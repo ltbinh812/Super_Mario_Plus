@@ -1,0 +1,14 @@
+# MANDATORY INITIALIZATION RULE FOR AGENTS
+
+Bạn đang làm việc trong dự án `SuperMarioPlus`. Hệ thống dự án này áp dụng các bộ quy tắc khắt khe được lưu dưới dạng "Agent Skills".
+
+**TRƯỚC KHI BẮT ĐẦU BẤT KỲ YÊU CẦU NÀO CỦA NGƯỜI DÙNG, BẠN BẮT BUỘC PHẢI THỰC HIỆN:**
+Hãy dùng công cụ `view_file` (hoặc tự nhớ nếu đã đọc) để duyệt qua 5 file Rule (Kỹ năng) sau đây nằm trong thư mục `.ai/rules/` của dự án:
+
+1. `.ai/rules/oop-enforcer/SKILL.md` (Quy tắc 1 Class / 1 File)
+2. `.ai/rules/pedagogical-explainer/SKILL.md` (Quy tắc giải thích cặn kẽ để sư phạm)
+3. `.ai/rules/structure-manager/SKILL.md` (Quy tắc cập nhật `structure.md` khi tạo file mới)
+4. `.ai/rules/structure-updater/SKILL.md` (Quy tắc quét dự án khi có lệnh `/update structure.md`)
+5. `.ai/rules/code-deletion-guard/SKILL.md` (Quy tắc hỏi ý kiến trước khi xóa code cũ)
+
+**NẾU BẠN CHƯA ĐỌC CÁC FILE NÀY TRONG PHIÊN LÀM VIỆC HIỆN TẠI, HÃY ĐỌC CHÚNG NGAY LẬP TỨC TRƯỚC KHI CODE HOẶC PHẢN HỒI.** Việc tuân thủ 5 kỹ năng trên là mệnh lệnh tối cao trong dự án này.

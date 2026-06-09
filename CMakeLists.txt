@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 project(SuperMarioPlus)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,6 +24,16 @@ include_directories(${RAYLIB_INCLUDE_DIR} include)
 set(SOURCES 
     src/main.cpp 
     src/SuperMarioPlus.cpp
+    src/Player.cpp
+    src/Platform.cpp
+    src/Cloud.cpp
+    src/Decoration.cpp
+    src/CameraManager.cpp
+    src/Background.cpp
+    src/HUD.cpp
+    src/Menu.cpp
+    src/World.cpp
+    src/GameManager.cpp
 )
 
 # Executable

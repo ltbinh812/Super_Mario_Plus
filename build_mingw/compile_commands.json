@@ -1,0 +1,74 @@
+[
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\main.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\main.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/main.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/main.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\SuperMarioPlus.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\SuperMarioPlus.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/SuperMarioPlus.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/SuperMarioPlus.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Player.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Player.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Player.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Player.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Platform.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Platform.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Platform.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Platform.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Cloud.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Cloud.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Cloud.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Cloud.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Decoration.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Decoration.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Decoration.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Decoration.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\CameraManager.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\CameraManager.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/CameraManager.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/CameraManager.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Background.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Background.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Background.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Background.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\HUD.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\HUD.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/HUD.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/HUD.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\Menu.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\Menu.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/Menu.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/Menu.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\World.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\World.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/World.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/World.cpp.obj"
+},
+{
+  "directory": "D:/Git/.SuperMarioPlus/build_mingw",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe  @CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\SuperMarioPlus.dir\\src\\GameManager.cpp.obj -c D:\\Git\\.SuperMarioPlus\\src\\GameManager.cpp",
+  "file": "D:/Git/.SuperMarioPlus/src/GameManager.cpp",
+  "output": "CMakeFiles/SuperMarioPlus.dir/src/GameManager.cpp.obj"
+}
+]

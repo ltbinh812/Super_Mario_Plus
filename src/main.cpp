@@ -1,14 +1,18 @@
 #include "SuperMarioPlus.h"
+#include "raylib.h"
 
 int main() {
-  SuperMarioPlus game;
-  game.Init();
+    // Khởi tạo các cờ cửa sổ (có thể điều chỉnh kích thước, VSync)
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    
+    // Mở cửa sổ
+    InitWindow(1280, 720, "Super Mario Plus");
+    SetTargetFPS(60);
 
-  while (!game.ShouldClose()) {
-    game.Update();
-    game.Draw();
-  }
-  std::cout << "test\n";
-  CloseWindow();
-  return 0;
+    // Chạy logic game chính (trong SuperMarioPlus.cpp)
+    RunGame();
+
+    // Đóng cửa sổ và giải phóng bộ nhớ
+    CloseWindow();
+    return 0;
 }

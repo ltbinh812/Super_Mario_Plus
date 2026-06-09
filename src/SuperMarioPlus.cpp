@@ -1,25 +1,27 @@
 #include "SuperMarioPlus.h"
-#include <iostream>
+#include "GameManager.h"
+#include "Menu.h"
+#include "raylib.h"
+#include <memory>
 
-SuperMarioPlus::SuperMarioPlus() {}
-SuperMarioPlus::~SuperMarioPlus() {}
+void RunGame() {
+    GameManager game;
+    // Khởi tạo trạng thái ban đầu là Menu
+    game.ChangeState(std::make_unique<MenuState>(&game));
 
-void SuperMarioPlus::Init() {
-    InitWindow(800, 450, "Super Mario Plus");
-    SetTargetFPS(60);
-}
+    // ---- Main Game Loop ----
+    while (!WindowShouldClose()) {
+        float dt = GetFrameTime();
 
-void SuperMarioPlus::Update() {
-    // Game logic update
-}
+        // 1. Nhận phím dựa theo State hiện tại
+        game.HandleInput();
 
-void SuperMarioPlus::Draw() {
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    DrawText("Super Mario Plus - Welcome!", 190, 200, 20, LIGHTGRAY);
-    EndDrawing();
-}
+        // 2. Cập nhật logic dựa theo State hiện tại
+        game.Update(dt);
 
-bool SuperMarioPlus::ShouldClose() {
-    return WindowShouldClose();
+        // 3. Render Đồ hoạ dựa theo State hiện tại
+        BeginDrawing();
+        game.Draw();
+        EndDrawing();
+    }
 }
