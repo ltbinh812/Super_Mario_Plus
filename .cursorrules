@@ -12,3 +12,13 @@ Hãy dùng công cụ `view_file` (hoặc tự nhớ nếu đã đọc) để du
 5. `.ai/rules/code-deletion-guard/SKILL.md` (Quy tắc hỏi ý kiến trước khi xóa code cũ)
 
 **NẾU BẠN CHƯA ĐỌC CÁC FILE NÀY TRONG PHIÊN LÀM VIỆC HIỆN TẠI, HÃY ĐỌC CHÚNG NGAY LẬP TỨC TRƯỚC KHI CODE HOẶC PHẢN HỒI.** Việc tuân thủ 5 kỹ năng trên là mệnh lệnh tối cao trong dự án này.
+
+---
+
+## QUY TẮC BẢO TRÌ .CURSORRULES
+
+**TRỌNG YẾU:** Mỗi khi bạn thêm một quy tắc, kỹ năng (Skill) mới hoặc cập nhật các quy tắc hiện có trong dự án, BẠN PHẢI CẬP NHẬT FILE `.cursorrules` NÀY ĐỂ PHẢN ÁNH CÁC THAY ĐỔI.
+
+- Nếu thêm quy tắc mới: thêm nó vào danh sách trong `.cursorrules`
+- Nếu cập nhật quy tắc hiện có: cập nhật mô tả hoặc chi tiết tương ứng
+- Nếu xóa quy tắc: xóa nó khỏi danh sách
