@@ -9,6 +9,7 @@ This project is completely self-contained and pre-configured to be lightweight (
 - A C++ Compiler:
   - **Windows**: Visual Studio (MSVC) **OR** MinGW-w64 (GCC)
 
+
 ## How to Build and Run
 
 You can build the project effortlessly using the provided `CMakePresets.json`.
@@ -20,6 +21,8 @@ You can build the project effortlessly using the provided `CMakePresets.json`.
 4. Click the **Build** button (or press `F7`).
 5. Click the **Play / Launch** button (or press `Shift + F5`) to run the game!
 
+*Remember: If you switch from MSVC to MinGW in VS Code, delete the `build` folder first!*
+
 ### Option 2: Using the Terminal (Command Line)
 
 **If you are using Visual Studio (MSVC):**
@@ -28,10 +31,10 @@ You can build the project effortlessly using the provided `CMakePresets.json`.
 cmake --preset windows-msvc
 
 # 2. Build the project
-cmake --build --preset windows-msvc
+cmake --build build
 
 # 3. Run the executable
-.\build\msvc\Debug\SuperMarioPlus.exe
+.\build\Debug\SuperMarioPlus.exe
 ```
 
 **If you are using MinGW / GCC:**
@@ -40,10 +43,10 @@ cmake --build --preset windows-msvc
 cmake --preset windows-mingw
 
 # 2. Build the project
-cmake --build --preset windows-mingw
+cmake --build build
 
 # 3. Run the executable
-.\build\mingw\SuperMarioPlus.exe
+.\build\SuperMarioPlus.exe
 ```
 
 ## Project Structure

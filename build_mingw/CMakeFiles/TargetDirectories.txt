@@ -1,3 +1,0 @@
-D:/Git/.SuperMarioPlus/build_mingw/CMakeFiles/SuperMarioPlus.dir
-D:/Git/.SuperMarioPlus/build_mingw/CMakeFiles/edit_cache.dir
-D:/Git/.SuperMarioPlus/build_mingw/CMakeFiles/rebuild_cache.dir

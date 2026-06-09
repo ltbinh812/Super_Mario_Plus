@@ -5,14 +5,14 @@
       "name": "windows-msvc",
       "displayName": "Windows (MSVC)",
       "description": "Configure using Microsoft Visual Studio compiler",
-      "binaryDir": "${sourceDir}/build/msvc"
+      "binaryDir": "${sourceDir}/build"
     },
     {
       "name": "windows-mingw",
       "displayName": "Windows (MinGW)",
       "description": "Configure using MinGW/GCC compiler",
       "generator": "MinGW Makefiles",
-      "binaryDir": "${sourceDir}/build/mingw",
+      "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
