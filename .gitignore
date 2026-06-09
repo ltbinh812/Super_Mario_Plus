@@ -9,3 +9,4 @@ build/
 # IDE and tool configs
 .cache/
 .clangd
+compile_commands.json
