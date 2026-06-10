@@ -1,0 +1,71 @@
+@startuml physics_system
+
+package "Systems Layer" {
+    class PhysicsSystem {
+        + PhysicsSystem()
+        + update(entities: std::vector<Entity*>, dt: float): void
+        - applyGravity(entity: Entity*, dt: float): void
+        - capVelocity(entity: Entity*): void
+        - applyFriction(entity: Entity*, dt: float): void
+        - integratePosition(entity: Entity*, dt: float): void
+    }
+    
+    note right of PhysicsSystem::update
+      Executes at a strict 60Hz (dt = 0.0167s).
+      1. Apply Gravity (if not grounded)
+      2. Cap max fall speed
+      3. Apply grounded friction
+      4. Position += Velocity * dt
+      5. Set grounded = false (CollisionSystem resets this)
+    end note
+}
+
+package "Domain Layer" {
+    abstract class Entity {
+        + position : Vector2D
+        + velocity : Vector2D
+        + active : bool
+        
+        ' Physics-specific attributes 
+        ' (Often extracted into a PhysicsComponent in pure ECS)
+        + grounded : bool
+        + gravity_scale : float
+    }
+}
+
+package "Infrastructure Layer" {
+    class Constants <<Static>> {
+        + static constexpr float GRAVITY
+        + static constexpr float MAX_FALL_SPEED
+        + static constexpr float FRICTION
+        + static constexpr float FIXED_DT
+    }
+}
+
+' Relationships
+PhysicsSystem ..> Entity : <<iterates and mutates>>
+PhysicsSystem ..> Constants : <<reads physical limits>>
+
+@enduml
+
+Key Architectural Takeaways
+Stateless Processor: The PhysicsSystem itself holds very little state. 
+It doesn't "own" the entities; it receives a reference/pointer to 
+the active entity list, processes their data, and finishes its 
+job for that frame.
+
+Mutation over Encapsulation: In performance-critical game loops, 
+systems often need direct access to public data 
+members (like position and velocity on the Entity). 
+Routing these updates through getters and setters millions 
+of times per second can introduce unnecessary overhead, 
+which is why they are exposed directly to the system.
+
+The "Grounded" Handshake: Notice that Step 5 of the Physics 
+logic explicitly sets entity.grounded = false. 
+The Physics System always assumes an entity is 
+falling until the CollisionSystem runs in the 
+immediately following step. If the Collision 
+System detects a floor, it sets grounded = true. 
+This prevents the PhysicsSystem from endlessly 
+accumulating gravity while Mario is standing still.

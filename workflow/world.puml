@@ -1,0 +1,130 @@
+@startuml world_layer
+
+package "World Layer" {
+
+    ' ==========================================
+    ' ENUMS & DATA STRUCTURES
+    ' ==========================================
+    enum TileType {
+        AIR
+        SOLID
+        BRICK
+        QUESTION
+        EMPTY_BLOCK
+        PIPE_TOP
+        PIPE_BODY
+        CLOUD
+        WATER_TOP
+        WATER
+        LAVA
+        DEATH_ZONE
+        FLAG_POLE
+        CASTLE
+    }
+
+    class Tile {
+        + type : TileType
+        + rect : Rect
+        + position : Vector2D
+        + hasItem : bool
+        + itemType : std::string
+        + active : bool
+        + isUsed : bool
+    }
+
+    ' ==========================================
+    ' CORE WORLD CLASSES
+    ' ==========================================
+    class TileMap {
+        - tiles : std::vector<std::vector<Tile>>
+        + pixelWidth : int
+        + pixelHeight : int
+        + TileMap()
+        + render(renderer: Renderer&, camera: Camera&): void
+        + getTileAt(x: float, y: float): Tile&
+        + getTilesInRect(rect: Rect): std::vector<Tile*>
+        + clear(): void
+    }
+
+    class Camera {
+        + x : float
+        + y : float
+        + x_min : float
+        + target : Vector2D
+        + viewport : Rect
+        + Camera(viewportW: int, viewportH: int)
+        + update(mapWidth: int): void
+    }
+
+    ' ==========================================
+    ' FACTORIES & LOADERS
+    ' ==========================================
+    class LevelLoader {
+        + static loadLevel(path: std::string, outMap: TileMap&, outEntities: std::vector<Entity*>&): bool
+        - static parseTiles(data: json, outMap: TileMap&): void
+        - static parseEntities(data: json, outEntities: std::vector<Entity*>&): void
+        - static loadDefaultLevel(outMap: TileMap&): bool
+    }
+
+    class EntityFactory {
+        + static createEntity(type: std::string, pos: Vector2D, config: json): Entity*
+    }
+
+    ' ==========================================
+    ' RELATIONSHIPS & DEPENDENCIES
+    ' ==========================================
+    TileMap *-- "many" Tile : contains >
+    Tile o-- TileType : uses >
+    
+    LevelLoader ..> TileMap : populates >
+    LevelLoader ..> EntityFactory : uses >
+    
+    TileMap ..> Camera : culls off-screen tiles using >
+}
+
+package "Domain Layer (Entities)" {
+    abstract class Entity
+}
+
+' External dependencies
+EntityFactory ..> Entity : instantiates >
+
+note right of LevelLoader
+  Reads assets/maps/world_X_Y.json
+  Fills the TileMap and uses EntityFactory 
+  to populate the initial spawn list.
+end note
+
+note right of Camera
+  Clamps to map boundary.
+  Never scrolls backward 
+  (x = max(x, x_min)).
+end note
+
+@enduml
+
+Key Components Explained
+TileType & Tile: Represents the static grid of the game world. 
+Each Tile holds spatial data (Rect, position) and logic flags (e.g., hasItem, isUsed)
+to handle interactions like Mario hitting a QUESTION block or breaking a BRICK block.
+
+TileMap: Manages the 2D array of tiles. Its render() method is 
+highly optimized—it takes the Camera as an argument to perform 
+frustum culling, ensuring it only draws tiles currently visible 
+on the screen, rather than iterating over thousands of off-screen tiles.
+
+Camera: Follows Mario's position (target) but strictly 
+enforces map boundaries. As specified in your edge cases, 
+it implements the x = max(x, x_min) logic to prevent 
+the player from scrolling the screen backward.
+
+LevelLoader: The bridge between your raw JSON files and the engine. 
+It parses world_X_Y.json, constructs the static TileMap, 
+and reads the entity spawn definitions. 
+It includes fallback logic (loadDefaultLevel) 
+to prevent hard crashes if a JSON file is missing or corrupted.
+
+EntityFactory: A strict Factory Method implementation. 
+When the LevelLoader or a game event (like hitting a block) 
+requests a "Goomba" or a "Mushroom", this factory interprets 
+the request and allocates the correct concrete Entity subclass.

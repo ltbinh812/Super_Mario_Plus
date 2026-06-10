@@ -1,0 +1,215 @@
+@startuml entity_layer
+
+package "Entity Layer (Domain Layer)" {
+
+    ' ==========================================
+    ' BASE ENTITY
+    ' ==========================================
+    abstract class Entity {
+        # id : int
+        # position : Vector2
+        # velocity : Vector2
+        # active : bool
+        # layer : int
+        + {abstract} update(dt: float): void
+        + {abstract} render(): void
+        + {abstract} getHitbox(): Rectangle
+        + onCollide(other: Entity*, side: Side): void
+        + isActive(): bool
+        + setActive(active: bool): void
+    }
+
+    ' ==========================================
+    ' PLAYER
+    ' ==========================================
+    class Mario {
+        + fsm : MarioFSM
+        + lives : int
+        + coins : int
+        + score : int
+        + isRunning : bool
+        + facingRight : bool
+        - coyoteTimer : float
+        - jumpBufferTimer : float
+        - jumpHoldTimer : float
+        - isHoldingJump : bool
+        - invulTimer : float
+        - fireball1Active : bool
+        - fireball2Active : bool
+        + update(dt: float): void
+        + render(): void
+        + getHitbox(): Rectangle
+        + onCollide(other: Entity*, side: Side): void
+        - handleMovement(input: InputState, dt: float): void
+        - handleJump(input: InputState, dt: float): void
+        - applyPhysics(dt: float): void
+        - shoot(): void
+        - takeDamage(): void
+        - die(): void
+        - collect(item: Item*): void
+    }
+
+    ' ==========================================
+    ' ENEMIES
+    ' ==========================================
+    abstract class Enemy {
+        # direction : int
+        # moveSpeed : float
+        # isDead : bool
+        # deathTimer : float
+        # scoreValue : int
+        + update(dt: float): void
+        + onCollide(other: Entity*, side: Side): void
+        # {abstract} onUpdateAI(dt: float): void
+        # onStomped(): void
+        # onFireball(): void
+        # onShell(): void
+        # onStar(): void
+    }
+
+    class Goomba {
+        # onUpdateAI(dt: float): void
+        # onStomped(): void
+    }
+
+    class KoopaTroopa {
+        + shellState : ShellState
+        + reviveTimer : float
+        # onUpdateAI(dt: float): void
+        # onStomped(): void
+        + kickShell(): void
+    }
+
+    class PiranhaPlant {
+        + pipeCenter : Vector2
+        + moveDir : int
+        + moveTimer : float
+        + waitTimer : float
+        + hiddenIfClose : bool
+        # onUpdateAI(dt: float): void
+        # onStomped(): void
+    }
+
+    class Bowser {
+        + fireTimer : float
+        + hammerTimer : float
+        + hp : int
+        # onUpdateAI(dt: float): void
+        # onFireball(): void
+    }
+
+    ' ==========================================
+    ' ITEMS
+    ' ==========================================
+    abstract class Item {
+        + isMoving : bool
+        + moveDir : int
+        + update(dt: float): void
+        + onCollide(other: Entity*, side: Side): void
+        # {abstract} onPickup(mario: Mario&): void
+    }
+
+    class Mushroom {
+        # onPickup(mario: Mario&): void
+    }
+
+    class FireFlower {
+        # onPickup(mario: Mario&): void
+    }
+
+    class StarPower {
+        + bounceVelocity : float
+        # onPickup(mario: Mario&): void
+    }
+
+    ' ==========================================
+    ' PROJECTILES
+    ' ==========================================
+    abstract class Projectile {
+        + damage : int
+        + maxBounce : int
+        + bounceCount : int
+        # {abstract} onHitEnemy(enemy: Enemy*): void
+        # {abstract} onHitTile(): void
+    }
+
+    class Fireball {
+        # onHitEnemy(enemy: Enemy*): void
+        # onHitTile(): void
+    }
+
+    class Hammer {
+        # onHitEnemy(enemy: Enemy*): void
+        # onHitTile(): void
+    }
+
+    ' ==========================================
+    ' PARTICLES (Visual Only)
+    ' ==========================================
+    class Particle <<Visual>> {
+        + lifetime : float
+        + velocity : Vector2
+        + sprite : SpriteFrame
+    }
+
+    ' ==========================================
+    ' INHERITANCE & RELATIONSHIPS
+    ' ==========================================
+    
+    Entity <|-- Mario
+    Entity <|-- Enemy
+    Entity <|-- Item
+    Entity <|-- Projectile
+
+    Enemy <|-- Goomba
+    Enemy <|-- KoopaTroopa
+    Enemy <|-- PiranhaPlant
+    Enemy <|-- Bowser
+
+    Item <|-- Mushroom
+    Item <|-- FireFlower
+    Item <|-- StarPower
+
+    Projectile <|-- Fireball
+    Projectile <|-- Hammer
+
+    ' Interaction relationships
+    Mario ..> Item : <<collects>>
+    Mario ..> Projectile : <<shoots/hit by>>
+    Projectile ..> Enemy : <<damages>>
+    Mario ..> Enemy : <<stomps/hit by>>
+    
+    note bottom of Particle
+      Not a true Entity subclass. 
+      Uses ObjectPool<Particle> and 
+      has no physical collision.
+    end note
+}
+
+@enduml
+
+Key Enhancements Explained
+Here is how the Entity layer classes break down based on your design document:
+
+Entity (Abstract Base): The foundation for the entire Domain layer. 
+Standardizes update(), render(), and polymorphic onCollide() logic. 
+Tracks essential data like position, velocity, and rendering layer.
+
+Mario: Contains the most complex localized state, managing precision platforming mechanics (coyoteTimer, jumpBufferTimer, jumpHoldTimer). 
+It aggregates MarioFSM to manage form states (Small, Super, Fire, Invincible) cleanly without massive if/else blocks.
+
+Enemy (Abstract Base & Subclasses): Employs the Template Method pattern. 
+The base Enemy class handles standard physics and collision resolution in its update(), deferring specific movement logic to the pure virtual #onUpdateAI(dt) implemented by subclasses like Goomba or PiranhaPlant. 
+Event hooks like #onStomped() or #onFireball() can be overridden (e.g., a Goomba dies to a fireball, but a BuzzyBeetle wouldn't).
+
+Item (Abstract Base & Subclasses): Ensures items handle their 
+own movement (like a Mushroom sliding or a StarPower bouncing) while 
+defining the pure virtual #onPickup(mario&) to delegate the exact 
+buff implementation to the specific item class.
+
+Projectile: Abstracts behavior for bouncing items (like Mario's Fireball) 
+and gravity-arc items (like the Hammer Bro's Hammer). 
+Tracks bounceCount to enforce the 3-bounce lifespan rule described in the physics section.
+
+Particle: Explicitly marked as visual-only to decouple it from 
+the main CollisionSystem, reserving physics calculations solely for gameplay-relevant entities.

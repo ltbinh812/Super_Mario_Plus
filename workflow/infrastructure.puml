@@ -1,0 +1,132 @@
+@startuml infrastructure
+
+package "Infrastructure Layer" {
+
+    class AssetManager <<Singleton>> {
+        - static instance: AssetManager*
+        - textures: std::map<std::string, Texture2D>
+        - sounds: std::map<std::string, Sound>
+        - AssetManager()
+        - ~AssetManager()
+        + static getInstance(): AssetManager&
+        + loadTexture(path: std::string): Texture2D
+        + loadSound(path: std::string): Sound
+        + clear(): void
+    }
+
+    class AudioManager <<Singleton>> {
+        - static instance: AudioManager*
+        - currentBGM: Music
+        - previousBGM: Music
+        - AudioManager()
+        + static getInstance(): AudioManager&
+        + playBGM(bgmId: std::string): void
+        + playSFX(sfxId: std::string): void
+        + pauseBGM(): void
+        + resumePreviousBGM(): void
+        + playHurryBGM(): void
+    }
+
+    class Logger <<Singleton>> {
+        - static instance: Logger*
+        - logFile: std::ofstream
+        - Logger()
+        + static getInstance(): Logger&
+        + debug(msg: std::string): void
+        + info(msg: std::string): void
+        + warn(msg: std::string): void
+        + error(msg: std::string): void
+    }
+
+    class EventBus <<Observer>> <<Singleton>> {
+        - static instance: EventBus*
+        - listeners: std::map<EventType, std::vector<Listener*>>
+        - pendingQueue: std::vector<Event>
+        - EventBus()
+        + static getInstance(): EventBus&
+        + subscribe(type: EventType, listener: Listener*): void
+        + publish(event: Event): void
+        + dispatch(): void
+        + clear(): void
+    }
+
+    class ObjectPool<T> {
+        - pool: std::vector<T>
+        - poolSize: int
+        + ObjectPool(size: int)
+        + allocate(): T*
+        + release(obj: T*): void
+        + reset(): void
+        + isFull(): bool
+    }
+
+    class SpatialHash {
+        - cellSize: int
+        - grid: std::map<int, std::vector<Entity*>>
+        + SpatialHash(cellSize: int)
+        + insert(entity: Entity*): void
+        + updateEntity(entity: Entity*): void
+        + remove(entity: Entity*): void
+        + query(bounds: Rect): std::vector<Entity*>
+        + clear(): void
+    }
+
+    class FileIO {
+        + static loadLevel(path: std::string, out: TileMap&): bool
+        + static saveGame(path: std::string, state: GameState&): bool
+        + static loadHighScores(path: std::string): std::vector<int>
+        + static saveHighScores(path: std::string, scores: std::vector<int>): void
+    }
+
+    class Constants <<Static>> {
+        + static constexpr float GRAVITY
+        + static constexpr int TILE_SIZE
+        + static constexpr int SCREEN_W
+        + static constexpr int SCREEN_H
+        + static constexpr float FPS
+        + static constexpr float FIXED_DT
+        + static constexpr float MAX_FRAME_TIME
+    }
+
+    ' ==========================================
+    ' RELATIONSHIPS & DEPENDENCIES
+    ' ==========================================
+
+    ' Managers and IO rely on Logger for error reporting
+    AssetManager ..> Logger : <<use>>
+    AudioManager ..> Logger : <<use>>
+    FileIO ..> Logger : <<use>>
+
+    ' EventBus relies on external generic events (conceptual)
+    EventBus ..> "Event" : <<dispatch>>
+    EventBus o-- "Listener" : manages >
+
+    ' FileIO uses the generic GameState and TileMap (from Domain Layer)
+    FileIO ..> "GameState" : <<use>>
+    FileIO ..> "TileMap" : <<use>>
+
+    ' SpatialHash aggregates generic Entities
+    SpatialHash o-- "Entity" : tracks >
+}
+
+
+@enduml
+
+Key Enhancements Explained
+Here is how the infrastructure classes break down based on your design document:
+
+AssetManager: Designed to load assets. Its destructor relies on RAII to ensure memory leaks are impossible.
+
+AudioManager: Manages the background music (BGM) and sound effects (SFX). It specifically includes methods like playHurryBGM() for when the timer drops below 100 seconds, and resumePreviousBGM() to restore normal music after the Starman theme ends.
+
+Logger: Implements logging levels (DEBUG, INFO, WARN, ERROR) and outputs to logs/game.log to track missing assets, pool overflows, or level loads.
+
+EventBus: Uses a decoupled publish/subscribe architecture where events are stored in a pendingQueue. The dispatch() method flushes these events strictly during step 5 of the fixed-timestep game loop to prevent circular dependencies.
+
+ObjectPool<T>: Formatted as a template class to pre-allocate memory slots for entities like Fireballs and Particles, entirely avoiding new/delete operations inside the main loop. It includes an isFull() check to safely halt spawning rather than crashing.
+
+SpatialHash: Divides the game world into a grid, allowing the collision system to query strictly neighboring entities and tiles, ensuring performance stays high (60 FPS) even with many active objects.
+
+FileIO: Handles the JSON parsing required to read world_X_Y.json tilemap files and write to saves/save.json and saves/highscores.dat.
+
+Constants: Centralizes the strict physics values required for the game, including GRAVITY, MAX_FRAME_TIME (0.25f to prevent the "death spiral"), and FIXED_DT (1/60s) for the fixed-timestep implementation.

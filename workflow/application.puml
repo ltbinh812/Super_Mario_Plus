@@ -1,0 +1,186 @@
+@startuml application_layer
+
+package "Application Layer" {
+
+    ' ==========================================
+    ' CORE ENGINE WRAPPERS
+    ' ==========================================
+    class Game {
+        - isRunning : bool
+        - window : Window*
+        - gameLoop : GameLoop*
+        - sceneManager : SceneManager*
+        + init(title: string, width: int, height: int): bool
+        + run(): void
+        + stop(): void
+        + clean(): void
+    }
+
+    class Window {
+        - width : int
+        - height : int
+        - title : string
+        + init(title: string, w: int, h: int): bool
+        + beginDraw(): void
+        + endDraw(): void
+        + close(): void
+        + isShouldClose(): bool
+    }
+
+    class GameLoop {
+        - accumulator : float
+        - isRunning : bool
+        + run(sceneManager: SceneManager&): void
+        + stop(): void
+    }
+
+    ' ==========================================
+    ' STATE MANAGEMENT (Composite/Stack Pattern)
+    ' ==========================================
+    class SceneManager {
+        - stateStack : std::vector<IGameState*>
+        + pushState(state: IGameState*): void
+        + popState(): void
+        + changeState(state: IGameState*): void
+        + update(dt: float): void
+        + render(alpha: float): void
+        + clear(): void
+    }
+
+    interface IGameState {
+        + {abstract} onEnter(): bool
+        + {abstract} onExit(): bool
+        + {abstract} update(dt: float): void
+        + {abstract} render(alpha: float): void
+    }
+
+    class SplashState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class TitleState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class MenuState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class PlayState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class PauseState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class TransitionState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+    class GameOverState {
+        + update(dt: float): void
+        + render(alpha: float): void
+    }
+
+}
+
+package "UI Layer" {
+    ' ==========================================
+    ' USER INTERFACE CONTROLS
+    ' ==========================================
+    class HUD {
+        + render(score: int, coins: int, world: string, lives: int, timer: float): void
+    }
+
+    class Menu {
+        - items : std::vector<string>
+        - selectedIndex : int
+        + moveUp(): void
+        + moveDown(): void
+        + select(): void
+        + render(): void
+    }
+
+    class NumberRenderer {
+        + static draw(number: int, pos: Vector2D): void
+    }
+}
+
+' ==========================================
+' RELATIONSHIPS & DEPENDENCIES
+' ==========================================
+
+Game *-- Window : owns >
+Game *-- GameLoop : owns >
+Game *-- SceneManager : owns >
+
+SceneManager o-- IGameState : manages stack of >
+
+IGameState <|.. SplashState
+IGameState <|.. TitleState
+IGameState <|.. MenuState
+IGameState <|.. PlayState
+IGameState <|.. PauseState
+IGameState <|.. TransitionState
+IGameState <|.. GameOverState
+
+PlayState ..> HUD : renders >
+MenuState ..> Menu : controls >
+HUD ..> NumberRenderer : uses >
+Menu ..> NumberRenderer : uses >
+
+note left of SceneManager
+  Uses a Stack to allow Overlays.
+  Example: PauseState is pushed 
+  ON TOP of PlayState, allowing 
+  PlayState to remain in memory.
+end note
+
+note right of GameLoop
+  Implements the Fixed-Timestep
+  logic (accumulating dt) and
+  passes interpolation alpha
+  to the active state's render.
+end note
+
+note left of Window
+  Wraps Raylib lifecycle functions.
+  beginDraw() -> BeginDrawing() + ClearBackground()
+  endDraw() -> EndDrawing()
+end note
+
+@enduml
+
+Key Architectural Takeaways (Raylib Version)
+Game & Hardware Abstraction: The Game class acts as 
+the top-level orchestrator. It sets up the Raylib environment 
+through the Window wrapper (which manages InitWindow() and CloseWindow()), 
+initializes the SceneManager, and hands control over to the GameLoop. 
+This encapsulates Raylib's global lifecycle functions away from your 
+core game logic.
+
+The State Stack (SceneManager): Instead of simple boolean flags 
+or a single active state, this layer uses a Push/Pop Stack. 
+This is what allows the PauseState to be drawn on top of the 
+PlayState without having to destroy or reload the game level. 
+When the player unpauses, the stack simply calls popState(), and 
+the gameplay resumes exactly where it left off.
+
+Global Rendering Context: Because Raylib utilizes a global 
+graphics context, you no longer need to pass a Renderer 
+object through every function. State and UI classes simply 
+call their internal render() methods, which safely utilize 
+Raylib's native drawing functions (like DrawRectangle, DrawTexture, etc.) directly.
+
+
+The UI Decoupling: The UI components (HUD, Menu) are stateless renderers. 
+They do not store the player's score or lives. 
+Instead, the PlayState pulls that data from the active 
+player entity and passes it directly into the HUD::render() method.
+
+Fixed-Timestep Bridge: The GameLoop is where the alpha 
+variable (used for rendering interpolation between two physics frames) 
+is calculated. It passes this alpha down through the SceneManager into 
+the specific IGameState::render() method, ensuring smooth visual 
+movement at any framerate while your physics update at a fixed rate.
