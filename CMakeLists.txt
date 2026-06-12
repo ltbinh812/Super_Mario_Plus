@@ -22,22 +22,18 @@ include_directories(${RAYLIB_INCLUDE_DIR} include)
 
 # Source files
 set(SOURCES 
-    src/main.cpp 
-    src/SuperMarioPlus.cpp
-    src/Player.cpp
-    src/Platform.cpp
-    src/Cloud.cpp
-    src/Decoration.cpp
-    src/CameraManager.cpp
-    src/Background.cpp
-    src/HUD.cpp
-    src/Menu.cpp
-    src/World.cpp
-    src/GameManager.cpp
+    src/main.cpp
+    src/Game.cpp
+    src/IntroState.cpp
+    src/SettingState.cpp
+    src/StateManager.cpp
+    src/UIComponent.cpp
+
 )
 
 # Executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+    )
 
 # Link raylib
 target_link_libraries(${PROJECT_NAME} ${RAYLIB_LIB} ${PLATFORM_LIBS})

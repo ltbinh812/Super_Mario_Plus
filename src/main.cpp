@@ -1,4 +1,4 @@
-#include "SuperMarioPlus.h"
+#include "Game.h"
 #include "raylib.h"
 
 int main() {
@@ -9,8 +9,9 @@ int main() {
     InitWindow(1280, 720, "Super Mario Plus");
     SetTargetFPS(60);
 
-    // Chạy logic game chính (trong SuperMarioPlus.cpp)
-    RunGame();
+    // Chạy logic game chính 
+    Game game;
+    game.runGame();
 
     // Đóng cửa sổ và giải phóng bộ nhớ
     CloseWindow();

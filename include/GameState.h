@@ -1,12 +1,14 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
-
+#pragma once 
+#include "Command.h"
+#include <queue>
 class GameState {
-public:
+    public:
     virtual ~GameState() = default;
-    virtual void HandleInput() = 0;
-    virtual void Update(float dt) = 0;
-    virtual void Draw() = 0;
+    virtual void handleInput() = 0;
+    virtual void update(float dt) = 0;
+    virtual Command processCommand() = 0;
+    virtual void render(float alpha) const = 0;
+
+
 };
 
-#endif
