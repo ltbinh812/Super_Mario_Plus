@@ -11,11 +11,15 @@ StateManager::StateManager() {
 StateManager::~StateManager() = default;
 
 void StateManager::handleInput() {
+    if (stateStack.empty()) return;
+
     const auto &state = stateStack.top();
     state->handleInput();
 }
 
 void StateManager::update(float dt) {
+    if (stateStack.empty()) return;
+
     const auto &state = stateStack.top();
     state->update(dt);
 
@@ -46,11 +50,13 @@ void StateManager::popState() {
 void StateManager::changeState(std::unique_ptr<GameState> state) {
     if (!stateStack.empty())
     stateStack.pop();
-    
+
     stateStack.push(std::move(state));
 }
 
 void StateManager::render(float alpha) const {
+    if (stateStack.empty()) return;
+    
     const auto &state = stateStack.top();
     state->render(alpha);
 } 

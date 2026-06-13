@@ -1,6 +1,6 @@
 #include "GameState.h"
 
-void GameState::pushCommand(Command cmd) {
+void GameState::pushCommand(Command&& cmd) {
     commandQueue.push_back(std::move(cmd));
 }
 
