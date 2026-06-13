@@ -1,9 +1,13 @@
 #include "SettingState.h"
+#include "StateManager.h"
+#include "IntroState.h"
 
-SettingState::SettingState() {
-    std::unique_ptr<Button> menuButton = std::make_unique<Button>(Command{CommandType::Intro}); 
+SettingState::SettingState(){
+    std::unique_ptr<Button> menuButton = std::make_unique<Button>(); 
     menuButton->setLabel("Intro");
-
+    menuButton->setOnClick([this](){
+        pushCommand({CommandType::Change, std::make_unique<IntroState>()});
+    });
     buttons.push_back(std::move(menuButton));
 }
 
@@ -19,21 +23,10 @@ void SettingState::handleInput() {
 
 void SettingState::update(float dt) {
     for (const auto &button: buttons) {
-        button->update(commandQueue);
+        button->update();
     }
 }
 
-Command SettingState::processCommand() {
-    while (!commandQueue.empty()) {
-        Command t = commandQueue.front();
-        commandQueue.pop();
-        if (t.type == CommandType::Intro) {
-            return t;
-        }
-    }
-
-    return Command{CommandType::Null};
-}
 
 void SettingState::render(float alpha) const {
     for (const auto &button: buttons) {

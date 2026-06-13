@@ -24,6 +24,7 @@ include_directories(${RAYLIB_INCLUDE_DIR} include)
 set(SOURCES 
     src/main.cpp
     src/Game.cpp
+    src/GameState.cpp
     src/IntroState.cpp
     src/SettingState.cpp
     src/StateManager.cpp

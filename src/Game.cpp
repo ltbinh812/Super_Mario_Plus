@@ -13,8 +13,6 @@ void Game::runGame() {
             stateManager.update(fixedDt);
         }
 
-        stateManager.processCommand();
-
         float alpha = accumulator / fixedDt;
 
         BeginDrawing();

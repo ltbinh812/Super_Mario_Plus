@@ -1,6 +1,6 @@
 #include "UIComponent.h"
 
-Button::Button(Command command) : command_(command) {
+Button::Button() {
 
 }
 
@@ -26,6 +26,10 @@ Button& Button::setRadius(float radius) {
     return *this;
 }
 
+Button& Button::setOnClick(std::function<void()> onClick) {
+    onClick_ = onClick;
+    return *this;
+}
 void Button::updateBound() {
     bound_ = {position_.x, position_.y, size_.x, size_.y};
 }
@@ -52,10 +56,10 @@ void Button::handleInput(Vector2 mousePos, bool mousePressed, bool mouseReleased
     
 }
 
-void Button::update(std::queue<Command> &commandQueue) {
+void Button::update() {
     if (isClicked_ == true) {
         isClicked_ = false;
-        commandQueue.push(command_);
+        onClick_();
     } 
 }
 
