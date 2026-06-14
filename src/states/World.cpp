@@ -1,4 +1,4 @@
-#include "World.h"
+﻿#include "World.h"
 #include "Background.h"
 #include "HUD.h"
 #include "GameManager.h"
@@ -92,11 +92,11 @@ void World1_1State::HandleInput() {
         return;
     }
     
-    // Test special ability for Player 1
+    // Test kỹ năng đặc biệt cho Player 1
     if (IsKeyPressed(KEY_J)) player1_->UseAbility1();
     if (IsKeyPressed(KEY_K)) player1_->UseAbility2();
     
-    // Test special ability for Player 2
+    // Test kỹ năng đặc biệt cho Player 2
     if (IsKeyPressed(KEY_KP_1)) player2_->UseAbility1();
     if (IsKeyPressed(KEY_KP_2)) player2_->UseAbility2();
 }
@@ -104,7 +104,7 @@ void World1_1State::HandleInput() {
 void World1_1State::Update(float dt) {
     if (activeOverlay_) {
         activeOverlay_->Update(dt);
-        return; // Pause update
+        return; // Tạm dừng update
     }
 
     player1_->Update(dt, worldWidth_);

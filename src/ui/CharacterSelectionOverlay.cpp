@@ -1,10 +1,10 @@
-#include "CharacterSelectionOverlay.h"
+﻿#include "CharacterSelectionOverlay.h"
 #include "CharacterFactory.h"
 
 CharacterSelectionOverlay::CharacterSelectionOverlay(std::unique_ptr<Player>& p1, std::unique_ptr<Player>& p2, const std::vector<std::string>& availableChars)
     : player1Ref_(p1), player2Ref_(p2), availableChars_(availableChars) 
 {
-    // Try to find the current player index if needed, for simplicity temporarily start from 0 and 1 or from variable
+    // Thử tìm chỉ số người chơi hiện tại nếu cần, để đơn giản tạm thời bắt đầu từ 0 và 1 hoặc từ biến
 }
 
 void CharacterSelectionOverlay::HandleInput() {
@@ -13,7 +13,7 @@ void CharacterSelectionOverlay::HandleInput() {
         return;
     }
 
-    // Player 1 change
+    // Player 1 đổi
     if (IsKeyPressed(KEY_A)) {
         p1Index_ = (p1Index_ - 1 + availableChars_.size()) % availableChars_.size();
         auto oldPos = player1Ref_->GetPosition();
@@ -31,7 +31,7 @@ void CharacterSelectionOverlay::HandleInput() {
         player1Ref_->SetInputConfig(oldConfig);
     }
 
-    // Player 2 change
+    // Player 2 đổi
     if (IsKeyPressed(KEY_LEFT)) {
         p2Index_ = (p2Index_ - 1 + availableChars_.size()) % availableChars_.size();
         auto oldPos = player2Ref_->GetPosition();
@@ -55,11 +55,11 @@ void CharacterSelectionOverlay::Update(float dt) {
 
 void CharacterSelectionOverlay::Draw() {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.7f));
-    DrawText("CHARACTER SELECTION (Press U to resume)", GetScreenWidth()/2 - 250, 100, 20, WHITE);
+    DrawText("CHỌN NHÂN VẬT (Bấm U để tiếp tục)", GetScreenWidth()/2 - 250, 100, 20, WHITE);
     
-    DrawText("Player 1 (A/D to swap):", 100, 200, 20, RED);
+    DrawText("Người chơi 1 (A/D để đổi):", 100, 200, 20, RED);
     DrawText(availableChars_[p1Index_].c_str(), 100, 240, 30, WHITE);
 
-    DrawText("Player 2 (Left/Right to swap):", 500, 200, 20, BLUE);
+    DrawText("Người chơi 2 (Left/Right để đổi):", 500, 200, 20, BLUE);
     DrawText(availableChars_[p2Index_].c_str(), 500, 240, 30, WHITE);
 }

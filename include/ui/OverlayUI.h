@@ -1,20 +1,20 @@
-#ifndef OVERLAYUI_H
+﻿#ifndef OVERLAYUI_H
 #define OVERLAYUI_H
 
 class OverlayUI {
 public:
     virtual ~OverlayUI() = default;
     
-    // Handle input / click
+    // Xử lý đầu vào / click
     virtual void HandleInput() = 0;
     
-    // Update UI logic
+    // Cập nhật logic UI
     virtual void Update(float dt) = 0;
     
-    // Draw UI to screen
+    // Vẽ UI lên màn hình
     virtual void Draw() = 0;
     
-    // Check if UI is finished
+    // Kiểm tra xem UI đã hoàn thành chưa
     virtual bool IsFinished() const = 0;
 };
 
