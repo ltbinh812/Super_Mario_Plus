@@ -1,33 +1,25 @@
+# MANDATORY INITIALIZATION RULE FOR AGENTS
+
+Bß¦ín -æang l+ám viß+çc trong dß+¦ +ín `SuperMarioPlus`. Hß+ç thß+æng dß+¦ +ín n+áy +íp dß+Ñng c+íc bß+Ö quy tß¦»c khß¦»t khe -æ¦¦ß+úc l¦¦u d¦¦ß+¢i dß¦íng "Agent Skills".
+
+**TR¦»ß+ÜC KHI Bß¦«T -Éß¦ªU Bß¦ñT Kß+¦ Y+èU Cß¦ªU N+ÇO Cß+ªA NG¦»ß+£I D+ÖNG, Bß¦áN Bß¦«T BUß+ÿC PHß¦óI THß+¦C HIß+åN:**
+H+úy d+¦ng c+¦ng cß+Ñ `view_file` (hoß¦+c tß+¦ nhß+¢ nß¦+u -æ+ú -æß+ìc) -æß+â duyß+çt qua 6 file Rule (Kß+¦ n-âng) sau -æ+óy nß¦¦m trong th¦¦ mß+Ñc `.ai/skills/` cß+ºa dß+¦ +ín:
+
+1. `.ai/skills/oop-enforcer/SKILL.md` (Quy tß¦»c 1 Class / 1 File)
+2. `.ai/skills/pedagogical-explainer/SKILL.md` (Quy tß¦»c giß¦úi th+¡ch cß¦+n kß¦+ -æß+â s¦¦ phß¦ím)
+3. `.ai/skills/structure-manager/SKILL.md` (Quy tß¦»c cß¦¡p nhß¦¡t `structure.md` khi tß¦ío file mß+¢i)
+4. `.ai/skills/structure-updater/SKILL.md` (Quy tß¦»c qu+¬t dß+¦ +ín khi c+¦ lß+çnh `/update structure.md`)
+5. `.ai/skills/code-deletion-guard/SKILL.md` (Quy tß¦»c hß+Åi ++ kiß¦+n tr¦¦ß+¢c khi x+¦a code c+¬)
+6. `.ai/skills/uml-updater/SKILL.md` (Quy tß¦»c bß¦»t buß+Öc cß¦¡p nhß¦¡t file UML khi c+¦ t+¡nh n-âng/kiß¦+n tr+¦c mß+¢i)
+
+**Nß¦+U Bß¦áN CH¦»A -Éß+îC C+üC FILE N+ÇY TRONG PHI+èN L+ÇM VIß+åC HIß+åN Tß¦áI, H+âY -Éß+îC CH+ÜNG NGAY Lß¦¼P Tß+¿C TR¦»ß+ÜC KHI CODE HOß¦¦C PHß¦óN Hß+ÆI.** Viß+çc tu+ón thß+º 6 kß+¦ n-âng tr+¬n l+á mß+çnh lß+çnh tß+æi cao trong dß+¦ +ín n+áy.
+
 ---
-name: supermarioplus-oop-rules
-description: Ká»¹ nÄƒng hÆ°á»›ng dáº«n Agent tuÃ¢n thá»§ nghiÃªm ngáº·t cÃ¡c quy táº¯c láº­p trÃ¬nh hÆ°á»›ng Ä‘á»‘i tÆ°á»£ng (OOP) vÃ  quáº£n lÃ½ cáº¥u trÃºc cho dá»± Ã¡n SuperMarioPlus.
----
 
-# Ká»¹ nÄƒng: SuperMarioPlus OOP Rules
+## QUY Tß¦«C Bß¦óO TR+î .CURSORRULES
 
-Ká»¹ nÄƒng nÃ y Ä‘áº£m báº£o ráº±ng báº¡n (Agent) khi lÃ m viá»‡c trÃªn dá»± Ã¡n `SuperMarioPlus` sáº½ luÃ´n tuÃ¢n theo cÃ¡c quy táº¯c kháº¯t khe vá» Object-Oriented Programming (OOP), Ä‘á»“ng thá»i Ä‘áº£m báº£o sá»± minh báº¡ch trong viá»‡c hÆ°á»›ng dáº«n ngÆ°á»i dÃ¹ng vÃ  cáº­p nháº­t cáº¥u trÃºc dá»± Ã¡n.
+**TRß+îNG Yß¦+U:** Mß+ùi khi bß¦ín th+¬m mß+Öt quy tß¦»c, kß+¦ n-âng (Skill) mß+¢i hoß¦+c cß¦¡p nhß¦¡t c+íc quy tß¦»c hiß+çn c+¦ trong dß+¦ +ín, Bß¦áN PHß¦óI Cß¦¼P NHß¦¼T FILE `.cursorrules` N+ÇY -Éß+é PHß¦óN +üNH C+üC THAY -Éß+öI.
 
-## HÆ°á»›ng dáº«n tá»«ng bÆ°á»›c
-
-Báº¥t cá»© khi nÃ o báº¡n Ä‘Æ°á»£c yÃªu cáº§u viáº¿t code, Ä‘á» xuáº¥t cáº¥u trÃºc, hoáº·c refactor dá»± Ã¡n SuperMarioPlus, hÃ£y lÃ m theo cÃ¡c nguyÃªn táº¯c sau:
-
-1. **TuÃ¢n thá»§ nguyÃªn táº¯c OOP (1 Class / 1 File):**
-   - Má»i quyáº¿t Ä‘á»‹nh kiáº¿n trÃºc pháº£i dá»±a trÃªn Ä‘áº·c Ä‘iá»ƒm cá»§a OOP (ÄÃ³ng gÃ³i, Káº¿ thá»«a, Äa hÃ¬nh, Trá»«u tÆ°á»£ng).
-   - Má»—i file chá»‰ chá»©a Má»˜T class duy nháº¥t (vÃ­ dá»¥: `Player.h` vÃ  `Player.cpp`). KhÃ´ng Ä‘á»ƒ nhiá»u class hoáº·c cÃ¡c struct lá»›n chung trong má»™t file.
-
-2. **Giáº£i thÃ­ch chi tiáº¿t (SÆ° pháº¡m):**
-   - Khi Ä‘á» xuáº¥t cáº¥u trÃºc, cÆ¡ cháº¿ build hoáº·c Ã½ tÆ°á»Ÿng thá»±c thi, báº¡n PHáº¢I giáº£i thÃ­ch rÃµ Ã½ tÆ°á»Ÿng.
-   - TrÃ¬nh bÃ y chá»©c nÄƒng cá»§a tá»«ng hÃ m, tá»«ng class Ä‘Æ°á»£c táº¡o ra.
-   - Giáº£i thÃ­ch má»¥c Ä‘Ã­ch Ä‘áº±ng sau cÃ¡c quyáº¿t Ä‘á»‹nh Ä‘Ã³ Ä‘á»ƒ ngÆ°á»i dÃ¹ng cÃ³ thá»ƒ há»c há»i cÃ¡ch á»©ng dá»¥ng OOP vÃ o dá»± Ã¡n.
-
-3. **LuÃ´n cáº­p nháº­t `structure.md`:**
-   - Khi táº¡o file má»›i hoáº·c thÃªm class má»›i, PHáº¢I ghi vÃ o file `structure.md` cáº¥u trÃºc dáº¡ng cÃ¢y vá» má»‘i liÃªn há»‡ giá»¯a cÃ¡c file/class.
-   - Trong `structure.md`, báº¯t buá»™c cÃ³ má»¥c chi tiáº¿t: TÃ¡c dá»¥ng cá»§a file/class lÃ  gÃ¬? NÃ³ Ä‘Æ°á»£c dÃ¹ng cho file/class nÃ o? Cáº§n thÃªm file/class nÃ o Ä‘á»ƒ bá»• trá»£ cho nÃ³?
-   - Cung cáº¥p Ä‘á»§ thÃ´ng tin tÃ³m táº¯t trong `structure.md` Ä‘á»ƒ cÃ¡c Agent sau nÃ y khi Ä‘á»c sáº½ hiá»ƒu ngay má»¥c Ä‘Ã­ch vÃ  tiáº¿n Ä‘á»™ dá»± Ã¡n mÃ  khÃ´ng tá»‘n token Ä‘á»c láº¡i toÃ n bá»™ code.
-
-4. **Xá»­ lÃ½ lá»‡nh `/update structure.md`:**
-   - Náº¿u ngÆ°á»i dÃ¹ng gÃµ lá»‡nh `/update structure.md`, báº¡n PHáº¢I tá»± Ä‘á»™ng duyá»‡t toÃ n bá»™ dá»± Ã¡n, tÃ¬m cÃ¡c file Ä‘Ã£ sá»­a/thÃªm má»›i vÃ  cáº­p nháº­t chÃ­nh xÃ¡c láº¡i vÃ o file `structure.md`.
-
-5. **Quy táº¯c khi xoÃ¡ code cÅ©:**
-   - Khi thá»±c thi Ã½ tÆ°á»Ÿng mÃ  pháº£i xÃ³a nhiá»u code cÃ³ sáºµn, PHáº¢I há»i Ã½ kiáº¿n ngÆ°á»i dÃ¹ng vÃ  phÃ¢n tÃ­ch táº¡i sao láº¡i cáº§n xÃ³a Ä‘á»ƒ thay code má»›i.
-   - Háº¡n cháº¿ tá»‘i Ä‘a viá»‡c xÃ³a nhiá»u code cÅ©, trá»« khi ngÆ°á»i dÃ¹ng ra lá»‡nh thay tháº¿ code cÅ© báº±ng Ã½ tÆ°á»Ÿng má»›i.
+- Nß¦+u th+¬m quy tß¦»c mß+¢i: th+¬m n+¦ v+áo danh s+ích trong `.cursorrules`
+- Nß¦+u cß¦¡p nhß¦¡t quy tß¦»c hiß+çn c+¦: cß¦¡p nhß¦¡t m+¦ tß¦ú hoß¦+c chi tiß¦+t t¦¦¦íng ß+¬ng
+- Nß¦+u x+¦a quy tß¦»c: x+¦a n+¦ khß+Åi danh s+ích

@@ -30,7 +30,7 @@ You can build the project effortlessly using the provided `CMakePresets.json`.
 # 1. Configure the project
 cmake --preset windows-msvc
 
-# 2. Build the project
+# 2. Build the project (c+Ìch gﬂ+Ïi ngﬂ¶ªn gﬂ+Ïn chung cho mﬂ+Ïi compiler)
 cmake --build build
 
 # 3. Run the executable
@@ -42,7 +42,7 @@ cmake --build build
 # 1. Configure the project
 cmake --preset windows-mingw
 
-# 2. Build the project
+# 2. Build the project (c+Ìch gﬂ+Ïi ngﬂ¶ªn gﬂ+Ïn chung cho mﬂ+Ïi compiler)
 cmake --build build
 
 # 3. Run the executable

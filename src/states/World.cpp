@@ -6,12 +6,33 @@
 #include "raylib.h"
 #include <cstdlib>
 #include <memory>
+#include "CharacterFactory.h"
+#include "HighJumpAbility.h"
+#include "DashAbility.h"
+#include "Menu.h"
+#include "SettingsOverlay.h"
+#include "CharacterSelectionOverlay.h"
 
 World1_1State::World1_1State(GameManager* gameManager) : gameManager_(gameManager) {
     worldWidth_ = 6000.0f;
     groundY_ = 720 - 80.0f;
 
-    player_.Init(200.0f, groundY_ - player_.GetHeight());
+    player1_ = std::unique_ptr<Player>(static_cast<Player*>(CharacterFactory::GetInstance().CreateCharacter(availableCharacters_[player1CharIndex_]).release()));
+    player1_->Init(200.0f, groundY_ - player1_->GetHeight());
+    player1_->SetInputConfig({ KEY_A, KEY_D, KEY_W, KEY_S, KEY_J, KEY_K });
+
+    player2_ = std::unique_ptr<Player>(static_cast<Player*>(CharacterFactory::GetInstance().CreateCharacter(availableCharacters_[player2CharIndex_]).release()));
+    player2_->Init(250.0f, groundY_ - player2_->GetHeight());
+    player2_->SetInputConfig({ KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_KP_1, KEY_KP_2 });
+
+    enemies_.clear();
+    auto goomba1 = CharacterFactory::GetInstance().CreateCharacter("Goomba");
+    goomba1->Init(600.0f, groundY_ - 32.0f);
+    enemies_.push_back(std::move(goomba1));
+
+    auto goomba2 = CharacterFactory::GetInstance().CreateCharacter("Goomba");
+    goomba2->Init(900.0f, groundY_ - 32.0f);
+    enemies_.push_back(std::move(goomba2));
 
     platforms_.clear();
     platforms_.push_back({ { 0, groundY_, worldWidth_, 80.0f }, { 94, 164, 50, 255 } });
@@ -49,21 +70,58 @@ World1_1State::World1_1State(GameManager* gameManager) : gameManager_(gameManage
         decorations_.push_back(Decoration({ dd[0], dd[1] }, (int)dd[2]));
     }
 
-    camera_.Init(&player_);
+    camera_.Init(player1_.get());
 }
 
 void World1_1State::HandleInput() {
-    // Nhấn phím M để thoát ra Menu chính (minh hoạ state transition)
-    if (IsKeyPressed(KEY_M)) {
-        gameManager_->ChangeState(std::make_unique<MenuState>(gameManager_));
+    if (activeOverlay_) {
+        activeOverlay_->HandleInput();
+        if (activeOverlay_->IsFinished()) {
+            activeOverlay_.reset();
+        }
+        return;
     }
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        activeOverlay_ = std::make_unique<SettingsOverlay>(gameManager_);
+        return;
+    }
+
+    if (IsKeyPressed(KEY_U)) {
+        activeOverlay_ = std::make_unique<CharacterSelectionOverlay>(player1_, player2_, availableCharacters_);
+        return;
+    }
+    
+    // Test special ability for Player 1
+    if (IsKeyPressed(KEY_J)) player1_->UseAbility1();
+    if (IsKeyPressed(KEY_K)) player1_->UseAbility2();
+    
+    // Test special ability for Player 2
+    if (IsKeyPressed(KEY_KP_1)) player2_->UseAbility1();
+    if (IsKeyPressed(KEY_KP_2)) player2_->UseAbility2();
 }
 
 void World1_1State::Update(float dt) {
-    player_.ResetGroundState();
-    player_.Update(dt, worldWidth_);
-    for (auto& p : platforms_) player_.ResolveCollision(p.GetBounds());
-    camera_.Update(&player_, worldWidth_);
+    if (activeOverlay_) {
+        activeOverlay_->Update(dt);
+        return; // Pause update
+    }
+
+    player1_->Update(dt, worldWidth_);
+    player1_->SetOnGround(false);
+    for (auto& p : platforms_) player1_->ResolveCollision(p.GetBounds());
+
+    player2_->Update(dt, worldWidth_);
+    player2_->SetOnGround(false);
+    for (auto& p : platforms_) player2_->ResolveCollision(p.GetBounds());
+
+    for (auto& e : enemies_) {
+        e->Update(dt, worldWidth_);
+        e->SetOnGround(false);
+        for (auto& p : platforms_) e->ResolveCollision(p.GetBounds());
+    }
+
+    camera_.Update(player1_.get(), worldWidth_);
     for (auto& c : clouds_) c.Update(dt, worldWidth_);
 }
 
@@ -74,8 +132,14 @@ void World1_1State::Draw() {
         Background::Draw(worldWidth_, groundY_, clouds_);
         for (const auto& d : decorations_) d.Draw();
         for (const auto& p : platforms_) p.Draw();
-        player_.Draw();
+        player1_->Draw();
+        player2_->Draw();
+        for (auto& e : enemies_) e->Draw();
     EndMode2D();
 
-    HUD::Draw(player_);
+    HUD::Draw(*player1_);
+
+    if (activeOverlay_) {
+        activeOverlay_->Draw();
+    }
 }

@@ -7,7 +7,10 @@
 #include "Cloud.h"
 #include "Decoration.h"
 #include "CameraManager.h"
+#include "OverlayUI.h"
 #include <vector>
+#include <string>
+#include <memory>
 
 class GameManager; // Forward declaration
 
@@ -26,8 +29,18 @@ private:
     float worldWidth_;
     float groundY_;
 
-    Player player_;
+    bool isSelectingCharacter_ = false; // Bß+Å
+    bool isSettingsOpen_ = false; // Bß+Å
+    int player1CharIndex_ = 0; // Bß+Å
+    int player2CharIndex_ = 1; // Bß+Å
+    std::vector<std::string> availableCharacters_ = {"Mario", "Luigi", "Peach", "Toad", "Wario"};
+
+    std::unique_ptr<OverlayUI> activeOverlay_;
+
+    std::unique_ptr<Player> player1_;
+    std::unique_ptr<Player> player2_;
     CameraManager camera_;
+    std::vector<std::unique_ptr<Character>> enemies_;
     std::vector<Platform> platforms_;
     std::vector<Cloud> clouds_;
     std::vector<Decoration> decorations_;

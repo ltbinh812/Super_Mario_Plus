@@ -12,7 +12,7 @@ package "Systems Layer" {
     
     note right of PhysicsSystem::update
       Executes at a strict 60Hz (dt = 0.0167s).
-      1. Apply Gravity (if not grounded)
+      1. Apply Gravity (always applied to ensure ground collision detection)
       2. Cap max fall speed
       3. Apply grounded friction
       4. Position += Velocity * dt
@@ -61,11 +61,12 @@ Routing these updates through getters and setters millions
 of times per second can introduce unnecessary overhead, 
 which is why they are exposed directly to the system.
 
-The "Grounded" Handshake: Notice that Step 5 of the Physics 
-logic explicitly sets entity.grounded = false. 
-The Physics System always assumes an entity is 
-falling until the CollisionSystem runs in the 
-immediately following step. If the Collision 
-System detects a floor, it sets grounded = true. 
-This prevents the PhysicsSystem from endlessly 
-accumulating gravity while Mario is standing still.
+The "Grounded" Handshake & Gravity Trick: 
+Notice that Step 5 explicitly sets entity.grounded = false. 
+The Physics System ALWAYS applies a small gravity vector even 
+when on the ground. This ensures that the entity moves 
+microscopically down into the floor collider on every frame, 
+guaranteeing that the CollisionSystem (running next) successfully 
+detects the floor, snaps the entity back up, zeroes velocity.y, 
+and sets grounded = true. This eliminates 1-frame flickering 
+which would cause jump inputs to drop!
