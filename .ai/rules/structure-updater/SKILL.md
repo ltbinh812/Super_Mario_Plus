@@ -1,22 +1,18 @@
 ---
-name: uml-updater
-description: Kß+¦ n-âng bß¦»t buß+Öc Agent tß+¦ -æß+Öng cß¦¡p nhß¦¡t hoß¦+c tß¦ío mß+¢i s¦í -æß+ô UML (.puml) mß+ùi khi c+¦ mß+Öt thay -æß+òi lß+¢n vß+ü t+¡nh n-âng hoß¦+c kiß¦+n tr+¦c code.
+name: structure-updater
+description: Ká»¹ nÄƒng quÃ©t toÃ n bá»™ dá»± Ã¡n vÃ  cáº­p nháº­t láº¡i structure.md khi ngÆ°á»i dÃ¹ng gÃµ lá»‡nh /update structure.md.
 ---
 
-# Kß+¦ n-âng: Tß+¦ -æß+Öng cß¦¡p nhß¦¡t UML
+# Ká»¹ nÄƒng: Cáº­p nháº­t structure.md
 
-Kß+¦ n-âng n+áy -æß¦úm bß¦úo Agent lu+¦n duy tr+¼ t+ái liß+çu thiß¦+t kß¦+ (UML) nhß¦Ñt qu+ín v+á -æß+ông bß+Ö vß+¢i thß+¦c tß¦+ m+ú nguß+ôn (codebase) trong dß+¦ +ín SuperMarioPlus.
+Ká»¹ nÄƒng nÃ y chá»‹u trÃ¡ch nhiá»‡m Ä‘á»“ng bá»™ hoÃ¡ láº¡i file `structure.md` vá»›i thá»±c tráº¡ng code hiá»‡n táº¡i cá»§a dá»± Ã¡n khi nháº­n Ä‘Æ°á»£c lá»‡nh tá»« ngÆ°á»i dÃ¹ng.
 
-## H¦¦ß+¢ng dß¦½n tß+½ng b¦¦ß+¢c
+## HÆ°á»›ng dáº«n tá»«ng bÆ°á»›c
 
-Khi ng¦¦ß+¥i d+¦ng y+¬u cß¦ºu mß+Öt thay -æß+òi (prompt) c+¦ chß+¬a nhß+»ng logic sau:
-- Th+¬m mß+Öt t+¡nh n-âng mß+¢i (v+¡ dß+Ñ: Kß+¦ n-âng mß+¢i, Nh+ón vß¦¡t mß+¢i).
-- Tß¦ío ra mß+Öt Class/Interface quan trß+ìng mß+¢i.
-- Thay -æß+òi cß¦Ñu tr+¦c Design Pattern (State, Strategy, Factory, v.v.).
+Khi ngÆ°á»i dÃ¹ng gÃµ lá»‡nh `/update structure.md`, hÃ£y lÃ m theo cÃ¡c bÆ°á»›c sau:
 
-H+úy l+ám theo c+íc b¦¦ß+¢c sau:
-
-1. **Thß+¦c thi code:** Xß+¡ l++ y+¬u cß¦ºu code cß+ºa ng¦¦ß+¥i d+¦ng nh¦¦ b+¼nh th¦¦ß+¥ng.
-2. **X+íc -æß+ïnh file UML:** T+¼m c+íc file `.puml` li+¬n quan trong th¦¦ mß+Ñc `workflow/` (nh¦¦ `system.puml`, `character_system.puml`, `ui_system.puml`).
-3. **Cß¦¡p nhß¦¡t UML:** Tß+¦ -æß+Öng sß+¡a -æß+òi m+ú PlantUML trong c+íc file n+áy -æß+â phß¦ún +ính ch+¡nh x+íc 100% thay -æß+òi vß+½a thß+¦c hiß+çn trong code. Kh+¦ng bao giß+¥ -æß+â UML bß+ï tß+Ñt hß¦¡u so vß+¢i code.
-4. **B+ío c+ío:** Trong c+óu trß¦ú lß+¥i phß¦ún hß+ôi cho ng¦¦ß+¥i d+¦ng, h+úy x+íc nhß¦¡n r+¦ r+áng rß¦¦ng "T+¦i -æ+ú tß+¦ -æß+Öng cß¦¡p nhß¦¡t lß¦íi file UML li+¬n quan -æß+â phß¦ún +ính kiß¦+n tr+¦c mß+¢i."
+1. **QuÃ©t dá»± Ã¡n:** Äá»c qua toÃ n bá»™ cáº¥u trÃºc thÆ° má»¥c (Ä‘áº·c biá»‡t lÃ  `src` vÃ  `include`) Ä‘á»ƒ tÃ¬m cÃ¡c file Ä‘Ã£ sá»­a hoáº·c thÃªm má»›i.
+2. **PhÃ¢n tÃ­ch:** Nháº­n diá»‡n cÃ¡c class/file má»›i hoáº·c nhá»¯ng liÃªn káº¿t bá»‹ thay Ä‘á»•i so vá»›i tÃ i liá»‡u hiá»‡n táº¡i trong `structure.md`.
+3. **Äá»“ng bá»™ cáº¥u trÃºc:** Cáº­p nháº­t láº¡i sÆ¡ Ä‘á»“ cÃ¢y vÃ  giáº£i thÃ­ch chá»©c nÄƒng chi tiáº¿t cho táº¥t cáº£ cÃ¡c file/class. Pháº£i Ä‘áº£m báº£o mÃ´ táº£ cáº¥u trÃºc Ä‘áº§y Ä‘á»§ nháº¥t cÃ³ thá»ƒ.
+4. **BÃ¡o cÃ¡o tiáº¿n trÃ¬nh (Cá»°C Ká»² QUAN TRá»ŒNG):** Pháº£i tá»•ng há»£p vÃ  ghi rÃµ má»™t má»¥c vá» "TÃ¬nh tráº¡ng & Tiáº¿n Ä‘á»™ dá»± Ã¡n hiá»‡n táº¡i". Má»¥c nÃ y pháº£i tÃ³m táº¯t Ä‘áº§y Ä‘á»§ dá»± Ã¡n Ä‘ang lÃ m tá»›i Ä‘Ã¢u, logic nÃ o Ä‘Ã£ hoÃ n thiá»‡n, pháº§n nÃ o Ä‘ang dá»Ÿ dang. Má»¥c tiÃªu cá»‘t lÃµi lÃ : **Báº¥t ká»³ Agent nÃ o á»Ÿ láº§n sau khi má»Ÿ project, chá»‰ cáº§n Ä‘á»c file `structure.md` nÃ y lÃ  sáº½ hiá»ƒu ngay láº­p tá»©c 100% bá»‘i cáº£nh vÃ  tiáº¿n Ä‘á»™ dá»± Ã¡n mÃ  khÃ´ng cáº§n pháº£i duyá»‡t láº¡i code.**
+5. **Dá»n dáº¹p lá»‹ch sá»­ (Cáº®T Tá»ˆA Ná»˜I DUNG):** Tá»± Ä‘á»™ng xÃ³a bá» nhá»¯ng thÃ´ng tin tiáº¿n trÃ¬nh cÅ©, nhá»¯ng lá»‹ch sá»­ cáº­p nháº­t khÃ´ng cÃ²n giÃ¡ trá»‹ tham kháº£o hoáº·c Ä‘Ã£ lá»—i thá»i. Chá»‰ giá»¯ láº¡i thá»±c tráº¡ng hiá»‡n táº¡i Ä‘á»ƒ trÃ¡nh file quÃ¡ dÃ i, giÃºp Agent Ä‘á»c nhanh vÃ  khÃ´ng bá»‹ nhiá»…u thÃ´ng tin.
