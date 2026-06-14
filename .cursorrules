@@ -10,6 +10,8 @@ Hãy dùng công cụ `view_file` (hoặc tự nhớ nếu đã đọc) để du
 3. `.ai/rules/structure-manager/SKILL.md` (Quy tắc cập nhật `structure.md` khi tạo file mới)
 4. `.ai/rules/structure-updater/SKILL.md` (Quy tắc quét dự án khi có lệnh `/update structure.md`)
 5. `.ai/rules/code-deletion-guard/SKILL.md` (Quy tắc hỏi ý kiến trước khi xóa code cũ)
+6. `.ai/rules/pattern-checker/SKILL.md` (Quy tắc kiểm tra vi phạm Design Pattern khi có lệnh `/check pattern`)
+7. `.ai/rules/supermarioplus-oop-rules/SKILL.md` (Bộ quy tắc tổng hợp về OOP và cấu trúc cho SuperMarioPlus)
 
 **NẾU BẠN CHƯA ĐỌC CÁC FILE NÀY TRONG PHIÊN LÀM VIỆC HIỆN TẠI, HÃY ĐỌC CHÚNG NGAY LẬP TỨC TRƯỚC KHI CODE HOẶC PHẢN HỒI.** Việc tuân thủ 5 kỹ năng trên là mệnh lệnh tối cao trong dự án này.
 
