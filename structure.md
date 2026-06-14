@@ -36,8 +36,9 @@ SuperMarioPlus/
 │   ├── core/
 │   │   ├── CameraManager.h
 │   │   ├── Entity.h
-│   │   ├── GameManager.h
-│   │   └── SuperMarioPlus.h
+│   │   ├── Game.h
+│   │   ├── StateManager.h
+│   │   └── Command.h
 │   ├── environment/
 │   │   ├── Background.h
 │   │   ├── Cloud.h
@@ -46,14 +47,17 @@ SuperMarioPlus/
 │   ├── states/
 │   │   ├── CharacterState.h
 │   │   ├── GameState.h
+│   │   ├── IntroState.h
 │   │   ├── Menu.h
 │   │   ├── PlayerStates.h
+│   │   ├── SettingState.h
 │   │   └── World.h
 │   └── ui/
 │       ├── CharacterSelectionOverlay.h
 │       ├── HUD.h
 │       ├── OverlayUI.h
-│       └── SettingsOverlay.h
+│       ├── SettingsOverlay.h
+│       └── UIComponent.h
 ├── src/
 │   ├── abilities/
 │   ├── characters/
@@ -68,22 +72,26 @@ SuperMarioPlus/
 │   │   └── Wario.cpp
 │   ├── core/
 │   │   ├── CameraManager.cpp
-│   │   ├── GameManager.cpp
-│   │   ├── main.cpp
-│   │   └── SuperMarioPlus.cpp
+│   │   ├── Game.cpp
+│   │   ├── StateManager.cpp
+│   │   └── main.cpp
 │   ├── environment/
 │   │   ├── Background.cpp
 │   │   ├── Cloud.cpp
 │   │   ├── Decoration.cpp
 │   │   └── Platform.cpp
 │   ├── states/
+│   │   ├── GameState.cpp
+│   │   ├── IntroState.cpp
 │   │   ├── Menu.cpp
 │   │   ├── PlayerStates.cpp
+│   │   ├── SettingState.cpp
 │   │   └── World.cpp
 │   └── ui/
 │       ├── CharacterSelectionOverlay.cpp
 │       ├── HUD.cpp
-│       └── SettingsOverlay.cpp
+│       ├── SettingsOverlay.cpp
+│       └── UIComponent.cpp
 ├── third_party/
 │   └── raylib/
 ├── workflow/
@@ -106,15 +114,18 @@ SuperMarioPlus/
 
 #### Core
 - **`main.cpp`**: Entry point. Mở cửa sổ, thiết lập Raylib và chạy vòng lặp chính.
-- **`SuperMarioPlus`**: Cung cấp `RunGame()`, thiết lập GameManager.
-- **`GameManager`**: Trái tim của State Pattern, quản lý state hiện tại của game (Menu, World).
+- **`Game`**: Lớp chính quản lý vòng lặp game (Game Loop) với cơ chế Fixed-Timestep (tích lũy `accumulator`) giúp logic vật lý chạy ổn định trên mọi FPS.
+- **`StateManager`**: Cốt lõi của State Pattern kết hợp Command Pattern (PushCommand), quản lý các state hiện tại bằng stack (Ngăn xếp).
+- **`Command`**: Định nghĩa cấu trúc lệnh (Push, Pop, Change, Clear) để chuyển đổi State an toàn mà không bị tight-coupling.
 - **`CameraManager`**: Theo dõi Player, tính toán offset để vẽ màn hình cuộn.
 - **`Entity`**: Base class cho mọi vật thể trong game (tọa độ, tốc độ).
 
 #### States
-- **`GameState`**: Abstract class quy định các hàm `HandleInput()`, `Update()`, `Draw()` cho màn chơi.
-- **`MenuState` (`Menu`)**: Trạng thái màn hình bắt đầu game.
-- **`World1_1State` (`World`)**: Quản lý màn hình chơi chính (Mario, Quái, Môi trường).
+- **`GameState`**: Abstract class quy định các hàm `HandleInput()`, `Update(float dt)`, `Render(float alpha) const` cho màn chơi, và hỗ trợ gửi `Command` ngược lên `StateManager`.
+- **`IntroState`**: Màn hình giới thiệu ban đầu, có nút chuyển sang Menu hoặc Setting.
+- **`MenuState` (`Menu`)**: Màn hình chọn nhân vật và bắt đầu game.
+- **`World1_1State` (`World`)**: Quản lý màn hình chơi chính (Mario, Quái, Môi trường). Bắt các OverlayUI khi ấn phím đặc biệt.
+- **`SettingState`**: Màn hình thiết lập hệ thống từ Intro.
 - **`CharacterState` / `PlayerStates`**: Base interface và các lớp triển khai cho State Pattern của nhân vật (Idle, Running, Jumping).
 
 #### Characters
@@ -132,9 +143,10 @@ SuperMarioPlus/
 
 #### UI
 - **`HUD`**: Lớp chứa logic in thông tin lên màn hình (Máu, Điểm, Thời gian).
-- **`OverlayUI`**: Interface cho giao diện hiển thị đè lên màn chơi (Settings, Chọn nhân vật).
-- **`SettingsOverlay`**: Menu tùy chỉnh (Save, Load, Về Menu chính).
-- **`CharacterSelectionOverlay`**: UI cho phép 2 người chơi swap chọn nhân vật (Mario, Luigi, v.v.).
+- **`OverlayUI`**: Interface cho giao diện hiển thị đè lên màn chơi (Settings, Chọn nhân vật), hỗ trợ `Render(float alpha) const`.
+- **`SettingsOverlay`**: Menu tùy chỉnh đè lên World (Save, Load, Về Menu chính).
+- **`CharacterSelectionOverlay`**: UI cho phép 2 người chơi swap chọn nhân vật đè lên World (Mario, Luigi, v.v.).
+- **`UIComponent`**: Lớp cơ sở (như `Button`) phục vụ cho các state tĩnh (Intro, Setting) để dễ dàng thao tác bấm nút.
 
 #### Root & Misc Folders
 - **`assets/`**: Chứa các tài nguyên của game (âm thanh, hình ảnh, font chữ...). Hiện tại đang trống.

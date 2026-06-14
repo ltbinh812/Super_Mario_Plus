@@ -1,0 +1,51 @@
+@startuml world_and_collision
+
+skinparam packageStyle rectangle
+
+title World System & Spatial Grid Collision
+
+package "Level Loading System" {
+    class LevelLoader {
+        + static LoadLevel(jsonPath: string, world: WorldState&): void
+    }
+    
+    note right of LevelLoader
+      Dùng nlohmann/json để đọc file .json
+      Sinh ra TileMap và nhồi Entities vào World.
+    end note
+}
+
+package "World Domain" {
+    class WorldState {
+        - tileMap: unique_ptr<TileMap>
+        - entities: vector<unique_ptr<Entity>>
+        - cameraManager: CameraManager
+        + Update(dt: float): void
+    }
+
+    class TileMap {
+        - grid: vector<vector<int>>
+        - tileSize: int
+        + GetTilesInRect(bounds: Rectangle): vector<Rectangle>
+        + IsSolid(gridX: int, gridY: int): bool
+    }
+
+    class CameraManager {
+        - camera: Camera2D
+        + Update(target: Vector2, dt: float): void
+    }
+}
+
+WorldState *-- TileMap
+WorldState *-- CameraManager
+LevelLoader ..> WorldState : populates >
+
+note right of TileMap
+  THAY THẾ VÒNG LẶP O(N * M)
+  Thay vì duyệt mảng Platform,
+  chỉ cần tính toán gridX, gridY từ toạ độ
+  và lấy ra 4-8 block xung quanh nhân vật.
+  Tốc độ va chạm là O(1) bất chấp map to cỡ nào.
+end note
+
+@enduml

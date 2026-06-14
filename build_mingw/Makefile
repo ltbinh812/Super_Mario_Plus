@@ -128,293 +128,53 @@ SuperMarioPlus/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/build
 .PHONY : SuperMarioPlus/fast
 
-src/characters/Character.obj: src/characters/Character.cpp.obj
-.PHONY : src/characters/Character.obj
+src/core/Game.obj: src/core/Game.cpp.obj
+.PHONY : src/core/Game.obj
 
 # target to build an object file
-src/characters/Character.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Character.cpp.obj
-.PHONY : src/characters/Character.cpp.obj
+src/core/Game.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/Game.cpp.obj
+.PHONY : src/core/Game.cpp.obj
 
-src/characters/Character.i: src/characters/Character.cpp.i
-.PHONY : src/characters/Character.i
+src/core/Game.i: src/core/Game.cpp.i
+.PHONY : src/core/Game.i
 
 # target to preprocess a source file
-src/characters/Character.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Character.cpp.i
-.PHONY : src/characters/Character.cpp.i
+src/core/Game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/Game.cpp.i
+.PHONY : src/core/Game.cpp.i
 
-src/characters/Character.s: src/characters/Character.cpp.s
-.PHONY : src/characters/Character.s
+src/core/Game.s: src/core/Game.cpp.s
+.PHONY : src/core/Game.s
 
 # target to generate assembly for a file
-src/characters/Character.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Character.cpp.s
-.PHONY : src/characters/Character.cpp.s
+src/core/Game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/Game.cpp.s
+.PHONY : src/core/Game.cpp.s
 
-src/characters/CharacterFactory.obj: src/characters/CharacterFactory.cpp.obj
-.PHONY : src/characters/CharacterFactory.obj
+src/core/StateManager.obj: src/core/StateManager.cpp.obj
+.PHONY : src/core/StateManager.obj
 
 # target to build an object file
-src/characters/CharacterFactory.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/CharacterFactory.cpp.obj
-.PHONY : src/characters/CharacterFactory.cpp.obj
+src/core/StateManager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/StateManager.cpp.obj
+.PHONY : src/core/StateManager.cpp.obj
 
-src/characters/CharacterFactory.i: src/characters/CharacterFactory.cpp.i
-.PHONY : src/characters/CharacterFactory.i
-
-# target to preprocess a source file
-src/characters/CharacterFactory.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/CharacterFactory.cpp.i
-.PHONY : src/characters/CharacterFactory.cpp.i
-
-src/characters/CharacterFactory.s: src/characters/CharacterFactory.cpp.s
-.PHONY : src/characters/CharacterFactory.s
-
-# target to generate assembly for a file
-src/characters/CharacterFactory.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/CharacterFactory.cpp.s
-.PHONY : src/characters/CharacterFactory.cpp.s
-
-src/characters/Goomba.obj: src/characters/Goomba.cpp.obj
-.PHONY : src/characters/Goomba.obj
-
-# target to build an object file
-src/characters/Goomba.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Goomba.cpp.obj
-.PHONY : src/characters/Goomba.cpp.obj
-
-src/characters/Goomba.i: src/characters/Goomba.cpp.i
-.PHONY : src/characters/Goomba.i
+src/core/StateManager.i: src/core/StateManager.cpp.i
+.PHONY : src/core/StateManager.i
 
 # target to preprocess a source file
-src/characters/Goomba.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Goomba.cpp.i
-.PHONY : src/characters/Goomba.cpp.i
+src/core/StateManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/StateManager.cpp.i
+.PHONY : src/core/StateManager.cpp.i
 
-src/characters/Goomba.s: src/characters/Goomba.cpp.s
-.PHONY : src/characters/Goomba.s
-
-# target to generate assembly for a file
-src/characters/Goomba.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Goomba.cpp.s
-.PHONY : src/characters/Goomba.cpp.s
-
-src/characters/Luigi.obj: src/characters/Luigi.cpp.obj
-.PHONY : src/characters/Luigi.obj
-
-# target to build an object file
-src/characters/Luigi.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Luigi.cpp.obj
-.PHONY : src/characters/Luigi.cpp.obj
-
-src/characters/Luigi.i: src/characters/Luigi.cpp.i
-.PHONY : src/characters/Luigi.i
-
-# target to preprocess a source file
-src/characters/Luigi.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Luigi.cpp.i
-.PHONY : src/characters/Luigi.cpp.i
-
-src/characters/Luigi.s: src/characters/Luigi.cpp.s
-.PHONY : src/characters/Luigi.s
+src/core/StateManager.s: src/core/StateManager.cpp.s
+.PHONY : src/core/StateManager.s
 
 # target to generate assembly for a file
-src/characters/Luigi.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Luigi.cpp.s
-.PHONY : src/characters/Luigi.cpp.s
-
-src/characters/Mario.obj: src/characters/Mario.cpp.obj
-.PHONY : src/characters/Mario.obj
-
-# target to build an object file
-src/characters/Mario.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Mario.cpp.obj
-.PHONY : src/characters/Mario.cpp.obj
-
-src/characters/Mario.i: src/characters/Mario.cpp.i
-.PHONY : src/characters/Mario.i
-
-# target to preprocess a source file
-src/characters/Mario.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Mario.cpp.i
-.PHONY : src/characters/Mario.cpp.i
-
-src/characters/Mario.s: src/characters/Mario.cpp.s
-.PHONY : src/characters/Mario.s
-
-# target to generate assembly for a file
-src/characters/Mario.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Mario.cpp.s
-.PHONY : src/characters/Mario.cpp.s
-
-src/characters/Peach.obj: src/characters/Peach.cpp.obj
-.PHONY : src/characters/Peach.obj
-
-# target to build an object file
-src/characters/Peach.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Peach.cpp.obj
-.PHONY : src/characters/Peach.cpp.obj
-
-src/characters/Peach.i: src/characters/Peach.cpp.i
-.PHONY : src/characters/Peach.i
-
-# target to preprocess a source file
-src/characters/Peach.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Peach.cpp.i
-.PHONY : src/characters/Peach.cpp.i
-
-src/characters/Peach.s: src/characters/Peach.cpp.s
-.PHONY : src/characters/Peach.s
-
-# target to generate assembly for a file
-src/characters/Peach.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Peach.cpp.s
-.PHONY : src/characters/Peach.cpp.s
-
-src/characters/Player.obj: src/characters/Player.cpp.obj
-.PHONY : src/characters/Player.obj
-
-# target to build an object file
-src/characters/Player.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Player.cpp.obj
-.PHONY : src/characters/Player.cpp.obj
-
-src/characters/Player.i: src/characters/Player.cpp.i
-.PHONY : src/characters/Player.i
-
-# target to preprocess a source file
-src/characters/Player.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Player.cpp.i
-.PHONY : src/characters/Player.cpp.i
-
-src/characters/Player.s: src/characters/Player.cpp.s
-.PHONY : src/characters/Player.s
-
-# target to generate assembly for a file
-src/characters/Player.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Player.cpp.s
-.PHONY : src/characters/Player.cpp.s
-
-src/characters/Toad.obj: src/characters/Toad.cpp.obj
-.PHONY : src/characters/Toad.obj
-
-# target to build an object file
-src/characters/Toad.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Toad.cpp.obj
-.PHONY : src/characters/Toad.cpp.obj
-
-src/characters/Toad.i: src/characters/Toad.cpp.i
-.PHONY : src/characters/Toad.i
-
-# target to preprocess a source file
-src/characters/Toad.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Toad.cpp.i
-.PHONY : src/characters/Toad.cpp.i
-
-src/characters/Toad.s: src/characters/Toad.cpp.s
-.PHONY : src/characters/Toad.s
-
-# target to generate assembly for a file
-src/characters/Toad.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Toad.cpp.s
-.PHONY : src/characters/Toad.cpp.s
-
-src/characters/Wario.obj: src/characters/Wario.cpp.obj
-.PHONY : src/characters/Wario.obj
-
-# target to build an object file
-src/characters/Wario.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Wario.cpp.obj
-.PHONY : src/characters/Wario.cpp.obj
-
-src/characters/Wario.i: src/characters/Wario.cpp.i
-.PHONY : src/characters/Wario.i
-
-# target to preprocess a source file
-src/characters/Wario.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Wario.cpp.i
-.PHONY : src/characters/Wario.cpp.i
-
-src/characters/Wario.s: src/characters/Wario.cpp.s
-.PHONY : src/characters/Wario.s
-
-# target to generate assembly for a file
-src/characters/Wario.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/characters/Wario.cpp.s
-.PHONY : src/characters/Wario.cpp.s
-
-src/core/CameraManager.obj: src/core/CameraManager.cpp.obj
-.PHONY : src/core/CameraManager.obj
-
-# target to build an object file
-src/core/CameraManager.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/CameraManager.cpp.obj
-.PHONY : src/core/CameraManager.cpp.obj
-
-src/core/CameraManager.i: src/core/CameraManager.cpp.i
-.PHONY : src/core/CameraManager.i
-
-# target to preprocess a source file
-src/core/CameraManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/CameraManager.cpp.i
-.PHONY : src/core/CameraManager.cpp.i
-
-src/core/CameraManager.s: src/core/CameraManager.cpp.s
-.PHONY : src/core/CameraManager.s
-
-# target to generate assembly for a file
-src/core/CameraManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/CameraManager.cpp.s
-.PHONY : src/core/CameraManager.cpp.s
-
-src/core/GameManager.obj: src/core/GameManager.cpp.obj
-.PHONY : src/core/GameManager.obj
-
-# target to build an object file
-src/core/GameManager.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/GameManager.cpp.obj
-.PHONY : src/core/GameManager.cpp.obj
-
-src/core/GameManager.i: src/core/GameManager.cpp.i
-.PHONY : src/core/GameManager.i
-
-# target to preprocess a source file
-src/core/GameManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/GameManager.cpp.i
-.PHONY : src/core/GameManager.cpp.i
-
-src/core/GameManager.s: src/core/GameManager.cpp.s
-.PHONY : src/core/GameManager.s
-
-# target to generate assembly for a file
-src/core/GameManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/GameManager.cpp.s
-.PHONY : src/core/GameManager.cpp.s
-
-src/core/SuperMarioPlus.obj: src/core/SuperMarioPlus.cpp.obj
-.PHONY : src/core/SuperMarioPlus.obj
-
-# target to build an object file
-src/core/SuperMarioPlus.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/SuperMarioPlus.cpp.obj
-.PHONY : src/core/SuperMarioPlus.cpp.obj
-
-src/core/SuperMarioPlus.i: src/core/SuperMarioPlus.cpp.i
-.PHONY : src/core/SuperMarioPlus.i
-
-# target to preprocess a source file
-src/core/SuperMarioPlus.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/SuperMarioPlus.cpp.i
-.PHONY : src/core/SuperMarioPlus.cpp.i
-
-src/core/SuperMarioPlus.s: src/core/SuperMarioPlus.cpp.s
-.PHONY : src/core/SuperMarioPlus.s
-
-# target to generate assembly for a file
-src/core/SuperMarioPlus.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/SuperMarioPlus.cpp.s
-.PHONY : src/core/SuperMarioPlus.cpp.s
+src/core/StateManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/StateManager.cpp.s
+.PHONY : src/core/StateManager.cpp.s
 
 src/core/main.obj: src/core/main.cpp.obj
 .PHONY : src/core/main.obj
@@ -440,101 +200,53 @@ src/core/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/core/main.cpp.s
 .PHONY : src/core/main.cpp.s
 
-src/environment/Background.obj: src/environment/Background.cpp.obj
-.PHONY : src/environment/Background.obj
+src/states/GameState.obj: src/states/GameState.cpp.obj
+.PHONY : src/states/GameState.obj
 
 # target to build an object file
-src/environment/Background.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Background.cpp.obj
-.PHONY : src/environment/Background.cpp.obj
+src/states/GameState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/GameState.cpp.obj
+.PHONY : src/states/GameState.cpp.obj
 
-src/environment/Background.i: src/environment/Background.cpp.i
-.PHONY : src/environment/Background.i
+src/states/GameState.i: src/states/GameState.cpp.i
+.PHONY : src/states/GameState.i
 
 # target to preprocess a source file
-src/environment/Background.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Background.cpp.i
-.PHONY : src/environment/Background.cpp.i
+src/states/GameState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/GameState.cpp.i
+.PHONY : src/states/GameState.cpp.i
 
-src/environment/Background.s: src/environment/Background.cpp.s
-.PHONY : src/environment/Background.s
+src/states/GameState.s: src/states/GameState.cpp.s
+.PHONY : src/states/GameState.s
 
 # target to generate assembly for a file
-src/environment/Background.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Background.cpp.s
-.PHONY : src/environment/Background.cpp.s
+src/states/GameState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/GameState.cpp.s
+.PHONY : src/states/GameState.cpp.s
 
-src/environment/Cloud.obj: src/environment/Cloud.cpp.obj
-.PHONY : src/environment/Cloud.obj
+src/states/IntroState.obj: src/states/IntroState.cpp.obj
+.PHONY : src/states/IntroState.obj
 
 # target to build an object file
-src/environment/Cloud.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Cloud.cpp.obj
-.PHONY : src/environment/Cloud.cpp.obj
+src/states/IntroState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/IntroState.cpp.obj
+.PHONY : src/states/IntroState.cpp.obj
 
-src/environment/Cloud.i: src/environment/Cloud.cpp.i
-.PHONY : src/environment/Cloud.i
-
-# target to preprocess a source file
-src/environment/Cloud.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Cloud.cpp.i
-.PHONY : src/environment/Cloud.cpp.i
-
-src/environment/Cloud.s: src/environment/Cloud.cpp.s
-.PHONY : src/environment/Cloud.s
-
-# target to generate assembly for a file
-src/environment/Cloud.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Cloud.cpp.s
-.PHONY : src/environment/Cloud.cpp.s
-
-src/environment/Decoration.obj: src/environment/Decoration.cpp.obj
-.PHONY : src/environment/Decoration.obj
-
-# target to build an object file
-src/environment/Decoration.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Decoration.cpp.obj
-.PHONY : src/environment/Decoration.cpp.obj
-
-src/environment/Decoration.i: src/environment/Decoration.cpp.i
-.PHONY : src/environment/Decoration.i
+src/states/IntroState.i: src/states/IntroState.cpp.i
+.PHONY : src/states/IntroState.i
 
 # target to preprocess a source file
-src/environment/Decoration.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Decoration.cpp.i
-.PHONY : src/environment/Decoration.cpp.i
+src/states/IntroState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/IntroState.cpp.i
+.PHONY : src/states/IntroState.cpp.i
 
-src/environment/Decoration.s: src/environment/Decoration.cpp.s
-.PHONY : src/environment/Decoration.s
-
-# target to generate assembly for a file
-src/environment/Decoration.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Decoration.cpp.s
-.PHONY : src/environment/Decoration.cpp.s
-
-src/environment/Platform.obj: src/environment/Platform.cpp.obj
-.PHONY : src/environment/Platform.obj
-
-# target to build an object file
-src/environment/Platform.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Platform.cpp.obj
-.PHONY : src/environment/Platform.cpp.obj
-
-src/environment/Platform.i: src/environment/Platform.cpp.i
-.PHONY : src/environment/Platform.i
-
-# target to preprocess a source file
-src/environment/Platform.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Platform.cpp.i
-.PHONY : src/environment/Platform.cpp.i
-
-src/environment/Platform.s: src/environment/Platform.cpp.s
-.PHONY : src/environment/Platform.s
+src/states/IntroState.s: src/states/IntroState.cpp.s
+.PHONY : src/states/IntroState.s
 
 # target to generate assembly for a file
-src/environment/Platform.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/environment/Platform.cpp.s
-.PHONY : src/environment/Platform.cpp.s
+src/states/IntroState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/IntroState.cpp.s
+.PHONY : src/states/IntroState.cpp.s
 
 src/states/Menu.obj: src/states/Menu.cpp.obj
 .PHONY : src/states/Menu.obj
@@ -560,29 +272,29 @@ src/states/Menu.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/Menu.cpp.s
 .PHONY : src/states/Menu.cpp.s
 
-src/states/PlayerStates.obj: src/states/PlayerStates.cpp.obj
-.PHONY : src/states/PlayerStates.obj
+src/states/SettingState.obj: src/states/SettingState.cpp.obj
+.PHONY : src/states/SettingState.obj
 
 # target to build an object file
-src/states/PlayerStates.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/PlayerStates.cpp.obj
-.PHONY : src/states/PlayerStates.cpp.obj
+src/states/SettingState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/SettingState.cpp.obj
+.PHONY : src/states/SettingState.cpp.obj
 
-src/states/PlayerStates.i: src/states/PlayerStates.cpp.i
-.PHONY : src/states/PlayerStates.i
+src/states/SettingState.i: src/states/SettingState.cpp.i
+.PHONY : src/states/SettingState.i
 
 # target to preprocess a source file
-src/states/PlayerStates.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/PlayerStates.cpp.i
-.PHONY : src/states/PlayerStates.cpp.i
+src/states/SettingState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/SettingState.cpp.i
+.PHONY : src/states/SettingState.cpp.i
 
-src/states/PlayerStates.s: src/states/PlayerStates.cpp.s
-.PHONY : src/states/PlayerStates.s
+src/states/SettingState.s: src/states/SettingState.cpp.s
+.PHONY : src/states/SettingState.s
 
 # target to generate assembly for a file
-src/states/PlayerStates.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/PlayerStates.cpp.s
-.PHONY : src/states/PlayerStates.cpp.s
+src/states/SettingState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/SettingState.cpp.s
+.PHONY : src/states/SettingState.cpp.s
 
 src/states/World.obj: src/states/World.cpp.obj
 .PHONY : src/states/World.obj
@@ -608,54 +320,6 @@ src/states/World.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/states/World.cpp.s
 .PHONY : src/states/World.cpp.s
 
-src/ui/CharacterSelectionOverlay.obj: src/ui/CharacterSelectionOverlay.cpp.obj
-.PHONY : src/ui/CharacterSelectionOverlay.obj
-
-# target to build an object file
-src/ui/CharacterSelectionOverlay.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterSelectionOverlay.cpp.obj
-.PHONY : src/ui/CharacterSelectionOverlay.cpp.obj
-
-src/ui/CharacterSelectionOverlay.i: src/ui/CharacterSelectionOverlay.cpp.i
-.PHONY : src/ui/CharacterSelectionOverlay.i
-
-# target to preprocess a source file
-src/ui/CharacterSelectionOverlay.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterSelectionOverlay.cpp.i
-.PHONY : src/ui/CharacterSelectionOverlay.cpp.i
-
-src/ui/CharacterSelectionOverlay.s: src/ui/CharacterSelectionOverlay.cpp.s
-.PHONY : src/ui/CharacterSelectionOverlay.s
-
-# target to generate assembly for a file
-src/ui/CharacterSelectionOverlay.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterSelectionOverlay.cpp.s
-.PHONY : src/ui/CharacterSelectionOverlay.cpp.s
-
-src/ui/HUD.obj: src/ui/HUD.cpp.obj
-.PHONY : src/ui/HUD.obj
-
-# target to build an object file
-src/ui/HUD.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/HUD.cpp.obj
-.PHONY : src/ui/HUD.cpp.obj
-
-src/ui/HUD.i: src/ui/HUD.cpp.i
-.PHONY : src/ui/HUD.i
-
-# target to preprocess a source file
-src/ui/HUD.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/HUD.cpp.i
-.PHONY : src/ui/HUD.cpp.i
-
-src/ui/HUD.s: src/ui/HUD.cpp.s
-.PHONY : src/ui/HUD.s
-
-# target to generate assembly for a file
-src/ui/HUD.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/HUD.cpp.s
-.PHONY : src/ui/HUD.cpp.s
-
 src/ui/SettingsOverlay.obj: src/ui/SettingsOverlay.cpp.obj
 .PHONY : src/ui/SettingsOverlay.obj
 
@@ -680,6 +344,30 @@ src/ui/SettingsOverlay.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/SettingsOverlay.cpp.s
 .PHONY : src/ui/SettingsOverlay.cpp.s
 
+src/ui/UIComponent.obj: src/ui/UIComponent.cpp.obj
+.PHONY : src/ui/UIComponent.obj
+
+# target to build an object file
+src/ui/UIComponent.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/UIComponent.cpp.obj
+.PHONY : src/ui/UIComponent.cpp.obj
+
+src/ui/UIComponent.i: src/ui/UIComponent.cpp.i
+.PHONY : src/ui/UIComponent.i
+
+# target to preprocess a source file
+src/ui/UIComponent.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/UIComponent.cpp.i
+.PHONY : src/ui/UIComponent.cpp.i
+
+src/ui/UIComponent.s: src/ui/UIComponent.cpp.s
+.PHONY : src/ui/UIComponent.s
+
+# target to generate assembly for a file
+src/ui/UIComponent.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/UIComponent.cpp.s
+.PHONY : src/ui/UIComponent.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -689,75 +377,36 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... SuperMarioPlus
-	@echo ... src/characters/Character.obj
-	@echo ... src/characters/Character.i
-	@echo ... src/characters/Character.s
-	@echo ... src/characters/CharacterFactory.obj
-	@echo ... src/characters/CharacterFactory.i
-	@echo ... src/characters/CharacterFactory.s
-	@echo ... src/characters/Goomba.obj
-	@echo ... src/characters/Goomba.i
-	@echo ... src/characters/Goomba.s
-	@echo ... src/characters/Luigi.obj
-	@echo ... src/characters/Luigi.i
-	@echo ... src/characters/Luigi.s
-	@echo ... src/characters/Mario.obj
-	@echo ... src/characters/Mario.i
-	@echo ... src/characters/Mario.s
-	@echo ... src/characters/Peach.obj
-	@echo ... src/characters/Peach.i
-	@echo ... src/characters/Peach.s
-	@echo ... src/characters/Player.obj
-	@echo ... src/characters/Player.i
-	@echo ... src/characters/Player.s
-	@echo ... src/characters/Toad.obj
-	@echo ... src/characters/Toad.i
-	@echo ... src/characters/Toad.s
-	@echo ... src/characters/Wario.obj
-	@echo ... src/characters/Wario.i
-	@echo ... src/characters/Wario.s
-	@echo ... src/core/CameraManager.obj
-	@echo ... src/core/CameraManager.i
-	@echo ... src/core/CameraManager.s
-	@echo ... src/core/GameManager.obj
-	@echo ... src/core/GameManager.i
-	@echo ... src/core/GameManager.s
-	@echo ... src/core/SuperMarioPlus.obj
-	@echo ... src/core/SuperMarioPlus.i
-	@echo ... src/core/SuperMarioPlus.s
+	@echo ... src/core/Game.obj
+	@echo ... src/core/Game.i
+	@echo ... src/core/Game.s
+	@echo ... src/core/StateManager.obj
+	@echo ... src/core/StateManager.i
+	@echo ... src/core/StateManager.s
 	@echo ... src/core/main.obj
 	@echo ... src/core/main.i
 	@echo ... src/core/main.s
-	@echo ... src/environment/Background.obj
-	@echo ... src/environment/Background.i
-	@echo ... src/environment/Background.s
-	@echo ... src/environment/Cloud.obj
-	@echo ... src/environment/Cloud.i
-	@echo ... src/environment/Cloud.s
-	@echo ... src/environment/Decoration.obj
-	@echo ... src/environment/Decoration.i
-	@echo ... src/environment/Decoration.s
-	@echo ... src/environment/Platform.obj
-	@echo ... src/environment/Platform.i
-	@echo ... src/environment/Platform.s
+	@echo ... src/states/GameState.obj
+	@echo ... src/states/GameState.i
+	@echo ... src/states/GameState.s
+	@echo ... src/states/IntroState.obj
+	@echo ... src/states/IntroState.i
+	@echo ... src/states/IntroState.s
 	@echo ... src/states/Menu.obj
 	@echo ... src/states/Menu.i
 	@echo ... src/states/Menu.s
-	@echo ... src/states/PlayerStates.obj
-	@echo ... src/states/PlayerStates.i
-	@echo ... src/states/PlayerStates.s
+	@echo ... src/states/SettingState.obj
+	@echo ... src/states/SettingState.i
+	@echo ... src/states/SettingState.s
 	@echo ... src/states/World.obj
 	@echo ... src/states/World.i
 	@echo ... src/states/World.s
-	@echo ... src/ui/CharacterSelectionOverlay.obj
-	@echo ... src/ui/CharacterSelectionOverlay.i
-	@echo ... src/ui/CharacterSelectionOverlay.s
-	@echo ... src/ui/HUD.obj
-	@echo ... src/ui/HUD.i
-	@echo ... src/ui/HUD.s
 	@echo ... src/ui/SettingsOverlay.obj
 	@echo ... src/ui/SettingsOverlay.i
 	@echo ... src/ui/SettingsOverlay.s
+	@echo ... src/ui/UIComponent.obj
+	@echo ... src/ui/UIComponent.i
+	@echo ... src/ui/UIComponent.s
 .PHONY : help
 
 

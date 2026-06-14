@@ -1,0 +1,55 @@
+@startuml command_pattern
+
+skinparam packageStyle rectangle
+
+title Command Pattern Architecture (Polymorphic Commands)
+
+package "Command Interfaces" {
+    interface ICommand {
+        + {abstract} Execute(): void
+    }
+
+    class PushStateCommand {
+        - stateManager: StateManager*
+        - stateToPush: unique_ptr<GameState>
+        + Execute(): void
+    }
+
+    class PopStateCommand {
+        - stateManager: StateManager*
+        + Execute(): void
+    }
+
+    class MoveCommand {
+        - player: Player*
+        - direction: Vector2
+        + Execute(): void
+    }
+
+    class JumpCommand {
+        - player: Player*
+        + Execute(): void
+    }
+
+    class UseAbilityCommand {
+        - player: Player*
+        - abilityIndex: int
+        + Execute(): void
+    }
+}
+
+ICommand <|.. PushStateCommand
+ICommand <|.. PopStateCommand
+ICommand <|.. MoveCommand
+ICommand <|.. JumpCommand
+ICommand <|.. UseAbilityCommand
+
+note right of ICommand
+  Tất cả các Command (Input từ phím bấm,
+  click chuột UI, hay chuyển State) 
+  đều tuân thủ Interface này.
+end note
+
+
+
+@enduml

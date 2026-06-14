@@ -1,0 +1,52 @@
+@startuml object_pool
+
+skinparam packageStyle rectangle
+
+title Object Pool Pattern (Memory Optimization)
+
+package "Pool Implementation" {
+    class ObjectPool<T> {
+        - pool: vector<unique_ptr<T>>
+        + GetInstance(): T*
+        + ReturnInstance(obj: T*): void
+    }
+}
+
+package "Poolable Objects" {
+    abstract class Poolable {
+        # active: bool
+        + IsActive(): bool
+        + SetActive(val: bool): void
+        + {abstract} Reset(): void
+    }
+
+    class Fireball {
+        + Reset(): void
+        + Update(dt: float): void
+    }
+
+    class Particle {
+        + Reset(): void
+        + Update(dt: float): void
+    }
+}
+
+Poolable <|-- Fireball
+Poolable <|-- Particle
+
+ObjectPool "1" *-- "*" Poolable : "manages >"
+
+note bottom of ObjectPool
+  Cấp phát sẵn (Pre-allocate) N phần tử.
+  GetInstance() tìm phần tử có active == false,
+  gọi Reset() và trả về. KHÔNG dùng từ khoá 'new'.
+end note
+
+note bottom of Fireball
+  Khi chạm tường, gọi SetActive(false).
+  ObjectPool sẽ tự động coi như đã thu hồi.
+  Không dùng từ khoá 'delete'.
+  Chống giật lag (Memory Fragmentation).
+end note
+
+@enduml

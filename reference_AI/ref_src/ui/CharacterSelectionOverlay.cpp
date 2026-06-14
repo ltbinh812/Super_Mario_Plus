@@ -1,4 +1,4 @@
-﻿#include "CharacterSelectionOverlay.h"
+#include "CharacterSelectionOverlay.h"
 #include "CharacterFactory.h"
 
 CharacterSelectionOverlay::CharacterSelectionOverlay(std::unique_ptr<Player>& p1, std::unique_ptr<Player>& p2, const std::vector<std::string>& availableChars)
@@ -53,13 +53,17 @@ void CharacterSelectionOverlay::HandleInput() {
 void CharacterSelectionOverlay::Update(float dt) {
 }
 
-void CharacterSelectionOverlay::Draw() {
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.7f));
-    DrawText("CHỌN NHÂN VẬT (Bấm U để tiếp tục)", GetScreenWidth()/2 - 250, 100, 20, WHITE);
+void CharacterSelectionOverlay::Render(float alpha) const {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.8f));
+    DrawText("CHARACTER SELECTION", GetScreenWidth()/2 - 150, 50, 30, YELLOW);
     
-    DrawText("Người chơi 1 (A/D để đổi):", 100, 200, 20, RED);
-    DrawText(availableChars_[p1Index_].c_str(), 100, 240, 30, WHITE);
+    DrawText("PLAYER 1", GetScreenWidth()/4 - 50, 150, 20, RAYWHITE);
+    DrawText(availableChars_[p1Index_].c_str(), GetScreenWidth()/4 - 50, 200, 30, RED);
+    DrawText("Use A/D to change", GetScreenWidth()/4 - 50, 250, 15, GRAY);
 
-    DrawText("Người chơi 2 (Left/Right để đổi):", 500, 200, 20, BLUE);
-    DrawText(availableChars_[p2Index_].c_str(), 500, 240, 30, WHITE);
+    DrawText("PLAYER 2", 3*GetScreenWidth()/4 - 50, 150, 20, RAYWHITE);
+    DrawText(availableChars_[p2Index_].c_str(), 3*GetScreenWidth()/4 - 50, 200, 30, BLUE);
+    DrawText("Use LEFT/RIGHT to change", 3*GetScreenWidth()/4 - 50, 250, 15, GRAY);
+
+    DrawText("Press ENTER to confirm", GetScreenWidth()/2 - 120, GetScreenHeight() - 100, 20, GREEN);
 }

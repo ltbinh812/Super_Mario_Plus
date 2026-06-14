@@ -1,0 +1,61 @@
+@startuml event_bus
+
+skinparam packageStyle rectangle
+
+title Event Bus Architecture (Observer Pattern)
+
+package "Event System Core" {
+    enum EventType {
+        ENEMY_DIED
+        PLAYER_COIN_COLLECTED
+        PLAYER_TOOK_DAMAGE
+        LEVEL_COMPLETED
+    }
+
+    class Event {
+        + type: EventType
+        + data: any
+    }
+
+    class EventBus <<Singleton>> {
+        - listeners: map<EventType, vector<function>>
+        + GetInstance(): EventBus&
+        + Subscribe(type: EventType, callback: function): void
+        + Publish(event: Event): void
+    }
+}
+
+package "Publishers (Người gửi tin)" {
+    class Goomba {
+        + Die(): void
+    }
+    class Player {
+        + TakeDamage(): void
+    }
+}
+
+package "Subscribers (Người nghe tin)" {
+    class HUD {
+        + AddScore(points: int): void
+        + UpdateHealth(hp: int): void
+    }
+    class AudioManager {
+        + PlaySound(soundId: string): void
+    }
+}
+
+EventBus <-- Goomba : Publish(ENEMY_DIED)
+EventBus <-- Player : Publish(PLAYER_TOOK_DAMAGE)
+
+HUD ..> EventBus : Subscribe(ENEMY_DIED, &AddScore)
+HUD ..> EventBus : Subscribe(PLAYER_TOOK_DAMAGE, &UpdateHealth)
+AudioManager ..> EventBus : Subscribe(ENEMY_DIED, &PlaySound)
+
+note bottom of EventBus
+  EventBus là trung tâm trung chuyển tin nhắn.
+  Goomba KHÔNG CẦN `#include "HUD.h"`.
+  Chỉ việc gửi Event vào Bus.
+  Các class khác tự đăng ký lắng nghe và tự xử lý.
+end note
+
+@enduml

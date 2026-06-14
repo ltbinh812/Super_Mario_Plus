@@ -1,0 +1,88 @@
+@startuml master_game_lifecycle
+
+skinparam maxMessageSize 150
+skinparam sequenceMessageAlign center
+
+title Bản Đồ Dòng Chảy Vòng Đời Game (Master Game Lifecycle)
+
+actor "Người Chơi" as User
+participant "Game\n(Game Loop)" as Game
+participant "StateManager" as SM
+participant "Current State\n(VD: WorldState)" as World
+participant "Entities\n(Player/Enemy)" as Entities
+participant "CommandQueue" as Queue
+participant "EventBus" as Events
+participant "Raylib\n(Render Engine)" as Raylib
+
+== KHỞI TẠO (INITIALIZATION) ==
+Game -> SM : Khởi tạo StateManager
+SM -> World : PushState(new WorldState())
+activate World
+World -> Entities : LevelLoader nạp map và tạo Player/Goomba
+World -> Queue : Khởi tạo hàng đợi Command rỗng
+World -> Events : Các hệ thống (HUD, Audio) Subscribe EventBus
+deactivate World
+
+== VÒNG LẶP CHÍNH (WHILE !WindowShouldClose) ==
+loop Chạy liên tục mỗi Khung hình (Frame)
+    
+    note over Game : dt = GetFrameTime()\naccumulator += dt
+    
+    == GIAI ĐOẠN 1: BẮT SỰ KIỆN ĐẦU VÀO (HANDLE INPUT) ==
+    User -> Raylib : Bấm phím / Click chuột
+    Game -> SM : HandleInput()
+    activate SM
+    SM -> World : HandleInput()
+    activate World
+    World -> Raylib : Poll Input (VD: IsKeyDown('W'))
+    alt Nếu phím W được bấm
+        World -> Queue : push(new JumpCommand(Player))
+    end
+    deactivate World
+    deactivate SM
+
+    == GIAI ĐOẠN 2: CẬP NHẬT VẬT LÝ & LOGIC (FIXED UPDATE) ==
+    loop while (accumulator >= fixedDt)
+        Game -> SM : Update(fixedDt)
+        activate SM
+        SM -> World : Update(fixedDt)
+        activate World
+        World -> Entities : ApplyPhysics(fixedDt) (Rớt xuống, trượt đi)
+        World -> World : Grid Collision (Kiểm tra TileMap)
+        
+        == GIAI ĐOẠN 3: XỬ LÝ LỆNH TỪ BƯỚC 1 (PROCESS COMMANDS) ==
+        World -> World : ProcessCommands()
+        loop Duyệt toàn bộ CommandQueue
+            World -> Queue : cmd = pop()
+            World -> cmd : Execute()
+            cmd -> Entities : Jump() (Nhân vật thay đổi vận tốc)
+        end
+        
+        == GIAI ĐOẠN 4: GIAO TIẾP SỰ KIỆN (EVENTS PUBLISHING) ==
+        alt Nếu Goomba bị dẫm chết
+            Entities -> Events : Publish(EnemyDiedEvent)
+            Events -> Events : Thông báo cho HUD (Tăng điểm)\nThông báo cho Audio (Phát tiếng BỤP)
+        end
+        deactivate World
+        SM -> SM : Process State Commands (Chuyển màn nếu có)
+        deactivate SM
+        
+        note over Game : accumulator -= fixedDt
+    end
+
+    == GIAI ĐOẠN 5: XUẤT HÌNH ẢNH (RENDER) ==
+    note over Game : Lấy phần dư alpha = accumulator / fixedDt\nđể nội suy hình ảnh cho mượt
+    Game -> Raylib : BeginDrawing()
+    Game -> SM : Render(alpha)
+    activate SM
+    SM -> World : Render(alpha)
+    activate World
+    World -> Entities : Lấy toạ độ (đã nội suy)
+    World -> Raylib : DrawTexture()
+    deactivate World
+    deactivate SM
+    Game -> Raylib : EndDrawing()
+
+end
+
+@enduml

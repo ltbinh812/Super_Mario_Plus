@@ -84,12 +84,12 @@ clean: CMakeFiles/SuperMarioPlus.dir/clean
 CMakeFiles/SuperMarioPlus.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 "Built target SuperMarioPlus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target SuperMarioPlus"
 .PHONY : CMakeFiles/SuperMarioPlus.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/SuperMarioPlus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles 24
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/SuperMarioPlus.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles 0
 .PHONY : CMakeFiles/SuperMarioPlus.dir/rule
@@ -101,7 +101,7 @@ SuperMarioPlus: CMakeFiles/SuperMarioPlus.dir/rule
 # codegen rule for target.
 CMakeFiles/SuperMarioPlus.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 "Finished codegen for target SuperMarioPlus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Finished codegen for target SuperMarioPlus"
 .PHONY : CMakeFiles/SuperMarioPlus.dir/codegen
 
 # clean rule for target.

@@ -14,7 +14,7 @@ public:
     
     void HandleInput() override;
     void Update(float dt) override;
-    void Draw() override;
+    void Render(float alpha) const override;
     bool IsFinished() const override { return isFinished_; }
 
 private:

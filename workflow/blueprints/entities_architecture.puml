@@ -1,0 +1,100 @@
+@startuml entities_architecture
+
+skinparam packageStyle rectangle
+
+title Entity Architecture Blueprint
+
+package "Core Domain" {
+    abstract class Entity {
+        # pos: Vector2
+        # vel: Vector2
+        # width: float
+        # height: float
+        + {abstract} Update(dt: float): void
+        + {abstract} Draw() const: void
+        + {abstract} ResolveCollision(other: Rectangle): void
+        + GetBounds(): Rectangle
+    }
+
+    abstract class Character {
+        # hp: int
+        # onGround: bool
+        # currentState: unique_ptr<CharacterState>
+        # ability: unique_ptr<AbilityStrategy>
+        + {abstract} Init(x: float, y: float): void
+        + ChangeState(newState: unique_ptr<CharacterState>): void
+        + ApplyPhysics(dt: float): void
+    }
+
+    abstract class Item {
+        # isCollected: bool
+        + {abstract} OnCollect(player: Player&): void
+    }
+}
+
+package "Characters (Players & Enemies)" {
+    class Player {
+        - inputConfig: InputConfig
+        + HandleInput(): void
+    }
+
+    class Enemy {
+        # damage: int
+        + OnPlayerStomp(): void
+    }
+
+    class Mario {
+        + Init(x, y): void
+    }
+    
+    class Luigi {
+        + Init(x, y): void
+    }
+
+    class Goomba {
+        + Init(x, y): void
+        + Update(dt: float): void
+    }
+
+    class KoopaTroopa {
+        - isShell: bool
+        + Init(x, y): void
+    }
+}
+
+package "Items" {
+    class Mushroom {
+        + OnCollect(player: Player&): void
+    }
+    class Coin {
+        + OnCollect(player: Player&): void
+    }
+}
+
+Entity <|-- Character
+Entity <|-- Item
+
+Character <|-- Player
+Character <|-- Enemy
+
+Player <|-- Mario
+Player <|-- Luigi
+
+Enemy <|-- Goomba
+Enemy <|-- KoopaTroopa
+
+Item <|-- Mushroom
+Item <|-- Coin
+
+note bottom of Character
+  Bất kì thực thể nào có HP, có trọng lực
+  có State Machine và có di chuyển vật lý
+  đều kế thừa Character.
+end note
+
+note bottom of Item
+  Item tĩnh hoặc di chuyển đơn giản.
+  Chỉ quan tâm lúc va chạm (OnCollect).
+end note
+
+@enduml

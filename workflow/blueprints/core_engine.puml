@@ -1,0 +1,68 @@
+@startuml core_engine
+
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+title Core Engine Architecture (Game Loop & State Management)
+
+package "Core Engine" {
+
+    class Game {
+        - accumulator: float
+        - fixedDt: float
+        - stateManager: StateManager
+        + runGame(): void
+    }
+
+    class StateManager {
+        - stateStack: stack<unique_ptr<GameState>>
+        - commandQueue_: vector<unique_ptr<ICommand>>
+        + PushState(state: unique_ptr<GameState>): void
+        + PopState(): void
+        + ChangeState(state: unique_ptr<GameState>): void
+        + HandleInput(): void
+        + Update(dt: float): void
+        + ProcessCommands(): void
+        + Render(alpha: float): void
+    }
+
+    abstract class GameState {
+        # commandQueue_: vector<unique_ptr<ICommand>>
+        + {abstract} HandleInput(): void
+        + {abstract} Update(dt: float): void
+        + {abstract} Render(alpha: float) const: void
+        + ProcessCommands(): void
+        + PushCommand(cmd: unique_ptr<ICommand>): void
+    }
+
+    class IntroState {}
+    class MenuState {}
+    class WorldState {}
+
+}
+
+note right of Game
+  Vòng lặp chính nằm ở đây. 
+  Sử dụng Fixed-Timestep (tích luỹ dt)
+  để gọi Update() với tần số cố định.
+end note
+
+note right of StateManager
+  Quản lý danh sách các State (Màn chơi/Menu) 
+  bằng cấu trúc dữ liệu Stack (ngăn xếp).
+  State nằm trên cùng sẽ được update và render.
+end note
+
+note bottom of GameState
+  Interface chung cho mọi màn hình.
+  Mỗi State tự quản lý hàng đợi Command
+  của các thực thể bên trong nó.
+end note
+
+Game *-- StateManager : "chứa và gọi hàm"
+StateManager o-- GameState : "chứa trong Stack"
+GameState <|-- IntroState
+GameState <|-- MenuState
+GameState <|-- WorldState
+
+@enduml
