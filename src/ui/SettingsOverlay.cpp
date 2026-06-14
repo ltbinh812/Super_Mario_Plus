@@ -1,4 +1,4 @@
-#include "SettingsOverlay.h"
+ï»¿#include "SettingsOverlay.h"
 #include "Menu.h"
 #include <memory>
 
@@ -14,14 +14,14 @@ void SettingsOverlay::HandleInput() {
         Vector2 mousePos = GetMousePosition();
         Rectangle menuBtn = { (float)GetScreenWidth()/2 - 100, (float)GetScreenHeight()/2 + 40, 200, 50 };
         if (CheckCollisionPointRec(mousePos, menuBtn)) {
-            // N+¦t Menu quay vß+ü Menu State
+            // NÃºt Menu quay vá» Menu State
             gameManager_->ChangeState(std::make_unique<MenuState>(gameManager_));
         }
     }
 }
 
 void SettingsOverlay::Update(float dt) {
-    // Kh+¦ng c+¦ logic -æß+Öng, t-¬nh
+    // KhÃ´ng cÃ³ logic Ä‘á»™ng, tÄ©nh
 }
 
 void SettingsOverlay::Draw() {

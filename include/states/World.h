@@ -1,4 +1,4 @@
-#ifndef WORLD_H
+ï»¿#ifndef WORLD_H
 #define WORLD_H
 
 #include "GameState.h"
@@ -29,10 +29,10 @@ private:
     float worldWidth_;
     float groundY_;
 
-    bool isSelectingCharacter_ = false; // Bß+Å
-    bool isSettingsOpen_ = false; // Bß+Å
-    int player1CharIndex_ = 0; // Bß+Å
-    int player2CharIndex_ = 1; // Bß+Å
+    bool isSelectingCharacter_ = false; // Báº­t
+    bool isSettingsOpen_ = false; // Báº­t
+    int player1CharIndex_ = 0; // Báº­t
+    int player2CharIndex_ = 1; // Báº­t
     std::vector<std::string> availableCharacters_ = {"Mario", "Luigi", "Peach", "Toad", "Wario"};
 
     std::unique_ptr<OverlayUI> activeOverlay_;
