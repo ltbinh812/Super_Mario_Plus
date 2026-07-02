@@ -1,7 +1,7 @@
 #pragma once 
 #include <stack>
 #include <memory>
-#include "Command.h"
+#include "IGameCommand.h"
 
 class GameState;
 
@@ -9,15 +9,16 @@ class StateManager {
     private: 
     std::stack<std::unique_ptr<GameState>> stateStack;
 
+public: 
     void PushState(std::unique_ptr<GameState> state);
     void PopState();
     void ChangeState(std::unique_ptr<GameState> state);
 
-    public: 
     StateManager();
     ~StateManager();
+    bool isEmpty() const { return stateStack.empty(); }
     void HandleInput();
+    void Process();
     void Update(float dt);
-    void ProcessCommand(Command command);
     void Render(float alpha) const;
 };

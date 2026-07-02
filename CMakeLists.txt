@@ -12,10 +12,16 @@ set(RAYLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/third_party/raylib/include")
 # Add header files
 include_directories(
     ${RAYLIB_INCLUDE_DIR}
+    third_party/json/include
     include
     include/states
     include/ui
     include/core
+    include/entity
+    include/entity/Player
+    include/entity/Skill
+    include/infrastructure
+    include/command
 )
 
 if(WIN32)
@@ -32,13 +38,18 @@ set(SOURCES
     src/core/main.cpp
     src/core/Game.cpp
     src/core/StateManager.cpp
+    src/core/InputHandler.cpp
     src/states/GameState.cpp
     src/states/IntroState.cpp
-    src/states/SettingState.cpp
-    src/states/Menu.cpp
-    src/states/World.cpp
-    src/ui/SettingsOverlay.cpp
-    src/ui/UIComponent.cpp
+    src/ui/Buttons.cpp
+    src/entity/Animation.cpp
+    src/entity/Entity.cpp
+    src/entity/Player/Player.cpp
+    src/entity/Player/PlayerStates.cpp
+    src/entity/Player/PlayerFactory.cpp
+    src/entity/Skill/SkillManager.cpp
+    src/entity/Skill/DashSkill.cpp
+    src/infrastructure/AssetManager.cpp
 )
 
 # Executable
@@ -46,3 +57,10 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link raylib
 target_link_libraries(${PROJECT_NAME} ${RAYLIB_LIB} ${PLATFORM_LIBS})
+
+# Copy assets folder to build directory
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
+)

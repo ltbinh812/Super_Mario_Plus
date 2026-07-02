@@ -5,10 +5,13 @@ skinparam packageStyle rectangle
 title Command Pattern Architecture (Polymorphic Commands)
 
 package "Command Interfaces" {
-    interface ICommand {
-        + {abstract} Execute(): void
+    interface IGameCommand {
+        + {abstract} Execute(StateManager& manager): void
     }
 
+    interface IEntityCommand {
+        + {abstract} Execute(Entity& entity): void
+    }
     class PushStateCommand {
         - stateManager: StateManager*
         - stateToPush: unique_ptr<GameState>
@@ -38,16 +41,19 @@ package "Command Interfaces" {
     }
 }
 
-ICommand <|.. PushStateCommand
-ICommand <|.. PopStateCommand
-ICommand <|.. MoveCommand
-ICommand <|.. JumpCommand
-ICommand <|.. UseAbilityCommand
+IGameCommand <|.. PushStateCommand
+IGameCommand <|.. PopStateCommand
 
-note right of ICommand
-  Tất cả các Command (Input từ phím bấm,
-  click chuột UI, hay chuyển State) 
-  đều tuân thủ Interface này.
+IEntityCommand <|.. MoveCommand
+IEntityCommand <|.. JumpCommand
+IEntityCommand <|.. UseAbilityCommand
+
+note right of IGameCommand
+  Lệnh điều khiển GameState (Menu, Chơi, Pause)
+end note
+
+note right of IEntityCommand
+  Lệnh điều khiển hành động của nhân vật/quái vật
 end note
 
 

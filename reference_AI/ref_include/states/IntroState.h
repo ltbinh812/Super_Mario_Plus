@@ -13,6 +13,7 @@ class IntroState : public GameState {
     public:
     IntroState();
     void HandleInput() override;
+    void Process() override;
     void Update(float dt) override; 
     void Render(float alpha) const override;
 

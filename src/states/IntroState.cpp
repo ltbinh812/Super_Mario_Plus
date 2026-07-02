@@ -1,47 +1,78 @@
 #include "IntroState.h"
-#include "StateManager.h"
-#include "SettingState.h"
-#include "Menu.h"
+#include "Animation.h"
+#include "AssetManager.h"
+#include "Entity.h"
+#include "EntityCommands.h"
+#include "PlayerFactory.h"
+#include "raylib.h"
+#include <fstream>
+#include <iostream>
+#include <nlohmann/json.hpp>
 
-IntroState::IntroState(){
-    std::unique_ptr<Button> menuButton = std::make_unique<Button>(); 
-    menuButton->setLabel("Setting");
-    menuButton->setPosition({100, 100});
-    menuButton->setOnClick([this](){
-        PushCommand({CommandType::Change, std::make_unique<SettingState>()});
-    });
+using json = nlohmann::json;
 
-    std::unique_ptr<Button> playButton = std::make_unique<Button>();
-    playButton->setLabel("Play");
-    playButton->setPosition({100, 200});
-    playButton->setOnClick([this](){
-        PushCommand({CommandType::Change, std::make_unique<MenuState>()});
-    });
+IntroState::IntroState() {
+  std::ifstream file("assets/config/session.json");
+  if (!file.is_open()) {
+    std::cerr << "Khong the mo file session.json. Su dung mac dinh.\n";
+    exit(0);
+  }
 
-    buttons.push_back(std::move(menuButton));
-    buttons.push_back(std::move(playButton));
+  json sessionData;
+  file >> sessionData;
+
+  for (const auto &playerInfo : sessionData["players"]) {
+    std::string charName = playerInfo["character"].get<std::string>();
+    Vector2 startPos = {playerInfo["start_pos"]["x"].get<float>(),
+                        playerInfo["start_pos"]["y"].get<float>()};
+
+    auto player = PlayerFactory::createPlayer(charName, startPos);
+    if (player) {
+      int jumpKey = playerInfo["controls"]["jump"].get<int>();
+      int leftKey = playerInfo["controls"]["left"].get<int>();
+      int rightKey = playerInfo["controls"]["right"].get<int>();
+      int skill1Key = playerInfo["controls"]["skill1"].get<int>();
+      int skill2Key = playerInfo["controls"]["skill2"].get<int>();
+      InputHandler handler;
+      handler.bindKey(jumpKey, std::make_unique<JumpCommand>(), false);
+      handler.bindKey(leftKey, std::make_unique<MoveLeftCommand>(), true);
+      handler.bindKey(rightKey, std::make_unique<MoveRightCommand>(), true);
+      handler.bindKey(skill1Key, std::make_unique<UseSkillCommand>(player->getSkill1Name()), false);
+      handler.bindKey(skill2Key, std::make_unique<UseSkillCommand>(player->getSkill2Name()), false);
+
+      Entity* entityPtr = player.get();
+      entities.push_back(std::move(player));
+      
+      controllers.push_back({std::move(handler), entityPtr});
+    }
+  }
 }
 
 void IntroState::HandleInput() {
-    Vector2 mousePos = GetMousePosition();
-    bool mousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-    bool mouseReleased = IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
-
-    for (const auto &button : buttons) {
-        button->handleInput(mousePos, mousePressed, mouseReleased);
+  for (auto &controller : controllers) {
+    if (controller.target) {
+      auto commands = controller.handler.handleInput();
+      for (auto *cmd : commands) {
+        cmd->Execute(*(controller.target));
+      }
     }
+  }
+}
+
+void IntroState::Process() {
+  for (const auto &entity : entities) {
+    entity->process();
+  }
 }
 
 void IntroState::Update(float dt) {
-    for (const auto &button: buttons) {
-        button->update();
-    }
-
+  for (const auto &entity : entities) {
+    entity->update(dt);
+  }
 }
 
-
 void IntroState::Render(float alpha) const {
-    for (const auto &button: buttons) {
-        button->render();
-    }
+  for (const auto &entity : entities) {
+    entity->render(alpha);
+  }
 }

@@ -16,7 +16,7 @@ package "Core Engine" {
 
     class StateManager {
         - stateStack: stack<unique_ptr<GameState>>
-        - commandQueue_: vector<unique_ptr<ICommand>>
+        - commandQueue_: vector<unique_ptr<IGameCommand>>
         + PushState(state: unique_ptr<GameState>): void
         + PopState(): void
         + ChangeState(state: unique_ptr<GameState>): void
@@ -27,12 +27,12 @@ package "Core Engine" {
     }
 
     abstract class GameState {
-        # commandQueue_: vector<unique_ptr<ICommand>>
+        # commandQueue_: vector<unique_ptr<IGameCommand>>
         + {abstract} HandleInput(): void
         + {abstract} Update(dt: float): void
         + {abstract} Render(alpha: float) const: void
         + ProcessCommands(): void
-        + PushCommand(cmd: unique_ptr<ICommand>): void
+        + PushCommand(cmd: unique_ptr<IGameCommand>): void
     }
 
     class IntroState {}

@@ -1,19 +1,20 @@
 #pragma once 
-#include "GameState.h"
-#include "UIComponent.h"
-#include <memory>
-#include <queue>
+#include "GameState.h" 
+#include <vector>
+#include "InputHandler.h"
 
-class StateManager;
+class Entity;
 
 class IntroState : public GameState {
-    private: 
-    std::vector<std::unique_ptr<Button>> buttons;
-    
+    private:
+    std::vector<std::unique_ptr<Entity>> entities;
+    std::vector<PlayerController> controllers;
     public:
     IntroState();
+    ~IntroState() = default; 
     void HandleInput() override;
-    void Update(float dt) override; 
+    void Process() override;
+    void Update(float dt) override;
     void Render(float alpha) const override;
 
 };

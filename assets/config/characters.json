@@ -1,0 +1,64 @@
+{
+    "Mario": {
+        "name": "Mario",
+        "maxHealth": 3,
+        "maxMana": 100,
+        "moveSpeed": 100.0,
+        "maxSpeed": 200.0,
+        "acceleration": 600.0,
+        "jumpForce": -1200.0,
+        "gravityScale": 1.0,
+        "animations": {
+            "idle": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "run": {
+                "texture": "mario_run",
+                "frameNum": 8,
+                "frameTime": 0.1
+            },
+            "jump": {
+                "texture": "mario_jump",
+                "frameNum": 12,
+                "frameTime": 0.25
+            }
+        },
+        "skills":[
+            "Dash",
+            "Dash"
+        ]
+    },
+    "Wario": {
+        "name": "Wario",
+        "maxHealth": 5,
+        "maxMana": 50,
+        "moveSpeed": 80.0,
+        "maxSpeed": 150.0,
+        "acceleration": 450.0,
+        "jumpForce": -350.0,
+        "gravityScale": 1.5,
+        "animations": {
+            "idle": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "run": {
+                "texture": "mario_run",
+                "frameNum": 8,
+                "frameTime": 0.15
+            },
+            "jump": {
+                "texture": "mario_jump",
+                "frameNum": 12,
+                "frameTime": 0.3
+            }
+        },
+        "skills":[
+            "Dash",
+            "Dash"
+        ]
+    }
+}
