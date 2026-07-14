@@ -4,20 +4,21 @@ void InputHandler::clearBindings() {
   keyBindings_.clear();
 }
 
-void InputHandler::bindKey(int key, std::unique_ptr<IEntityCommand> command, bool isContinuous) {
-  keyBindings_[key] = {std::move(command), isContinuous};
+void InputHandler::bindKey(int key, std::unique_ptr<IPlayerCommand> command, bool isPressed) {
+  keyBindings_[key].push_back({std::move(command), isPressed});
 }
 
-std::vector<IEntityCommand *> InputHandler::handleInput() {
-  std::vector<IEntityCommand *> activeCommands;
+std::vector<IPlayerCommand *> InputHandler::handleInput() {
+  std::vector<IPlayerCommand *> activeCommands;
 
   for (auto &pair : keyBindings_) {
     int key = pair.first;
-    bool isContinuous = pair.second.isContinuous;
 
-    bool active = isContinuous ? IsKeyDown(key) : IsKeyPressed(key);
-    if (active) {
-      activeCommands.push_back(pair.second.command.get());
+    for (auto &binding : pair.second) {
+      bool active = binding.isPressed ? IsKeyPressed(key) : IsKeyReleased(key);
+      if (active) {
+        activeCommands.push_back(binding.command.get());
+      }
     }
   }
 

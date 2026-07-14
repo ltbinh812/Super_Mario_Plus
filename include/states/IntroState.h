@@ -3,15 +3,15 @@
 #include <vector>
 #include "InputHandler.h"
 
-class Entity;
+class Player;
 
 class IntroState : public GameState {
     private:
-    std::vector<std::unique_ptr<Entity>> entities;
+    std::vector<std::unique_ptr<Player>> entities;
     std::vector<PlayerController> controllers;
     public:
     IntroState();
-    ~IntroState() = default; 
+    ~IntroState() override; 
     void HandleInput() override;
     void Process() override;
     void Update(float dt) override;

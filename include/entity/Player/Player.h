@@ -1,65 +1,62 @@
 #pragma once
-#include "CharacterStats.h"
 #include "Entity.h"
-#include "IEntityState.h"
-#include "InputHandler.h"
-#include "PlayerStates.h"
-#include "SkillManager.h"
+#include "CharacterStats.h"
+#include <string>
+#include <map>
+#include <unordered_map>
+#include <memory>
+#include <PlayerStates.h>
+
+class ISkill;
+
 
 class Player : public Entity {
-private:
-  bool isFacingRight;
-  bool isGrounded;
-  float airSpeed;
+    public:
+    Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS, CharacterWorldStats &wS, std::unordered_map<std::string, Animation> animations);
+    void update(float dt) override;
+    void render(float alpha) override;
+    void changeState(PlayerState &requestState);
+    
+    void useSkill(const std::string& skillname);
+    void addSkill(const std::string& name, std::unique_ptr<ISkill> skill);
 
-  bool isMovingLeft = false;
-  bool isMovingRight = false;
+    // Actions
+    void onMoveRight();
+    void onMoveLeft();
+    void onJump();
+    void onStopLeft();
+    void onStopRight();
+    void onCrouch();
+    void onAttack();
 
-  IEntityState<Player> *currentState;
-  PlayerIdleState idleState;
-  PlayerRunState runState;
-  PlayerJumpState jumpState;
-  IEntityState<Player> *requestState = nullptr;
+    
+    //helper functions
+    void moveRight();
+    void moveLeft();
+    void stopLeftRun();
+    void stopRightRun();
+    void jump();
+    void crouch();
 
-  CharacterStats stats;
-  SkillManager skillManager;
 
-public:
-  Player(const CharacterStats &charStats, Vector2 pos, Vector2 boxsize, bool isRight);
 
-  void handleInput() override;
-  void process() override;
-  void update(float dt) override;
-  void render(float alpha) const override;
+    // list of States
+    PlayerIdleState idleState;
+    PlayerRunState runState;
+    PlayerJumpState jumpState;
+    PlayerFallState fallState;
+    PlayerCrouchState crouchState;
+    PlayerHurtState hurtState;
+    PlayerDieState dieState;
+    PlayerSkillState skillState;
+    void playAnimation(const std::string& name);
 
-  void jump() override;
-  void moveRight() override;
-  void moveLeft() override;
-  void stopMove() override;
 
-  std::string getSkill1Name();
-  std::string getSkill2Name();
-  void addSkill(const std::string& name, std::unique_ptr<ISkill> skill);
-  void useSkill(const std::string &skillName);
+    private:
+    
+    PlayerState *currentState;
+    std::unordered_map<std::string, Animation> animationList;
+    std::unordered_map<std::string, std::unique_ptr<ISkill>> skillList;
 
-  void setRequest(IEntityState<Player> *state);
-  void processRequest();
-  void changeState(IEntityState<Player> *state);
-  void setAnimation(Animation *anim);
-
-  IEntityState<Player> *getIdleState() { return &idleState; }
-  IEntityState<Player> *getRunState() { return &runState; }
-  IEntityState<Player> *getJumpState() { return &jumpState; }
-
-  Animation *getIdleAnimation() { return &stats.idleAnimation; }
-  Animation *getRunAnimation() { return &stats.runAnimation; }
-  Animation *getJumpAnimation() { return &stats.jumpAnimation; }
-  const CharacterStats &getStats() const { return stats; }
-
-  void setFaceDirection(bool isRight);
-  bool getFaceDirection() const { return isFacingRight; }
-  void setVelocityX(float vel);
-  void setVelocityY(float vel);
-  bool checkIsGrounded();
-  void setIsGrounded(bool grounded);
+     
 };

@@ -3,11 +3,9 @@
         "name": "Mario",
         "maxHealth": 3,
         "maxMana": 100,
-        "moveSpeed": 100.0,
-        "maxSpeed": 200.0,
-        "acceleration": 600.0,
-        "jumpForce": -1200.0,
-        "gravityScale": 1.0,
+        "moveVelocity": 300.0,
+        "jumpVelocity": -300.0,
+        "gravityScale": 100,
         "animations": {
             "idle": {
                 "texture": "mario_idle",
@@ -23,6 +21,26 @@
                 "texture": "mario_jump",
                 "frameNum": 12,
                 "frameTime": 0.25
+            },
+            "fall": {
+                "texture": "mario_jump",
+                "frameNum": 12,
+                "frameTime": 0.25
+            },
+            "crouch": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "hurt": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "die": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
             }
         },
         "skills":[
@@ -34,11 +52,9 @@
         "name": "Wario",
         "maxHealth": 5,
         "maxMana": 50,
-        "moveSpeed": 80.0,
-        "maxSpeed": 150.0,
-        "acceleration": 450.0,
-        "jumpForce": -350.0,
-        "gravityScale": 1.5,
+        "moveVelocity": 400.0,
+        "jumpVelocity": -500.0,
+        "gravityScale": 100,
         "animations": {
             "idle": {
                 "texture": "mario_idle",
@@ -54,6 +70,26 @@
                 "texture": "mario_jump",
                 "frameNum": 12,
                 "frameTime": 0.3
+            },
+            "fall": {
+                "texture": "mario_jump",
+                "frameNum": 12,
+                "frameTime": 0.3
+            },
+            "crouch": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "hurt": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "die": {
+                "texture": "mario_idle",
+                "frameNum": 6,
+                "frameTime": 0.25
             }
         },
         "skills":[

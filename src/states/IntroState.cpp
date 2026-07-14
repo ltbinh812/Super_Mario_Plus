@@ -2,7 +2,8 @@
 #include "Animation.h"
 #include "AssetManager.h"
 #include "Entity.h"
-#include "EntityCommands.h"
+#include "Player.h"
+#include "PlayerCommands.h"
 #include "PlayerFactory.h"
 #include "raylib.h"
 #include <fstream>
@@ -34,19 +35,21 @@ IntroState::IntroState() {
       int skill1Key = playerInfo["controls"]["skill1"].get<int>();
       int skill2Key = playerInfo["controls"]["skill2"].get<int>();
       InputHandler handler;
-      handler.bindKey(jumpKey, std::make_unique<JumpCommand>(), false);
+      handler.bindKey(jumpKey, std::make_unique<JumpCommand>(), true);
       handler.bindKey(leftKey, std::make_unique<MoveLeftCommand>(), true);
       handler.bindKey(rightKey, std::make_unique<MoveRightCommand>(), true);
-      handler.bindKey(skill1Key, std::make_unique<UseSkillCommand>(player->getSkill1Name()), false);
-      handler.bindKey(skill2Key, std::make_unique<UseSkillCommand>(player->getSkill2Name()), false);
+      handler.bindKey(leftKey, std::make_unique<StopLeftCommand>(), false);
+      handler.bindKey(rightKey, std::make_unique<StopRightCommand>(), false);
 
-      Entity* entityPtr = player.get();
+      Player* playerPtr = player.get();
       entities.push_back(std::move(player));
       
-      controllers.push_back({std::move(handler), entityPtr});
+      controllers.push_back({std::move(handler), playerPtr});
     }
   }
 }
+
+IntroState::~IntroState() = default;
 
 void IntroState::HandleInput() {
   for (auto &controller : controllers) {
@@ -60,8 +63,44 @@ void IntroState::HandleInput() {
 }
 
 void IntroState::Process() {
-  for (const auto &entity : entities) {
-    entity->process();
+  // physics system
+  float dt = GetFrameTime();
+  for (auto& entity : entities) {
+    auto& runtime = entity->getRuntimeStats();
+    auto& world = entity->getWorldStats();
+    auto& base = entity->getBaseStats();
+
+    // Apply gravity
+    runtime.velocity.y += base.gravityScale * 9.8f * dt;
+
+    // Update position
+    world.position.x += runtime.velocity.x * dt;
+    world.position.y += runtime.velocity.y * dt;
+
+    // Simple ground check
+    float groundY = 500.0f;
+    if (world.position.y >= groundY) {
+      world.position.y = groundY;
+      runtime.velocity.y = 0.0f;
+      runtime.isGrounded = true;
+    } else {
+      runtime.isGrounded = false;
+    }
+
+    // State check for fall/grounded
+    if (!runtime.isGrounded) {
+      if (runtime.velocity.y > 0) {
+        entity->changeState(entity->fallState);
+      } else {
+        entity->changeState(entity->jumpState);
+      }
+    } else {
+      if (runtime.velocity.x == 0.0f) {
+        entity->changeState(entity->idleState);
+      } else {
+        entity->changeState(entity->runState);
+      }
+    }
   }
 }
 

@@ -1,175 +1,129 @@
 #include "Player.h"
 #include "AssetManager.h"
-#include "EntityCommands.h"
+#include "PlayerCommands.h"
 #include "raylib.h"
+#include <iostream>
 
-Player::Player(const CharacterStats &charStats, Vector2 pos, Vector2 boxsize,
-               bool isRight)
-    : Entity(pos, boxsize), isFacingRight(isRight), isGrounded(true),
-      airSpeed(1.0f), stats(charStats), currentState(nullptr) {
-  changeState(&idleState);
-}
-
-
-void Player::handleInput() {
-}
-
-void Player::process() {
-  if (!isMovingLeft && !isMovingRight) {
-    stopMove();
-  }
-  isMovingLeft = false;
-  isMovingRight = false;
-}
-
-void Player::jump() { currentState->onJump(*this); }
-
-void Player::moveRight() {
-  isMovingRight = true;
-  currentState->onMoveRight(*this);
-}
-
-void Player::moveLeft() {
-  isMovingLeft = true;
-  currentState->onMoveLeft(*this);
-}
-
-void Player::stopMove() { currentState->onStopMove(*this); }
-
-std::string Player::getSkill1Name() {
-  if (stats.skills.size() > 0) {
-    return stats.skills[0];
-  }
-  return "";
-}
-
-std::string Player::getSkill2Name() {
-  if (stats.skills.size() > 1) {
-    return stats.skills[1];
-  }
-  return "";
-}
-
-void Player::addSkill(const std::string &name, std::unique_ptr<ISkill> skill) {
-  skillManager.addSkill(name, std::move(skill));
-}
-
-void Player::useSkill(const std::string &skillName) {
-  skillManager.useSkill(skillName, *this);
+Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS, CharacterWorldStats &wS, std::unordered_map<std::string, Animation> animations) 
+: Entity(bS, rS, wS), 
+  idleState(*this),
+  runState(*this),
+  jumpState(*this),
+  fallState(*this),
+  crouchState(*this),
+  hurtState(*this),
+  dieState(*this),
+  skillState(*this),
+  animationList(std::move(animations))
+{
+    currentState = &idleState;
+    currentState->onEnter();
 }
 
 void Player::update(float dt) {
-  currentState->update(*this, dt);
-  processRequest();
-  currentAnimation->update(dt);
-  skillManager.update(dt);
-
-  // --- HORIZONTAL PHYSICS ---
-  float accX = stats.acceleration;
-  float friction =
-      1500.0f; // sau này ma sát sẽ được đọc từ file json của thông số từng map
-
-  if (isMovingRight) {
-    if (velocity.x < 0) {
-      velocity.x += friction * 2.0f * dt; // Phanh mượt mà nhưng rất nhanh
-      if (velocity.x > 0) velocity.x = 0; // Tránh vọt lố
-    } else if (velocity.x < stats.maxSpeed) {
-      velocity.x += accX * dt;
-      if (velocity.x > stats.maxSpeed) velocity.x = stats.maxSpeed;
-    } else if (velocity.x > stats.maxSpeed) {
-      velocity.x -= friction * dt;
-      if (velocity.x < stats.maxSpeed) velocity.x = stats.maxSpeed;
+    if (currentState) {
+        currentState->update(dt);
     }
-    setFaceDirection(true);
-  } else if (isMovingLeft) {
-    if (velocity.x > 0) {
-      velocity.x -= friction * 2.0f * dt; // Phanh mượt mà nhưng rất nhanh
-      if (velocity.x < 0) velocity.x = 0; // Tránh vọt lố
-    } else if (velocity.x > -stats.maxSpeed) {
-      velocity.x -= accX * dt;
-      if (velocity.x < -stats.maxSpeed) velocity.x = -stats.maxSpeed;
-    } else if (velocity.x < -stats.maxSpeed) {
-      velocity.x += friction * dt;
-      if (velocity.x > -stats.maxSpeed) velocity.x = -stats.maxSpeed;
+    if (worldStats.animation) {
+        worldStats.animation->update(dt);
     }
-    setFaceDirection(false);
-  } else {
-    // Giảm ma sát
-    if (velocity.x > 0) {
-      velocity.x -= friction * dt;
-      if (velocity.x < 0)
-        velocity.x = 0;
-    } else if (velocity.x < 0) {
-      velocity.x += friction * dt;
-      if (velocity.x > 0)
-        velocity.x = 0;
+}
+
+void Player::render(float alpha) {
+    if (!worldStats.animation) return;
+
+    Rectangle source = worldStats.animation->getCurrentFrame();
+    if (!worldStats.isFacingRight) {
+        source.width = -source.width; // Flip horizontally
     }
-  }
 
-  velocity.y += stats.gravityScale * 1000.0f * dt;
-
-  prevPosition = position;
-  position.x += dt * velocity.x;
-  position.y += dt * velocity.y;
-
-  if (position.y > 500) {
-    isGrounded = true;
-    position.y = 500;
-    velocity.y = 0;
-  } else {
-    isGrounded = false;
-  }
+    // Assuming the position is the top-left of the character
+    Vector2 pos = worldStats.position;
+    DrawTextureRec(worldStats.animation->getTexture(), source, pos, WHITE);
 }
 
-void Player::render(float alpha) const {
-  Rectangle rec = currentAnimation->getCurrentFrame();
-
-  if (!isFacingRight) {
-    rec.x += rec.width;
-    rec.width = -rec.width;
-  }
-
-  Vector2 renderPos = {prevPosition.x + (position.x - prevPosition.x) * alpha,
-                       prevPosition.y + (position.y - prevPosition.y) * alpha};
-
-  DrawTextureRec(currentAnimation->getTexture(), rec, renderPos, WHITE);
+void Player::changeState(PlayerState &requestState) {
+    if (currentState == &requestState) return;
+    if (currentState) {
+        currentState->onExit();
+    }
+    currentState = &requestState;
+    currentState->onEnter();
 }
 
-void Player::setRequest(IEntityState<Player> *state) { requestState = state; }
-
-void Player::processRequest() {
-  if (requestState != nullptr) {
-    changeState(requestState);
-    requestState = nullptr;
-  }
+void Player::useSkill(const std::string& skillname) {
+    auto it = skillList.find(skillname);
+    if (it != skillList.end() && it->second) {
+        skillState.setSkill(it->second.get());
+        changeState(skillState);
+    }
 }
 
-void Player::changeState(IEntityState<Player> *state) {
-  if (state == nullptr) {
-    std::cerr << "Bad request - State None" << '\n';
-    return;
-  }
-
-  currentState = state;
-  currentState->onEnter(*this);
+void Player::addSkill(const std::string& name, std::unique_ptr<ISkill> skill) {
+    skillList[name] = std::move(skill);
 }
 
-void Player::setAnimation(Animation *anim) {
-  if (anim == nullptr) {
-    std::cerr << "Bad request - Anim None" << '\n';
-    return;
-  }
-
-  currentAnimation = anim;
-  currentAnimation->resetAnimation();
+void Player::onMoveRight() {
+    if (currentState) currentState->onMoveRight();
 }
 
-void Player::setFaceDirection(bool isRight) { isFacingRight = isRight; }
+void Player::onMoveLeft() {
+    if (currentState) currentState->onMoveLeft();
+}
 
-bool Player::checkIsGrounded() { return isGrounded; }
+void Player::onJump() {
+    if (currentState) currentState->onJump();
+}
 
-void Player::setVelocityX(float vel) { velocity.x = vel; }
+void Player::onStopLeft() {
+    if (currentState) currentState->onStopLeft();
+}
 
-void Player::setVelocityY(float vel) { velocity.y = vel; }
+void Player::onStopRight() {
+    if (currentState) currentState->onStopRight();
+}
 
-void Player::setIsGrounded(bool grounded) { isGrounded = grounded; }
+void Player::onCrouch() {
+    if (currentState) currentState->onCrouch();
+}
+
+void Player::onAttack() {
+    if (currentState) currentState->onAttack();
+}
+
+void Player::playAnimation(const std::string& name) {
+    auto it = animationList.find(name);
+    if (it != animationList.end()) {
+        worldStats.animation = &it->second;
+    }
+}
+
+void Player::moveRight() {
+    worldStats.isFacingRight = true;
+    runtimeStats.velocity.x = baseStats.moveVelocity;
+}
+
+void Player::moveLeft() {
+    worldStats.isFacingRight = false;
+    runtimeStats.velocity.x = -baseStats.moveVelocity;
+}
+
+void Player::stopLeftRun() {
+    if (runtimeStats.velocity.x < 0.0f)
+        runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::stopRightRun() {
+    if (runtimeStats.velocity.x > 0.0f)
+        runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::jump() {
+    runtimeStats.velocity.y = baseStats.jumpVelocity;
+}
+
+void Player::crouch() {
+    runtimeStats.hitbox.y /= 2;
+    runtimeStats.velocity = {0.0f, 0.0f};
+    
+}

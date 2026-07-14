@@ -45,10 +45,16 @@ set(SOURCES
     src/entity/Animation.cpp
     src/entity/Entity.cpp
     src/entity/Player/Player.cpp
-    src/entity/Player/PlayerStates.cpp
+    src/entity/Player/PlayerState.cpp
+    src/entity/Player/PlayerIdleState.cpp
+    src/entity/Player/PlayerRunState.cpp
+    src/entity/Player/PlayerJumpState.cpp
+    src/entity/Player/PlayerFallState.cpp
+    src/entity/Player/PlayerCrouchState.cpp
+    src/entity/Player/PlayerHurtState.cpp
+    src/entity/Player/PlayerDieState.cpp
+    src/entity/Player/PlayerSkillState.cpp
     src/entity/Player/PlayerFactory.cpp
-    src/entity/Skill/SkillManager.cpp
-    src/entity/Skill/DashSkill.cpp
     src/infrastructure/AssetManager.cpp
 )
 

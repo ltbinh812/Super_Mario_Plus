@@ -1,29 +1,22 @@
 #pragma once 
 #include "raylib.h"
-#include "Animation.h"
-#include <memory>
+#include "IEntityState.h"
+#include "CharacterStats.h"
 
 class Entity {
     protected:
-    Animation* currentAnimation;
-    Vector2 prevPosition;
-    Vector2 position;
-    Vector2 boxSize;
-    Vector2 velocity = {0, 0};
-    Vector2 acceleration = {0, 100};
+    CharacterBaseStats baseStats;
+    CharacterRuntimeStats runtimeStats;
+    CharacterWorldStats worldStats;
 
-    public:
-    virtual ~Entity() = default;
-    Entity(Vector2 pos, Vector2 boxsize);
-    virtual void handleInput() {};
-    virtual void process() {};
-    virtual void update(float dt) = 0;
-    virtual void render(float alpha) const = 0;
+    public: 
+        Entity(CharacterBaseStats &bS, CharacterRuntimeStats &rS, CharacterWorldStats &wS);
+        virtual ~Entity() = default;
+        virtual void update(float dt) = 0;
+        virtual void render(float alpha) = 0;
 
-    virtual void jump() {}
-    virtual void moveRight() {}
-    virtual void moveLeft() {}
-    virtual void stopMove() {}
-
-    virtual void addForce(Vector2 force);
+        CharacterBaseStats& getBaseStats() { return baseStats; }
+        CharacterRuntimeStats& getRuntimeStats() { return runtimeStats; }
+        CharacterWorldStats& getWorldStats() { return worldStats; }
+    
 };  

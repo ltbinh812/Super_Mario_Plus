@@ -4,7 +4,6 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-#include "DashSkill.h"
 
 using json = nlohmann::json;
 
@@ -33,39 +32,55 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     skillList.push_back(s.get<std::string>());
   }
 
-  CharacterStats stats{
-      charData["name"].get<std::string>(),
-      charData["maxHealth"].get<int>(),
-      charData["maxMana"].get<int>(),
-      charData["moveSpeed"].get<float>(),
-      charData["maxSpeed"].get<float>(),
-      charData["acceleration"].get<float>(),
-      charData["jumpForce"].get<float>(),
-      charData["gravityScale"].get<float>(),
-      skillList,
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["idle"]["texture"].get<std::string>()),
-          charData["animations"]["idle"]["frameNum"].get<int>(),
-          charData["animations"]["idle"]["frameTime"].get<float>()),
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["run"]["texture"].get<std::string>()),
-          charData["animations"]["run"]["frameNum"].get<int>(),
-          charData["animations"]["run"]["frameTime"].get<float>()),
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["jump"]["texture"].get<std::string>()),
-          charData["animations"]["jump"]["frameNum"].get<int>(),
-          charData["animations"]["jump"]["frameTime"].get<float>())};
+  CharacterBaseStats bS;
+  bS.name = charData["name"].get<std::string>();
+  bS.maxHealth = charData["maxHealth"].get<int>();
+  bS.maxMana = charData["maxMana"].get<int>();
+  bS.moveVelocity = charData["moveVelocity"].get<float>();
+  bS.jumpVelocity = charData["jumpVelocity"].get<float>();
+  bS.gravityScale = charData["gravityScale"].get<float>();
 
-  Vector2 boxsize = {16.0f, 16.0f};
-  auto player = std::make_unique<Player>(stats, pos, boxsize, true);
+  CharacterRuntimeStats rS;
+  rS.health = bS.maxHealth;
+  rS.mana = bS.maxMana;
+  rS.hitbox = {16.0f, 16.0f};
+  rS.velocity = {0.0f, 0.0f};
+  rS.isGrounded = false;
+
+  CharacterWorldStats wS;
+  wS.position = pos;
+  wS.isFacingRight = true;
+  wS.animation = nullptr;
+
+  std::unordered_map<std::string, Animation> animations;
+  
+  auto addAnimation = [&](const std::string& animName) {
+      if (charData["animations"].contains(animName)) {
+          auto& animData = charData["animations"][animName];
+          animations.emplace(animName, Animation(
+              AssetManager::getInstance().getTexture(animData["texture"].get<std::string>()),
+              animData["frameNum"].get<int>(),
+              animData["frameTime"].get<float>()
+          ));
+      }
+  };
+
+  addAnimation("idle");
+  addAnimation("run");
+  addAnimation("jump");
+  addAnimation("fall");
+  addAnimation("crouch");
+  addAnimation("hurt");
+  addAnimation("die");
+
+  auto player = std::make_unique<Player>(bS, rS, wS, std::move(animations));
+
   for (const std::string &skillName : skillList) {
     if (skillName == "Dash") {
-        player->addSkill("Dash", std::make_unique<DashSkill>());
+        // player->addSkill("Dash", std::make_unique<DashSkill>());
     } 
     else if (skillName == "Fireball") {
+        // player->addSkill("Fireball", std::make_unique<FireballSkill>());
     }
   }
   return player;

@@ -28,15 +28,6 @@ StateManager::StateManager() {
 StateManager::~StateManager() = default;
 
 
-
-
-
-
-
-
-
-
-
 void StateManager::HandleInput() {
   if (stateStack.empty())
     return;
