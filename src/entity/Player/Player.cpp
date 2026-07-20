@@ -92,6 +92,7 @@ void Player::onAttack() {
 }
 
 void Player::playAnimation(const std::string& name) {
+    std::cout << name << '\n';
     auto it = animationList.find(name);
     if (it != animationList.end()) {
         worldStats.animation = &it->second;

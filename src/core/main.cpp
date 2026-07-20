@@ -11,9 +11,11 @@ int main() {
     SetTargetFPS(60);
 
     //load các Asset
-    AssetManager::getInstance().loadTexture("mario_run", "assets/Run.png");
-    AssetManager::getInstance().loadTexture("mario_idle", "assets/Idle.png");
-    AssetManager::getInstance().loadTexture("mario_jump", "assets/Jump.png");
+    AssetManager::getInstance().loadTexture("Goku_run", "assets/Goku_animation/run.png");
+    AssetManager::getInstance().loadTexture("Goku_idle", "assets/Goku_animation/idle.png");
+    AssetManager::getInstance().loadTexture("Goku_jump", "assets/Goku_animation/jump.png");
+    AssetManager::getInstance().loadTexture("Goku_fall", "assets/Goku_animation/fall.png");
+
     
 
     // Chạy logic game chính 

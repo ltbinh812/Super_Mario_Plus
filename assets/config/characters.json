@@ -1,6 +1,6 @@
 {
-    "Mario": {
-        "name": "Mario",
+    "Goku": {
+        "name": "Goku",
         "maxHealth": 3,
         "maxMana": 100,
         "moveVelocity": 300.0,
@@ -8,86 +8,37 @@
         "gravityScale": 100,
         "animations": {
             "idle": {
-                "texture": "mario_idle",
-                "frameNum": 6,
+                "texture": "Goku_idle",
+                "frameNum": 4,
                 "frameTime": 0.25
             },
             "run": {
-                "texture": "mario_run",
-                "frameNum": 8,
+                "texture": "Goku_run",
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "jump": {
-                "texture": "mario_jump",
-                "frameNum": 12,
+                "texture": "Goku_jump",
+                "frameNum": 3,
                 "frameTime": 0.25
             },
             "fall": {
-                "texture": "mario_jump",
-                "frameNum": 12,
+                "texture": "Goku_fall",
+                "frameNum": 3,
                 "frameTime": 0.25
             },
             "crouch": {
-                "texture": "mario_idle",
+                "texture": "Goku_crouch",
                 "frameNum": 6,
                 "frameTime": 0.25
             },
             "hurt": {
-                "texture": "mario_idle",
+                "texture": "Goku_hurt",
                 "frameNum": 6,
                 "frameTime": 0.25
             },
             "die": {
-                "texture": "mario_idle",
-                "frameNum": 6,
-                "frameTime": 0.25
-            }
-        },
-        "skills":[
-            "Dash",
-            "Dash"
-        ]
-    },
-    "Wario": {
-        "name": "Wario",
-        "maxHealth": 5,
-        "maxMana": 50,
-        "moveVelocity": 400.0,
-        "jumpVelocity": -500.0,
-        "gravityScale": 100,
-        "animations": {
-            "idle": {
-                "texture": "mario_idle",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "run": {
-                "texture": "mario_run",
-                "frameNum": 8,
-                "frameTime": 0.15
-            },
-            "jump": {
-                "texture": "mario_jump",
-                "frameNum": 12,
-                "frameTime": 0.3
-            },
-            "fall": {
-                "texture": "mario_jump",
-                "frameNum": 12,
-                "frameTime": 0.3
-            },
-            "crouch": {
-                "texture": "mario_idle",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "hurt": {
-                "texture": "mario_idle",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "die": {
-                "texture": "mario_idle",
+                "texture": "Goku_die",
                 "frameNum": 6,
                 "frameTime": 0.25
             }
