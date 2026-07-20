@@ -55,6 +55,8 @@ set(SOURCES
     src/entity/Player/PlayerDieState.cpp
     src/entity/Player/PlayerSkillState.cpp
     src/entity/Player/PlayerFactory.cpp
+    src/entity/Skill/DashSkill.cpp
+    src/entity/Skill/PunchSkill.cpp
     src/infrastructure/AssetManager.cpp
 )
 

@@ -23,12 +23,12 @@ void PlayerRunState::onMoveRight() {
 
 void PlayerRunState::onJump() {
     player.jump();
-    player.changeState(player.jumpState);
+    changePlayerState(player.jumpState);
 }
 
 void PlayerRunState::onCrouch() {
     player.crouch();
-    player.changeState(player.crouchState);
+    changePlayerState(player.crouchState);
 }
 
 void PlayerRunState::onAttack() {
@@ -37,14 +37,8 @@ void PlayerRunState::onAttack() {
 
 void PlayerRunState::onStopLeft() {
     player.stopLeftRun();
-    if (player.getRuntimeStats().velocity.x == 0.0f) {
-        player.changeState(player.idleState);
-    }
 }
 
 void PlayerRunState::onStopRight() {
     player.stopRightRun();
-    if (player.getRuntimeStats().velocity.x == 0.0f) {
-        player.changeState(player.idleState);
-    }
 }

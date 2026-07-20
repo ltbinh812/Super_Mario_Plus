@@ -8,6 +8,10 @@ class PlayerState : public IEntityState<Player> {
     protected: 
     Player& player;
 
+    // Protected helper so subclasses can trigger unconditional state changes.
+    // PlayerState is a friend of Player, so this compiles; subclasses inherit access.
+    void changePlayerState(PlayerState& newState);
+
     public: 
     virtual ~PlayerState() = default;
 
@@ -19,5 +23,7 @@ class PlayerState : public IEntityState<Player> {
     virtual void onAttack() {}
     virtual void onStopLeft() {}
     virtual void onStopRight() {}
+
+    virtual bool canExit() const { return true; }
 
 };

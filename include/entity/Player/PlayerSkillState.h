@@ -5,6 +5,7 @@
 class PlayerSkillState : public PlayerState {
     private:
     ISkill* currentSkill = nullptr;
+    float timer = 0.0f;
 
     public:
 
@@ -15,5 +16,6 @@ class PlayerSkillState : public PlayerState {
     void onEnter() override;
     void onExit() override;
     void update(float dt) override;
+    bool canExit() const override { return timer <= 0.0f; }
 
 };

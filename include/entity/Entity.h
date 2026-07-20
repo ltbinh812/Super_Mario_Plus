@@ -15,8 +15,14 @@ class Entity {
         virtual void update(float dt) = 0;
         virtual void render(float alpha) = 0;
 
-        CharacterBaseStats& getBaseStats() { return baseStats; }
-        CharacterRuntimeStats& getRuntimeStats() { return runtimeStats; }
-        CharacterWorldStats& getWorldStats() { return worldStats; }
+        // Physics helpers (overridable by subclasses)
+        virtual void applyGravity(float dt) {}
+        virtual void updatePosition(float dt) {}
+        virtual void checkGroundCollision(float groundY) {}
+        virtual void updateStateFromPhysics() {}
+
+        const CharacterBaseStats& getBaseStats() { return baseStats; }
+        const CharacterRuntimeStats& getRuntimeStats() { return runtimeStats; }
+        const CharacterWorldStats& getWorldStats() { return worldStats; }
     
 };  

@@ -15,6 +15,10 @@ int main() {
     AssetManager::getInstance().loadTexture("Goku_idle", "assets/Goku_animation/idle.png");
     AssetManager::getInstance().loadTexture("Goku_jump", "assets/Goku_animation/jump.png");
     AssetManager::getInstance().loadTexture("Goku_fall", "assets/Goku_animation/fall.png");
+    AssetManager::getInstance().loadTexture("Goku_dash", "assets/Goku_animation/dash.png");
+    AssetManager::getInstance().loadTexture("Goku_punch1", "assets/Goku_animation/punch1.png");
+
+
 
     
 

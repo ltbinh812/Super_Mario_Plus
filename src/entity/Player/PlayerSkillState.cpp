@@ -6,17 +6,31 @@ PlayerSkillState::PlayerSkillState(Player& player) : PlayerState(player) {
 
 void PlayerSkillState::onEnter() {
     if (currentSkill) {
+        // Deduct mana
+        player.reduceMana(currentSkill->getManaCost());
+
+        // Play skill animation
+        player.playAnimation(currentSkill->getAnimationName());
+
+        // Set timer for skill duration
+        timer = currentSkill->getDuration();
+
+        // Execute skill effect (velocity burst, etc.)
         currentSkill->execute(player);
     }
 }
 
 void PlayerSkillState::onExit() {
-    // Cleanup if needed
     currentSkill = nullptr;
+    timer = 0.0f;
 }
 
 void PlayerSkillState::update(float dt) {
-    // The state update can check if the skill animation is finished,
-    // and if so, transition back to Idle or Fall depending on grounded status.
-    // E.g., if (animationEnded) player.changeState(player.idleState);
+    timer -= dt;
+    timer = std::max(timer, 0.0f);
+
+    if (timer == 0) {
+        player.requestState(player.idleState);
+    }
 }
+

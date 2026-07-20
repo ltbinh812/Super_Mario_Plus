@@ -9,4 +9,5 @@ class PlayerDieState : public PlayerState {
     void onEnter() override;
     void onExit() override;
     void update(float dt) override;
+    bool canExit() const override { return false; }
 };

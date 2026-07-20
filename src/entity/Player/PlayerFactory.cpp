@@ -1,5 +1,7 @@
 #include "PlayerFactory.h"
 #include "AssetManager.h"
+#include "DashSkill.h"
+#include "PunchSkill.h"
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -72,15 +74,17 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   addAnimation("crouch");
   addAnimation("hurt");
   addAnimation("die");
+  addAnimation("dash");
+  addAnimation("punch1");
 
   auto player = std::make_unique<Player>(bS, rS, wS, std::move(animations));
 
   for (const std::string &skillName : skillList) {
     if (skillName == "Dash") {
-        // player->addSkill("Dash", std::make_unique<DashSkill>());
+        player->addSkill("Dash", std::make_unique<DashSkill>());
     } 
-    else if (skillName == "Fireball") {
-        // player->addSkill("Fireball", std::make_unique<FireballSkill>());
+    else if (skillName == "Punch1") {
+        player->addSkill("Punch1", std::make_unique<PunchSkill>());
     }
   }
   return player;

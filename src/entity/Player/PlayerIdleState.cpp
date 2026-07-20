@@ -4,6 +4,7 @@
 PlayerIdleState::PlayerIdleState(Player& player) : PlayerState(player) {}
 
 void PlayerIdleState::onEnter() {
+    player.idle();
     player.playAnimation("idle");
 }
 
@@ -11,26 +12,27 @@ void PlayerIdleState::onExit() {
 }
 
 void PlayerIdleState::update(float dt) {
+    player.increaseMana(1000 * dt);
 }
 
 void PlayerIdleState::onMoveLeft() {
     player.moveLeft();
-    player.changeState(player.runState);
+    changePlayerState(player.runState);
 }
 
 void PlayerIdleState::onMoveRight() {
     player.moveRight();
-    player.changeState(player.runState);
+    changePlayerState(player.runState);
 }
 
 void PlayerIdleState::onJump() {
     player.jump();
-    player.changeState(player.jumpState);
+    changePlayerState(player.jumpState);
 }
 
 void PlayerIdleState::onCrouch() {
     player.crouch();
-    player.changeState(player.crouchState);
+    changePlayerState(player.crouchState);
 }
 
 void PlayerIdleState::onAttack() {

@@ -41,6 +41,10 @@ IntroState::IntroState() {
       handler.bindKey(leftKey, std::make_unique<StopLeftCommand>(), false);
       handler.bindKey(rightKey, std::make_unique<StopRightCommand>(), false);
 
+      // Bind skill keys
+      handler.bindKey(skill1Key, std::make_unique<UseSkillCommand>("Dash"), true);
+      handler.bindKey(skill2Key, std::make_unique<UseSkillCommand>("Punch1"), true);
+
       Player* playerPtr = player.get();
       entities.push_back(std::move(player));
       
@@ -63,44 +67,14 @@ void IntroState::HandleInput() {
 }
 
 void IntroState::Process() {
-  // physics system
   float dt = GetFrameTime();
+  float groundY = 500.0f;
+
   for (auto& entity : entities) {
-    auto& runtime = entity->getRuntimeStats();
-    auto& world = entity->getWorldStats();
-    auto& base = entity->getBaseStats();
-
-    // Apply gravity
-    runtime.velocity.y += base.gravityScale * 9.8f * dt;
-
-    // Update position
-    world.position.x += runtime.velocity.x * dt;
-    world.position.y += runtime.velocity.y * dt;
-
-    // Simple ground check
-    float groundY = 500.0f;
-    if (world.position.y >= groundY) {
-      world.position.y = groundY;
-      runtime.velocity.y = 0.0f;
-      runtime.isGrounded = true;
-    } else {
-      runtime.isGrounded = false;
-    }
-
-    // State check for fall/grounded
-    if (!runtime.isGrounded) {
-      if (runtime.velocity.y > 0) {
-        entity->changeState(entity->fallState);
-      } else {
-        entity->changeState(entity->jumpState);
-      }
-    } else {
-      if (runtime.velocity.x == 0.0f) {
-        entity->changeState(entity->idleState);
-      } else {
-        entity->changeState(entity->runState);
-      }
-    }
+    entity->applyGravity(dt);
+    entity->updatePosition(dt);
+    entity->checkGroundCollision(groundY);
+    entity->updateStateFromPhysics();
   }
 }
 
