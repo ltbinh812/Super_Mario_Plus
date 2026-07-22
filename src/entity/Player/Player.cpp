@@ -32,18 +32,24 @@ void Player::update(float dt) {
 void Player::render(float alpha) {
     if (!worldStats.animation) return;
 
+    constexpr float RENDER_SCALE = 2.0f;
+
     Rectangle source = worldStats.animation->getCurrentFrame();
     if (!worldStats.isFacingRight) {
         source.width = -source.width; // Flip horizontally
     }
 
-    // Position is the bottom-left (feet) of the character
-    // Offset upward by sprite height for drawing
-    Vector2 pos = {
+    // Destination rectangle scaled 4x, anchored at feet (bottom-left)
+    float absW = (source.width < 0 ? -source.width : source.width) * RENDER_SCALE;
+    float absH = source.height * RENDER_SCALE;
+    Rectangle dest = {
         worldStats.position.x,
-        worldStats.position.y - source.height
+        worldStats.position.y - absH,
+        absW,
+        absH
     };
-    DrawTextureRec(worldStats.animation->getTexture(), source, pos, WHITE);
+
+    DrawTexturePro(worldStats.animation->getTexture(), source, dest, {0, 0}, 0.0f, WHITE);
 }
 
 void Player::changeState(PlayerState &state) {

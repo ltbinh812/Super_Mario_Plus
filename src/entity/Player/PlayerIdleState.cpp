@@ -12,7 +12,7 @@ void PlayerIdleState::onExit() {
 }
 
 void PlayerIdleState::update(float dt) {
-    player.increaseMana(1000 * dt);
+    player.increaseMana(60.0f * dt);
 }
 
 void PlayerIdleState::onMoveLeft() {

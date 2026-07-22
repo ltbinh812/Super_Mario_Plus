@@ -21,8 +21,8 @@ class Entity {
         virtual void checkGroundCollision(float groundY) {}
         virtual void updateStateFromPhysics() {}
 
-        const CharacterBaseStats& getBaseStats() { return baseStats; }
-        const CharacterRuntimeStats& getRuntimeStats() { return runtimeStats; }
-        const CharacterWorldStats& getWorldStats() { return worldStats; }
+        const CharacterBaseStats& getBaseStats() const { return baseStats; }
+        const CharacterRuntimeStats& getRuntimeStats() const { return runtimeStats; }
+        const CharacterWorldStats& getWorldStats() const { return worldStats; }
     
 };  

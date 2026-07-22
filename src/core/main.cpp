@@ -18,6 +18,12 @@ int main() {
     AssetManager::getInstance().loadTexture("Goku_dash", "assets/Goku_animation/dash.png");
     AssetManager::getInstance().loadTexture("Goku_punch1", "assets/Goku_animation/punch1.png");
 
+    AssetManager::getInstance().loadTexture("Luffy_run", "assets/Luffy_animation/run.png");
+    AssetManager::getInstance().loadTexture("Luffy_idle", "assets/Luffy_animation/idle.png");
+    AssetManager::getInstance().loadTexture("Luffy_jump", "assets/Luffy_animation/jump.png");
+    AssetManager::getInstance().loadTexture("Luffy_fall", "assets/Luffy_animation/fall.png");
+    AssetManager::getInstance().loadTexture("Luffy_dash", "assets/Luffy_animation/dash.png");
+    AssetManager::getInstance().loadTexture("Luffy_punch1", "assets/Luffy_animation/punch1.png");
 
 
     

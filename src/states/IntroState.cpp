@@ -88,4 +88,37 @@ void IntroState::Render(float alpha) const {
   for (const auto &entity : entities) {
     entity->render(alpha);
   }
+
+  // Draw mana display for each player
+  for (size_t i = 0; i < entities.size(); ++i) {
+    const auto &entity = entities[i];
+    const auto &base = entity->getBaseStats();
+    const auto &runtime = entity->getRuntimeStats();
+    const auto &world = entity->getWorldStats();
+
+    // Position the mana bar above the player's head
+    float barWidth = 200.0f;   // 50 * 4
+    float barHeight = 24.0f;   // 6 * 4
+    float barX = world.position.x;
+    float barY = world.position.y + 75.0f; // 
+
+    // Player name
+    int nameWidth = MeasureText(base.name.c_str(), 48);
+    DrawText(base.name.c_str(), static_cast<int>(barX + barWidth / 2 - nameWidth / 2), static_cast<int>(barY - 64), 48, WHITE);
+
+    // Mana text (e.g. "50 / 100")
+    std::string manaText = std::to_string(runtime.mana) + " / " + std::to_string(base.maxMana);
+    int textWidth = MeasureText(manaText.c_str(), 40);
+    DrawText(manaText.c_str(), static_cast<int>(barX + barWidth / 2 - textWidth / 2), static_cast<int>(barY + barHeight + 8), 40, SKYBLUE);
+
+    // Background bar (dark)
+    DrawRectangle(static_cast<int>(barX), static_cast<int>(barY), static_cast<int>(barWidth), static_cast<int>(barHeight), DARKGRAY);
+
+    // Filled mana bar (blue)
+    float manaRatio = (base.maxMana > 0) ? static_cast<float>(runtime.mana) / static_cast<float>(base.maxMana) : 0.0f;
+    DrawRectangle(static_cast<int>(barX), static_cast<int>(barY), static_cast<int>(barWidth * manaRatio), static_cast<int>(barHeight), BLUE);
+
+    // Bar outline
+    DrawRectangleLines(static_cast<int>(barX), static_cast<int>(barY), static_cast<int>(barWidth), static_cast<int>(barHeight), WHITE);
+  }
 }

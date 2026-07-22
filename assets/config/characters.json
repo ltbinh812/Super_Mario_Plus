@@ -57,5 +57,64 @@
             "Dash",
             "Punch1"
         ]
+    },
+    "Luffy": {
+        "name": "Luffy",
+        "maxHealth": 3,
+        "maxMana": 100,
+        "moveVelocity": 300.0,
+        "jumpVelocity": -300.0,
+        "gravityScale": 80,
+        "animations": {
+            "idle": {
+                "texture": "Luffy_idle",
+                "frameNum": 4,
+                "frameTime": 0.25
+            },
+            "run": {
+                "texture": "Luffy_run",
+                "frameNum": 8,
+                "frameTime": 0.1
+            },
+            "jump": {
+                "texture": "Luffy_jump",
+                "frameNum": 3,
+                "frameTime": 0.25
+            },
+            "fall": {
+                "texture": "Luffy_fall",
+                "frameNum": 3,
+                "frameTime": 0.3
+            },
+            "crouch": {
+                "texture": "Luffy_crouch",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "hurt": {
+                "texture": "Luffy_hurt",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "die": {
+                "texture": "Luffy_die",
+                "frameNum": 6,
+                "frameTime": 0.25
+            },
+            "dash": {
+                "texture": "Luffy_dash",
+                "frameNum": 2,
+                "frameTime": 0.1
+            },
+            "punch1": {
+                "texture": "Luffy_punch1",
+                "frameNum": 5,
+                "frameTime": 0.1
+            }
+        },
+        "skills":[
+            "Dash",
+            "Punch1"
+        ]
     }
 }
