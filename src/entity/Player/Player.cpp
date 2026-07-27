@@ -32,7 +32,7 @@ void Player::update(float dt) {
 void Player::render(float alpha) {
     if (!worldStats.animation) return;
 
-    constexpr float RENDER_SCALE = 2.0f;
+    constexpr float RENDER_SCALE = 0.5f; // Tỷ lệ 0.5f giúp hình ảnh thực tế của nhân vật (body ~32px trong khung 64x64) cao đúng bằng 1 block (16px) trên map LDtk
 
     Rectangle source = worldStats.animation->getCurrentFrame();
     if (!worldStats.isFacingRight) {

@@ -22,6 +22,7 @@ include_directories(
     include/entity/Skill
     include/infrastructure
     include/command
+    include/environment
 )
 
 if(WIN32)
@@ -58,6 +59,9 @@ set(SOURCES
     src/entity/Skill/DashSkill.cpp
     src/entity/Skill/PunchSkill.cpp
     src/infrastructure/AssetManager.cpp
+    src/environment/TileMap.cpp
+    src/states/World01State.cpp
+    src/states/WorldState.cpp
 )
 
 # Executable

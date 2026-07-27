@@ -8,6 +8,7 @@ int main() {
     
     // Mở cửa sổ
     InitWindow(1280, 720, "Super Mario Plus");
+    MaximizeWindow(); // Phóng to cửa sổ tối đa (vừa toàn màn hình nhưng không ngập lấp Taskbar)
     SetTargetFPS(60);
 
     //load các Asset
