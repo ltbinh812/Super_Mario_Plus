@@ -60,8 +60,9 @@ set(SOURCES
     src/entity/Skill/PunchSkill.cpp
     src/infrastructure/AssetManager.cpp
     src/environment/TileMap.cpp
+    src/environment/MapCamera.cpp
     src/states/World01State.cpp
-    src/states/WorldState.cpp
+    src/states/World02State.cpp
 )
 
 # Executable

@@ -30,7 +30,7 @@ void PlayerSkillState::update(float dt) {
     timer = std::max(timer, 0.0f);
 
     if (timer == 0) {
-        player.requestState(player.idleState);
+        player.updateStateFromPhysics();
     }
 }
 

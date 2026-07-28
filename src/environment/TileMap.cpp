@@ -108,9 +108,22 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         if (!ts.contains("relPath") || ts["relPath"].is_null()) continue;
         int uid = ts["uid"];
         std::string relPath = ts["relPath"];
+        
+        std::string filename = relPath;
+        size_t lastSlash = relPath.find_last_of("/\\");
+        if (lastSlash != std::string::npos) {
+            filename = relPath.substr(lastSlash + 1);
+        }
+        std::string localPath = baseDir + filename;
         std::string fullPath = baseDir + relPath;
-        tilesetTextures[uid] = LoadTexture(fullPath.c_str());
-        std::cout << "[LDtk] Da tai Texture ID " << uid << ": " << relPath << "\n";
+
+        if (FileExists(localPath.c_str())) {
+            tilesetTextures[uid] = LoadTexture(localPath.c_str());
+            std::cout << "[LDtk] Da tai Texture ID " << uid << " (Smart Local): " << filename << "\n";
+        } else {
+            tilesetTextures[uid] = LoadTexture(fullPath.c_str());
+            std::cout << "[LDtk] Da tai Texture ID " << uid << ": " << relPath << "\n";
+        }
     }
 
     json targetLevel = nullptr;
@@ -129,6 +142,8 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         std::cerr << "[LDtk] Khong tim thay level: " << levelName << std::endl;
         return false;
     }
+    std::string actualLevelName = targetLevel.contains("identifier") && !targetLevel["identifier"].is_null() ? (std::string)targetLevel["identifier"] : "Unknown";
+    std::cout << "[LDtk] Da chon Level: " << actualLevelName << "\n";
 
     levelWidth = targetLevel["pxWid"];
     levelHeight = targetLevel["pxHei"];
@@ -154,7 +169,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         std::string layerName = (layer.contains("__identifier") && !layer["__identifier"].is_null()) ? (std::string)layer["__identifier"] : "";
         std::string layerType = (layer.contains("__type") && !layer["__type"].is_null()) ? (std::string)layer["__type"] : "";
 
-        if (layerName == "Collision" || layerType == "IntGrid") {
+        if (layerName == "Collision") {
             if (layer.contains("intGridCsv") && !layer["intGridCsv"].is_null()) {
                 const auto& csv = layer["intGridCsv"];
                 for (size_t idx = 0; idx < csv.size(); ++idx) {
@@ -168,7 +183,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                     }
                 }
             }
-            if (layerName == "Collision") continue;
+            continue; // Không render lớp Collision ra màn hình
         }
 
         if (layerType == "Entities") {
@@ -221,14 +236,16 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     }
     EndTextureMode();
 
-    std::cout << "[LDtk] Load map " << levelName << " (" << levelWidth << "x" << levelHeight << ") thanh cong!\n";
+    std::cout << "[LDtk] Load map " << actualLevelName << " (" << levelWidth << "x" << levelHeight << ") thanh cong!\n";
     return true;
 }
 
 void TileMap::Draw() const {
     if (hasCanvas) {
+        float scale = GetWorldScale();
         Rectangle src = { 0.0f, 0.0f, (float)mapCanvas.texture.width, -(float)mapCanvas.texture.height };
-        DrawTextureRec(mapCanvas.texture, src, { 0.0f, 0.0f }, WHITE);
+        Rectangle dest = { 0.0f, 0.0f, (float)mapCanvas.texture.width * scale, (float)mapCanvas.texture.height * scale };
+        DrawTexturePro(mapCanvas.texture, src, dest, { 0.0f, 0.0f }, 0.0f, WHITE);
         return;
     }
 
@@ -241,6 +258,7 @@ void TileMap::Draw() const {
     if (tileSheet.id == 0) return;
 
     int tilesX = tileSheet.width / tileSize;
+    float scale = GetWorldScale();
 
     // Helper lambda to draw a layer
     auto drawLayer = [&](const std::vector<std::vector<int>>& layer) {
@@ -253,9 +271,9 @@ void TileMap::Draw() const {
                 int srcY = (tileId / tilesX) * tileSize;
 
                 Rectangle sourceRect = { (float)srcX, (float)srcY, (float)tileSize, (float)tileSize };
-                Vector2 position = { (float)(x * tileSize), (float)(y * tileSize) };
+                Rectangle destRect = { (float)(x * tileSize) * scale, (float)(y * tileSize) * scale, (float)tileSize * scale, (float)tileSize * scale };
 
-                DrawTextureRec(tileSheet, sourceRect, position, WHITE);
+                DrawTexturePro(tileSheet, sourceRect, destRect, { 0.0f, 0.0f }, 0.0f, WHITE);
             }
         }
     };
@@ -271,10 +289,13 @@ std::vector<Rectangle> TileMap::GetCollidingRectangles(Rectangle entityRect) con
     std::vector<Rectangle> collisions;
     if (tileSize == 0 || columns == 0 || rows == 0) return collisions;
     
-    int startX = std::max(0, (int)(entityRect.x / tileSize));
-    int startY = std::max(0, (int)(entityRect.y / tileSize));
-    int endX = std::min(columns - 1, (int)((entityRect.x + entityRect.width) / tileSize));
-    int endY = std::min(rows - 1, (int)((entityRect.y + entityRect.height) / tileSize));
+    float scale = GetWorldScale();
+    float worldTileSize = (float)tileSize * scale;
+
+    int startX = std::max(0, (int)(entityRect.x / worldTileSize));
+    int startY = std::max(0, (int)(entityRect.y / worldTileSize));
+    int endX = std::min(columns - 1, (int)((entityRect.x + entityRect.width) / worldTileSize));
+    int endY = std::min(rows - 1, (int)((entityRect.y + entityRect.height) / worldTileSize));
 
     for (int y = startY; y <= endY; ++y) {
         if (y >= collisionLayer.size()) continue;
@@ -284,7 +305,7 @@ std::vector<Rectangle> TileMap::GetCollidingRectangles(Rectangle entityRect) con
             int tileId = collisionLayer[y][x];
             // If the collision layer has a value > 0, it's a solid block
             if (tileId > 0) {
-                Rectangle tileRect = { (float)(x * tileSize), (float)(y * tileSize), (float)tileSize, (float)tileSize };
+                Rectangle tileRect = { (float)(x * worldTileSize), (float)(y * worldTileSize), worldTileSize, worldTileSize };
                 if (CheckCollisionRecs(entityRect, tileRect)) {
                     collisions.push_back(tileRect);
                 }

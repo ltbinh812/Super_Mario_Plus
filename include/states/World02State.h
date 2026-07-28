@@ -6,7 +6,7 @@
 #include "TileMap.h"
 #include <memory>
 
-class World01State : public GameState {
+class World02State : public GameState {
 private:
   TileMap map;
   std::unique_ptr<Player> player1;
@@ -16,8 +16,8 @@ private:
   MapCamera mapCamera;
 
 public:
-  World01State();
-  ~World01State() override;
+  World02State();
+  ~World02State() override;
 
   void HandleInput() override;
   void Process() override;

@@ -27,13 +27,14 @@ public:
     ~TileMap();
 
     void LoadMap(const std::string& jsonFilePath, const std::string& tilesetPath, const std::string& backgroundPath);
-    bool LoadLDtkMap(const std::string& ldtkFilePath, const std::string& levelName = "Level_0");
+    bool LoadLDtkMap(const std::string& ldtkFilePath, const std::string& levelName = "");
     
     void Draw() const;
     std::vector<Rectangle> GetCollidingRectangles(Rectangle entityRect) const;
 
+    float GetWorldScale() const { return (tileSize > 0 && tileSize < 32) ? (32.0f / (float)tileSize) : 1.0f; }
     int GetTileSize() const { return tileSize; }
-    int GetWidth() const { return levelWidth; }
-    int GetHeight() const { return levelHeight; }
+    int GetWidth() const { return (int)(levelWidth * GetWorldScale()); }
+    int GetHeight() const { return (int)(levelHeight * GetWorldScale()); }
 };
 

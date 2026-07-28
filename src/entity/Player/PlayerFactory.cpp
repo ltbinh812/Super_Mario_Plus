@@ -45,7 +45,7 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   CharacterRuntimeStats rS;
   rS.health = bS.maxHealth;
   rS.mana = bS.maxMana;
-  rS.hitbox = {12.0f, 16.0f}; // Hitbox cao bằng đúng 1 block (16px) trong map LDtk
+  rS.hitbox = {31.0f, 56.0f}; // Hitbox ngang < 32px để lọt hố, cao 56px (1.75 block x 32px)
   rS.velocity = {0.0f, 0.0f};
   rS.isGrounded = false;
 

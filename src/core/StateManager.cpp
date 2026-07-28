@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "IntroState.h"
 #include "World01State.h"
+#include "World02State.h"
 #include <iostream>
 
 void StateManager::PushState(std::unique_ptr<GameState> state) {
@@ -22,12 +23,11 @@ void StateManager::ChangeState(std::unique_ptr<GameState> state) {
 }
 
 StateManager::StateManager() {
-  std::unique_ptr<GameState> initialState = std::make_unique<World01State>();
+  std::unique_ptr<GameState> initialState = std::make_unique<World02State>();
   stateStack.push(std::move(initialState));
 }
 
 StateManager::~StateManager() = default;
-
 
 void StateManager::HandleInput() {
   if (stateStack.empty())

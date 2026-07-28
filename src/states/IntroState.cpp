@@ -67,19 +67,14 @@ void IntroState::HandleInput() {
 }
 
 void IntroState::Process() {
-  float dt = GetFrameTime();
-  float groundY = 500.0f;
-
-  for (auto& entity : entities) {
-    entity->applyGravity(dt);
-    entity->updatePosition(dt);
-    entity->checkGroundCollision(groundY);
-    entity->updateStateFromPhysics();
-  }
+  // Process is for user input commands if any
 }
 
 void IntroState::Update(float dt) {
+  float groundY = 500.0f;
   for (const auto &entity : entities) {
+    entity->updatePhysicsSimple(groundY, dt);
+    entity->updateStateFromPhysics();
     entity->update(dt);
   }
 }

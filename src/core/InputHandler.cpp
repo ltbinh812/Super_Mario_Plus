@@ -15,7 +15,7 @@ std::vector<IPlayerCommand *> InputHandler::handleInput() {
     int key = pair.first;
 
     for (auto &binding : pair.second) {
-      bool active = binding.isPressed ? IsKeyPressed(key) : IsKeyReleased(key);
+      bool active = binding.isPressed ? IsKeyDown(key) : IsKeyReleased(key);
       if (active) {
         activeCommands.push_back(binding.command.get());
       }

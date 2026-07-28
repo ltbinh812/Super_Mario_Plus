@@ -4,8 +4,8 @@
         "maxHealth": 3,
         "maxMana": 100,
         "moveVelocity": 300.0,
-        "jumpVelocity": -300.0,
-        "gravityScale": 80,
+        "jumpVelocity": -600.0,
+        "gravityScale": 160.0,
         "animations": {
             "idle": {
                 "texture": "Goku_idle",
@@ -53,7 +53,7 @@
                 "frameTime": 0.1
             }
         },
-        "skills":[
+        "skills": [
             "Dash",
             "Punch1"
         ]
@@ -63,8 +63,8 @@
         "maxHealth": 3,
         "maxMana": 100,
         "moveVelocity": 300.0,
-        "jumpVelocity": -300.0,
-        "gravityScale": 80,
+        "jumpVelocity": -600.0,
+        "gravityScale": 160.0,
         "animations": {
             "idle": {
                 "texture": "Luffy_idle",
@@ -112,7 +112,7 @@
                 "frameTime": 0.1
             }
         },
-        "skills":[
+        "skills": [
             "Dash",
             "Punch1"
         ]

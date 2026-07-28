@@ -419,36 +419,76 @@ Tuy nhiên, để code trong `TileMap.cpp` sạch hơn và dễ bảo trì, bạ
 
 ---
 
-## 7. Bảng Theo Dõi Tiến Độ Triển Khai (Build Status Checklist)
+## 7. Hệ Thống Đọc Map & Quản Lý Camera Chung (Unified Map & Camera Architecture)
+
+Để giải quyết nhu cầu nạp hàng loạt map mới (như `map01`, `map02` và các map tương lai) theo một quy trình nhất quán mà không phải viết lại logic camera hay xử lý ngoại lệ đường dẫn trong từng State, engine áp dụng kiến trúc chuẩn hoá mới với các cơ chế sau:
+
+### A. Phân Tích So Sánh Map01 & Map02
+
+| Đặc tính | Map01 (`world01.ldtk`) | Map02 (`world02.ldtk`) |
+| :--- | :--- | :--- |
+| **Thư mục lưu trữ** | `assets/maps/map01/world01.ldtk` | `assets/maps/map02/world02.ldtk` |
+| **Identifier Level** | `"Level_0"` | `"AutoLayer"` |
+| **Kích thước (pixel)** | $3472 \times 432$ px ($217 \times 27$ tiles) | $880 \times 464$ px ($55 \times 29$ tiles) |
+| **Đặc thù địa hình** | Map phiêu lưu ngang dài (Horizontal Adventure) | Map hang động / Đấu trường rộng và cao (Cavern / Arena) |
+| **Vấn đề Texture Path** | Đường dẫn tương đối chuẩn | Đã chuẩn hoá về local path (`Cavernas_by_Adam_Saltsman.png`) |
+| **Yêu cầu Camera** | Khóa cạnh trên ($Y=0$) ở góc trái màn hình, chỉ cuộn ngang theo nhân vật | Giữ nguyên **Tỷ lệ Zoom cố định** như map01, cho phép camera cuộn cả ngang lẫn dọc và clamp theo ranh giới map |
+
+### B. Giải Pháp Khắc Phục Lỗi LDtk & Tải Map Thông Minh (`TileMap`)
+1. **Smart Texture Path Resolution (Tự động tải ảnh thông minh khi thay đổi location):**
+   * Trong thực tế làm việc nhóm hoặc làm mới dự án, khi di chuyển thư mục game sang một location (máy tính hoặc đường dẫn) khác, hoặc khi tải map sample (có thể bị ghi đường dẫn tuyệt đối kiểu `C:/Users/...`), việc nạp mù quáng theo `relPath` sẽ báo lỗi mất texture.
+   * **Giải pháp:** Engine áp dụng nguyên tắc **luôn sử dụng đường dẫn thông minh**: hàm `TileMap::LoadLDtkMap()` tự động trích xuất tên file gốc (ví dụ: `Cavernas_by_Adam_Saltsman.png`) từ chuỗi `relPath` và ưu tiên tìm kiếm ngay tại thư mục địa phương chứa file bản đồ (`baseDir + filename`). Nhờ cơ chế nhận diện thông minh này, bất kể cấu trúc thư mục máy tính thay đổi ra sao, dự án luôn bảo đảm tải texture map thành công 100%.
+2. **Auto Level Fallback (Tự động chọn Level):**
+   * Tham số `levelName` trong hàm `LoadLDtkMap()` có giá trị mặc định là rỗng (`""`). Nếu người lập trình không truyền tên level hoặc truyền sai tên (ví dụ gọi `"Level_0"` trên map02 vốn chỉ có level `"AutoLayer"`), engine sẽ tự động fallback tải level đầu tiên trong mảng (`j["levels"][0]`).
+   * Nhờ đó, việc push map mới vào game trở nên chỉ cần 1 lệnh duy nhất: `map.LoadLDtkMap("assets/maps/map02/world02.ldtk");`.
+
+### C. Chuẩn Hoá Camera Với Lớp `MapCamera`
+Thay vì copy-paste công thức zoom và clamping vào từng State (`World01State`, `WorldState`), toàn bộ logic camera được đóng gói vào class tiện ích `MapCamera` ([include/environment/MapCamera.h](file:///d:/Git/.SuperMarioPlus/include/environment/MapCamera.h)):
+
+1. **Cố Định Tỷ Lệ Zoom (Fixed Viewport Ratio):**
+   * `MapCamera` luôn áp dụng thông số chuẩn `FIXED_VIEWPORT_HEIGHT = 416.0f` (tương đương 26 ô gạch theo chiều dọc).
+   * **Công thức Zoom:** `zoom = (float)GetScreenHeight() / FIXED_VIEWPORT_HEIGHT;`.
+   * **Ý nghĩa:** Bảo toàn nguyên vẹn kích thước vật lý của nhân vật và block gạch ($16 \times 16$ px) trên màn hình. Một ô gạch trong `map01` và `map02` sẽ có kích thước hiển thị y chang nhau 100%.
+2. **Hỗ Trợ 2 Chế Độ Điều Khiển Camera (Camera Modes):**
+   * **`HORIZONTAL_FOLLOW` (Dành cho map ngang như Map01):** Khóa trục Y sao cho cạnh trên của bản đồ ($Y=0$) luôn neo chuẩn xác tại góc trái trên cùng màn hình. Camera chỉ cuộn theo nhân vật trên trục X và được khóa ranh giới (clamping) không cho camera tràn ra ngoài mép trái/phải bản đồ.
+   * **`FREE_FOLLOW` (Dành cho map hang động / leo tháp như Map02):** Camera cuộn mượt mà theo nhân vật trên cả 2 trục X và Y. Đảm bảo giới hạn khung hình luôn nằm an toàn trong ranh giới $[0, \text{levelWidth}]$ và $[0, \text{levelHeight}]$, tự động khóa mép trên/dưới/trái/phải khi nhân vật đi sát rìa bản đồ.
+
+---
+
+## 8. Bảng Theo Dõi Tiến Độ Triển Khai (Build Status Checklist)
 
 Dưới đây là ghi nhận trạng thái chi tiết cho đợt triển khai hiện tại để nhóm phát triển theo dõi và chuẩn bị cho các đợt build tiếp theo:
 
-### ✅ PHẦN ĐÃ HOÀN THÀNH (Phase 1: Map Loading & Display - COMPLETED)
+### ✅ PHẦN ĐÃ HOÀN THÀNH (Phase 1 & 2: Map Loading, Smart Paths & Camera System - COMPLETED)
 1. **Nâng cấp toàn bộ Class `TileMap` ([TileMap.h](file:///d:/Git/.SuperMarioPlus/include/environment/TileMap.h) & [TileMap.cpp](file:///d:/Git/.SuperMarioPlus/src/environment/TileMap.cpp)):**
    * Đã tích hợp thành công **Flyweight Pattern**: Dùng chung tài nguyên ảnh theo `uid` qua `tilesetTextures`, không tốn lặp VRAM.
    * Đã tích hợp **Batch Render Buffer**: Dựng canvas tự động (`RenderTexture2D mapCanvas`), chỉ tốn **1 Draw Call duy nhất** khi render toàn bộ gạch và entity trang trí nền.
    * Đã áp dụng **Reverse Layer Order**: Duyệt ngược mảng `layerInstances` từ dưới lên để đảm bảo đúng thuật toán đè hình hậu cảnh.
    * Đã áp dụng quy tắc **Ẩn lớp Collision**: Tự động lấy dữ liệu từ `intGridCsv` đổ vào mảng 2 chiều `collisionLayer` và tuyệt đối không vẽ lớp này lên màn hình.
-   * Đã bổ sung kiểm tra an toàn trong `GetCollidingRectangles()` (tránh lỗi chia cho 0 khi chưa load map).
-2. **Tạo mới State Kiểm Tra Bản Đồ (`World01State` - [World01State.h](file:///d:/Git/.SuperMarioPlus/include/states/World01State.h) & [World01State.cpp](file:///d:/Git/.SuperMarioPlus/src/states/World01State.cpp)):**
-   * Đã tạo state riêng biệt kết nối thẳng tới `assets/maps/map01/world01.ldtk` (level `Level_0`).
-   * Tích hợp điều khiển Camera tự do để kiểm tra map: Dùng phím **W/A/S/D** hoặc **Mũi tên** để cuộn camera, phím **Q / E** để phóng to / thu nhỏ (Zoom 0.5x - 5.0x).
-3. **Cấu Hình Cấu Trúc Biên Dịch ([CMakeLists.txt](file:///d:/Git/.SuperMarioPlus/CMakeLists.txt) & [StateManager.cpp](file:///d:/Git/.SuperMarioPlus/src/core/StateManager.cpp)):**
-   * Đã bổ sung `include/environment` vào danh sách include và nạp các tệp `TileMap.cpp`, `World01State.cpp` vào target biên dịch.
-   * Đã đặt `World01State` làm state khởi chạy mặc định của game trong `StateManager`.
-   * **Kết quả build:** Dự án đã biên dịch thành công 100% (`[100%] Built target SuperMarioPlus`), sẵn sàng chạy thử nghiệm hiển thị map ngay lập tức!
+   * 🆕 **Smart Texture Path Resolution**: Tự động nhận diện và tải ảnh trong `baseDir` dựa trên tên file gốc, khắc phục triệt để lỗi đường dẫn tuyệt đối của LDtk trên `map02`.
+   * 🆕 **Auto Level Fallback**: Tự động chọn level đầu tiên nếu không tìm thấy identifier, giúp push map mới vô cùng nhanh gọn.
+2. **Xây Dựng Hệ Thống Camera Chuẩn Hoá (`MapCamera` - [MapCamera.h](file:///d:/Git/.SuperMarioPlus/include/environment/MapCamera.h) & [MapCamera.cpp](file:///d:/Git/.SuperMarioPlus/src/environment/MapCamera.cpp)):**
+   * Tối giản hoàn toàn logic: Cả hai map và mọi map trong tương lai sử dụng **chung duy nhất một cơ chế camera**.
+   * Đóng gói công thức **Fixed Viewport Ratio** (`416.0f`) kết hợp chuẩn hoá theo kích thước block gốc (`mapTileSize`).
+   * Tự động điều chỉnh tỷ lệ zoom: Khi Map 1 có `mapTileSize = 16`, hệ thống cho zoom chuẩn (`1x`). Khi Map 2 có `mapTileSize = 8`, hệ thống tự động tăng zoom lên gấp đôi (`2x`) để block hiển thị trên màn hình có kích thước hoàn toàn giống Map 1.
+   * Khóa mép trên bản đồ (`Y = 0`) luôn trùng khớp với mép trên màn hình, chỉ di chuyển theo trục X và tự động clamp theo ranh giới map.
+3. **Đồng Bộ Hoá Các State Màn Chơi ([World01State.cpp](file:///d:/Git/.SuperMarioPlus/src/states/World01State.cpp) & [World02State.cpp](file:///d:/Git/.SuperMarioPlus/src/states/World02State.cpp)):**
+   * `World01State`: Nạp `world01.ldtk`, gọi `mapCamera.SetMapTileSize(16)`.
+   * `World02State`: Nạp `assets/maps/map02/world02.ldtk`, gọi `mapCamera.SetMapTileSize(8)`, camera tự động zoom gấp đôi Map 1.
+4. **Cấu Hình Cấu Trúc Biên Dịch ([CMakeLists.txt](file:///d:/Git/.SuperMarioPlus/CMakeLists.txt)):**
+   * Đã nạp đầy đủ các module mới (`MapCamera.cpp`, `TileMap.cpp`, `World01State.cpp`, `World02State.cpp`) vào target biên dịch.
 
 ---
 
-### ⏳ PHẦN CHƯA LÀM - ĐỂ LẠI CHO LẦN BUILD TIẾP THEO (Phase 2: Physics & Player Integration - TODO)
+### ⏳ PHẦN CHƯA LÀM - ĐỂ LẠI CHO LẦN BUILD TIẾP THEO (Phase 3: Physics & Player Collision Integration - TODO)
 1. **Class `Entity` ([Entity.h](file:///d:/Git/.SuperMarioPlus/include/entity/Entity.h) & [Entity.cpp](file:///d:/Git/.SuperMarioPlus/src/entity/Entity.cpp)):**
    * *Chưa triển khai:* Hàm `virtual void updatePhysicsWithMap(const TileMap& map, float dt);` (hoặc `checkMapCollision`).
-   * *Nhiệm vụ cho Phase 2:* Cần viết thuật toán va chạm AABB tách 2 trục (Trục X xử lý kẹt tường trước, Trục Y xử lý trọng lực và sàn/trần sau) dựa trên lưới gạch lấy từ `map.GetCollidingRectangles()`.
+   * *Nhiệm vụ cho Phase 3:* Cần viết thuật toán va chạm AABB tách 2 trục (Trục X xử lý kẹt tường trước, Trục Y xử lý trọng lực và sàn/trần sau) dựa trên lưới gạch lấy từ `map.GetCollidingRectangles()`.
 2. **Class `Player` ([Player.cpp](file:///d:/Git/.SuperMarioPlus/src/entity/Player/Player.cpp)):**
    * *Chưa triển khai:* Kết nối hệ thống vật lý bản đồ với State Machine của người chơi.
-   * *Nhiệm vụ cho Phase 2:* Cho phép chuyển trạng thái `FallState` về `IdleState`/`RunState` khi chân chạm gạch LDtk rắn (`isGrounded = true`), và dừng tốc độ ngang khi đụng tường gạch.
-3. **Đưa Nhân Vật Vào `World01State` ([World01State.cpp](file:///d:/Git/.SuperMarioPlus/src/states/World01State.cpp)):**
-   * *Chưa triển khai:* Hiện tại `World01State` chỉ mới tập trung vẽ hiển thị map, chưa khởi tạo danh sách `entities`.
-   * *Nhiệm vụ cho Phase 2:* Khởi tạo Player 1 (ví dụ Goku/Mario) và Player 2 (ví dụ Luffy/Luigi) bên trong `World01State`, cho gọi `updatePhysicsWithMap(map, dt)` trong hàm `Process()` và bổ sung cơ chế đẩy nhẹ khi 2 người chơi va chạm nhau (`Coop Push`).
+   * *Nhiệm vụ cho Phase 3:* Cho phép chuyển trạng thái `FallState` về `IdleState`/`RunState` khi chân chạm gạch LDtk rắn (`isGrounded = true`), và dừng tốc độ ngang khi đụng tường gạch.
+3. **Đưa Va Chạm Hoàn Chỉnh Vào Các State:**
+   * *Chưa triển khai:* Hiện tại các State tập trung hiển thị map và kiểm chứng tỷ lệ camera.
+   * *Nhiệm vụ cho Phase 3:* Gọi `updatePhysicsWithMap(map, dt)` trong hàm `Process()` cho Player 1 & Player 2 và bổ sung cơ chế đẩy nhẹ khi 2 người chơi va chạm nhau (`Coop Push`).
 
 
