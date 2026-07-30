@@ -6,7 +6,6 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-
 using json = nlohmann::json;
 
 std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
@@ -45,7 +44,8 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   CharacterRuntimeStats rS;
   rS.health = bS.maxHealth;
   rS.mana = bS.maxMana;
-  rS.hitbox = {31.0f, 56.0f}; // Hitbox ngang < 32px để lọt hố, cao 56px (1.75 block x 32px)
+  rS.hitbox = {24.0f, 56.0f}; // Hitbox ngang đúng 32px (1 block), cao 56px
+
   rS.velocity = {0.0f, 0.0f};
   rS.isGrounded = false;
 
@@ -55,16 +55,16 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   wS.animation = nullptr;
 
   std::unordered_map<std::string, Animation> animations;
-  
-  auto addAnimation = [&](const std::string& animName) {
-      if (charData["animations"].contains(animName)) {
-          auto& animData = charData["animations"][animName];
-          animations.emplace(animName, Animation(
-              AssetManager::getInstance().getTexture(animData["texture"].get<std::string>()),
-              animData["frameNum"].get<int>(),
-              animData["frameTime"].get<float>()
-          ));
-      }
+
+  auto addAnimation = [&](const std::string &animName) {
+    if (charData["animations"].contains(animName)) {
+      auto &animData = charData["animations"][animName];
+      animations.emplace(animName,
+                         Animation(AssetManager::getInstance().getTexture(
+                                       animData["texture"].get<std::string>()),
+                                   animData["frameNum"].get<int>(),
+                                   animData["frameTime"].get<float>()));
+    }
   };
 
   addAnimation("idle");
@@ -81,10 +81,9 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
 
   for (const std::string &skillName : skillList) {
     if (skillName == "Dash") {
-        player->addSkill("Dash", std::make_unique<DashSkill>());
-    } 
-    else if (skillName == "Punch1") {
-        player->addSkill("Punch1", std::make_unique<PunchSkill>());
+      player->addSkill("Dash", std::make_unique<DashSkill>());
+    } else if (skillName == "Punch1") {
+      player->addSkill("Punch1", std::make_unique<PunchSkill>());
     }
   }
   return player;

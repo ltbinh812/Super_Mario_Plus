@@ -9,10 +9,11 @@ Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
                std::unordered_map<std::string, Animation> animations)
     : Entity(bS, rS, wS), idleState(*this), runState(*this), jumpState(*this),
       fallState(*this), crouchState(*this), hurtState(*this), dieState(*this),
-      skillState(*this), animationList(std::move(animations)) {
+      skillState(*this), swimState(*this), climbState(*this), animationList(std::move(animations)) {
   currentState = &idleState;
   currentState->onEnter();
 }
+
 
 void Player::update(float dt) {
   if (currentState) {
@@ -108,16 +109,32 @@ void Player::onStopRight() {
 }
 
 void Player::onCrouch() {
+  if (runtimeStats.isOverlappingLadder && currentState != &climbState) {
+    requestState(climbState);
+  }
+  dropThrough(); // Attempt to drop through OneWay platforms
+
   if (currentState)
     currentState->onCrouch();
 }
 
 void Player::onAttack() {
+
   if (currentState)
     currentState->onAttack();
 }
 
+void Player::onClimb() {
+  if (runtimeStats.isOverlappingLadder && currentState != &climbState) {
+    requestState(climbState);
+  }
+  if (currentState)
+    currentState->onClimb();
+}
+
+
 void Player::playAnimation(const std::string &name) {
+
   std::cout << name << '\n';
   auto it = animationList.find(name);
   if (it != animationList.end()) {
@@ -149,7 +166,6 @@ void Player::stopRightRun() {
 void Player::jump() { runtimeStats.velocity.y = baseStats.jumpVelocity; }
 
 void Player::crouch() {
-  runtimeStats.hitbox.y /= 2;
   runtimeStats.velocity = {0.0f, 0.0f};
 }
 
@@ -183,8 +199,32 @@ void Player::onHitCeiling(float ceilY) {
   // Có thể kích hoạt âm thanh cụng gạch hoặc phá gạch trong tương lai
 }
 
+void Player::onEnterWater() {
+  requestState(swimState);
+}
+
+void Player::onOverlapLadder() {
+  if (runtimeStats.ignoreLadderTimer <= 0.0f && currentState != &climbState) {
+    requestState(climbState);
+  }
+}
+
+void Player::onHazard() {
+  requestState(dieState); // or hurtState
+}
+
+void Player::onDie() {
+  requestState(dieState);
+}
+
 void Player::updateStateFromPhysics() {
+  // If we are swimming or climbing, we let the states handle transitions unless we want a global override
+  if (currentState == &swimState || currentState == &climbState) {
+    return;
+  }
+
   if (!runtimeStats.isGrounded) {
+
     if (runtimeStats.velocity.y > 0) {
       requestState(fallState);
     } else {

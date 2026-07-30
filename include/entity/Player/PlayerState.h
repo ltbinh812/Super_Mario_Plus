@@ -23,6 +23,8 @@ class PlayerState : public IEntityState<Player> {
     virtual void onAttack() {}
     virtual void onStopLeft() {}
     virtual void onStopRight() {}
+    virtual void onClimb() {}
+
 
     virtual bool canExit() const { return true; }
 

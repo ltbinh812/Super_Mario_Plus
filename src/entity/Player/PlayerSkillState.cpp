@@ -29,6 +29,13 @@ void PlayerSkillState::update(float dt) {
     timer -= dt;
     timer = std::max(timer, 0.0f);
 
+    // Nếu đang dùng skill trên thang và không phải skill di chuyển (như Dash), giữ nhân vật đứng yên trên thang
+    if (player.getRuntimeStats().isOverlappingLadder) {
+        if (player.getRuntimeStats().velocity.x == 0.0f) {
+            player.getRuntimeStatsMutable().velocity.y = 0.0f;
+        }
+    }
+
     if (timer == 0) {
         player.updateStateFromPhysics();
     }

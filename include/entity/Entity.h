@@ -30,8 +30,23 @@ public:
   virtual void onLand(float floorY) {}
   virtual void onHitCeiling(float ceilY) {}
   virtual void onCollide(Entity& other) {} // Extension point for future Entity vs Entity collision
+  virtual void onEnterWater() {}
+  virtual void onOverlapLadder() {}
+  virtual void onHazard() {}
+  virtual void onDie() {}
+
+  virtual void dropThrough();
+
 
   const CharacterBaseStats &getBaseStats() const { return baseStats; }
   const CharacterRuntimeStats &getRuntimeStats() const { return runtimeStats; }
   const CharacterWorldStats &getWorldStats() const { return worldStats; }
+  
+  CharacterBaseStats &getBaseStatsMutable() { return baseStats; }
+  CharacterRuntimeStats &getRuntimeStatsMutable() { return runtimeStats; }
+  CharacterWorldStats &getWorldStatsMutable() { return worldStats; }
+  
+  void setPosition(Vector2 pos) { worldStats.position = pos; }
+
+
 };

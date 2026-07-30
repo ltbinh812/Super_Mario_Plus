@@ -16,6 +16,8 @@ World01State::World01State() : mapCamera(416.0f) {
       std::cout << "[World01State] Da them Player 1 (Goku)!\n";
       player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
+      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), false);
       player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Punch1"), true);
@@ -23,18 +25,22 @@ World01State::World01State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), true);
     }
 
+
     // Khởi tạo Player 2 (Luffy) tại {220.0f, 208.0f}
     player2 = PlayerFactory::createPlayer("Luffy", {220.0f, 208.0f});
     if (player2) {
       std::cout << "[World01State] Da them Player 2 (Luffy)!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), true);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), true);
+      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), false);
       player2Handler.bindKey(KEY_COMMA, std::make_unique<UseSkillCommand>("Punch1"), true);
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), true);
     }
+
   } else {
     std::cerr << "[World01State] Loi khi tai ban do map01!\n";
   }

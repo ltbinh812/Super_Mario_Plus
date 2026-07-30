@@ -32,9 +32,11 @@ public:
   void onStopRight();
   void onCrouch();
   void onAttack();
+  void onClimb();
 
   // helper functions
   void idle();
+
   void moveRight();
   void moveLeft();
   void stopLeftRun();
@@ -49,8 +51,13 @@ public:
   void onLand(float floorY) override;
   void onHitCeiling(float ceilY) override;
   void updateStateFromPhysics() override;
+  void onEnterWater() override;
+  void onOverlapLadder() override;
+  void onHazard() override;
+  void onDie() override;
 
   // list of States
+
   PlayerIdleState idleState;
   PlayerRunState runState;
   PlayerJumpState jumpState;
@@ -59,7 +66,10 @@ public:
   PlayerHurtState hurtState;
   PlayerDieState dieState;
   PlayerSkillState skillState;
+  PlayerSwimState swimState;
+  PlayerClimbState climbState;
   void playAnimation(const std::string &name);
+
 
 private:
   void changeState(PlayerState &state);

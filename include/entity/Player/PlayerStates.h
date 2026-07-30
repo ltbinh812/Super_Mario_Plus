@@ -9,3 +9,6 @@
 #include "PlayerHurtState.h"
 #include "PlayerDieState.h"
 #include "PlayerSkillState.h"
+#include "PlayerSwimState.h"
+#include "PlayerClimbState.h"
+
