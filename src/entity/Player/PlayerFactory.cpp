@@ -1,7 +1,11 @@
 #include "PlayerFactory.h"
 #include "AssetManager.h"
+#include "BlockSkill.h"
 #include "DashSkill.h"
-#include "PunchSkill.h"
+#include "Punch1Skill.h"
+#include "Punch2Skill.h"
+#include "Punch3Skill.h"
+#include "Punch4Skill.h"
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -30,8 +34,8 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   auto &charData = jsonData[charName];
 
   std::vector<std::string> skillList;
-  for (auto &s : charData["skills"]) {
-    skillList.push_back(s.get<std::string>());
+  for (auto& [key, value] : charData["skills"].items()) {
+    skillList.push_back(key);
   }
 
   CharacterBaseStats bS;
@@ -41,11 +45,19 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   bS.moveVelocity = charData["moveVelocity"].get<float>();
   bS.jumpVelocity = charData["jumpVelocity"].get<float>();
   bS.gravityScale = charData["gravityScale"].get<float>();
+  bS.physicsBox = {
+      charData["physicsBox"]["w"].get<float>(),
+      charData["physicsBox"]["h"].get<float>()
+  };
+  bS.crouchBox = {
+      charData["crouchBox"]["w"].get<float>(),
+      charData["crouchBox"]["h"].get<float>()
+  };
 
   CharacterRuntimeStats rS;
   rS.health = bS.maxHealth;
   rS.mana = bS.maxMana;
-  rS.hitbox = {31.0f, 56.0f}; // Hitbox ngang < 32px để lọt hố, cao 56px (1.75 block x 32px)
+  rS.physicsBox = bS.physicsBox;
   rS.velocity = {0.0f, 0.0f};
   rS.isGrounded = false;
 
@@ -55,37 +67,50 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   wS.animation = nullptr;
 
   std::unordered_map<std::string, Animation> animations;
-  
-  auto addAnimation = [&](const std::string& animName) {
-      if (charData["animations"].contains(animName)) {
-          auto& animData = charData["animations"][animName];
-          animations.emplace(animName, Animation(
-              AssetManager::getInstance().getTexture(animData["texture"].get<std::string>()),
-              animData["frameNum"].get<int>(),
-              animData["frameTime"].get<float>()
-          ));
-      }
-  };
 
-  addAnimation("idle");
-  addAnimation("run");
-  addAnimation("jump");
-  addAnimation("fall");
-  addAnimation("crouch");
-  addAnimation("hurt");
-  addAnimation("die");
-  addAnimation("dash");
-  addAnimation("punch1");
+  for (auto& [animName, animData] : charData["animations"].items()) {
+      animations.emplace(animName, Animation(
+          AssetManager::getInstance().getTexture(animData["texture"].get<std::string>()),
+          animData["frameNum"].get<int>(),
+          animData["frameTime"].get<float>()
+      ));
+  }
 
   auto player = std::make_unique<Player>(bS, rS, wS, std::move(animations));
 
   for (const std::string &skillName : skillList) {
+    std::unique_ptr<ISkill> skill;
+
     if (skillName == "Dash") {
-        player->addSkill("Dash", std::make_unique<DashSkill>());
-    } 
-    else if (skillName == "Punch1") {
-        player->addSkill("Punch1", std::make_unique<PunchSkill>());
+        skill = std::make_unique<DashSkill>();
+    } else if (skillName == "Block") {
+        skill = std::make_unique<BlockSkill>();
+    } else if (skillName == "Punch1") {
+        skill = std::make_unique<Punch1Skill>();
+    } else if (skillName == "Punch2") {
+        skill = std::make_unique<Punch2Skill>();
+    } else if (skillName == "Punch3") {
+        skill = std::make_unique<Punch3Skill>();
+    } else if (skillName == "Punch4") {
+        skill = std::make_unique<Punch4Skill>();
+    } else {
+        std::cerr << "Unknown skill: " << skillName << std::endl;
+        continue;
     }
+
+    // Load combat data from JSON and inject into skill
+    auto& skillJson = charData["skills"][skillName];
+    int atk = skillJson.value("attack", 0);
+    int def = skillJson.value("defense", 0);
+    Rectangle box = {
+        skillJson["box"].value("offsetX", 0.0f),
+        skillJson["box"].value("offsetY", 0.0f),
+        skillJson["box"]["w"].get<float>(),
+        skillJson["box"]["h"].get<float>()
+    };
+    skill->setCombatData(atk, def, box);
+
+    player->addSkill(skillName, std::move(skill));
   }
   return player;
-}
+}

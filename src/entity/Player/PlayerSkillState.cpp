@@ -22,6 +22,7 @@ void PlayerSkillState::onEnter() {
 
 void PlayerSkillState::onExit() {
     currentSkill = nullptr;
+    nextSkill = nullptr;
     timer = 0.0f;
 }
 
@@ -30,7 +31,24 @@ void PlayerSkillState::update(float dt) {
     timer = std::max(timer, 0.0f);
 
     if (timer == 0) {
-        player.updateStateFromPhysics();
+        if (nextSkill) {
+            // Chain into the next combo skill
+            ISkill* next = nextSkill;
+            nextSkill = nullptr;
+            currentSkill = next;
+            onEnter();  // Re-enter with the new skill
+        } else {
+            player.requestState(player.idleState);
+        }
     }
 }
 
+void PlayerSkillState::onAttack() {
+    if (!currentSkill || !currentSkill->hasNextCombo()) return;
+
+    // Look up the next combo skill from the player's skill list
+    ISkill* combo = player.findSkill(currentSkill->getNextComboSkillName());
+    if (combo && player.hasEnoughMana(combo->getManaCost())) {
+        nextSkill = combo;
+    }
+}

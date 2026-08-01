@@ -11,4 +11,6 @@ class PlayerHurtState : public PlayerState {
     void update(float dt) override;
     bool canExit() const override { return false; }
 
+    private:
+    float invicibleTimer = 1.0f;
 };

@@ -36,6 +36,6 @@ void PlayerIdleState::onCrouch() {
 }
 
 void PlayerIdleState::onAttack() {
-    player.useSkill("normal_attack");
+    player.useSkill("Punch1");
 }
 

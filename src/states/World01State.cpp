@@ -18,23 +18,34 @@ World01State::World01State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), false);
-      player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Punch1"), true);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
+      
+     
+
+
+
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), true);
+      
+      
     }
 
     // Khởi tạo Player 2 (Luffy) tại {220.0f, 208.0f}
-    player2 = PlayerFactory::createPlayer("Luffy", {220.0f, 208.0f});
+    player2 = PlayerFactory::createPlayer("Goku", {220.0f, 208.0f});
     if (player2) {
       std::cout << "[World01State] Da them Player 2 (Luffy)!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), true);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), true);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), false);
-      player2Handler.bindKey(KEY_COMMA, std::make_unique<UseSkillCommand>("Punch1"), true);
+      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), true);
     }
+
+    // Register players with CombatSystem (one-way: CombatSystem observes players)
+    if (player1) combatSystem.registerPlayer(player1.get());
+    if (player2) combatSystem.registerPlayer(player2.get());
   } else {
     std::cerr << "[World01State] Loi khi tai ban do map01!\n";
   }
@@ -88,6 +99,9 @@ void World01State::Update(float dt) {
     player2->updateStateFromPhysics();
     player2->update(dt);
   }
+
+  // Combat: polls players for active hitboxes, detects collisions, applies damage
+  combatSystem.update(dt);
 }
 
 void World01State::Render(float alpha) const {
@@ -101,6 +115,7 @@ void World01State::Render(float alpha) const {
   if (player2) {
     player2->render(alpha);
   }
+  combatSystem.renderDebug();  // Debug: green = attack hitbox, blue = defense hitbox
   mapCamera.EndMode();
 
   // Debug UI overlays

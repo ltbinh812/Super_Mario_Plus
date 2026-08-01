@@ -13,5 +13,5 @@ class PlayerJumpState : public PlayerState {
     void onMoveRight() override;
     void onStopLeft() override;
     void onStopRight() override;
-
+    void onAttack() override;
 };

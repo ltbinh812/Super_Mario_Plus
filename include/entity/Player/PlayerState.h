@@ -23,6 +23,7 @@ class PlayerState : public IEntityState<Player> {
     virtual void onAttack() {}
     virtual void onStopLeft() {}
     virtual void onStopRight() {}
+    virtual void onStopCrouch() {}
 
     virtual bool canExit() const { return true; }
 

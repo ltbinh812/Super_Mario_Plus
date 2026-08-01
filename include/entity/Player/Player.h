@@ -1,6 +1,7 @@
 #pragma once
 #include "CharacterStats.h"
 #include "Entity.h"
+#include "Hitbox.h"
 #include <PlayerStates.h>
 #include <map>
 #include <memory>
@@ -31,6 +32,7 @@ public:
   void onStopLeft();
   void onStopRight();
   void onCrouch();
+  void onStopCrouch();
   void onAttack();
 
   // helper functions
@@ -44,6 +46,13 @@ public:
   void dash(float dashSpeed);
   void reduceMana(float cost);
   void increaseMana(float cost);
+  ISkill* findSkill(const std::string& skillName);
+  bool hasEnoughMana(float cost) const;
+
+  // Combat — read-only queries for CombatSystem (one-way dependency)
+  bool hasActiveHitbox() const;
+  Hitbox getActiveHitbox() const;
+  void takeDamage(int damage);
 
   // Polymorphic Hook Methods override from Entity
   void onLand(float floorY) override;
@@ -67,4 +76,4 @@ private:
   PlayerState *currentState;
   std::unordered_map<std::string, Animation> animationList;
   std::unordered_map<std::string, std::unique_ptr<ISkill>> skillList;
-};
+};

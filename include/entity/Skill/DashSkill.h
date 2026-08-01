@@ -3,9 +3,7 @@
 
 class DashSkill : public ISkill {
 public:
-    DashSkill() {
-        manaCost = 20.0f;
-        duration = 0.3f;
+    DashSkill(float mn = 0.0f, float dr = 0.2f) : ISkill(mn, dr) {
         animationName = "dash";
     }
 

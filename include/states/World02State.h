@@ -4,6 +4,7 @@
 #include "MapCamera.h"
 #include "Player.h"
 #include "TileMap.h"
+#include "CombatSystem.h"
 #include <memory>
 
 class World02State : public GameState {
@@ -14,6 +15,7 @@ private:
   InputHandler player1Handler;
   InputHandler player2Handler;
   MapCamera mapCamera;
+  CombatSystem combatSystem;
 
 public:
   World02State();

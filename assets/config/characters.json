@@ -1,11 +1,19 @@
 {
     "Goku": {
         "name": "Goku",
-        "maxHealth": 3,
+        "maxHealth": 300,
         "maxMana": 100,
         "moveVelocity": 300.0,
         "jumpVelocity": -600.0,
         "gravityScale": 160.0,
+        "physicsBox" : {
+            "w" : 64,
+            "h" : 64
+        },
+        "crouchBox" : {
+            "w" : 64,
+            "h" : 40
+        },
         "animations": {
             "idle": {
                 "texture": "Goku_idle",
@@ -29,17 +37,17 @@
             },
             "crouch": {
                 "texture": "Goku_crouch",
-                "frameNum": 6,
+                "frameNum": 1,
                 "frameTime": 0.25
             },
             "hurt": {
                 "texture": "Goku_hurt",
-                "frameNum": 6,
-                "frameTime": 0.25
+                "frameNum": 3,
+                "frameTime": 0.15
             },
             "die": {
                 "texture": "Goku_die",
-                "frameNum": 6,
+                "frameNum": 5,
                 "frameTime": 0.25
             },
             "dash": {
@@ -51,70 +59,137 @@
                 "texture": "Goku_punch1",
                 "frameNum": 5,
                 "frameTime": 0.1
-            }
-        },
-        "skills": [
-            "Dash",
-            "Punch1"
-        ]
-    },
-    "Luffy": {
-        "name": "Luffy",
-        "maxHealth": 3,
-        "maxMana": 100,
-        "moveVelocity": 300.0,
-        "jumpVelocity": -600.0,
-        "gravityScale": 160.0,
-        "animations": {
-            "idle": {
-                "texture": "Luffy_idle",
-                "frameNum": 4,
-                "frameTime": 0.25
             },
-            "run": {
-                "texture": "Luffy_run",
-                "frameNum": 8,
+            "punch2": {
+                "texture": "Goku_punch1",
+                "frameNum": 5,
                 "frameTime": 0.1
             },
-            "jump": {
-                "texture": "Luffy_jump",
-                "frameNum": 3,
-                "frameTime": 0.25
-            },
-            "fall": {
-                "texture": "Luffy_fall",
-                "frameNum": 3,
-                "frameTime": 0.3
-            },
-            "crouch": {
-                "texture": "Luffy_crouch",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "hurt": {
-                "texture": "Luffy_hurt",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "die": {
-                "texture": "Luffy_die",
-                "frameNum": 6,
-                "frameTime": 0.25
-            },
-            "dash": {
-                "texture": "Luffy_dash",
-                "frameNum": 2,
+            "punch3": {
+                "texture": "Goku_punch1",
+                "frameNum": 5,
                 "frameTime": 0.1
             },
-            "punch1": {
-                "texture": "Luffy_punch1",
+            "punch4": {
+                "texture": "Goku_punch1",
+                "frameNum": 5,
+                "frameTime": 0.1
+            },
+            "jump_attack": {
+                "texture": "Goku_jump_attack",
+                "frameNum": 5,
+                "frameTime": 0.1
+            },
+            "low_kick": {
+                "texture": "Goku_low_kick",
+                "frameNum": 5,
+                "frameTime": 0.1
+            },
+            "block": {
+                "texture": "Goku_block",
+                "frameNum": 1,
+                "frameTime": 0.1
+            },
+            "long_attack": {
+                "texture": "Goku_long_attack",
+                "frameNum": 5,
+                "frameTime": 0.1
+            },
+            "ulti_attack": {
+                "texture": "Goku_ulti_attack",
                 "frameNum": 5,
                 "frameTime": 0.1
             }
         },
-        "skills": [
-            "Dash",
-            "Punch1"
-        ]
+        "skills": {
+            "Dash": {
+                "velocityScale": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64
+                }
+            },
+            "Block": {
+                "defense": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Punch1": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Punch2": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Punch3": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Punch4": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Jump_attack": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Low_kick": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Long_attack": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            },
+            "Ulti_attack": {
+                "attack": 10,
+                "box" : {
+                    "w" : 64,
+                    "h" : 64,
+                    "offsetX" : 10,
+                    "offsetY" : 10
+                }
+            }
+        }
     }
 }

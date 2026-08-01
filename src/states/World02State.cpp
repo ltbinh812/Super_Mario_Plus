@@ -20,15 +20,18 @@ World02State::World02State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              false);
-      player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Punch1"),
-                             true);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
+      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
                              true);
+      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
+                             true);                      
     }
 
     // Khởi tạo Player 2 (Luffy) tại {420.0f, 100.0f}
-    player2 = PlayerFactory::createPlayer("Luffy", {420.0f, 200.0f});
+    player2 = PlayerFactory::createPlayer("Goku", {420.0f, 200.0f});
     if (player2) {
       std::cout << "[World02State] Da them Player 2 (Luffy) vao map02!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
@@ -39,12 +42,15 @@ World02State::World02State() : mapCamera(416.0f) {
                              false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
                              false);
-      player2Handler.bindKey(KEY_COMMA,
-                             std::make_unique<UseSkillCommand>("Punch1"), true);
+      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH,
                              std::make_unique<UseSkillCommand>("Dash"), true);
     }
+
+    // Register players with CombatSystem (one-way: CombatSystem observes players)
+    if (player1) combatSystem.registerPlayer(player1.get());
+    if (player2) combatSystem.registerPlayer(player2.get());
   } else {
     std::cerr << "[World02State] Loi khi tai ban do map02!\n";
   }
@@ -101,6 +107,9 @@ void World02State::Update(float dt) {
     player2->updateStateFromPhysics();
     player2->update(dt);
   }
+
+  // Combat: polls players for active hitboxes, detects collisions, applies damage
+  combatSystem.update(dt);
 }
 
 void World02State::Render(float alpha) const {
@@ -114,6 +123,7 @@ void World02State::Render(float alpha) const {
   if (player2) {
     player2->render(alpha);
   }
+  combatSystem.renderDebug();  // Debug: green = attack hitbox, blue = defense hitbox
   mapCamera.EndMode();
 
   // Debug UI overlays
@@ -133,5 +143,30 @@ void World02State::Render(float alpha) const {
     DrawText("Dynamic Co-op Camera active: smoothly zooms out when players "
              "separate!",
              10, 110, 20, GREEN);
+  }
+
+  int screenWidth = GetScreenWidth();
+  int screenHeight = GetScreenHeight();
+
+  if (player1) {
+    const auto& base = player1->getBaseStats();
+    const auto& runtime = player1->getRuntimeStats();
+    std::string hpStr = "P1 HP: " + std::to_string(runtime.health) + " / " + std::to_string(base.maxHealth);
+    std::string mpStr = "P1 MP: " + std::to_string(runtime.mana) + " / " + std::to_string(base.maxMana);
+    DrawText(hpStr.c_str(), 20, screenHeight - 60, 20, RED);
+    DrawText(mpStr.c_str(), 20, screenHeight - 35, 20, BLUE);
+  }
+
+  if (player2) {
+    const auto& base = player2->getBaseStats();
+    const auto& runtime = player2->getRuntimeStats();
+    std::string hpStr = "P2 HP: " + std::to_string(runtime.health) + " / " + std::to_string(base.maxHealth);
+    std::string mpStr = "P2 MP: " + std::to_string(runtime.mana) + " / " + std::to_string(base.maxMana);
+    
+    int hpWidth = MeasureText(hpStr.c_str(), 20);
+    int mpWidth = MeasureText(mpStr.c_str(), 20);
+    
+    DrawText(hpStr.c_str(), screenWidth - hpWidth - 20, screenHeight - 60, 20, RED);
+    DrawText(mpStr.c_str(), screenWidth - mpWidth - 20, screenHeight - 35, 20, BLUE);
   }
 }

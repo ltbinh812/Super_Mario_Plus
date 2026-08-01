@@ -28,3 +28,7 @@ void PlayerJumpState::onStopLeft() {
 void PlayerJumpState::onStopRight() {
     player.stopRightRun();
 }
+
+void PlayerJumpState::onAttack() {
+    player.useSkill("Punch1");
+}

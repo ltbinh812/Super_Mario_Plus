@@ -28,3 +28,7 @@ void PlayerFallState::onStopLeft() {
 void PlayerFallState::onStopRight() {
     player.stopRightRun();
 }
+
+void PlayerFallState::onAttack() {
+    player.useSkill("jump_attack");
+}

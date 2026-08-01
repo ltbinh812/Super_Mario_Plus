@@ -7,7 +7,7 @@ Entity::Entity(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
     : baseStats(bS), runtimeStats(rS), worldStats(wS) {}
 
 Rectangle Entity::getHitbox() const {
-    return { worldStats.position.x - runtimeStats.hitbox.x / 2.0f, worldStats.position.y - runtimeStats.hitbox.y, runtimeStats.hitbox.x, runtimeStats.hitbox.y };
+    return { worldStats.position.x - runtimeStats.physicsBox.x/ 2.0f, worldStats.position.y - runtimeStats.physicsBox.y, runtimeStats.physicsBox.x, runtimeStats.physicsBox.y };
 }
 
 void Entity::updatePhysicsWithMap(const TileMap& map, float dt) {
@@ -37,11 +37,11 @@ void Entity::updatePhysicsWithMap(const TileMap& map, float dt) {
             if (!CheckCollisionRecs(currentHitBoxX, rect)) continue;
 
             if (runtimeStats.velocity.x > 0) { // Moving right -> hit left wall of block
-                worldStats.position.x = rect.x - (runtimeStats.hitbox.x / 2.0f) - EPSILON;
+                worldStats.position.x = rect.x - (runtimeStats.physicsBox.x / 2.0f) - EPSILON;
                 runtimeStats.velocity.x = 0.0f;
                 onHitWall(true);
             } else if (runtimeStats.velocity.x < 0) { // Moving left -> hit right wall of block
-                worldStats.position.x = rect.x + rect.width + (runtimeStats.hitbox.x / 2.0f) + EPSILON;
+                worldStats.position.x = rect.x + rect.width + (runtimeStats.physicsBox.x / 2.0f) + EPSILON;
                 runtimeStats.velocity.x = 0.0f;
                 onHitWall(false);
             }
@@ -72,7 +72,7 @@ void Entity::updatePhysicsWithMap(const TileMap& map, float dt) {
                 runtimeStats.isGrounded = true;
                 onLand(rect.y);
             } else if (runtimeStats.velocity.y < 0) { // Jumping up -> hit ceiling
-                worldStats.position.y = rect.y + rect.height + runtimeStats.hitbox.y + EPSILON;
+                worldStats.position.y = rect.y + rect.height + runtimeStats.physicsBox.y + EPSILON;
                 runtimeStats.velocity.y = 0.0f;
                 onHitCeiling(rect.y + rect.height);
             }

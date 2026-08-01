@@ -14,6 +14,7 @@ include_directories(
     ${RAYLIB_INCLUDE_DIR}
     third_party/json/include
     include
+    include/combatsystem
     include/states
     include/ui
     include/core
@@ -41,7 +42,6 @@ set(SOURCES
     src/core/StateManager.cpp
     src/core/InputHandler.cpp
     src/states/GameState.cpp
-    src/states/IntroState.cpp
     src/ui/Buttons.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
@@ -57,7 +57,13 @@ set(SOURCES
     src/entity/Player/PlayerSkillState.cpp
     src/entity/Player/PlayerFactory.cpp
     src/entity/Skill/DashSkill.cpp
-    src/entity/Skill/PunchSkill.cpp
+    src/entity/Skill/Punch1Skill.cpp
+    src/entity/Skill/Punch2Skill.cpp
+    src/entity/Skill/Punch3Skill.cpp
+    src/entity/Skill/Punch4Skill.cpp
+    src/entity/Skill/BlockSkill.cpp
+    src/combatsystem/BruteForceDetector.cpp
+    src/combatsystem/CombatSystem.cpp
     src/infrastructure/AssetManager.cpp
     src/environment/TileMap.cpp
     src/environment/MapCamera.cpp

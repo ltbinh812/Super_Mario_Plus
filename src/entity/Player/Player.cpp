@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "AssetManager.h"
+#include "ISkill.h"
 #include "PlayerCommands.h"
 #include "raylib.h"
 #include <iostream>
@@ -36,7 +37,7 @@ void Player::render(float alpha) {
   // Lý do: Asset của Goku to gấp đôi Luffy (128x128 so với 64x64) nhưng hình vẽ 
   // nhân vật bên trong lại chiếm tỷ lệ khác nhau. Mức 0.90f sẽ giúp body của cả 2
   // đều đạt mốc ~56px chiều cao (gấp đôi mốc cũ 28px).
-  float scale = 0.90f;
+  float scale = 0.9f;
 
   float absW = (source.width < 0 ? -source.width : source.width) * scale;
   float absH = source.height * scale;
@@ -112,6 +113,11 @@ void Player::onCrouch() {
     currentState->onCrouch();
 }
 
+void Player::onStopCrouch() {
+  if (currentState) 
+    currentState->onStopCrouch();
+}
+
 void Player::onAttack() {
   if (currentState)
     currentState->onAttack();
@@ -149,7 +155,7 @@ void Player::stopRightRun() {
 void Player::jump() { runtimeStats.velocity.y = baseStats.jumpVelocity; }
 
 void Player::crouch() {
-  runtimeStats.hitbox.y /= 2;
+  runtimeStats.physicsBox = baseStats.crouchBox;
   runtimeStats.velocity = {0.0f, 0.0f};
 }
 
@@ -161,7 +167,10 @@ void Player::dash(float dashSpeed) {
   }
 }
 
-void Player::idle() { runtimeStats.velocity = {0, 0}; }
+void Player::idle() { 
+  runtimeStats.physicsBox = baseStats.physicsBox;
+  runtimeStats.velocity = {0, 0}; 
+}
 
 void Player::reduceMana(float cost) {
   runtimeStats.mana -= static_cast<int>(cost);
@@ -173,6 +182,48 @@ void Player::increaseMana(float cost) {
   runtimeStats.mana += static_cast<int>(cost);
   if (runtimeStats.mana > baseStats.maxMana)
     runtimeStats.mana = baseStats.maxMana;
+}
+
+ISkill* Player::findSkill(const std::string& skillName) {
+  auto it = skillList.find(skillName);
+  if (it != skillList.end()) return it->second.get();
+  return nullptr;
+}
+
+bool Player::hasEnoughMana(float cost) const {
+  return runtimeStats.mana >= static_cast<int>(cost);
+}
+
+bool Player::hasActiveHitbox() const {
+  return currentState == &skillState && skillState.getCurrentSkill() != nullptr;
+}
+
+Hitbox Player::getActiveHitbox() const {
+  const ISkill* skill = skillState.getCurrentSkill();
+  Rectangle box = skill->getHitboxConfig();
+  // Compute world-space rect based on position + facing direction
+  float offsetX = worldStats.isFacingRight ? box.x : -box.x;
+  Rectangle worldRect = {
+      worldStats.position.x + offsetX - box.width / 2.0f,
+      worldStats.position.y - runtimeStats.physicsBox.y + box.y,
+      box.width,
+      box.height
+  };
+  return { worldRect, skill->getAttackPower(), skill->getDefensePower(), const_cast<Player*>(this) };
+}
+
+void Player::takeDamage(int damage) {
+  if (currentState == &hurtState || currentState == &dieState) {
+    return;
+  }
+
+  runtimeStats.health -= damage;
+  if (runtimeStats.health <= 0) {
+    runtimeStats.health = 0;
+    changeState(dieState);
+  } else {
+    changeState(hurtState);
+  }
 }
 
 void Player::onLand(float floorY) {

@@ -44,6 +44,13 @@ public:
   }
 };
 
+class StopCrouchCommand : public IPlayerCommand {
+public:
+  void Execute(Player &player) override {
+    player.onStopCrouch();
+  }
+};
+
 class AttackCommand : public IPlayerCommand {
 public:
   void Execute(Player &player) override {

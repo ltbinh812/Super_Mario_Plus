@@ -10,4 +10,7 @@ class PlayerCrouchState : public PlayerState {
     void onExit() override;
     void update(float dt) override;
 
+    bool canExit() const override {return false;}
+    void onAttack() override;
+    void onStopCrouch() override;
 };
