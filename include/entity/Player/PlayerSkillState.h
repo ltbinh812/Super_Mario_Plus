@@ -7,6 +7,7 @@ class PlayerSkillState : public PlayerState {
     ISkill* currentSkill = nullptr;
     ISkill* nextSkill = nullptr;  // Queued combo skill
     float timer = 0.0f;
+    bool hasExecuted = false;
 
     public:
 
@@ -22,4 +23,6 @@ class PlayerSkillState : public PlayerState {
     void onAttack() override;
 
     const ISkill* getCurrentSkill() const { return currentSkill; }
+    float getElapsedTime() const;
+    bool isHitboxActive() const;
 };

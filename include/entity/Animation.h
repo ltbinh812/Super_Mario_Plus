@@ -17,6 +17,8 @@ public:
     void update(float dt);
     Rectangle getCurrentFrame() const;
     const Texture2D& getTexture() const;
+    int getFrameNum() const { return frameNum; }
+    float getFrameTime() const { return frameTime; }
 
     void resetAnimation();
 };

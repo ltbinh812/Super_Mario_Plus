@@ -1,6 +1,6 @@
 #include "CombatSystem.h"
 #include "BruteForceDetector.h"
-#include "Player.h"
+#include "Entity.h"
 #include "raylib.h"
 #include <algorithm>
 #include <iostream>
@@ -8,28 +8,36 @@
 CombatSystem::CombatSystem()
     : detector(std::make_unique<BruteForceDetector>()) {}
 
-void CombatSystem::registerPlayer(Player* p) {
-    players.push_back(p);
+void CombatSystem::registerEntity(Entity* e) {
+    entities.push_back(e);
+}
+
+void CombatSystem::removeInactive() {
+    entities.erase(
+        std::remove_if(entities.begin(), entities.end(),
+            [](Entity* e) { return !e->getIsActive(); }),
+        entities.end());
 }
 
 void CombatSystem::update(float dt) {
-    // 1. Collect active hitboxes from all players
+    // 1. Collect active hitboxes from all entities
     std::vector<Hitbox> activeHitboxes;
-    for (auto* player : players) {
-        if (player->hasActiveHitbox()) {
-            activeHitboxes.push_back(player->getActiveHitbox());
+    for (auto* entity : entities) {
+        if (!entity->getIsActive()) continue;
+        if (entity->hasActiveHitbox()) {
+            activeHitboxes.push_back(entity->getActiveHitbox());
         }
     }
 
     if (activeHitboxes.empty()) return;
 
-    // 2. Run collision detection (attack hitboxes vs player physics boxes)
-    std::vector<CollisionPair> collisions = detector->detect(activeHitboxes, players);
+    // 2. Run collision detection (attack hitboxes vs entity physics boxes)
+    std::vector<CollisionPair> collisions = detector->detect(activeHitboxes, entities);
 
     // 3. Resolve damage for each collision
     for (const auto& pair : collisions) {
         const Hitbox* attackBox = pair.hitbox;
-        Player* target = pair.target;
+        Entity* target = pair.target;
 
         // Skip block-type hitboxes (defense only, no outgoing damage)
         if (attackBox->damage <= 0) continue;
@@ -51,9 +59,10 @@ void CombatSystem::update(float dt) {
 }
 
 void CombatSystem::renderDebug() const {
-    for (auto* player : players) {
-        if (player->hasActiveHitbox()) {
-            Hitbox hb = player->getActiveHitbox();
+    for (auto* entity : entities) {
+        if (!entity->getIsActive()) continue;
+        if (entity->hasActiveHitbox()) {
+            Hitbox hb = entity->getActiveHitbox();
             Color color = (hb.damage > 0) ? GREEN : BLUE;
             DrawRectangleLinesEx(hb.rect, 2.0f, color);
         }

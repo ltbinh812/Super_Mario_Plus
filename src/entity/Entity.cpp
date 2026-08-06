@@ -2,8 +2,8 @@
 #include "TileMap.h"
 #include <cmath>
 
-Entity::Entity(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
-               CharacterWorldStats &wS)
+Entity::Entity(const CharacterBaseStats &bS, const CharacterRuntimeStats &rS,
+               const CharacterWorldStats &wS)
     : baseStats(bS), runtimeStats(rS), worldStats(wS) {}
 
 Rectangle Entity::getHitbox() const {

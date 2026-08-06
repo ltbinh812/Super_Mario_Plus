@@ -2,11 +2,11 @@
 #include "Hitbox.h"
 #include <vector>
 
-class Player;
+class Entity;
 
 struct CollisionPair {
     const Hitbox* hitbox;
-    Player* target;
+    Entity* target;
 };
 
 class ICollisionDetector {
@@ -14,6 +14,6 @@ public:
     virtual ~ICollisionDetector() = default;
     virtual std::vector<CollisionPair> detect(
         const std::vector<Hitbox>& hitboxes,
-        const std::vector<Player*>& entities
+        const std::vector<Entity*>& entities
     ) = 0;
 };

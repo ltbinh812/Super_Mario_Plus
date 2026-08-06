@@ -10,6 +10,9 @@ protected:
     std::string animationName;
     std::string nextComboSkillName = "";  // Name of the next skill in the combo chain
 
+    float hitboxStartTime = 0.0f;
+    float hitboxEndTime = 0.0f;
+
     // Combat data (loaded from JSON by PlayerFactory)
     int attackPower = 0;
     int defensePower = 0;
@@ -24,6 +27,15 @@ public:
     const std::string& getAnimationName() const { return animationName; }
     const std::string& getNextComboSkillName() const { return nextComboSkillName; }
     bool hasNextCombo() const { return !nextComboSkillName.empty(); }
+
+    void setDurationAndHitbox(float dur, float hitStart, float hitEnd) {
+        duration = dur;
+        hitboxStartTime = hitStart;
+        hitboxEndTime = hitEnd;
+    }
+
+    float getHitboxStartTime() const { return hitboxStartTime; }
+    float getHitboxEndTime() const { return hitboxEndTime; }
 
     // Combat data getters
     int getAttackPower() const { return attackPower; }

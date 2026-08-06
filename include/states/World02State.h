@@ -5,7 +5,9 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "CombatSystem.h"
+#include "CommandQueue.h"
 #include <memory>
+#include <vector>
 
 class World02State : public GameState {
 private:
@@ -16,6 +18,9 @@ private:
   InputHandler player2Handler;
   MapCamera mapCamera;
   CombatSystem combatSystem;
+
+  CommandQueue spawnQueue;
+  std::vector<std::unique_ptr<Entity>> activeEntities;
 
 public:
   World02State();

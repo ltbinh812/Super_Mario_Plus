@@ -6,6 +6,7 @@
 #include "Punch2Skill.h"
 #include "Punch3Skill.h"
 #include "Punch4Skill.h"
+#include "LongAttackSkill.h"
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -93,6 +94,8 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
         skill = std::make_unique<Punch3Skill>();
     } else if (skillName == "Punch4") {
         skill = std::make_unique<Punch4Skill>();
+    } else if (skillName == "LongAttack") {
+        skill = std::make_unique<LongAttackSkill>();
     } else {
         std::cerr << "Unknown skill: " << skillName << std::endl;
         continue;
@@ -110,7 +113,24 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     };
     skill->setCombatData(atk, def, box);
 
+    float duration = 0.0f;
+    float hitStart = 0.0f;
+    float hitEnd = 0.0f;
+    std::string animName = skill->getAnimationName();
+    if (charData["animations"].contains(animName)) {
+        int frameNum = charData["animations"][animName]["frameNum"].get<int>();
+        float frameTime = charData["animations"][animName]["frameTime"].get<float>();
+        duration = frameNum * frameTime;
+
+        int startFrame = skillJson.value("hitboxStartFrame", 0);
+        int endFrame = skillJson.value("hitboxEndFrame", frameNum);
+        hitStart = startFrame * frameTime;
+        hitEnd = endFrame * frameTime;
+    }
+    skill->setDurationAndHitbox(duration, hitStart, hitEnd);
+
+
     player->addSkill(skillName, std::move(skill));
   }
   return player;
-}
+}

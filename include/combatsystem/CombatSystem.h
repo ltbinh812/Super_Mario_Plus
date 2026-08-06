@@ -3,15 +3,16 @@
 #include <memory>
 #include <vector>
 
-class Player;
+class Entity;
 
 class CombatSystem {
-    std::vector<Player*> players;
+    std::vector<Entity*> entities;
     std::unique_ptr<ICollisionDetector> detector;
 
 public:
     CombatSystem();
-    void registerPlayer(Player* p);
+    void registerEntity(Entity* e);
+    void removeInactive();
     void update(float dt);
     void renderDebug() const;
 };

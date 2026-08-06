@@ -22,6 +22,9 @@ int main() {
     AssetManager::getInstance().loadTexture("Goku_block", "assets/Goku_animation/block.png");
     AssetManager::getInstance().loadTexture("Goku_hurt", "assets/Goku_animation/hurt.png");
     AssetManager::getInstance().loadTexture("Goku_die", "assets/Goku_animation/die.png");
+    AssetManager::getInstance().loadTexture("Goku_fireball", "assets/Goku_animation/bullet.png");
+    AssetManager::getInstance().loadTexture("Goku_long_attack", "assets/Goku_animation/longattack2.png");
+
 
 
     AssetManager::getInstance().loadTexture("Luffy_run", "assets/Luffy_animation/run.png");

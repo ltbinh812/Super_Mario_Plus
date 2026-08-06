@@ -6,13 +6,13 @@
         "moveVelocity": 300.0,
         "jumpVelocity": -600.0,
         "gravityScale": 160.0,
-        "physicsBox" : {
-            "w" : 64,
-            "h" : 64
+        "physicsBox": {
+            "w": 64,
+            "h": 64
         },
-        "crouchBox" : {
-            "w" : 64,
-            "h" : 40
+        "crouchBox": {
+            "w": 64,
+            "h": 40
         },
         "animations": {
             "idle": {
@@ -92,7 +92,7 @@
             },
             "long_attack": {
                 "texture": "Goku_long_attack",
-                "frameNum": 5,
+                "frameNum": 11,
                 "frameTime": 0.1
             },
             "ulti_attack": {
@@ -101,93 +101,126 @@
                 "frameTime": 0.1
             }
         },
+        "fireball": {
+            "speed": 450.0,
+            "gravityScale": 0.0,
+            "lifetime": 1.0,
+            "damage": 15,
+            "hitboxW": 32.0,
+            "hitboxH": 32.0,
+            "curveAmplitude": 0.0,
+            "curveFrequency": 0.0,
+            "textureName": "Goku_fireball",
+            "frameNum": 3,
+            "frameTime": 0.1
+        },
         "skills": {
             "Dash": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 2,
                 "velocityScale": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64
+                "box": {
+                    "w": 64,
+                    "h": 64
                 }
             },
             "Block": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 1,
                 "defense": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
             "Punch1": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
             "Punch2": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
             "Punch3": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
             "Punch4": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
-            "Jump_attack": {
+            "JumpAttack": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
-            "Low_kick": {
+            "LowKick": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
-            "Long_attack": {
+            "LongAttack": {
+                "hitboxStartFrame": 5,
+                "hitboxEndFrame": 11,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             },
-            "Ulti_attack": {
+            "UltiAttack": {
+                "hitboxStartFrame": 0,
+                "hitboxEndFrame": 5,
                 "attack": 10,
-                "box" : {
-                    "w" : 64,
-                    "h" : 64,
-                    "offsetX" : 10,
-                    "offsetY" : 10
+                "box": {
+                    "w": 64,
+                    "h": 64,
+                    "offsetX": 10,
+                    "offsetY": 10
                 }
             }
         }

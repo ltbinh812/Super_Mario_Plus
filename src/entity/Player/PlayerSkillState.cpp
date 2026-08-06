@@ -14,9 +14,7 @@ void PlayerSkillState::onEnter() {
 
         // Set timer for skill duration
         timer = currentSkill->getDuration();
-
-        // Execute skill effect (velocity burst, etc.)
-        currentSkill->execute(player);
+        hasExecuted = false; // Reset the flag for the new skill
     }
 }
 
@@ -29,6 +27,15 @@ void PlayerSkillState::onExit() {
 void PlayerSkillState::update(float dt) {
     timer -= dt;
     timer = std::max(timer, 0.0f);
+
+    float elapsedTime = getElapsedTime();
+    if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() && 
+           elapsedTime <= currentSkill->getHitboxEndTime()) {
+
+        // Execute skill effect (velocity burst, fireball spawn, etc.) ONLY ONCE
+        currentSkill->execute(player);
+        hasExecuted = true;
+    }
 
     if (timer == 0) {
         if (nextSkill) {
@@ -52,3 +59,16 @@ void PlayerSkillState::onAttack() {
         nextSkill = combo;
     }
 }
+
+bool PlayerSkillState::isHitboxActive() const {
+    if (!currentSkill) return false;
+    float elapsedTime = getElapsedTime();
+    return elapsedTime >= currentSkill->getHitboxStartTime() && 
+           elapsedTime <= currentSkill->getHitboxEndTime();
+}
+
+float PlayerSkillState::getElapsedTime() const {
+    if (!currentSkill) return 0.0f;
+    return currentSkill->getDuration() - timer;
+}
+

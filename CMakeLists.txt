@@ -62,6 +62,9 @@ set(SOURCES
     src/entity/Skill/Punch3Skill.cpp
     src/entity/Skill/Punch4Skill.cpp
     src/entity/Skill/BlockSkill.cpp
+    src/entity/Skill/LongAttackSkill.cpp
+    src/entity/Fireball.cpp
+    src/entity/EntityFactory.cpp
     src/combatsystem/BruteForceDetector.cpp
     src/combatsystem/CombatSystem.cpp
     src/infrastructure/AssetManager.cpp

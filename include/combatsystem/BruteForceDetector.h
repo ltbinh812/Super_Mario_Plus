@@ -5,6 +5,6 @@ class BruteForceDetector : public ICollisionDetector {
 public:
     std::vector<CollisionPair> detect(
         const std::vector<Hitbox>& hitboxes,
-        const std::vector<Player*>& entities
+        const std::vector<Entity*>& entities
     ) override;
 };

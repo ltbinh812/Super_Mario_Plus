@@ -195,7 +195,7 @@ bool Player::hasEnoughMana(float cost) const {
 }
 
 bool Player::hasActiveHitbox() const {
-  return currentState == &skillState && skillState.getCurrentSkill() != nullptr;
+  return currentState == &skillState && skillState.isHitboxActive();
 }
 
 Hitbox Player::getActiveHitbox() const {
@@ -209,7 +209,7 @@ Hitbox Player::getActiveHitbox() const {
       box.width,
       box.height
   };
-  return { worldRect, skill->getAttackPower(), skill->getDefensePower(), const_cast<Player*>(this) };
+  return { worldRect, skill->getAttackPower(), skill->getDefensePower(), const_cast<Entity*>(static_cast<const Entity*>(this)) };
 }
 
 void Player::takeDamage(int damage) {
@@ -248,4 +248,20 @@ void Player::updateStateFromPhysics() {
       requestState(runState);
     }
   }
+}
+
+void Player::spawnFireball() {
+    if (!commandQueue) return;
+
+    // Offset spawn position slightly based on facing direction
+    Vector2 offset = {worldStats.isFacingRight ? 100.0f : -100.0f, -10.0f};
+    
+    SpawnCommand cmd;
+    cmd.type = EntityType::Fireball;
+    cmd.position = {worldStats.position.x + offset.x, worldStats.position.y + offset.y};
+    cmd.isFacingRight = worldStats.isFacingRight;
+    cmd.ownerName = baseStats.name;
+    cmd.spawner = this;
+    
+    commandQueue->push(cmd);
 }

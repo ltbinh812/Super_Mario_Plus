@@ -48,11 +48,12 @@ public:
   void increaseMana(float cost);
   ISkill* findSkill(const std::string& skillName);
   bool hasEnoughMana(float cost) const;
+  void spawnFireball();
 
   // Combat — read-only queries for CombatSystem (one-way dependency)
-  bool hasActiveHitbox() const;
-  Hitbox getActiveHitbox() const;
-  void takeDamage(int damage);
+  bool hasActiveHitbox() const override;
+  Hitbox getActiveHitbox() const override;
+  void takeDamage(int damage) override;
 
   // Polymorphic Hook Methods override from Entity
   void onLand(float floorY) override;
@@ -76,4 +77,4 @@ private:
   PlayerState *currentState;
   std::unordered_map<std::string, Animation> animationList;
   std::unordered_map<std::string, std::unique_ptr<ISkill>> skillList;
-};
+};

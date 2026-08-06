@@ -1,6 +1,7 @@
 #include "World01State.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
+#include "EntityFactory.h"
 #include <algorithm>
 #include <iostream>
 #include <raylib.h>
@@ -13,6 +14,7 @@ World01State::World01State() : mapCamera(416.0f) {
     // Khởi tạo Player 1 (Goku) tại {180.0f, 208.0f}
     player1 = PlayerFactory::createPlayer("Goku", {180.0f, 208.0f});
     if (player1) {
+      player1->setCommandQueue(&spawnQueue);
       std::cout << "[World01State] Da them Player 1 (Goku)!\n";
       player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
@@ -20,11 +22,6 @@ World01State::World01State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), false);
       player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
-      
-     
-
-
-
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), true);
       
       
@@ -33,6 +30,7 @@ World01State::World01State() : mapCamera(416.0f) {
     // Khởi tạo Player 2 (Luffy) tại {220.0f, 208.0f}
     player2 = PlayerFactory::createPlayer("Goku", {220.0f, 208.0f});
     if (player2) {
+      player2->setCommandQueue(&spawnQueue);
       std::cout << "[World01State] Da them Player 2 (Luffy)!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), true);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), true);
@@ -43,9 +41,9 @@ World01State::World01State() : mapCamera(416.0f) {
       player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), true);
     }
 
-    // Register players with CombatSystem (one-way: CombatSystem observes players)
-    if (player1) combatSystem.registerPlayer(player1.get());
-    if (player2) combatSystem.registerPlayer(player2.get());
+    // Register players with CombatSystem (one-way: CombatSystem observes entities)
+    if (player1) combatSystem.registerEntity(player1.get());
+    if (player2) combatSystem.registerEntity(player2.get());
   } else {
     std::cerr << "[World01State] Loi khi tai ban do map01!\n";
   }
@@ -100,7 +98,26 @@ void World01State::Update(float dt) {
     player2->update(dt);
   }
 
-  // Combat: polls players for active hitboxes, detects collisions, applies damage
+  for (auto& entity : activeEntities) {
+      entity->updatePhysicsWithMap(map, dt);
+      entity->update(dt);
+  }
+
+  auto commands = spawnQueue.popAll();
+  for (const auto& cmd : commands) {
+      auto entity = EntityFactory::create(cmd);
+      if (entity) {
+          entity->setCommandQueue(&spawnQueue);
+          combatSystem.registerEntity(entity.get());
+          activeEntities.push_back(std::move(entity));
+      }
+  }
+
+  activeEntities.erase(std::remove_if(activeEntities.begin(), activeEntities.end(), 
+      [](const std::unique_ptr<Entity>& e) { return !e->getIsActive(); }), activeEntities.end());
+  combatSystem.removeInactive();
+
+  // Combat: polls entities for active hitboxes, detects collisions, applies damage
   combatSystem.update(dt);
 }
 
@@ -114,6 +131,9 @@ void World01State::Render(float alpha) const {
   }
   if (player2) {
     player2->render(alpha);
+  }
+  for (const auto& entity : activeEntities) {
+      entity->render(alpha);
   }
   combatSystem.renderDebug();  // Debug: green = attack hitbox, blue = defense hitbox
   mapCamera.EndMode();

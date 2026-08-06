@@ -1,6 +1,7 @@
 #include "World02State.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
+#include "EntityFactory.h"
 #include <algorithm>
 #include <iostream>
 #include <raylib.h>
@@ -14,6 +15,7 @@ World02State::World02State() : mapCamera(416.0f) {
     // Khởi tạo Player 1 (Goku) tại {380.0f, 100.0f}
     player1 = PlayerFactory::createPlayer("Goku", {380.0f, 200.0f});
     if (player1) {
+      player1->setCommandQueue(&spawnQueue);
       std::cout << "[World02State] Da them Player 1 (Goku) vao map02!\n";
       player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
@@ -27,12 +29,15 @@ World02State::World02State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
                              true);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
+                             true);
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"),
                              true);                      
     }
 
     // Khởi tạo Player 2 (Luffy) tại {420.0f, 100.0f}
     player2 = PlayerFactory::createPlayer("Goku", {420.0f, 200.0f});
     if (player2) {
+      player2->setCommandQueue(&spawnQueue);
       std::cout << "[World02State] Da them Player 2 (Luffy) vao map02!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
                              true);
@@ -46,11 +51,13 @@ World02State::World02State() : mapCamera(416.0f) {
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH,
                              std::make_unique<UseSkillCommand>("Dash"), true);
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("LongAttack"),
+                             true);
     }
 
-    // Register players with CombatSystem (one-way: CombatSystem observes players)
-    if (player1) combatSystem.registerPlayer(player1.get());
-    if (player2) combatSystem.registerPlayer(player2.get());
+    // Register players with CombatSystem (one-way: CombatSystem observes entities)
+    if (player1) combatSystem.registerEntity(player1.get());
+    if (player2) combatSystem.registerEntity(player2.get());
   } else {
     std::cerr << "[World02State] Loi khi tai ban do map02!\n";
   }
@@ -108,7 +115,29 @@ void World02State::Update(float dt) {
     player2->update(dt);
   }
 
-  // Combat: polls players for active hitboxes, detects collisions, applies damage
+  for (auto& entity : activeEntities) {
+      entity->updatePhysicsWithMap(map, dt);
+      entity->update(dt);
+  }
+
+  auto commands = spawnQueue.popAll();
+  if (!commands.empty()) {
+      std::cout << "[World02State] Processing " << commands.size() << " spawn commands" << std::endl;
+  }
+  for (const auto& cmd : commands) {
+      auto entity = EntityFactory::create(cmd);
+      if (entity) {
+          entity->setCommandQueue(&spawnQueue);
+          combatSystem.registerEntity(entity.get());
+          activeEntities.push_back(std::move(entity));
+      }
+  }
+
+  activeEntities.erase(std::remove_if(activeEntities.begin(), activeEntities.end(), 
+      [](const std::unique_ptr<Entity>& e) { return !e->getIsActive(); }), activeEntities.end());
+  combatSystem.removeInactive();
+
+  // Combat: polls entities for active hitboxes, detects collisions, applies damage
   combatSystem.update(dt);
 }
 
@@ -123,15 +152,18 @@ void World02State::Render(float alpha) const {
   if (player2) {
     player2->render(alpha);
   }
+  for (const auto& entity : activeEntities) {
+      entity->render(alpha);
+  }
   combatSystem.renderDebug();  // Debug: green = attack hitbox, blue = defense hitbox
   mapCamera.EndMode();
 
   // Debug UI overlays
   DrawText("WORLD 02 STATE - CO-OP MULTIPLAYER & DYNAMIC ZOOM CAMERA", 10, 10,
            20, YELLOW);
-  DrawText("P1 (Goku): A/D Move | J: Punch | K: Jump | L: Dash", 10, 35, 20,
+  DrawText("P1 (Goku): A/D Move | J: Punch | K: Jump | L: Dash | U: Fireball", 10, 35, 20,
            WHITE);
-  DrawText("P2 (Luffy): LEFT/RIGHT Move | ,: Punch | .: Jump | /: Dash", 10, 60,
+  DrawText("P2 (Luffy): LEFT/RIGHT Move | ,: Punch | .: Jump | /: Dash | M: Fireball", 10, 60,
            20, WHITE);
   Vector2 camTarget = mapCamera.GetTarget();
   DrawText(("Camera Target: (" + std::to_string((int)camTarget.x) + ", " +
