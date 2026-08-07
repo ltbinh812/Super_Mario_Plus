@@ -14,6 +14,6 @@ public:
     void onClimb() override;
     void onCrouch() override; // Leo xuống
 
-    void onStopLeft() override {}
-    void onStopRight() override {}
+    void onStopLeft() override;
+    void onStopRight() override;
 };

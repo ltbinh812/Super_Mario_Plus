@@ -49,6 +49,7 @@ public:
   void stopRightRun();
   void jump();
   void crouch();
+  void standUp();
   void dash(float dashSpeed);
   void reduceMana(float cost);
   void increaseMana(float cost);

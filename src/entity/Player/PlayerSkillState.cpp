@@ -6,6 +6,10 @@ PlayerSkillState::PlayerSkillState(Player& player) : PlayerState(player) {
 
 void PlayerSkillState::onEnter() {
     if (currentSkill) {
+        // Stop horizontal movement when initiating a skill
+        player.stopLeftRun();
+        player.stopRightRun();
+
         // Deduct mana
         player.reduceMana(currentSkill->getManaCost());
 

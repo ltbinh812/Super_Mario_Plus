@@ -16,8 +16,8 @@ void PlayerClimbState::update(float dt) {
         player.requestState(player.fallState);
         return;
     }
-    // Hold in place if no climb input — cancel any residual gravity
-    player.stopClimb();
+    // Fall slowly if no vertical input is held for the next frame
+    player.getRuntimeStatsMutable().velocity.y = player.getBaseStats().moveVelocity * 0.2f;
 }
 
 void PlayerClimbState::onMoveLeft() {
@@ -26,6 +26,14 @@ void PlayerClimbState::onMoveLeft() {
 
 void PlayerClimbState::onMoveRight() {
     player.moveRight();
+}
+
+void PlayerClimbState::onStopLeft() {
+    player.stopLeftRun();
+}
+
+void PlayerClimbState::onStopRight() {
+    player.stopRightRun();
 }
 
 void PlayerClimbState::onJump() {

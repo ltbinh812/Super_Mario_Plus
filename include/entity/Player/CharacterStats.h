@@ -32,6 +32,7 @@ struct CharacterRuntimeStats {
     uint32_t collisionMask = 0xFFFFFFFF;
     float ignoreOneWayTimer = 0.0f;
     float ignoreLadderTimer = 0.0f;
+    float iframeTimer = 0.0f;
 };
 
 

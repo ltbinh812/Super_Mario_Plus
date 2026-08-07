@@ -7,12 +7,12 @@
         "jumpVelocity": -600.0,
         "gravityScale": 160.0,
         "physicsBox": {
-            "w": 64,
-            "h": 64
+            "w": 24,
+            "h": 56
         },
         "crouchBox": {
-            "w": 64,
-            "h": 40
+            "w": 24,
+            "h": 32
         },
         "animations": {
             "idle": {

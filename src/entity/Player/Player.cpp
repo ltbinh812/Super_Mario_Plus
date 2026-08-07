@@ -17,6 +17,10 @@ Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
 }
 
 void Player::update(float dt) {
+  if (runtimeStats.iframeTimer > 0.0f) {
+      runtimeStats.iframeTimer -= dt;
+  }
+  
   if (currentState) {
     currentState->update(dt);
   }
@@ -75,6 +79,15 @@ void Player::useSkill(const std::string &skillname) {
     ISkill *skill = it->second.get();
     if (runtimeStats.mana < skill->getManaCost())
       return;
+    
+    // Prevent interrupting a skill with another skill (or the same one)
+    if (currentState == &skillState) {
+        if (skillState.getCurrentSkill() == skill && skillname == "Block") {
+            skillState.resetTimer();
+        }
+        return;
+    }
+
     skillState.setSkill(skill);
     changeState(skillState);
   }
@@ -188,6 +201,11 @@ void Player::crouch() {
   runtimeStats.velocity.x = 0.0f;
 }
 
+void Player::standUp() {
+  // Restore original physics hitbox
+  runtimeStats.physicsBox = baseStats.physicsBox;
+}
+
 void Player::dash(float dashSpeed) {
   runtimeStats.velocity.x = worldStats.isFacingRight ? dashSpeed : -dashSpeed;
 }
@@ -260,12 +278,15 @@ Hitbox Player::getActiveHitbox() {
 }
 
 void Player::takeDamage(int damage) {
-  if (currentState == &hurtState || currentState == &dieState) {
+  if (currentState == &dieState || currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
     return;
-  }
   runtimeStats.health -= damage;
+  runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
+  
+  // Apply a small knockback upwards to break free from continuous ground hazards
+  runtimeStats.velocity.y = -200.0f;
+
   if (runtimeStats.health <= 0) {
-    runtimeStats.health = 0;
     changeState(dieState);
   } else {
     changeState(hurtState);
@@ -301,6 +322,14 @@ void Player::updateStateFromPhysics() {
       currentState == &climbState || currentState == &hurtState ||
       currentState == &dieState)
     return;
+
+  // Auto-snap to ladder if falling (or at apex) onto it
+  if (runtimeStats.isOverlappingLadder && runtimeStats.ignoreLadderTimer <= 0.0f) {
+    if (runtimeStats.velocity.y >= 0.0f) {
+      requestState(climbState);
+      return;
+    }
+  }
 
   if (!runtimeStats.isGrounded) {
     if (runtimeStats.velocity.y > 0) {

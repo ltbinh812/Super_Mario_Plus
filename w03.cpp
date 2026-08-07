@@ -1,4 +1,4 @@
-#include "World03State.h"
+﻿#include "World03State.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
 #include <algorithm>
@@ -20,7 +20,6 @@ World03State::World03State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
       player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
       player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              false);
@@ -41,7 +40,6 @@ World03State::World03State() : mapCamera(416.0f) {
                              true);
       player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
       player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), false);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
                              false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
@@ -166,20 +164,15 @@ void World03State::TransitionToLevel(const std::string &nextLevel,
     float targetYNew = triggerGlobalY - newWorldY;
 
     // Adjust player positions based on direction
-    float margin = 48.0f; // 1.5 block from edge
-    
-    // We assume players have similar hitbox sizes, using player1 for reference
-    float hw = player1->getRuntimeStats().physicsBox.x / 2.0f;
-    float hh = player1->getRuntimeStats().physicsBox.y / 2.0f;
-
+    float margin = 64.0f; // Triß╗çu hß╗ôi ß╗ƒ ├┤ block liß╗ün kß╗ü ─æß╗â kh├┤ng d├¡nh m├⌐p
     if (dir == "e") {
-      targetXNew = margin + hw;
+      targetXNew = margin;
     } else if (dir == "w") {
-      targetXNew = mapW - (margin + hw);
+      targetXNew = mapW - margin;
     } else if (dir == "s") {
-      targetYNew = margin + hh;
+      targetYNew = margin;
     } else if (dir == "n") {
-      targetYNew = mapH - (margin + hh);
+      targetYNew = mapH - margin;
     }
 
     player1->setPosition({targetXNew, targetYNew});
