@@ -18,6 +18,8 @@ World01State::World01State() : mapCamera(416.0f) {
       std::cout << "[World01State] Da them Player 1 (Goku)!\n";
       player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
+      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), false);
       player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
@@ -27,6 +29,7 @@ World01State::World01State() : mapCamera(416.0f) {
       
     }
 
+
     // Khởi tạo Player 2 (Luffy) tại {220.0f, 208.0f}
     player2 = PlayerFactory::createPlayer("Goku", {220.0f, 208.0f});
     if (player2) {
@@ -34,6 +37,8 @@ World01State::World01State() : mapCamera(416.0f) {
       std::cout << "[World01State] Da them Player 2 (Luffy)!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), true);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), true);
+      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), false);
       player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
@@ -44,6 +49,7 @@ World01State::World01State() : mapCamera(416.0f) {
     // Register players with CombatSystem (one-way: CombatSystem observes entities)
     if (player1) combatSystem.registerEntity(player1.get());
     if (player2) combatSystem.registerEntity(player2.get());
+
   } else {
     std::cerr << "[World01State] Loi khi tai ban do map01!\n";
   }

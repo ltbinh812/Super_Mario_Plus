@@ -69,3 +69,18 @@ public:
     player.useSkill(skillName);
   }
 };
+
+class DropThroughCommand : public IPlayerCommand {
+public:
+  void Execute(Player &player) override {
+    player.dropThrough();
+  }
+};
+
+class ClimbCommand : public IPlayerCommand {
+public:
+  void Execute(Player &player) override {
+    player.onClimb();
+  }
+};
+

@@ -4,5 +4,6 @@
 PlayerState::PlayerState(Player& player) : player(player) {}
 
 void PlayerState::changePlayerState(PlayerState& newState) {
-    player.changeState(newState);
+    // Use public requestState() — respects canExit() guard
+    player.requestState(newState);
 }

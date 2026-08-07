@@ -55,6 +55,8 @@ set(SOURCES
     src/entity/Player/PlayerHurtState.cpp
     src/entity/Player/PlayerDieState.cpp
     src/entity/Player/PlayerSkillState.cpp
+    src/entity/Player/PlayerSwimState.cpp
+    src/entity/Player/PlayerClimbState.cpp
     src/entity/Player/PlayerFactory.cpp
     src/entity/Skill/DashSkill.cpp
     src/entity/Skill/Punch1Skill.cpp
@@ -72,6 +74,7 @@ set(SOURCES
     src/environment/MapCamera.cpp
     src/states/World01State.cpp
     src/states/World02State.cpp
+    src/states/World03State.cpp
 )
 
 # Executable
