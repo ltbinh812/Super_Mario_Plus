@@ -397,7 +397,7 @@ std::string TileMap::GetNeighbour(const std::string& dir, float globalX, float g
                 }
             }
         }
-        return neighbours[0].levelName; // Fallback
+        return ""; // Kh\u00f4ng t\u00ecm th\u1ea5y neighbour ph\u00f9 h\u1ee3p v\u1edbi to\u1ea1 \u0111\u1ed9 hi\u1ec7n t\u1ea1i
     }
     return "";
 }

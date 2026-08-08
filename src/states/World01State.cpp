@@ -217,20 +217,16 @@ void World01State::TransitionToLevel(const std::string &nextLevel,
     float targetXNew = triggerGlobalX - newWorldX;
     float targetYNew = triggerGlobalY - newWorldY;
 
-    float margin = 48.0f; // 1.5 block from edge
-    
-    // We assume players have similar hitbox sizes, using player1 for reference
-    float hw = player1->getRuntimeStats().physicsBox.x / 2.0f;
-    float hh = player1->getRuntimeStats().physicsBox.y / 2.0f;
+    float margin = 64.0f; // Triệu hồi ở ô block liền kề để không dính mép
 
     if (dir == "e") {
-      targetXNew = margin + hw;
+      targetXNew = margin;
     } else if (dir == "w") {
-      targetXNew = mapW - (margin + hw);
+      targetXNew = mapW - margin;
     } else if (dir == "s") {
-      targetYNew = margin + hh;
+      targetYNew = margin;
     } else if (dir == "n") {
-      targetYNew = mapH - (margin + hh);
+      targetYNew = mapH - margin;
     }
 
     player1->setPosition({targetXNew, targetYNew});

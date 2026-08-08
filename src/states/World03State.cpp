@@ -20,7 +20,8 @@ World03State::World03State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
       player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
       player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
+      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(),
+                             false);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              false);
@@ -33,7 +34,7 @@ World03State::World03State() : mapCamera(416.0f) {
     }
 
     // Setup Player 2
-    player2 = PlayerFactory::createPlayer("Luffy", {260.0f, 208.0f});
+    player2 = PlayerFactory::createPlayer("Goku", {260.0f, 208.0f});
     if (player2) {
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
                              true);
@@ -41,7 +42,8 @@ World03State::World03State() : mapCamera(416.0f) {
                              true);
       player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
       player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), false);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(),
+                             false);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
                              false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
@@ -110,28 +112,32 @@ void World03State::Update(float dt) {
     int mapW = map.GetWidth();
     int mapH = map.GetHeight();
 
-    float edge = 16.0f; // 0.5 block
-    
+    float edge = 16.0f;
+
     std::string next = "";
     std::string dir = "";
-    
+
     float triggerLocalX = 0;
     float triggerLocalY = 0;
 
     if (p1X > mapW - edge || p2X > mapW - edge) {
       dir = "e";
+      // Lấy toạ độ của người đã vượt rìa xa hơn (x lớn hơn)
       triggerLocalX = (p1X > p2X) ? p1X : p2X;
       triggerLocalY = (p1X > p2X) ? p1Y : p2Y;
     } else if (p1X < edge || p2X < edge) {
       dir = "w";
+      // Lấy toạ độ của người đã vượt rìa xa hơn (x nhỏ hơn)
       triggerLocalX = (p1X < p2X) ? p1X : p2X;
       triggerLocalY = (p1X < p2X) ? p1Y : p2Y;
     } else if (p1Y > mapH - edge || p2Y > mapH - edge) {
       dir = "s";
+      // Lấy toạ độ của người đã vượt rìa xa hơn (y lớn hơn)
       triggerLocalX = (p1Y > p2Y) ? p1X : p2X;
       triggerLocalY = (p1Y > p2Y) ? p1Y : p2Y;
     } else if (p1Y < edge || p2Y < edge) {
       dir = "n";
+      // Lấy toạ độ của người đã vượt rìa xa hơn (y nhỏ hơn)
       triggerLocalX = (p1Y < p2Y) ? p1X : p2X;
       triggerLocalY = (p1Y < p2Y) ? p1Y : p2Y;
     }
@@ -140,7 +146,7 @@ void World03State::Update(float dt) {
       float globalX = triggerLocalX + map.GetWorldX();
       float globalY = triggerLocalY + map.GetWorldY();
       next = map.GetNeighbour(dir, globalX, globalY);
-      
+
       if (!next.empty()) {
         TransitionToLevel(next, dir, globalX, globalY);
       }
@@ -166,24 +172,47 @@ void World03State::TransitionToLevel(const std::string &nextLevel,
     float targetYNew = triggerGlobalY - newWorldY;
 
     // Adjust player positions based on direction
-    float margin = 48.0f; // 1.5 block from edge
-    
-    // We assume players have similar hitbox sizes, using player1 for reference
-    float hw = player1->getRuntimeStats().physicsBox.x / 2.0f;
-    float hh = player1->getRuntimeStats().physicsBox.y / 2.0f;
+    float margin = 64.0f; // Triệu hồi ở ô block liền kề để không dính mép
 
     if (dir == "e") {
-      targetXNew = margin + hw;
+      targetXNew = margin;
     } else if (dir == "w") {
-      targetXNew = mapW - (margin + hw);
+      targetXNew = mapW - margin;
     } else if (dir == "s") {
-      targetYNew = margin + hh;
+      targetYNew = margin;
     } else if (dir == "n") {
-      targetYNew = mapH - (margin + hh);
+      targetYNew = mapH - margin;
     }
 
     player1->setPosition({targetXNew, targetYNew});
     player2->setPosition({targetXNew, targetYNew});
+
+    // Snap camera ngay lập tức đến vị trí mới trong level mới.
+    // Nếu không làm điều này, camera vẫn giữ target từ HandleInput() frame
+    // trước (tính theo kích thước level cũ) -> level mới không hiển thị đúng.
+    float midX = (targetXNew + targetXNew) / 2.0f; // cả 2 ở cùng điểm
+    float midY = (targetYNew + targetYNew) / 2.0f;
+
+    // Clamp trong ranh giới map mới (giống logic trong UpdateMultiplayer)
+    float screenW = (float)GetScreenWidth();
+    float screenH = (float)GetScreenHeight();
+    float baseZoom = (screenH > 0 && mapCamera.GetZoom() > 0.0f)
+                         ? mapCamera.GetZoom()
+                         : 1.0f;
+    float viewW = screenW / baseZoom;
+    float viewH = screenH / baseZoom;
+
+    if (mapW > 0) {
+      float minX = viewW / 2.0f;
+      float maxX = std::max(minX, (float)mapW - viewW / 2.0f);
+      midX = std::clamp(midX, minX, maxX);
+    }
+    if (mapH > 0) {
+      float minY = viewH / 2.0f;
+      float maxY = std::max(minY, (float)mapH - viewH / 2.0f);
+      midY = std::clamp(midY, minY, maxY);
+    }
+    mapCamera.SetTarget({midX, midY});
   } else {
     std::cerr << "[World03State] Failed to transition to level: " << nextLevel
               << "\n";
