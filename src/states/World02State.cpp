@@ -6,35 +6,36 @@
 #include <iostream>
 #include <raylib.h>
 
-World02State::World02State() : mapCamera(416.0f) {
-  bool loaded = map.LoadLDtkMap("assets/maps/map02/world02.ldtk", "");
+World02State::World02State() : mapCamera(416.0f), currentLevel("Level_0") {
+  bool loaded = map.LoadLDtkMap("assets/maps/map02/world02.ldtk", currentLevel);
   if (loaded && map.GetHeight() > 0) {
-    std::cout
-        << "[World02State] Da tai ban do map02 (Auto fallback) thanh cong!\n";
+    std::cout << "[World02State] Da tai ban do map02 (" << currentLevel << ") thanh cong!\n";
 
-    // Khởi tạo Player 1 (Goku) tại {380.0f, 100.0f}
+    // Khởi tạo Player 1 (Goku) tại {380.0f, 200.0f}
     player1 = PlayerFactory::createPlayer("Goku", {380.0f, 200.0f});
     if (player1) {
       player1->setCommandQueue(&spawnQueue);
       std::cout << "[World02State] Da them Player 1 (Goku) vao map02!\n";
       player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
       player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
+      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              false);
       player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
       player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
                              true);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
                              true);
-      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"),
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("Punch"),
                              true);                      
     }
 
-    // Khởi tạo Player 2 (Luffy) tại {420.0f, 100.0f}
+
+    // Khởi tạo Player 2 (Luffy) tại {420.0f, 200.0f}
     player2 = PlayerFactory::createPlayer("Goku", {420.0f, 200.0f});
     if (player2) {
       player2->setCommandQueue(&spawnQueue);
@@ -43,6 +44,9 @@ World02State::World02State() : mapCamera(416.0f) {
                              true);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
                              true);
+      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), false);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
                              false);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
@@ -51,13 +55,14 @@ World02State::World02State() : mapCamera(416.0f) {
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH,
                              std::make_unique<UseSkillCommand>("Dash"), true);
-      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("LongAttack"),
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Punch"),
                              true);
     }
 
     // Register players with CombatSystem (one-way: CombatSystem observes entities)
     if (player1) combatSystem.registerEntity(player1.get());
     if (player2) combatSystem.registerEntity(player2.get());
+
   } else {
     std::cerr << "[World02State] Loi khi tai ban do map02!\n";
   }
@@ -113,6 +118,34 @@ void World02State::Update(float dt) {
     player2->updatePhysicsWithMap(map, dt);
     player2->updateStateFromPhysics();
     player2->update(dt);
+  }
+
+  if (player1 && player2) {
+      std::string next = "";
+      std::string dir = "";
+      float edge = 16.0f; // Biên độ va chạm với viền map
+
+      // Player 1
+      float p1X = player1->getWorldStats().position.x;
+      float p1Y = player1->getWorldStats().position.y;
+      
+      // Chuyển hệ toạ độ local của map hiện tại sang global (dựa vào toạ độ LDtk)
+      float globalX1 = p1X + map.GetWorldX();
+      float globalY1 = p1Y + map.GetWorldY();
+
+      if (p1X > map.GetWidth() - edge) {
+        dir = "e"; next = map.GetNeighbour(dir, globalX1, globalY1);
+      } else if (p1X < edge) {
+        dir = "w"; next = map.GetNeighbour(dir, globalX1, globalY1);
+      } else if (p1Y > map.GetHeight() - edge) {
+        dir = "s"; next = map.GetNeighbour(dir, globalX1, globalY1);
+      } else if (p1Y < edge) {
+        dir = "n"; next = map.GetNeighbour(dir, globalX1, globalY1);
+      }
+
+      if (!next.empty()) {
+        TransitionToLevel(next, dir, globalX1, globalY1);
+      }
   }
 
   for (auto& entity : activeEntities) {
@@ -200,5 +233,44 @@ void World02State::Render(float alpha) const {
     
     DrawText(hpStr.c_str(), screenWidth - hpWidth - 20, screenHeight - 60, 20, RED);
     DrawText(mpStr.c_str(), screenWidth - mpWidth - 20, screenHeight - 35, 20, BLUE);
+  }
+}
+
+void World02State::TransitionToLevel(const std::string &nextLevel,
+                                     const std::string &dir, float triggerGlobalX,
+                                     float triggerGlobalY) {
+  std::cout << "[World02State] Transitioning to " << nextLevel << "...\n";
+
+  if (map.LoadLDtkMap("assets/maps/map02/world02.ldtk", nextLevel)) {
+    currentLevel = nextLevel;
+    activeEntities.clear();
+    combatSystem.clear();
+
+    float mapW = (float)map.GetWidth();
+    float mapH = (float)map.GetHeight();
+
+    float newWorldX = (float)map.GetWorldX();
+    float newWorldY = (float)map.GetWorldY();
+
+    float targetXNew = triggerGlobalX - newWorldX;
+    float targetYNew = triggerGlobalY - newWorldY;
+
+    float margin = 64.0f; // Triệu hồi ở ô block liền kề để không dính mép
+
+    if (dir == "e") {
+      targetXNew = margin;
+    } else if (dir == "w") {
+      targetXNew = mapW - margin;
+    } else if (dir == "s") {
+      targetYNew = margin;
+    } else if (dir == "n") {
+      targetYNew = mapH - margin;
+    }
+
+    player1->setPosition({targetXNew, targetYNew});
+    player2->setPosition({targetXNew, targetYNew});
+  } else {
+    std::cerr << "[World02State] Failed to transition to level: " << nextLevel
+              << "\n";
   }
 }

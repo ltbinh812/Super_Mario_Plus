@@ -15,4 +15,5 @@ public:
     void removeInactive();
     void update(float dt);
     void renderDebug() const;
+    void clear() { entities.clear(); }
 };

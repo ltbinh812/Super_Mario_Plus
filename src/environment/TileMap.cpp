@@ -36,12 +36,13 @@ void TileMap::LoadMap(const std::string& jsonFilePath, const std::string& tilese
     
     int tilesetColumns = j["tilesets"]["columns"];
 
-    // Initialize arrays with -1 (empty)
+    // Initialize arrays with -1 (empty) for visuals, None for collision
     backgroundLayer = std::vector<std::vector<int>>(rows, std::vector<int>(columns, -1));
     displayLayer = std::vector<std::vector<int>>(rows, std::vector<int>(columns, -1));
-    collisionLayer = std::vector<std::vector<int>>(rows, std::vector<int>(columns, 0));
+    collisionLayer = std::vector<std::vector<CollisionType>>(rows, std::vector<CollisionType>(columns, CollisionType::None));
 
     // Parse objects
+
     for (const auto& obj : j["objects"]) {
         int baseId = obj["baseId"];
         int startX = obj["x"];
@@ -82,8 +83,9 @@ void TileMap::LoadMap(const std::string& jsonFilePath, const std::string& tilese
                     
                     displayLayer[py][px] = tileId;
                     if (solid) {
-                        collisionLayer[py][px] = 1;
+                        collisionLayer[py][px] = CollisionType::Solid;
                     }
+
                 }
             }
         }
@@ -104,7 +106,34 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     file >> j;
 
     std::string baseDir = ldtkFilePath.substr(0, ldtkFilePath.find_last_of("/\\") + 1);
+    
+    // Tạo map ánh xạ IntGrid value sang CollisionType
+    std::unordered_map<int, CollisionType> intToCollisionType;
+    if (j.contains("defs") && j["defs"].contains("layers")) {
+        for (const auto& layerDef : j["defs"]["layers"]) {
+            if (layerDef.contains("identifier") && layerDef["identifier"] == "Collision") {
+                if (layerDef.contains("intGridValues")) {
+                    for (const auto& valDef : layerDef["intGridValues"]) {
+                        int value = valDef["value"];
+                        std::string id = valDef["identifier"];
+                        CollisionType type = CollisionType::None;
+                        if (id == "Solid") type = CollisionType::Solid;
+                        else if (id == "OneWay") type = CollisionType::OneWay;
+                        else if (id == "Hazard") type = CollisionType::Hazard;
+                        else if (id == "Ladder") type = CollisionType::Ladder;
+                        else if (id == "Water") type = CollisionType::Water;
+                        else if (id == "Die") type = CollisionType::Die;
+                        else if (id == "hoa_sen" || id == "Lotus") type = CollisionType::Lotus;
+                        intToCollisionType[value] = type;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     for (const auto& ts : j["defs"]["tilesets"]) {
+
         if (!ts.contains("relPath") || ts["relPath"].is_null()) continue;
         int uid = ts["uid"];
         std::string relPath = ts["relPath"];
@@ -145,8 +174,31 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     std::string actualLevelName = targetLevel.contains("identifier") && !targetLevel["identifier"].is_null() ? (std::string)targetLevel["identifier"] : "Unknown";
     std::cout << "[LDtk] Da chon Level: " << actualLevelName << "\n";
 
+    currentNeighbours.clear();
+    if (targetLevel.contains("__neighbours") && !targetLevel["__neighbours"].is_null()) {
+        for (const auto& nb : targetLevel["__neighbours"]) {
+            std::string dir = nb["dir"];
+            std::string levelIid = nb["levelIid"];
+            for (const auto& lvl : j["levels"]) {
+                if (lvl.contains("iid") && lvl["iid"] == levelIid) {
+                    NeighbourInfo info;
+                    info.levelName = lvl["identifier"];
+                    info.worldX = lvl.contains("worldX") ? (int)lvl["worldX"] : 0;
+                    info.worldY = lvl.contains("worldY") ? (int)lvl["worldY"] : 0;
+                    info.width = lvl.contains("pxWid") ? (int)lvl["pxWid"] : 0;
+                    info.height = lvl.contains("pxHei") ? (int)lvl["pxHei"] : 0;
+                    currentNeighbours[dir].push_back(info);
+                    break;
+                }
+            }
+        }
+    }
+
+
     levelWidth = targetLevel["pxWid"];
     levelHeight = targetLevel["pxHei"];
+    worldX = targetLevel.contains("worldX") ? (int)targetLevel["worldX"] : 0;
+    worldY = targetLevel.contains("worldY") ? (int)targetLevel["worldY"] : 0;
     
     auto& layerInstances = targetLevel["layerInstances"];
     if (!layerInstances.empty()) {
@@ -155,9 +207,10 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         rows = layerInstances[0]["__cHei"];
     }
 
-    collisionLayer = std::vector<std::vector<int>>(rows, std::vector<int>(columns, 0));
+    collisionLayer = std::vector<std::vector<CollisionType>>(rows, std::vector<CollisionType>(columns, CollisionType::None));
 
     if (hasCanvas) UnloadRenderTexture(mapCanvas);
+
     mapCanvas = LoadRenderTexture(levelWidth, levelHeight);
     hasCanvas = true;
 
@@ -178,8 +231,13 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                         int y = idx / columns;
                         int x = idx % columns;
                         if (y < rows && x < columns) {
-                            collisionLayer[y][x] = val;
+                            if (intToCollisionType.find(val) != intToCollisionType.end()) {
+                                collisionLayer[y][x] = intToCollisionType[val];
+                            } else {
+                                collisionLayer[y][x] = CollisionType::Solid;
+                            }
                         }
+
                     }
                 }
             }
@@ -285,8 +343,8 @@ void TileMap::Draw() const {
     drawLayer(displayLayer);
 }
 
-std::vector<Rectangle> TileMap::GetCollidingRectangles(Rectangle entityRect) const {
-    std::vector<Rectangle> collisions;
+std::vector<CollisionTile> TileMap::GetCollidingTiles(Rectangle entityRect) const {
+    std::vector<CollisionTile> collisions;
     if (tileSize == 0 || columns == 0 || rows == 0) return collisions;
     
     float scale = GetWorldScale();
@@ -302,15 +360,45 @@ std::vector<Rectangle> TileMap::GetCollidingRectangles(Rectangle entityRect) con
         for (int x = startX; x <= endX; ++x) {
             if (x >= collisionLayer[y].size()) continue;
             
-            int tileId = collisionLayer[y][x];
-            // If the collision layer has a value > 0, it's a solid block
-            if (tileId > 0) {
+            CollisionType tileType = collisionLayer[y][x];
+            if (tileType != CollisionType::None) {
                 Rectangle tileRect = { (float)(x * worldTileSize), (float)(y * worldTileSize), worldTileSize, worldTileSize };
                 if (CheckCollisionRecs(entityRect, tileRect)) {
-                    collisions.push_back(tileRect);
+                    collisions.push_back({tileRect, tileType});
                 }
             }
         }
     }
     return collisions;
 }
+
+std::string TileMap::GetNeighbour(const std::string& dir, float globalX, float globalY) const {
+    auto it = currentNeighbours.find(dir);
+    if (it != currentNeighbours.end()) {
+        const auto& neighbours = it->second;
+        if (neighbours.empty()) return "";
+        
+        float scale = GetWorldScale();
+        for (const auto& nb : neighbours) {
+            float nbWorldX = nb.worldX * scale;
+            float nbWorldY = nb.worldY * scale;
+            float nbWidth = nb.width * scale;
+            float nbHeight = nb.height * scale;
+            
+            float margin = 8.0f; // Bù sai số
+            
+            if (dir == "e" || dir == "w") {
+                if (globalY >= nbWorldY - margin && globalY <= nbWorldY + nbHeight + margin) {
+                    return nb.levelName;
+                }
+            } else if (dir == "n" || dir == "s") {
+                if (globalX >= nbWorldX - margin && globalX <= nbWorldX + nbWidth + margin) {
+                    return nb.levelName;
+                }
+            }
+        }
+        return ""; // Kh\u00f4ng t\u00ecm th\u1ea5y neighbour ph\u00f9 h\u1ee3p v\u1edbi to\u1ea1 \u0111\u1ed9 hi\u1ec7n t\u1ea1i
+    }
+    return "";
+}
+

@@ -118,9 +118,9 @@ bool Fireball::hasActiveHitbox() const {
     return isActive;
 }
 
-Hitbox Fireball::getActiveHitbox() const {
+Hitbox Fireball::getActiveHitbox() {
     Rectangle rect = getHitbox();
-    return { rect, attackPower, 0, const_cast<Entity*>(static_cast<const Entity*>(this)), spawner };
+    return { rect, attackPower, 0, this, spawner };
 }
 
 void Fireball::takeDamage(int damage) {

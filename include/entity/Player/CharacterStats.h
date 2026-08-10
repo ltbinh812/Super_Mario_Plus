@@ -1,6 +1,7 @@
 #pragma once
 #include "Animation.h"
 #include <string>
+#include <cstdint>
 #include "raylib.h"
 
 struct CharacterBaseStats {
@@ -27,7 +28,13 @@ struct CharacterRuntimeStats {
     Vector2 velocity = {0.0f, 0.0f}; 
 
     bool isGrounded = false;
+    bool isOverlappingLadder = false;
+    uint32_t collisionMask = 0xFFFFFFFF;
+    float ignoreOneWayTimer = 0.0f;
+    float ignoreLadderTimer = 0.0f;
+    float iframeTimer = 0.0f;
 };
+
 
 struct CharacterWorldStats {
     Animation* animation = nullptr;

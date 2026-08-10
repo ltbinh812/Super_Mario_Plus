@@ -6,6 +6,10 @@ PlayerSkillState::PlayerSkillState(Player& player) : PlayerState(player) {
 
 void PlayerSkillState::onEnter() {
     if (currentSkill) {
+        // Stop horizontal movement when initiating a skill
+        player.stopLeftRun();
+        player.stopRightRun();
+
         // Deduct mana
         player.reduceMana(currentSkill->getManaCost());
 
@@ -29,13 +33,13 @@ void PlayerSkillState::update(float dt) {
     timer = std::max(timer, 0.0f);
 
     float elapsedTime = getElapsedTime();
-    if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() && 
+    if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() &&
            elapsedTime <= currentSkill->getHitboxEndTime()) {
-
-        // Execute skill effect (velocity burst, fireball spawn, etc.) ONLY ONCE
+        // Execute skill effect (velocity burst, fireball spawn, etc.) ONLY ONCE per activation
         currentSkill->execute(player);
         hasExecuted = true;
     }
+
 
     if (timer == 0) {
         if (nextSkill) {

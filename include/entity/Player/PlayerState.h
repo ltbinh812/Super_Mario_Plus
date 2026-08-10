@@ -4,27 +4,16 @@
 
 class Player;
 
+// PlayerState is the concrete base for all Player states.
+// It inherits all input hooks from IEntityState<Player> — do NOT re-declare them here.
 class PlayerState : public IEntityState<Player> {
-    protected: 
+protected:
     Player& player;
 
-    // Protected helper so subclasses can trigger unconditional state changes.
-    // PlayerState is a friend of Player, so this compiles; subclasses inherit access.
+    // Protected helper — lets subclasses request state changes via the public Player API
     void changePlayerState(PlayerState& newState);
 
-    public: 
+public:
     virtual ~PlayerState() = default;
-
     PlayerState(Player& player);
-    virtual void onMoveRight() {}
-    virtual void onMoveLeft() {}
-    virtual void onJump() {}
-    virtual void onCrouch() {}
-    virtual void onAttack() {}
-    virtual void onStopLeft() {}
-    virtual void onStopRight() {}
-    virtual void onStopCrouch() {}
-
-    virtual bool canExit() const { return true; }
-
 };

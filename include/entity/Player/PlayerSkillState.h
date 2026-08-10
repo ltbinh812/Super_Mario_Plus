@@ -14,6 +14,7 @@ class PlayerSkillState : public PlayerState {
     PlayerSkillState(Player& player);
     
     void setSkill(ISkill* skill) { currentSkill = skill; }
+    void resetTimer() { if (currentSkill) timer = currentSkill->getDuration(); }
 
     void onEnter() override;
     void onExit() override;

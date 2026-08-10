@@ -28,7 +28,7 @@ public:
 
     // Combat interface
     bool hasActiveHitbox() const override;
-    Hitbox getActiveHitbox() const override;
+    Hitbox getActiveHitbox() override;
     void takeDamage(int damage) override;
 
     bool getIsActive() const override { return isActive; }
