@@ -24,7 +24,7 @@ void StateManager::ChangeState(std::unique_ptr<GameState> state) {
 }
 
 StateManager::StateManager() {
-  std::unique_ptr<GameState> initialState = std::make_unique<World03State>();
+  std::unique_ptr<GameState> initialState = std::make_unique<World02State>();
   stateStack.push(std::move(initialState));
 }
 
