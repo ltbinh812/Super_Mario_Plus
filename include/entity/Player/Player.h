@@ -50,10 +50,12 @@ public:
   void jump();
   void crouch();
   void standUp();
-  void dash(float dashSpeed);
+  void speedUpX(float speedX);
+  void speedUpY(float speedY);
   void reduceMana(float cost);
   void increaseMana(float cost);
   void spawnFireball();
+  void spawnExplosion();
 
   // --- Swim & Climb helpers (avoids raw getRuntimeStatsMutable() in States) ---
   void swim(float dirX);   // Move horizontally at water speed
@@ -76,7 +78,7 @@ public:
   void onDie() override;
 
   // --- Animation ---
-  void playAnimation(const std::string &name);
+  void playAnimation(const std::string &name, bool loop = true);
 
   // --- State instances (public so States can reference siblings) ---
   PlayerIdleState idleState;

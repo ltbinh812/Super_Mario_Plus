@@ -27,7 +27,7 @@ World01State::World01State() : mapCamera(416.0f), currentLevel("Level_0") {
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), true);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"), true);
-      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("Punch"), true);
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("Attack1"), true);
       
       
     }
@@ -48,7 +48,7 @@ World01State::World01State() : mapCamera(416.0f), currentLevel("Level_0") {
       player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), true);
-      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Punch"), true);
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"), true);
     }
 
     // Register players with CombatSystem (one-way: CombatSystem observes entities)

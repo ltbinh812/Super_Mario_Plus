@@ -8,6 +8,7 @@ private:
     int curFrame;
     float frameTime;
     float timer;
+    bool loop_;
 
     int frameWidth;
     int frameHeight;
@@ -19,6 +20,8 @@ public:
     const Texture2D& getTexture() const;
     int getFrameNum() const { return frameNum; }
     float getFrameTime() const { return frameTime; }
+    void setLoop(bool loop) { loop_ = loop; }
+    bool isLooping() const { return loop_; }
 
     void resetAnimation();
 };

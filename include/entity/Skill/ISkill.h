@@ -13,6 +13,11 @@ protected:
     float hitboxStartTime = 0.0f;
     float hitboxEndTime = 0.0f;
 
+    // Pacing data (loaded from JSON by PlayerFactory)
+    float recoveryDuration = 0.1f;       // pause after animation before next action
+    float hitStopDuration = 0.05f;        // freeze on hit confirmation
+    float anticipationDuration = 0.0f;    // wind-up before animation starts (0 for normal attacks)
+
     // Combat data (loaded from JSON by PlayerFactory)
     int attackPower = 0;
     int defensePower = 0;
@@ -36,6 +41,16 @@ public:
 
     float getHitboxStartTime() const { return hitboxStartTime; }
     float getHitboxEndTime() const { return hitboxEndTime; }
+
+    // Pacing getters/setters
+    float getRecoveryDuration() const { return recoveryDuration; }
+    float getHitStopDuration() const { return hitStopDuration; }
+    float getAnticipationDuration() const { return anticipationDuration; }
+    void setPacingData(float recovery, float hitstop, float anticipation) {
+        recoveryDuration = recovery;
+        hitStopDuration = hitstop;
+        anticipationDuration = anticipation;
+    }
 
     // Combat data getters
     int getAttackPower() const { return attackPower; }

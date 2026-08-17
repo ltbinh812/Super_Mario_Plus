@@ -16,7 +16,7 @@ void PlayerCrouchState::update(float dt) {
 }
 
 void PlayerCrouchState::onAttack() {
-    player.useSkill("Punch1");
+    player.useSkill("LowAttack");
 }
 
 void PlayerCrouchState::onJump() {

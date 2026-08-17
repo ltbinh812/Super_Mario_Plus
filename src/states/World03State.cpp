@@ -25,7 +25,7 @@ World03State::World03State() : mapCamera(416.0f) {
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              false);
-      player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Punch1"),
+      player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Attack1"),
                              true);
 
       player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
@@ -49,7 +49,7 @@ World03State::World03State() : mapCamera(416.0f) {
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
                              false);
       player2Handler.bindKey(KEY_COMMA,
-                             std::make_unique<UseSkillCommand>("Punch1"), true);
+                             std::make_unique<UseSkillCommand>("Attack1"), true);
 
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH,

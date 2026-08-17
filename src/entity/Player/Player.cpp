@@ -3,6 +3,7 @@
 #include "ISkill.h"
 #include "PlayerCommands.h"
 #include "raylib.h"
+#include <cmath>
 #include <iostream>
 
 Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
@@ -32,6 +33,14 @@ void Player::update(float dt) {
 void Player::render(float alpha) {
   if (!worldStats.animation)
     return;
+
+  // Blink effect during invincibility: skip rendering on alternating intervals
+  if (runtimeStats.iframeTimer > 0.0f) {
+    // Blink at ~10 Hz: hidden when sin > 0, visible when sin < 0
+    float blinkPhase = std::sin(runtimeStats.iframeTimer * 20.0f * 3.14159f);
+    if (blinkPhase > 0.0f)
+      return;
+  }
 
   Rectangle source = worldStats.animation->getCurrentFrame();
   if (!worldStats.isFacingRight) {
@@ -164,12 +173,13 @@ void Player::onClimb() {
 // MOVEMENT HELPERS (called by States — Tell, Don't Ask)
 // =============================================================================
 
-void Player::playAnimation(const std::string &name) {
+void Player::playAnimation(const std::string &name, bool loop) {
   std::cout << name << '\n';
   auto it = animationList.find(name);
   if (it != animationList.end()) {
     worldStats.animation = &it->second;
     worldStats.animation->resetAnimation();
+    worldStats.animation->setLoop(loop);
   }
 }
 
@@ -206,8 +216,12 @@ void Player::standUp() {
   runtimeStats.physicsBox = baseStats.physicsBox;
 }
 
-void Player::dash(float dashSpeed) {
-  runtimeStats.velocity.x = worldStats.isFacingRight ? dashSpeed : -dashSpeed;
+void Player::speedUpX(float speedX) {
+  runtimeStats.velocity.x = worldStats.isFacingRight ? speedX : -speedX;
+}
+
+void Player::speedUpY(float speedY) {
+  runtimeStats.velocity.y = speedY;
 }
 
 void Player::idle() {
@@ -353,12 +367,22 @@ void Player::updateStateFromPhysics() {
 void Player::spawnFireball() {
   if (!commandQueue) return;
 
-  Vector2 offset = {worldStats.isFacingRight ? 100.0f : -100.0f, -10.0f};
-
   SpawnCommand cmd;
   cmd.type = EntityType::Fireball;
-  cmd.position = {worldStats.position.x + offset.x,
-                  worldStats.position.y + offset.y};
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnExplosion() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::Explosion;
+  cmd.position = worldStats.position; // Centered on the player
   cmd.isFacingRight = worldStats.isFacingRight;
   cmd.ownerName = baseStats.name;
   cmd.spawner = this;

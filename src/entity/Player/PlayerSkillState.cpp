@@ -13,11 +13,11 @@ void PlayerSkillState::onEnter() {
         // Deduct mana
         player.reduceMana(currentSkill->getManaCost());
 
-        // Play skill animation
-        player.playAnimation(currentSkill->getAnimationName());
+        // Play skill animation, ensuring it doesn't loop so it holds the last frame during recovery
+        player.playAnimation(currentSkill->getAnimationName(), false);
 
-        // Set timer for skill duration
-        timer = currentSkill->getDuration();
+        // Set timer for skill duration plus recovery pause
+        timer = currentSkill->getDuration() + currentSkill->getRecoveryDuration();
         hasExecuted = false; // Reset the flag for the new skill
     }
 }
@@ -73,6 +73,6 @@ bool PlayerSkillState::isHitboxActive() const {
 
 float PlayerSkillState::getElapsedTime() const {
     if (!currentSkill) return 0.0f;
-    return currentSkill->getDuration() - timer;
+    float totalTime = currentSkill->getDuration() + currentSkill->getRecoveryDuration();
+    return totalTime - timer;
 }
-

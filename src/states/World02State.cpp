@@ -30,7 +30,7 @@ World02State::World02State() : mapCamera(416.0f), currentLevel("Level_0") {
                              true);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
                              true);
-      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("Punch"),
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"),
                              true);                      
     }
 
@@ -55,7 +55,7 @@ World02State::World02State() : mapCamera(416.0f), currentLevel("Level_0") {
       player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
       player2Handler.bindKey(KEY_SLASH,
                              std::make_unique<UseSkillCommand>("Dash"), true);
-      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Punch"),
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"),
                              true);
     }
 

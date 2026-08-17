@@ -59,13 +59,16 @@ set(SOURCES
     src/entity/Player/PlayerClimbState.cpp
     src/entity/Player/PlayerFactory.cpp
     src/entity/Skill/DashSkill.cpp
-    src/entity/Skill/Punch1Skill.cpp
-    src/entity/Skill/Punch2Skill.cpp
-    src/entity/Skill/Punch3Skill.cpp
-    src/entity/Skill/Punch4Skill.cpp
+    src/entity/Skill/Attack1Skill.cpp
+    src/entity/Skill/Attack2Skill.cpp
+    src/entity/Skill/Attack3Skill.cpp
+    src/entity/Skill/Attack4Skill.cpp
     src/entity/Skill/BlockSkill.cpp
     src/entity/Skill/LongAttackSkill.cpp
+    src/entity/Skill/JumpAttackSkill.cpp
+    src/entity/Skill/LowAttackSkill.cpp
     src/entity/Fireball.cpp
+    src/entity/Explosion.cpp
     src/entity/EntityFactory.cpp
     src/combatsystem/BruteForceDetector.cpp
     src/combatsystem/CombatSystem.cpp

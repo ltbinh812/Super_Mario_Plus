@@ -30,5 +30,5 @@ void PlayerJumpState::onStopRight() {
 }
 
 void PlayerJumpState::onAttack() {
-    player.useSkill("Punch1");
+    player.useSkill("JumpAttack");
 }
