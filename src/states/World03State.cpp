@@ -16,44 +16,41 @@ World03State::World03State() : mapCamera(416.0f) {
     // Setup Player 1
     player1 = PlayerFactory::createPlayer("Goku", {260.0f, 208.0f});
     if (player1) {
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
+      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_W, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
       player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(),
-                             false);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
+                             InputType::RELEASED);
+      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
-                             false);
-      player1Handler.bindKey(KEY_J, std::make_unique<UseSkillCommand>("Attack1"),
-                             true);
-
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
-      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             true);
+                             InputType::RELEASED);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_K, std::make_unique<UseSkillCommand>("Dash"),
+                             InputType::PRESSED);
+      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Attack1"),
+                             InputType::PRESSED);
     }
 
     // Setup Player 2
     player2 = PlayerFactory::createPlayer("Goku", {260.0f, 208.0f});
     if (player2) {
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
-                             true);
+                             InputType::DOWN);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
-                             true);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
+                             InputType::DOWN);
+      player2Handler.bindKey(KEY_UP, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
       player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(),
-                             false);
+                             InputType::RELEASED);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
-                             false);
+                             InputType::RELEASED);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
-                             false);
-      player2Handler.bindKey(KEY_COMMA,
-                             std::make_unique<UseSkillCommand>("Attack1"), true);
-
-      player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
+                             InputType::RELEASED);
+      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"), InputType::PRESSED);
       player2Handler.bindKey(KEY_SLASH,
-                             std::make_unique<UseSkillCommand>("Dash"), true);
+                             std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
     }
   } else {
     std::cerr << "[World03State] Loi khi tai ban do map03!\n";

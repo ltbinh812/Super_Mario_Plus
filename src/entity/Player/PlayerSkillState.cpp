@@ -64,6 +64,26 @@ void PlayerSkillState::onAttack() {
     }
 }
 
+void PlayerSkillState::onMoveLeft() {
+    float moveControl = currentSkill ? currentSkill->getMoveControl() : 0.0f;
+    player.getWorldStatsMutable().isFacingRight = false;
+    player.getRuntimeStatsMutable().velocity.x = -player.getBaseStats().moveVelocity * moveControl;
+}
+
+void PlayerSkillState::onMoveRight() {
+    float moveControl = currentSkill ? currentSkill->getMoveControl() : 0.0f;
+    player.getWorldStatsMutable().isFacingRight = true;
+    player.getRuntimeStatsMutable().velocity.x = player.getBaseStats().moveVelocity * moveControl;
+}
+
+void PlayerSkillState::onStopLeft() {
+    player.stopLeftRun();
+}
+
+void PlayerSkillState::onStopRight() {
+    player.stopRightRun();
+}
+
 bool PlayerSkillState::isHitboxActive() const {
     if (!currentSkill) return false;
     float elapsedTime = getElapsedTime();

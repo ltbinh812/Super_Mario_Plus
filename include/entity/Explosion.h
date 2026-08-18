@@ -15,7 +15,7 @@ private:
     std::unique_ptr<Animation> animation;
 
 public:
-    Explosion(Vector2 startPos, const ExplosionConfig& config, Entity* spawner);
+    Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig& config, Entity* spawner);
 
     void update(float dt) override;
     void render(float alpha) override;
@@ -25,7 +25,7 @@ public:
 
     void onHitWall(bool isRightWall) override {}
     void onCollide(Entity& other) override {}
-    void takeDamage(int damage) override {}
+    void takeDamage(int damage, float knockbackDirX = 0.0f) override {}
 
     bool getIsActive() const override { return isActive; }
     void deactivate() override { isActive = false; }

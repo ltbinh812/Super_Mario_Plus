@@ -9,6 +9,7 @@
 #include "LongAttackSkill.h"
 #include "JumpAttackSkill.h"
 #include "LowAttackSkill.h"
+#include "SpecialSkillAttack.h"
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -27,6 +28,7 @@ static const std::unordered_map<std::string, std::function<std::unique_ptr<ISkil
     { "LongAttack", []{ return std::make_unique<LongAttackSkill>(); } },
     { "JumpAttack", []{ return std::make_unique<JumpAttackSkill>(); } },
     { "LowAttack",  []{ return std::make_unique<LowAttackSkill>(); } },
+    { "SpecialAttack", []{ return std::make_unique<SpecialSkillAttack>(); } },
 };
 
 std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
@@ -94,10 +96,13 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     // Load texture if not already loaded
     AssetManager::getInstance().loadTexture(texKey, texPath);
 
+    float scale = animData.value("scale", 1.0f);
+
     animations.emplace(animName, Animation(
         AssetManager::getInstance().getTexture(texKey),
         animData["frameNum"].get<int>(),
-        animData["frameTime"].get<float>()
+        animData["frameTime"].get<float>(),
+        scale
     ));
   }
 
@@ -145,6 +150,9 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     float hitstop = skillJson.value("hitStopDuration", 0.05f);
     float anticipation = skillJson.value("anticipationDuration", 0.0f);
     skill->setPacingData(recovery, hitstop, anticipation);
+
+    float moveControl = skillJson.value("moveControl", 0.0f);
+    skill->setMoveControl(moveControl);
 
     player->addSkill(skillName, std::move(skill));
   }

@@ -67,6 +67,7 @@ set(SOURCES
     src/entity/Skill/LongAttackSkill.cpp
     src/entity/Skill/JumpAttackSkill.cpp
     src/entity/Skill/LowAttackSkill.cpp
+    src/entity/Skill/SpecialSkillAttack.cpp
     src/entity/Fireball.cpp
     src/entity/Explosion.cpp
     src/entity/EntityFactory.cpp
@@ -78,6 +79,7 @@ set(SOURCES
     src/states/World01State.cpp
     src/states/World02State.cpp
     src/states/World03State.cpp
+    src/states/CharacterSelectionState.cpp
 )
 
 # Executable

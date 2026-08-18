@@ -11,4 +11,5 @@ struct ExplosionConfig {
     std::string textureName = "";
     int   frameNum       = 1;
     float frameTime      = 0.1f;
+    float scale          = 1.0f;
 };

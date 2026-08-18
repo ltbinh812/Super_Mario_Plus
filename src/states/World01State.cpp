@@ -16,18 +16,17 @@ World01State::World01State() : mapCamera(416.0f), currentLevel("Level_0") {
     if (player1) {
       player1->setCommandQueue(&spawnQueue);
       std::cout << "[World01State] Da them Player 1 (Goku)!\n";
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
-      player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), false);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
-      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), true);
-      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"), true);
-      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("Attack1"), true);
+      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_W, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_K, std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Attack1"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
       
       
     }
@@ -38,17 +37,16 @@ World01State::World01State() : mapCamera(416.0f), currentLevel("Level_0") {
     if (player2) {
       player2->setCommandQueue(&spawnQueue);
       std::cout << "[World01State] Da them Player 2 (Luffy)!\n";
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), true);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), true);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), false);
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), false);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), false);
-      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
-      player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
-      player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), true);
-      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"), true);
+      player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_UP, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_SLASH, std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"), InputType::PRESSED);
     }
 
     // Register players with CombatSystem (one-way: CombatSystem observes entities)
@@ -181,10 +179,10 @@ void World01State::Render(float alpha) const {
   DrawText("WORLD 01 STATE - CO-OP MULTIPLAYER & DYNAMIC ZOOM CAMERA", 10, 10,
            20, YELLOW);
   DrawText(
-      "P1 (Goku): A/D Move | J: Punch | K: Jump | L: Dash",
+      "P1 (Goku): A/D Move | J: Punch | W: Jump | K: Dash | L: Special",
       10, 35, 20, WHITE);
   DrawText(
-      "P2 (Luffy): LEFT/RIGHT Move | ,: Punch | .: Jump | /: Dash",
+      "P2 (Luffy): LEFT/RIGHT Move | ,: Punch | UP: Jump | /: Dash",
       10, 60, 20, WHITE);
   Vector2 camTarget = mapCamera.GetTarget();
   DrawText(("Camera Target: (" + std::to_string((int)camTarget.x) + ", " +

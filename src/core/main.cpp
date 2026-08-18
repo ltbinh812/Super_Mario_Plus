@@ -2,34 +2,6 @@
 #include "AssetManager.h"
 #include "raylib.h"
 
-void LoadAsset() {
-        //load các Asset
-
-    // Các player 
-    // Goku
-
-    // Luffy
-    // Naruto
-    // kakashi
-    // sasuke
-    // zoro
-    // Goku - upgrade
-    // Naruto - upgrafe
-
-
-    // Các boss
-    // Chopper 
-    // Franky 
-    // Itachi
-    // Sasuke boss
-    // Shank
-
-
-    // Mobs
-
-    
-
-}
 int main() {
     // Khởi tạo các cờ cửa sổ (có thể điều chỉnh kích thước, VSync)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);

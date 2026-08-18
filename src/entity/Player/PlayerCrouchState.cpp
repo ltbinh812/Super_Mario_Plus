@@ -4,7 +4,7 @@
 PlayerCrouchState::PlayerCrouchState(Player& player) : PlayerState(player) {}
 
 void PlayerCrouchState::onEnter() {
-    player.playAnimation("crouch");
+    player.playAnimation("crouch", false);
     player.crouch();
 }
 
@@ -29,11 +29,11 @@ void PlayerCrouchState::onStopCrouch() {
 }
 
 void PlayerCrouchState::onMoveLeft() {
-    player.moveLeft();
+    // player.moveLeft();
 }
 
 void PlayerCrouchState::onMoveRight() {
-    player.moveRight();
+    // player.moveRight();
 }
 
 void PlayerCrouchState::onStopLeft() {
@@ -42,4 +42,4 @@ void PlayerCrouchState::onStopLeft() {
 
 void PlayerCrouchState::onStopRight() {
     player.stopRightRun();
-}
+}

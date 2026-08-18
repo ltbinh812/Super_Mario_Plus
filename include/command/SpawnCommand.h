@@ -6,7 +6,8 @@ class Entity;
 
 enum class EntityType {
     Fireball,
-    Explosion
+    Explosion,
+    SpecialBall
 };
 
 struct SpawnCommand {

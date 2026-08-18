@@ -21,10 +21,11 @@ private:
 
   CommandQueue spawnQueue;
   std::vector<std::unique_ptr<Entity>> activeEntities;
+  std::string selectedCharacter;
   std::string currentLevel;
   
 public:
-  World02State();
+  World02State(std::string selectedChar = "Goku");
   ~World02State() override;
 
   void TransitionToLevel(const std::string& nextLevel, const std::string& dir, float globalX, float globalY);

@@ -1,12 +1,13 @@
 #include "Animation.h"
 
-Animation::Animation(const Texture2D& tex, int frameNum, float frameTime)
+Animation::Animation(const Texture2D& tex, int frameNum, float frameTime, float scale)
         : texture_(&tex),
           frameNum(frameNum),
           frameTime(frameTime),
           curFrame(0),
           timer(0.0f),
-          loop_(true)
+          loop_(true),
+          scale_(scale)
     {
         frameWidth  = tex.width / frameNum;
         frameHeight = tex.height;

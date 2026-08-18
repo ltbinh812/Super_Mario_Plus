@@ -22,6 +22,9 @@ protected:
     int attackPower = 0;
     int defensePower = 0;
     Rectangle hitboxConfig = {0, 0, 0, 0};  // {offsetX, offsetY, w, h}
+    
+    // Movement multiplier during skill execution
+    float moveControl = 0.0f;
 public: 
     ISkill(float mn = 0.0f, float dr = 0.0f) : manaCost(mn), duration(dr) {}
     virtual ~ISkill() = default;
@@ -61,5 +64,8 @@ public:
         defensePower = def;
         hitboxConfig = box;
     }
+
+    float getMoveControl() const { return moveControl; }
+    void setMoveControl(float mc) { moveControl = mc; }
 };
     

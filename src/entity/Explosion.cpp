@@ -18,16 +18,16 @@ static CharacterRuntimeStats getExplosionRuntimeStats(const ExplosionConfig& con
     return rs;
 }
 
-static CharacterWorldStats getExplosionWorldStats(Vector2 startPos) {
+static CharacterWorldStats getExplosionWorldStats(Vector2 startPos, bool isFacingRight) {
     CharacterWorldStats ws;
     ws.position = startPos;
-    ws.isFacingRight = true;
+    ws.isFacingRight = isFacingRight;
     ws.animation = nullptr;
     return ws;
 }
 
-Explosion::Explosion(Vector2 startPos, const ExplosionConfig& config, Entity* spawner)
-    : Entity(getExplosionBaseStats(config), getExplosionRuntimeStats(config), getExplosionWorldStats(startPos)),
+Explosion::Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig& config, Entity* spawner)
+    : Entity(getExplosionBaseStats(config), getExplosionRuntimeStats(config), getExplosionWorldStats(startPos, isFacingRight)),
       lifetime(config.lifetime), attackPower(config.damage), 
       hitboxW(config.hitboxW), hitboxH(config.hitboxH), spawner(spawner) {
     
@@ -35,7 +35,7 @@ Explosion::Explosion(Vector2 startPos, const ExplosionConfig& config, Entity* sp
         auto& assetMgr = AssetManager::getInstance();
         const Texture2D& tex = assetMgr.getTexture(config.textureName);
         if (tex.id != 0) {
-            animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime);
+            animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime, config.scale);
         }
     }
 }
@@ -58,12 +58,16 @@ void Explosion::render(float alpha) {
 
     if (animation) {
         Rectangle source = animation->getCurrentFrame();
-        float absW = (source.width < 0 ? -source.width : source.width);
-        float absH = source.height;
+        if (!worldStats.isFacingRight) {
+            source.width = -source.width;
+        }
+        float scale = animation->getScale();
+        float absW = (source.width < 0 ? -source.width : source.width) * scale;
+        float absH = source.height * scale;
 
         Rectangle dest = {
             worldStats.position.x - absW / 2.0f,
-            worldStats.position.y - absH / 2.0f,
+            worldStats.position.y - absH,
             absW, absH
         };
 
@@ -71,7 +75,7 @@ void Explosion::render(float alpha) {
     } else {
         DrawCircleLines(
             static_cast<int>(worldStats.position.x),
-            static_cast<int>(worldStats.position.y),
+            static_cast<int>(worldStats.position.y - hitboxH / 2.0f),
             hitboxW / 2.0f, RED
         );
     }
@@ -83,6 +87,6 @@ bool Explosion::hasActiveHitbox() const {
 }
 
 Hitbox Explosion::getActiveHitbox() {
-    Rectangle rect = { worldStats.position.x - hitboxW / 2.0f, worldStats.position.y - hitboxH / 2.0f, hitboxW, hitboxH };
+    Rectangle rect = { worldStats.position.x - hitboxW / 2.0f, worldStats.position.y - hitboxH, hitboxW, hitboxH };
     return { rect, attackPower, 0, this, spawner };
 }

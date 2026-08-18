@@ -39,6 +39,7 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.curveFrequency = fb.value("curveFrequency", 0.0f);
                 cfg.frameNum       = fb.value("frameNum", 1);
                 cfg.frameTime      = fb.value("frameTime", 0.1f);
+                cfg.scale          = fb.value("scale", 1.0f);
 
                 // Auto-load fireball texture from assetFolder
                 std::string texBase = fb.value("textureName", std::string(""));
@@ -52,6 +53,45 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
             }
 
             // Apply spawn offset based on facing direction
+            Vector2 spawnPos = cmd.position;
+            spawnPos.x += cmd.isFacingRight ? cfg.offsetX : -cfg.offsetX;
+            spawnPos.y += cfg.offsetY;
+
+            return std::make_unique<Fireball>(spawnPos, cmd.isFacingRight, cfg, cmd.spawner);
+        }
+
+        case EntityType::SpecialBall: {
+            FireballConfig cfg;
+
+            // Load special_ball config from owner's json block if available
+            if (jsonData.contains(cmd.ownerName) &&
+                jsonData[cmd.ownerName].contains("special_ball")) {
+                auto& fb = jsonData[cmd.ownerName]["special_ball"];
+                cfg.speed          = fb.value("speed", 300.0f);
+                cfg.gravityScale   = fb.value("gravityScale", 0.0f);
+                cfg.lifetime       = fb.value("lifetime", 2.0f);
+                cfg.damage         = fb.value("damage", 10);
+                cfg.hitboxW        = fb.value("hitboxW", 16.0f);
+                cfg.hitboxH        = fb.value("hitboxH", 16.0f);
+                cfg.offsetX        = fb.value("offsetX", 100.0f);
+                cfg.offsetY        = fb.value("offsetY", -10.0f);
+                cfg.curveAmplitude = fb.value("curveAmplitude", 0.0f);
+                cfg.curveFrequency = fb.value("curveFrequency", 0.0f);
+                cfg.frameNum       = fb.value("frameNum", 1);
+                cfg.frameTime      = fb.value("frameTime", 0.1f);
+                cfg.scale          = fb.value("scale", 1.0f);
+
+                // Auto-load texture from assetFolder
+                std::string texBase = fb.value("textureName", std::string(""));
+                if (!texBase.empty() && jsonData[cmd.ownerName].contains("assetFolder")) {
+                    std::string folder = jsonData[cmd.ownerName]["assetFolder"].get<std::string>();
+                    std::string texKey = cmd.ownerName + "_" + texBase;
+                    std::string texPath = "assets/" + folder + "/" + texBase + ".png";
+                    AssetManager::getInstance().loadTexture(texKey, texPath);
+                    cfg.textureName = texKey;
+                }
+            }
+
             Vector2 spawnPos = cmd.position;
             spawnPos.x += cmd.isFacingRight ? cfg.offsetX : -cfg.offsetX;
             spawnPos.y += cfg.offsetY;
@@ -73,6 +113,7 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.offsetY   = ex.value("offsetY", 0.0f);
                 cfg.frameNum  = ex.value("frameNum", 1);
                 cfg.frameTime = ex.value("frameTime", 0.1f);
+                cfg.scale     = ex.value("scale", 1.0f);
 
                 // Auto-load texture
                 std::string texBase = ex.value("textureName", std::string(""));
@@ -90,7 +131,7 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
             spawnPos.x += cmd.isFacingRight ? cfg.offsetX : -cfg.offsetX;
             spawnPos.y += cfg.offsetY;
 
-            return std::make_unique<Explosion>(spawnPos, cfg, cmd.spawner);
+            return std::make_unique<Explosion>(spawnPos, cmd.isFacingRight, cfg, cmd.spawner);
         }
 
         // Future:

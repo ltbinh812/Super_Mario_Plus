@@ -6,57 +6,56 @@
 #include <iostream>
 #include <raylib.h>
 
-World02State::World02State() : mapCamera(416.0f), currentLevel("Level_0") {
+World02State::World02State(std::string selectedChar) 
+    : mapCamera(416.0f), selectedCharacter(std::move(selectedChar)), currentLevel("Level_0") {
   bool loaded = map.LoadLDtkMap("assets/maps/map02/world02.ldtk", currentLevel);
   if (loaded && map.GetHeight() > 0) {
     std::cout << "[World02State] Da tai ban do map02 (" << currentLevel << ") thanh cong!\n";
 
     // Khởi tạo Player 1 (Goku) tại {380.0f, 200.0f}
-    player1 = PlayerFactory::createPlayer("Goku", {380.0f, 200.0f});
+    player1 = PlayerFactory::createPlayer(selectedCharacter, {380.0f, 200.0f});
     if (player1) {
       player1->setCommandQueue(&spawnQueue);
       std::cout << "[World02State] Da them Player 1 (Goku) vao map02!\n";
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
+      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_W, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
-                             false);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), false);
-      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             true);
+                             InputType::RELEASED);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_K, std::make_unique<UseSkillCommand>("Dash"),
+                             InputType::PRESSED);
+      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("LongAttack"),
+                             InputType::PRESSED);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
-                             true);
-      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"),
-                             true);                      
+                             InputType::PRESSED);
     }
 
 
     // Khởi tạo Player 2 (Luffy) tại {420.0f, 200.0f}
-    player2 = PlayerFactory::createPlayer("Goku", {420.0f, 200.0f});
+    player2 = PlayerFactory::createPlayer(selectedCharacter, {420.0f, 200.0f});
     if (player2) {
       player2->setCommandQueue(&spawnQueue);
       std::cout << "[World02State] Da them Player 2 (Luffy) vao map02!\n";
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
-                             true);
+                             InputType::DOWN);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
-                             true);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), false);
+                             InputType::DOWN);
+      player2Handler.bindKey(KEY_UP, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
-                             false);
+                             InputType::RELEASED);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
-                             false);
-      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), true);
-      player2Handler.bindKey(KEY_PERIOD, std::make_unique<JumpCommand>(), true);
+                             InputType::RELEASED);
+      player2Handler.bindKey(KEY_COMMA, std::make_unique<AttackCommand>(), InputType::PRESSED);
       player2Handler.bindKey(KEY_SLASH,
-                             std::make_unique<UseSkillCommand>("Dash"), true);
+                             std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
       player2Handler.bindKey(KEY_M, std::make_unique<UseSkillCommand>("Attack1"),
-                             true);
+                             InputType::PRESSED);
     }
 
     // Register players with CombatSystem (one-way: CombatSystem observes entities)
@@ -118,6 +117,54 @@ void World02State::Update(float dt) {
     player2->updatePhysicsWithMap(map, dt);
     player2->updateStateFromPhysics();
     player2->update(dt);
+  }
+
+  // Player-to-Player Pushing Resolution
+  if (player1 && player2) {
+      Rectangle r1 = player1->getHitbox();
+      Rectangle r2 = player2->getHitbox();
+      if (CheckCollisionRecs(r1, r2)) {
+          float center1 = r1.x + r1.width / 2.0f;
+          float center2 = r2.x + r2.width / 2.0f;
+          float overlap = (r1.width + r2.width) / 2.0f - std::abs(center1 - center2);
+          
+          if (overlap > 0) {
+              float push = overlap / 2.0f + 0.1f; // +0.1f epsilon to fully separate
+              
+              Vector2 p1Pos = player1->getWorldStats().position;
+              Vector2 p2Pos = player2->getWorldStats().position;
+              
+              float dir1 = (center1 < center2) ? -1.0f : 1.0f;
+              float dir2 = -dir1;
+
+              // Check if P1 hits a wall if pushed
+              Rectangle nextR1 = r1;
+              nextR1.x += push * dir1;
+              bool p1HitsWall = false;
+              for (const auto& tile : map.GetCollidingTiles(nextR1)) {
+                  if (tile.type == CollisionType::Solid) { p1HitsWall = true; break; }
+              }
+
+              // Check if P2 hits a wall if pushed
+              Rectangle nextR2 = r2;
+              nextR2.x += push * dir2;
+              bool p2HitsWall = false;
+              for (const auto& tile : map.GetCollidingTiles(nextR2)) {
+                  if (tile.type == CollisionType::Solid) { p2HitsWall = true; break; }
+              }
+
+              if (!p1HitsWall && !p2HitsWall) {
+                  player1->setPosition({p1Pos.x + push * dir1, p1Pos.y});
+                  player2->setPosition({p2Pos.x + push * dir2, p2Pos.y});
+              } else if (p1HitsWall && !p2HitsWall) {
+                  // P1 is against a wall, push P2 the full amount
+                  player2->setPosition({p2Pos.x + overlap * dir2 + 0.1f, p2Pos.y});
+              } else if (!p1HitsWall && p2HitsWall) {
+                  // P2 is against a wall, push P1 the full amount
+                  player1->setPosition({p1Pos.x + overlap * dir1 + 0.1f, p1Pos.y});
+              }
+          }
+      }
   }
 
   if (player1 && player2) {
@@ -194,9 +241,9 @@ void World02State::Render(float alpha) const {
   // Debug UI overlays
   DrawText("WORLD 02 STATE - CO-OP MULTIPLAYER & DYNAMIC ZOOM CAMERA", 10, 10,
            20, YELLOW);
-  DrawText("P1 (Goku): A/D Move | J: Punch | K: Jump | L: Dash | U: Fireball", 10, 35, 20,
+  DrawText("P1 (Goku): A/D Move | J: Punch | W: Jump | K: Dash | L: Fireball", 10, 35, 20,
            WHITE);
-  DrawText("P2 (Luffy): LEFT/RIGHT Move | ,: Punch | .: Jump | /: Dash | M: Fireball", 10, 60,
+  DrawText("P2 (Luffy): LEFT/RIGHT Move | ,: Punch | UP: Jump | /: Dash | M: Fireball", 10, 60,
            20, WHITE);
   Vector2 camTarget = mapCamera.GetTarget();
   DrawText(("Camera Target: (" + std::to_string((int)camTarget.x) + ", " +

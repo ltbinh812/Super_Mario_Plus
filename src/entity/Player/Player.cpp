@@ -47,7 +47,7 @@ void Player::render(float alpha) {
     source.width = -source.width;
   }
 
-  float scale = 0.9f;
+  float scale = worldStats.animation->getScale();
   float absW = (source.width < 0 ? -source.width : source.width) * scale;
   float absH = source.height * scale;
 
@@ -291,14 +291,20 @@ Hitbox Player::getActiveHitbox() {
   return {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
 }
 
-void Player::takeDamage(int damage) {
+void Player::takeDamage(int damage, float knockbackDirX) {
   if (currentState == &dieState || currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
     return;
   runtimeStats.health -= damage;
   runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
   
-  // Apply a small knockback upwards to break free from continuous ground hazards
+  // Apply a small knockback upwards and horizontally
   runtimeStats.velocity.y = -200.0f;
+  if (knockbackDirX != 0.0f) {
+      runtimeStats.velocity.x = 250.0f * knockbackDirX;
+  } else {
+      // Default to pushing backwards if no direction provided
+      runtimeStats.velocity.x = worldStats.isFacingRight ? -250.0f : 250.0f;
+  }
 
   if (runtimeStats.health <= 0) {
     changeState(dieState);
@@ -369,6 +375,19 @@ void Player::spawnFireball() {
 
   SpawnCommand cmd;
   cmd.type = EntityType::Fireball;
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnSpecialBall() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::SpecialBall;
   cmd.position = worldStats.position;
   cmd.isFacingRight = worldStats.isFacingRight;
   cmd.ownerName = baseStats.name;

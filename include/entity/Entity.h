@@ -34,7 +34,7 @@ public:
   // Combat interface — subclasses override as needed
   virtual bool hasActiveHitbox() const { return false; }
   virtual Hitbox getActiveHitbox() { return { {0,0,0,0}, 0, 0, nullptr }; }
-  virtual void takeDamage(int damage) {}
+  virtual void takeDamage(int damage, float knockbackDirX = 0.0f) {}
 
   // Polymorphic Hook Methods (Extension Points for subclasses)
   virtual void onHitWall(bool isRightWall) {}

@@ -15,4 +15,5 @@ struct FireballConfig {
     std::string textureName = "";   // empty = draw circle fallback
     int   frameNum       = 1;
     float frameTime      = 0.1f;
+    float scale          = 1.0f;
 };

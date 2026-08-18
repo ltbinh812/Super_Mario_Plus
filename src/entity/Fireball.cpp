@@ -41,7 +41,7 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
         auto& assetMgr = AssetManager::getInstance();
         const Texture2D& tex = assetMgr.getTexture(config.textureName);
         if (tex.id != 0) {
-            animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime);
+            animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime, config.scale);
         }
     }
 
@@ -81,8 +81,9 @@ void Fireball::render(float alpha) {
             source.width = -source.width;
         }
 
-        float absW = (source.width < 0 ? -source.width : source.width);
-        float absH = source.height;
+        float scale = animation->getScale();
+        float absW = (source.width < 0 ? -source.width : source.width) * scale;
+        float absH = source.height * scale;
 
         // Center on position, bottom-aligned
         Rectangle dest = {
@@ -123,7 +124,7 @@ Hitbox Fireball::getActiveHitbox() {
     return { rect, attackPower, 0, this, spawner };
 }
 
-void Fireball::takeDamage(int damage) {
+void Fireball::takeDamage(int damage, float knockbackDirX) {
     // Fireball is destroyed when it takes any damage (e.g. fireball-vs-fireball cancel)
     isActive = false;
 }

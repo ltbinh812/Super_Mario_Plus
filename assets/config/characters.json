@@ -8,11 +8,11 @@
         "jumpVelocity": -600.0,
         "gravityScale": 160.0,
         "physicsBox": {
-            "w": 24,
-            "h": 56
+            "w": 32,
+            "h": 48
         },
         "crouchBox": {
-            "w": 24,
+            "w": 32,
             "h": 32
         },
         "animations": {
@@ -29,12 +29,12 @@
             "jump": {
                 "texture": "jump",
                 "frameNum": 3,
-                "frameTime": 0.25
+                "frameTime": 0.2
             },
             "fall": {
                 "texture": "fall",
                 "frameNum": 3,
-                "frameTime": 0.25
+                "frameTime": 0.2
             },
             "crouch": {
                 "texture": "crouch",
@@ -108,7 +108,7 @@
             "lifetime": 1.0,
             "damage": 15,
             "hitboxW": 32.0,
-            "hitboxH": 32.0,
+            "hitboxH": 48.0,
             "curveAmplitude": 0.0,
             "curveFrequency": 0.0,
             "offsetX": 100.0,
@@ -122,11 +122,12 @@
             "damage": 25,
             "hitboxW": 100.0,
             "hitboxH": 100.0,
-            "offsetX": 200.0,
+            "offsetX": 100.0,
             "offsetY": 0.0,
-            "textureName": "vfx_2",
-            "frameNum": 14,
-            "frameTime": 0.05
+            "textureName": "vfx_3",
+            "frameNum": 9,
+            "frameTime": 0.05,
+            "scale": 0.5
         },
         "skills": {
             "Dash": {
@@ -137,7 +138,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 2.5
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -152,48 +154,48 @@
                 "recoveryDuration": 0.1
             },
             "Attack1": {
-                "hitboxStartFrame": 0,
+                "hitboxStartFrame": 2,
                 "hitboxEndFrame": 5,
                 "attack": 10,
                 "box": {
-                    "w": 64,
+                    "w": 48,
                     "h": 64,
-                    "offsetX": 10,
-                    "offsetY": 10
+                    "offsetX": 0,
+                    "offsetY": 0
                 },
                 "recoveryDuration": 0.1
             },
             "Attack2": {
-                "hitboxStartFrame": 0,
+                "hitboxStartFrame": 2,
                 "hitboxEndFrame": 5,
                 "attack": 10,
                 "box": {
-                    "w": 64,
-                    "h": 64,
+                    "w": 56,
+                    "h": 32,
                     "offsetX": 10,
-                    "offsetY": 10
+                    "offsetY": 0
                 },
                 "recoveryDuration": 0.1
             },
             "Attack3": {
-                "hitboxStartFrame": 0,
+                "hitboxStartFrame": 1,
                 "hitboxEndFrame": 5,
                 "attack": 10,
                 "box": {
-                    "w": 64,
-                    "h": 64,
-                    "offsetX": 10,
+                    "w": 80,
+                    "h": 32,
+                    "offsetX": 0,
                     "offsetY": 10
                 },
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
-                "hitboxEndFrame": 5,
+                "hitboxStartFrame": 4,
+                "hitboxEndFrame": 9,
                 "attack": 10,
                 "box": {
-                    "w": 64,
-                    "h": 64,
+                    "w": 48,
+                    "h": 32,
                     "offsetX": 10,
                     "offsetY": 10
                 },
@@ -204,8 +206,8 @@
                 "hitboxEndFrame": 5,
                 "attack": 10,
                 "box": {
-                    "w": 64,
-                    "h": 64,
+                    "w": 32,
+                    "h": 48,
                     "offsetX": 10,
                     "offsetY": 10
                 },
@@ -217,15 +219,15 @@
                 "attack": 10,
                 "box": {
                     "w": 64,
-                    "h": 64,
+                    "h": 32,
                     "offsetX": 10,
                     "offsetY": 10
                 },
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
-                "hitboxEndFrame": 11,
+                "hitboxStartFrame": 4,
+                "hitboxEndFrame": 10,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -273,22 +275,22 @@
             },
             "run": {
                 "texture": "run",
-                "frameNum": 4,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "jump": {
                 "texture": "jump",
-                "frameNum": 3,
+                "frameNum": 5,
                 "frameTime": 0.25
             },
             "fall": {
                 "texture": "fall",
-                "frameNum": 3,
+                "frameNum": 5,
                 "frameTime": 0.3
             },
             "crouch": {
                 "texture": "crouch",
-                "frameNum": 1,
+                "frameNum": 2,
                 "frameTime": 0.25
             },
             "hurt": {
@@ -298,7 +300,7 @@
             },
             "die": {
                 "texture": "die",
-                "frameNum": 5,
+                "frameNum": 6,
                 "frameTime": 0.25
             },
             "dash": {
@@ -308,27 +310,27 @@
             },
             "attack_1": {
                 "texture": "attack_1",
-                "frameNum": 5,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "attack_2": {
                 "texture": "attack_2",
-                "frameNum": 5,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "attack_3": {
                 "texture": "attack_3",
-                "frameNum": 5,
+                "frameNum": 3,
                 "frameTime": 0.1
             },
             "attack_4": {
                 "texture": "attack_4",
-                "frameNum": 5,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "jump_attack": {
                 "texture": "jump_attack",
-                "frameNum": 5,
+                "frameNum": 2,
                 "frameTime": 0.1
             },
             "low_attack": {
@@ -343,12 +345,12 @@
             },
             "long_attack": {
                 "texture": "long_attack",
-                "frameNum": 11,
+                "frameNum": 10,
                 "frameTime": 0.1
             },
             "special_attack": {
                 "texture": "special_attack",
-                "frameNum": 5,
+                "frameNum": 3,
                 "frameTime": 0.1
             }
         },
@@ -364,7 +366,7 @@
             "offsetX": 100.0,
             "offsetY": -10.0,
             "textureName": "vfx_1",
-            "frameNum": 3,
+            "frameNum": 16,
             "frameTime": 0.1
         },
         "explosion": {
@@ -387,7 +389,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 5.0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -438,8 +441,8 @@
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
-                "hitboxEndFrame": 5,
+                "hitboxStartFrame": 2,
+                "hitboxEndFrame": 4,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -474,8 +477,8 @@
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
-                "hitboxEndFrame": 11,
+                "hitboxStartFrame": 6,
+                "hitboxEndFrame": 10,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -523,7 +526,7 @@
             },
             "run": {
                 "texture": "run",
-                "frameNum": 4,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "jump": {
@@ -538,7 +541,7 @@
             },
             "hurt": {
                 "texture": "hurt",
-                "frameNum": 3,
+                "frameNum": 2,
                 "frameTime": 0.15
             },
             "die": {
@@ -563,22 +566,22 @@
             },
             "attack_3": {
                 "texture": "attack_3",
-                "frameNum": 5,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "attack_4": {
                 "texture": "attack_4",
-                "frameNum": 5,
+                "frameNum": 10,
                 "frameTime": 0.1
             },
             "jump_attack": {
                 "texture": "jump_attack",
-                "frameNum": 5,
+                "frameNum": 19,
                 "frameTime": 0.1
             },
             "low_attack": {
                 "texture": "low_attack",
-                "frameNum": 5,
+                "frameNum": 22,
                 "frameTime": 0.1
             },
             "block": {
@@ -588,12 +591,17 @@
             },
             "long_attack": {
                 "texture": "long_attack",
-                "frameNum": 11,
+                "frameNum": 28,
                 "frameTime": 0.1
             },
             "special_attack": {
                 "texture": "special_attack",
-                "frameNum": 5,
+                "frameNum": 25,
+                "frameTime": 0.1
+            },
+            "crouch": {
+                "texture": "crouch",
+                "frameNum": 2,
                 "frameTime": 0.1
             }
         },
@@ -609,7 +617,7 @@
             "offsetX": 100.0,
             "offsetY": -10.0,
             "textureName": "vfx_1",
-            "frameNum": 3,
+            "frameNum": 6,
             "frameTime": 0.1
         },
         "explosion": {
@@ -632,7 +640,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 5.0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -683,8 +692,8 @@
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
-                "hitboxEndFrame": 5,
+                "hitboxStartFrame": 6,
+                "hitboxEndFrame": 10,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -719,8 +728,8 @@
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
-                "hitboxEndFrame": 11,
+                "hitboxStartFrame": 16,
+                "hitboxEndFrame": 28,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -763,12 +772,12 @@
         "animations": {
             "idle": {
                 "texture": "idle",
-                "frameNum": 4,
+                "frameNum": 2,
                 "frameTime": 0.25
             },
             "run": {
                 "texture": "run",
-                "frameNum": 4,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "jump": {
@@ -778,42 +787,42 @@
             },
             "fall": {
                 "texture": "fall",
-                "frameNum": 3,
+                "frameNum": 2,
                 "frameTime": 0.3
             },
             "crouch": {
                 "texture": "crouch",
-                "frameNum": 1,
+                "frameNum": 4,
                 "frameTime": 0.25
             },
             "hurt": {
                 "texture": "hurt",
-                "frameNum": 3,
+                "frameNum": 2,
                 "frameTime": 0.15
             },
             "die": {
                 "texture": "die",
-                "frameNum": 5,
+                "frameNum": 6,
                 "frameTime": 0.25
             },
             "dash": {
                 "texture": "dash",
-                "frameNum": 2,
+                "frameNum": 1,
                 "frameTime": 0.1
             },
             "attack_1": {
                 "texture": "attack_1",
-                "frameNum": 5,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "attack_2": {
                 "texture": "attack_2",
-                "frameNum": 5,
+                "frameNum": 3,
                 "frameTime": 0.1
             },
             "attack_3": {
                 "texture": "attack_3",
-                "frameNum": 5,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "attack_4": {
@@ -838,12 +847,12 @@
             },
             "long_attack": {
                 "texture": "long_attack",
-                "frameNum": 11,
+                "frameNum": 4,
                 "frameTime": 0.1
             },
             "special_attack": {
                 "texture": "special_attack",
-                "frameNum": 5,
+                "frameNum": 6,
                 "frameTime": 0.1
             }
         },
@@ -882,7 +891,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 5.0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -933,7 +943,7 @@
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
+                "hitboxStartFrame": 3,
                 "hitboxEndFrame": 5,
                 "attack": 10,
                 "box": {
@@ -969,8 +979,8 @@
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
-                "hitboxEndFrame": 11,
+                "hitboxStartFrame": 2,
+                "hitboxEndFrame": 4,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -1018,12 +1028,12 @@
             },
             "run": {
                 "texture": "run",
-                "frameNum": 4,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "jump": {
                 "texture": "jump",
-                "frameNum": 3,
+                "frameNum": 4,
                 "frameTime": 0.25
             },
             "fall": {
@@ -1033,7 +1043,7 @@
             },
             "crouch": {
                 "texture": "crouch",
-                "frameNum": 1,
+                "frameNum": 2,
                 "frameTime": 0.25
             },
             "hurt": {
@@ -1043,7 +1053,7 @@
             },
             "die": {
                 "texture": "die",
-                "frameNum": 5,
+                "frameNum": 10,
                 "frameTime": 0.25
             },
             "dash": {
@@ -1053,47 +1063,67 @@
             },
             "attack_1": {
                 "texture": "attack_1",
-                "frameNum": 5,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "attack_2": {
                 "texture": "attack_2",
-                "frameNum": 5,
+                "frameNum": 6,
                 "frameTime": 0.1
             },
             "attack_3": {
                 "texture": "attack_3",
-                "frameNum": 5,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "attack_4": {
                 "texture": "attack_4",
-                "frameNum": 5,
+                "frameNum": 9,
                 "frameTime": 0.1
             },
             "jump_attack": {
                 "texture": "jump_attack",
-                "frameNum": 5,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "low_attack": {
                 "texture": "low_attack",
-                "frameNum": 5,
+                "frameNum": 2,
                 "frameTime": 0.1
             },
             "block": {
                 "texture": "block",
-                "frameNum": 1,
+                "frameNum": 2,
                 "frameTime": 1
             },
             "long_attack": {
                 "texture": "long_attack",
-                "frameNum": 11,
+                "frameNum": 18,
                 "frameTime": 0.1
             },
             "special_attack": {
                 "texture": "special_attack",
-                "frameNum": 5,
+                "frameNum": 10,
+                "frameTime": 0.1
+            },
+            "attack_5": {
+                "texture": "attack_5",
+                "frameNum": 10,
+                "frameTime": 0.1
+            },
+            "attack_6": {
+                "texture": "attack_6",
+                "frameNum": 6,
+                "frameTime": 0.1
+            },
+            "attack_7": {
+                "texture": "attack_7",
+                "frameNum": 3,
+                "frameTime": 0.1
+            },
+            "attack_8": {
+                "texture": "attack_8",
+                "frameNum": 10,
                 "frameTime": 0.1
             }
         },
@@ -1109,7 +1139,7 @@
             "offsetX": 100.0,
             "offsetY": -10.0,
             "textureName": "vfx_1",
-            "frameNum": 3,
+            "frameNum": 15,
             "frameTime": 0.1
         },
         "explosion": {
@@ -1132,7 +1162,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 5.0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -1183,8 +1214,8 @@
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
-                "hitboxEndFrame": 5,
+                "hitboxStartFrame": 4,
+                "hitboxEndFrame": 8,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -1219,8 +1250,8 @@
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
-                "hitboxEndFrame": 11,
+                "hitboxStartFrame": 9,
+                "hitboxEndFrame": 16,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -1268,7 +1299,7 @@
             },
             "run": {
                 "texture": "run",
-                "frameNum": 4,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "jump": {
@@ -1293,32 +1324,32 @@
             },
             "die": {
                 "texture": "die",
-                "frameNum": 5,
+                "frameNum": 8,
                 "frameTime": 0.25
             },
             "dash": {
                 "texture": "dash",
-                "frameNum": 2,
+                "frameNum": 1,
                 "frameTime": 0.1
             },
             "attack_1": {
                 "texture": "attack_1",
-                "frameNum": 5,
+                "frameNum": 12,
                 "frameTime": 0.1
             },
             "attack_2": {
                 "texture": "attack_2",
-                "frameNum": 5,
+                "frameNum": 7,
                 "frameTime": 0.1
             },
             "attack_3": {
                 "texture": "attack_3",
-                "frameNum": 5,
+                "frameNum": 6,
                 "frameTime": 0.1
             },
             "attack_4": {
                 "texture": "attack_4",
-                "frameNum": 5,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "jump_attack": {
@@ -1328,12 +1359,12 @@
             },
             "low_attack": {
                 "texture": "low_attack",
-                "frameNum": 5,
+                "frameNum": 8,
                 "frameTime": 0.1
             },
             "block": {
                 "texture": "block",
-                "frameNum": 1,
+                "frameNum": 2,
                 "frameTime": 1
             },
             "long_attack": {
@@ -1359,7 +1390,7 @@
             "offsetX": 100.0,
             "offsetY": -10.0,
             "textureName": "vfx_1",
-            "frameNum": 3,
+            "frameNum": 4,
             "frameTime": 0.1
         },
         "explosion": {
@@ -1369,8 +1400,8 @@
             "hitboxH": 100.0,
             "offsetX": 50.0,
             "offsetY": 0.0,
-            "textureName": "",
-            "frameNum": 1,
+            "textureName": "vfx_2",
+            "frameNum": 13,
             "frameTime": 0.1
         },
         "skills": {
@@ -1382,7 +1413,8 @@
                     "w": 64,
                     "h": 64
                 },
-                "recoveryDuration": 0.1
+                "recoveryDuration": 0.1,
+                "moveControl": 5.0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -1433,8 +1465,8 @@
                 "recoveryDuration": 0.1
             },
             "Attack4": {
-                "hitboxStartFrame": 0,
-                "hitboxEndFrame": 5,
+                "hitboxStartFrame": 4,
+                "hitboxEndFrame": 8,
                 "attack": 10,
                 "box": {
                     "w": 64,
@@ -1469,7 +1501,7 @@
                 "recoveryDuration": 0.1
             },
             "LongAttack": {
-                "hitboxStartFrame": 5,
+                "hitboxStartFrame": 6,
                 "hitboxEndFrame": 11,
                 "attack": 10,
                 "box": {

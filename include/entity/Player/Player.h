@@ -56,6 +56,7 @@ public:
   void increaseMana(float cost);
   void spawnFireball();
   void spawnExplosion();
+  void spawnSpecialBall();
 
   // --- Swim & Climb helpers (avoids raw getRuntimeStatsMutable() in States) ---
   void swim(float dirX);   // Move horizontally at water speed
@@ -66,7 +67,7 @@ public:
   // --- Combat (read-only queries for CombatSystem) ---
   bool hasActiveHitbox() const override;
   Hitbox getActiveHitbox() override;   // Non-const: avoids const_cast
-  void takeDamage(int damage) override;
+  void takeDamage(int damage, float knockbackDirX = 0.0f) override;
 
   // --- Polymorphic Hook overrides from Entity ---
   void onLand(float floorY) override;

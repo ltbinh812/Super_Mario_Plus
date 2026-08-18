@@ -53,7 +53,18 @@ void CombatSystem::update(float dt) {
 
         int finalDamage = std::max(0, attackBox->damage - targetDefense);
         if (finalDamage > 0) {
-            target->takeDamage(finalDamage);
+            float dirX = 0.0f;
+            if (attackBox->owner) {
+                // Determine direction based on positions
+                float attackerX = attackBox->owner->getWorldStats().position.x;
+                float targetX = target->getWorldStats().position.x;
+                dirX = (targetX > attackerX) ? 1.0f : -1.0f;
+            } else if (attackBox->ignoreEntity) {
+                float spawnerX = attackBox->ignoreEntity->getWorldStats().position.x;
+                float targetX = target->getWorldStats().position.x;
+                dirX = (targetX > spawnerX) ? 1.0f : -1.0f;
+            }
+            target->takeDamage(finalDamage, dirX);
         }
     }
 }

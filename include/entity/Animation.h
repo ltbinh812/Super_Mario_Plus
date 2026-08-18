@@ -9,12 +9,13 @@ private:
     float frameTime;
     float timer;
     bool loop_;
+    float scale_;
 
     int frameWidth;
     int frameHeight;
 
 public:
-    Animation(const Texture2D& tex, int frameNum, float frameTime);
+    Animation(const Texture2D& tex, int frameNum, float frameTime, float scale = 1.0f);
     void update(float dt);
     Rectangle getCurrentFrame() const;
     const Texture2D& getTexture() const;
@@ -22,6 +23,8 @@ public:
     float getFrameTime() const { return frameTime; }
     void setLoop(bool loop) { loop_ = loop; }
     bool isLooping() const { return loop_; }
+    float getScale() const { return scale_; }
+    void setScale(float scale) { scale_ = scale; }
 
     void resetAnimation();
 };
