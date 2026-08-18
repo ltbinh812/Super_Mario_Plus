@@ -31,6 +31,7 @@ public:
     virtual void execute(Player& player) = 0;
 
     float getManaCost() const { return manaCost; }
+    void setManaCost(float mn) { manaCost = mn; }
     float getDuration() const { return duration; }
     const std::string& getAnimationName() const { return animationName; }
     const std::string& getNextComboSkillName() const { return nextComboSkillName; }

@@ -122,6 +122,8 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     auto& skillJson = charData["skills"][skillName];
     int atk = skillJson.value("attack", 0);
     int def = skillJson.value("defense", 0);
+    float manaCost = skillJson.value("manaCost", skill->getManaCost()); // fallback to default cost if not in JSON
+    skill->setManaCost(manaCost);
     Rectangle box = {
         skillJson["box"].value("offsetX", 0.0f),
         skillJson["box"].value("offsetY", 0.0f),

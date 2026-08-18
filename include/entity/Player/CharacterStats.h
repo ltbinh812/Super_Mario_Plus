@@ -2,7 +2,9 @@
 #include "Animation.h"
 #include <string>
 #include <cstdint>
+#include <vector>
 #include "raylib.h"
+#include "FloatingText.h"
 
 struct CharacterBaseStats {
     std::string name = "Default";
@@ -23,6 +25,7 @@ struct CharacterBaseStats {
 struct CharacterRuntimeStats {
     int health = 100;
     int mana   = 0;
+    float manaAccumulator = 0.0f;
 
     Vector2 physicsBox = {0.0f, 0.0f};
     Vector2 velocity = {0.0f, 0.0f}; 
@@ -42,5 +45,7 @@ struct CharacterWorldStats {
 
     Vector2 previousPos = {0.0f, 0.0f};
     Vector2 position = {0.0f, 0.0f};
+
+    std::vector<FloatingText> floatingTexts;
 };
 

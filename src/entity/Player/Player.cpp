@@ -28,6 +28,7 @@ void Player::update(float dt) {
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
+  updateFloatingTexts(dt);
 }
 
 void Player::render(float alpha) {
@@ -55,11 +56,15 @@ void Player::render(float alpha) {
   Rectangle dest = {worldStats.position.x - (absW / 2.0f),
                     worldStats.position.y - absH, absW, absH};
 
+  Color tint = (runtimeStats.iframeTimer > 0.0f) ? RED : WHITE;
+
   DrawTexturePro(worldStats.animation->getTexture(), source, dest, {0, 0},
-                 0.0f, WHITE);
+                 0.0f, tint);
 
   // Debug hitbox
   DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+  
+  renderFloatingTexts();
 }
 
 void Player::changeState(PlayerState &state) {
@@ -86,8 +91,10 @@ void Player::useSkill(const std::string &skillname) {
   auto it = skillList.find(skillname);
   if (it != skillList.end() && it->second) {
     ISkill *skill = it->second.get();
-    if (runtimeStats.mana < skill->getManaCost())
+    if (runtimeStats.mana < skill->getManaCost()) {
+      addFloatingText("Not enough mana", BLUE, {0, 0}, 0.3);
       return;
+    }
     
     // Prevent interrupting a skill with another skill (or the same one)
     if (currentState == &skillState) {
@@ -236,9 +243,14 @@ void Player::reduceMana(float cost) {
 }
 
 void Player::increaseMana(float cost) {
-  runtimeStats.mana += static_cast<int>(cost);
-  if (runtimeStats.mana > baseStats.maxMana)
-    runtimeStats.mana = baseStats.maxMana;
+  runtimeStats.manaAccumulator += cost;
+  if (runtimeStats.manaAccumulator >= 1.0f) {
+    int manaToAdd = static_cast<int>(runtimeStats.manaAccumulator);
+    runtimeStats.mana += manaToAdd;
+    runtimeStats.manaAccumulator -= manaToAdd;
+    if (runtimeStats.mana > baseStats.maxMana)
+      runtimeStats.mana = baseStats.maxMana;
+  }
 }
 
 // --- Swim & Climb helpers ---
@@ -296,6 +308,8 @@ void Player::takeDamage(int damage, float knockbackDirX) {
     return;
   runtimeStats.health -= damage;
   runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
+  
+  addFloatingText(std::to_string(damage), GREEN, {0, 0}, 0.5f);
   
   // Apply a small knockback upwards and horizontally
   runtimeStats.velocity.y = -200.0f;

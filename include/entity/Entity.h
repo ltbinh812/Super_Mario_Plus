@@ -22,6 +22,8 @@ public:
   virtual void update(float dt) = 0;
   virtual void render(float alpha) = 0;
 
+  void addFloatingText(const std::string& text, Color color, Vector2 offset = {0, -20}, float lifetime = 1.0f);
+
   virtual bool getIsActive() const { return true; }
   virtual void deactivate() {}
 
@@ -48,6 +50,11 @@ public:
 
   virtual void dropThrough();
 
+protected:
+  void updateFloatingTexts(float dt);
+  void renderFloatingTexts();
+
+public:
   // Accessors — const versions for read-only
   const CharacterBaseStats &getBaseStats() const { return baseStats; }
   const CharacterRuntimeStats &getRuntimeStats() const { return runtimeStats; }

@@ -32,6 +32,8 @@ World02State::World02State(std::string selectedChar)
                              InputType::PRESSED);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
                              InputType::PRESSED);
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("SpecialAttack"),
+                             InputType::PRESSED);
     }
 
 
