@@ -8,18 +8,7 @@
 CombatSystem::CombatSystem()
     : detector(std::make_unique<BruteForceDetector>()) {}
 
-void CombatSystem::registerEntity(Entity* e) {
-    entities.push_back(e);
-}
-
-void CombatSystem::removeInactive() {
-    entities.erase(
-        std::remove_if(entities.begin(), entities.end(),
-            [](Entity* e) { return !e->getIsActive(); }),
-        entities.end());
-}
-
-void CombatSystem::update(float dt) {
+void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
     // 1. Collect active hitboxes from all entities
     std::vector<Hitbox> activeHitboxes;
     for (auto* entity : entities) {
@@ -69,7 +58,7 @@ void CombatSystem::update(float dt) {
     }
 }
 
-void CombatSystem::renderDebug() const {
+void CombatSystem::renderDebug(const std::vector<Entity*>& entities) const {
     for (auto* entity : entities) {
         if (!entity->getIsActive()) continue;
         if (entity->hasActiveHitbox()) {

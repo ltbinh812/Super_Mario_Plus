@@ -60,10 +60,7 @@ World02State::World02State(std::string selectedChar)
                              InputType::PRESSED);
     }
 
-    // Register players with CombatSystem (one-way: CombatSystem observes entities)
-    if (player1) combatSystem.registerEntity(player1.get());
-    if (player2) combatSystem.registerEntity(player2.get());
-
+    // Register players with CombatSystem (removed for stateless design)
   } else {
     std::cerr << "[World02State] Loi khi tai ban do map02!\n";
   }
@@ -210,17 +207,23 @@ void World02State::Update(float dt) {
       auto entity = EntityFactory::create(cmd);
       if (entity) {
           entity->setCommandQueue(&spawnQueue);
-          combatSystem.registerEntity(entity.get());
           activeEntities.push_back(std::move(entity));
       }
   }
 
   activeEntities.erase(std::remove_if(activeEntities.begin(), activeEntities.end(), 
       [](const std::unique_ptr<Entity>& e) { return !e->getIsActive(); }), activeEntities.end());
-  combatSystem.removeInactive();
+
+  // Build frame entities list for stateless CombatSystem
+  std::vector<Entity*> frameEntities;
+  if (player1 && player1->getIsActive()) frameEntities.push_back(player1.get());
+  if (player2 && player2->getIsActive()) frameEntities.push_back(player2.get());
+  for (const auto& e : activeEntities) {
+      if (e->getIsActive()) frameEntities.push_back(e.get());
+  }
 
   // Combat: polls entities for active hitboxes, detects collisions, applies damage
-  combatSystem.update(dt);
+  combatSystem.update(frameEntities, dt);
 }
 
 void World02State::Render(float alpha) const {
@@ -237,7 +240,13 @@ void World02State::Render(float alpha) const {
   for (const auto& entity : activeEntities) {
       entity->render(alpha);
   }
-  combatSystem.renderDebug();  // Debug: green = attack hitbox, blue = defense hitbox
+  
+  std::vector<Entity*> debugEntities;
+  if (player1) debugEntities.push_back(player1.get());
+  if (player2) debugEntities.push_back(player2.get());
+  for (const auto& e : activeEntities) debugEntities.push_back(e.get());
+  
+  combatSystem.renderDebug(debugEntities);  // Debug: green = attack hitbox, blue = defense hitbox
   mapCamera.EndMode();
 
   // Debug UI overlays
@@ -293,7 +302,6 @@ void World02State::TransitionToLevel(const std::string &nextLevel,
   if (map.LoadLDtkMap("assets/maps/map02/world02.ldtk", nextLevel)) {
     currentLevel = nextLevel;
     activeEntities.clear();
-    combatSystem.clear();
 
     float mapW = (float)map.GetWidth();
     float mapH = (float)map.GetHeight();
