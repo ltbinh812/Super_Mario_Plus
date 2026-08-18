@@ -1,0 +1,84 @@
+{"frames": {
+
+"item_gold_magnet_fix01 (Custom).png":
+{
+	"frame": {"x":1003,"y":1,"w":200,"h":199},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":199},
+	"sourceSize": {"w":200,"h":199}
+},
+"item_invisibility_fix01 (Custom).png":
+{
+	"frame": {"x":1,"y":1,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200}
+},
+"item_jump_fix01 (Custom).png":
+{
+	"frame": {"x":203,"y":1,"w":199,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":199,"h":200},
+	"sourceSize": {"w":199,"h":200}
+},
+"item_poison_fix01 (Custom).png":
+{
+	"frame": {"x":1407,"y":1,"w":200,"h":198},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":198},
+	"sourceSize": {"w":200,"h":198}
+},
+"item_random_fix01 (Custom).png":
+{
+	"frame": {"x":404,"y":1,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":198,"h":200},
+	"sourceSize": {"w":198,"h":200}
+},
+"item_shield_fix01 (Custom).png":
+{
+	"frame": {"x":804,"y":1,"w":197,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":197,"h":200},
+	"sourceSize": {"w":197,"h":200}
+},
+"item_speed_fix01 (Custom).png":
+{
+	"frame": {"x":1609,"y":1,"w":200,"h":197},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":197},
+	"sourceSize": {"w":200,"h":197}
+},
+"item_strength_fix01 (Custom).png":
+{
+	"frame": {"x":1205,"y":1,"w":200,"h":199},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":199},
+	"sourceSize": {"w":200,"h":199}
+},
+"item_time_stop_fix01 (Custom).png":
+{
+	"frame": {"x":604,"y":1,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":198,"h":200},
+	"sourceSize": {"w":198,"h":200}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "buff.png",
+	"format": "RGBA8888",
+	"size": {"w":1810,"h":202},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e8d18ea50ccfc4d46755b08e2f0a35a5:d3605eec0758366551b615d022456d10:84a920f1122e4ed0c165a302aa94e4a4$"
+}
+}

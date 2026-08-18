@@ -9,6 +9,13 @@ class PlayerHurtState : public PlayerState {
     void onEnter() override;
     void onExit() override;
     void update(float dt) override;
+    
+    void onMoveLeft() override;
+    void onMoveRight() override;
+    void onStopLeft() override;
+    void onStopRight() override;
+    void onJump() override;
+    void onClimb() override;
     bool canExit() const override { return false; }
 
     private:

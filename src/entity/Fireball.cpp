@@ -123,7 +123,7 @@ Hitbox Fireball::getActiveHitbox() {
     return { rect, attackPower, 0, this, spawner };
 }
 
-void Fireball::takeDamage(int damage) {
+void Fireball::takeDamage(int damage, bool forceInterrupt) {
     // Fireball is destroyed when it takes any damage (e.g. fireball-vs-fireball cancel)
     isActive = false;
 }

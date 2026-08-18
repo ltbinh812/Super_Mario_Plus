@@ -38,7 +38,11 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.frameTime      = fb.value("frameTime", 0.1f);
             }
 
-            return std::make_unique<Fireball>(cmd.position, cmd.isFacingRight, cfg, cmd.spawner);
+            std::unique_ptr<Entity> entity = std::make_unique<Fireball>(cmd.position, cmd.isFacingRight, cfg, cmd.spawner);
+            if (entity) {
+                entity->setIid(cmd.iid);
+            }
+            return entity;
         }
 
         // Future:

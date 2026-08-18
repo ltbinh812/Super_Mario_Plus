@@ -55,6 +55,7 @@ SuperMarioPlus/
 │   └── ui/
 │       ├── CharacterSelectionOverlay.h
 │       ├── HUD.h
+│       ├── PlayerHUD.h
 │       ├── OverlayUI.h
 │       ├── SettingsOverlay.h
 │       └── UIComponent.h
@@ -90,6 +91,7 @@ SuperMarioPlus/
 │   └── ui/
 │       ├── CharacterSelectionOverlay.cpp
 │       ├── HUD.cpp
+│       ├── PlayerHUD.cpp
 │       ├── SettingsOverlay.cpp
 │       └── UIComponent.cpp
 ├── third_party/

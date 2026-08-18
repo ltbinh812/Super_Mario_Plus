@@ -3,12 +3,14 @@
 #include <string>
 #include <cstdint>
 #include "raylib.h"
+#include "TileMap.h"
 
 struct CharacterBaseStats {
     std::string name = "Default";
 
     int maxHealth = 100;
     int maxMana = 100;
+    int maxBreath = 100;
 
     float moveVelocity = 100.0f;
     float jumpVelocity = 100.0f;
@@ -23,6 +25,7 @@ struct CharacterBaseStats {
 struct CharacterRuntimeStats {
     int health = 100;
     int mana   = 0;
+    int breath = 100;
 
     Vector2 physicsBox = {0.0f, 0.0f};
     Vector2 velocity = {0.0f, 0.0f}; 
@@ -33,6 +36,17 @@ struct CharacterRuntimeStats {
     float ignoreOneWayTimer = 0.0f;
     float ignoreLadderTimer = 0.0f;
     float iframeTimer = 0.0f;
+
+    CollisionType currentLiquid = CollisionType::None;
+    bool isPartiallyOutsideLiquid = true;
+
+    // Inventory slots
+    std::string storedItemSlot = ""; // Can hold "Boom", "Speed", "Shield", etc.
+};
+
+struct PartyInventory {
+    int coins = 0;
+    int keys = 0;
 };
 
 
@@ -42,5 +56,6 @@ struct CharacterWorldStats {
 
     Vector2 previousPos = {0.0f, 0.0f};
     Vector2 position = {0.0f, 0.0f};
+    Vector2 startPosition = {0.0f, 0.0f};
 };
 

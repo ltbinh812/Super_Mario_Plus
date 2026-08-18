@@ -17,3 +17,34 @@ void PlayerHurtState::update(float dt) {
         changePlayerState(player.idleState);
     }
 }
+
+void PlayerHurtState::onMoveLeft() {
+    player.moveLeft();
+}
+
+void PlayerHurtState::onMoveRight() {
+    player.moveRight();
+}
+
+void PlayerHurtState::onStopLeft() {
+    player.stopLeftRun();
+}
+
+void PlayerHurtState::onStopRight() {
+    player.stopRightRun();
+}
+
+void PlayerHurtState::onJump() {
+    auto liquid = player.getRuntimeStats().currentLiquid;
+    if (player.getRuntimeStats().isGrounded || 
+        liquid == CollisionType::Poison || liquid == CollisionType::Lava) {
+        player.jump();
+    }
+}
+
+void PlayerHurtState::onClimb() {
+    auto liquid = player.getRuntimeStats().currentLiquid;
+    if (liquid == CollisionType::Poison || liquid == CollisionType::Lava || liquid == CollisionType::Water) {
+        player.swimY(-1.0f);
+    }
+}

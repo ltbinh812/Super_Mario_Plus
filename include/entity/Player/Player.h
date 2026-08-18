@@ -2,7 +2,9 @@
 #include "CharacterStats.h"
 #include "Entity.h"
 #include "Hitbox.h"
-#include <PlayerStates.h>
+#include "BuffManager.h"
+#include "PlayerStates.h"
+#include "ISkill.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -21,8 +23,16 @@ public:
   void update(float dt) override;
   void render(float alpha) override;
 
+  void setPartyInventory(std::shared_ptr<PartyInventory> inv) { partyInventory_ = inv; }
+  std::shared_ptr<PartyInventory> getPartyInventory() const { return partyInventory_; }
+  BuffManager& getBuffManager() { return buffManager_; }
+  const BuffManager& getBuffManager() const { return buffManager_; }
+  CommandQueue* getCommandQueue() const { return commandQueue; }
+
   // State transition request (respects canExit guard)
   void requestState(PlayerState &state);
+  // Force a state transition (ignores canExit guard, e.g. for respawning)
+  void forceState(PlayerState &state);
 
   // Skill system
   void useSkill(const std::string &skillname);
@@ -39,6 +49,10 @@ public:
   void onCrouch();
   void onStopCrouch();
   void onAttack();
+  void dropThrough();
+  void interactWithOverlapping(); // Swap/pickup when overlapping item; throw when not
+  void useStoredItem();           // Use or throw stored item via Strategy Pattern
+  void setOverlappingItem(class BaseItem* item) { overlappingItem_ = item; }
   void onClimb();
 
   // --- Movement helpers (called by States — Tell, Don't Ask) ---
@@ -57,6 +71,7 @@ public:
 
   // --- Swim & Climb helpers (avoids raw getRuntimeStatsMutable() in States) ---
   void swim(float dirX);   // Move horizontally at water speed
+  void swimY(float dirY);
   void climbUp();          // Move up ladder
   void climbDown();        // Move down ladder
   void stopClimb();        // Stop on ladder
@@ -64,13 +79,14 @@ public:
   // --- Combat (read-only queries for CombatSystem) ---
   bool hasActiveHitbox() const override;
   Hitbox getActiveHitbox() override;   // Non-const: avoids const_cast
-  void takeDamage(int damage) override;
+  void takeDamage(int damage, bool forceInterrupt = true) override;
 
   // --- Polymorphic Hook overrides from Entity ---
   void onLand(float floorY) override;
   void onHitCeiling(float ceilY) override;
   void updateStateFromPhysics() override;
   void onEnterWater() override;
+  void onExitLiquid();
   void onOverlapLadder() override;
   void onHazard() override;
   void onDie() override;
@@ -96,4 +112,7 @@ private:
   PlayerState *currentState;
   std::unordered_map<std::string, Animation> animationList;
   std::unordered_map<std::string, std::unique_ptr<ISkill>> skillList;
+  class BaseItem* overlappingItem_ = nullptr;
+  std::shared_ptr<PartyInventory> partyInventory_;
+  BuffManager buffManager_;
 };

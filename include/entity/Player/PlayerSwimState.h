@@ -10,7 +10,10 @@ public:
     void update(float dt) override;
     void onMoveLeft() override;
     void onMoveRight() override;
-    void onJump() override; // Ngoi lên
+    void onJump() override;
     void onStopLeft() override;
     void onStopRight() override;
+    void onClimb() override;
+    void onCrouch() override;
+    void onAttack() override;
 };

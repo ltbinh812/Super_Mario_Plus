@@ -84,3 +84,9 @@ public:
   }
 };
 
+class InteractCommand : public IPlayerCommand {
+public:
+  void Execute(Player &player) override {
+    player.interactWithOverlapping();
+  }
+};

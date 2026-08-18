@@ -7,7 +7,7 @@
 
 struct KeyBinding {
   std::unique_ptr<IPlayerCommand> command;
-  bool isPressed;
+  int triggerMode; // 0: Released, 1: Down, 2: Pressed
 };
 
 class InputHandler {
@@ -17,7 +17,7 @@ private:
 public:
   InputHandler() = default;
   void clearBindings();
-  void bindKey(int key, std::unique_ptr<IPlayerCommand> command, bool isPressed);
+  void bindKey(int key, std::unique_ptr<IPlayerCommand> command, int triggerMode);
   std::vector<IPlayerCommand *> handleInput();
 };
 

@@ -3,9 +3,10 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "nlohmann/json.hpp"
 
 enum class CollisionType {
-    None = 0, Solid, OneWay, Hazard, Ladder, Water, Die, Lotus
+    None = 0, Solid, OneWay, Hazard, Ladder, Water, Die, Lotus, Cloud, Poison, Lava, Slop
 };
 
 struct CollisionTile {
@@ -19,6 +20,14 @@ struct NeighbourInfo {
     int worldY;
     int width;
     int height;
+};
+
+// Data from a single LDtk Entity instance
+struct LDtkEntityData {
+    std::string identifier;          // e.g. "Spring_down", "Coin"
+    Vector2     px;                  // position in LDTK pixels (un-scaled)
+    std::string iid;                 // unique instance ID for state persistence
+    nlohmann::json fieldInstances;   // raw fieldInstances array
 };
 
 class TileMap {
@@ -35,6 +44,8 @@ private:
     int worldY = 0;
 
     std::unordered_map<int, Texture2D> tilesetTextures; // Flyweight: Dùng chung tài nguyên texture theo uid
+    Texture2D backgroundTexture;
+    bool hasBackgroundTexture = false;
     RenderTexture2D mapCanvas; // Batch Buffer: Gom toàn bộ background tĩnh vào 1 Canvas
     bool hasCanvas = false;
 
@@ -42,6 +53,9 @@ private:
     std::vector<std::vector<int>> displayLayer;
     std::vector<std::vector<CollisionType>> collisionLayer;
     std::unordered_map<std::string, std::vector<NeighbourInfo>> currentNeighbours; // Hướng -> Danh sách Level kề
+    std::vector<Vector2> playerSpawns;
+    std::vector<LDtkEntityData> entityData_;
+    std::string currentLevelName;
 
 
 
@@ -55,7 +69,9 @@ public:
     void Draw() const;
     std::vector<CollisionTile> GetCollidingTiles(Rectangle entityRect) const;
     std::string GetNeighbour(const std::string& dir, float globalX, float globalY) const;
-
+    std::vector<Vector2> GetPlayerSpawns() const;
+    std::vector<LDtkEntityData> GetEntityData() const;
+    std::string GetCurrentLevelName() const { return currentLevelName; }
 
 
     float GetWorldScale() const { return (tileSize > 0 && tileSize < 32) ? (32.0f / (float)tileSize) : 1.0f; }

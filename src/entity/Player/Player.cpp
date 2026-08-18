@@ -2,7 +2,10 @@
 #include "AssetManager.h"
 #include "ISkill.h"
 #include "PlayerCommands.h"
+#include "SpawnCommand.h"
 #include "raylib.h"
+#include "BaseItem.h"
+#include "ItemUsageFactory.h"
 #include <iostream>
 
 Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
@@ -18,8 +21,11 @@ Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
 
 void Player::update(float dt) {
   if (runtimeStats.iframeTimer > 0.0f) {
-      runtimeStats.iframeTimer -= dt;
+    runtimeStats.iframeTimer -= dt;
   }
+  
+  updateEffects(dt);
+  overlappingItem_ = nullptr; // Reset each frame; collision loop in GameState will set it if still overlapping
   
   if (currentState) {
     currentState->update(dt);
@@ -27,6 +33,8 @@ void Player::update(float dt) {
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
+  
+  buffManager_.update(dt, *this);
 }
 
 void Player::render(float alpha) {
@@ -51,6 +59,10 @@ void Player::render(float alpha) {
 
   // Debug hitbox
   DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+
+  for (auto& eff : activeEffects) {
+      eff->render(*this, alpha);
+  }
 }
 
 void Player::changeState(PlayerState &state) {
@@ -66,6 +78,10 @@ void Player::changeState(PlayerState &state) {
 void Player::requestState(PlayerState &state) {
   if (currentState && !currentState->canExit())
     return;
+  changeState(state);
+}
+
+void Player::forceState(PlayerState &state) {
   changeState(state);
 }
 
@@ -175,12 +191,18 @@ void Player::playAnimation(const std::string &name) {
 
 void Player::moveRight() {
   worldStats.isFacingRight = true;
-  runtimeStats.velocity.x = baseStats.moveVelocity;
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.7f;
+  runtimeStats.velocity.x = baseStats.moveVelocity * (1.0f + buffManager_.getTotalSpeedMultiplier()) * mod;
 }
 
 void Player::moveLeft() {
   worldStats.isFacingRight = false;
-  runtimeStats.velocity.x = -baseStats.moveVelocity;
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.7f;
+  runtimeStats.velocity.x = -baseStats.moveVelocity * (1.0f + buffManager_.getTotalSpeedMultiplier()) * mod;
 }
 
 void Player::stopLeftRun() {
@@ -193,7 +215,12 @@ void Player::stopRightRun() {
     runtimeStats.velocity.x = 0.0f;
 }
 
-void Player::jump() { runtimeStats.velocity.y = baseStats.jumpVelocity; }
+void Player::jump() { 
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.6f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.8f;
+  runtimeStats.velocity.y = baseStats.jumpVelocity * (1.0f + buffManager_.getTotalJumpMultiplier()) * mod; 
+}
 
 void Player::crouch() {
   // Resize hitbox to crouch dimensions; stop horizontal movement
@@ -230,7 +257,11 @@ void Player::increaseMana(float cost) {
 // --- Swim & Climb helpers ---
 
 void Player::swim(float dirX) {
-  const float swimSpeed = baseStats.moveVelocity * 0.7f;
+  float speedMod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Water) speedMod = 0.7f;
+  else if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) speedMod = 0.4f;
+
+  const float swimSpeed = baseStats.moveVelocity * speedMod;
   if (dirX > 0.0f) {
     worldStats.isFacingRight = true;
     runtimeStats.velocity.x = swimSpeed;
@@ -239,6 +270,21 @@ void Player::swim(float dirX) {
     runtimeStats.velocity.x = -swimSpeed;
   } else {
     runtimeStats.velocity.x = 0.0f;
+  }
+}
+
+void Player::swimY(float dirY) {
+  float speedMod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Water) speedMod = 0.7f;
+  else if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) speedMod = 0.4f;
+
+  const float swimSpeed = baseStats.moveVelocity * speedMod;
+  if (dirY > 0.0f) {
+    runtimeStats.velocity.y = swimSpeed;
+  } else if (dirY < 0.0f) {
+    runtimeStats.velocity.y = -swimSpeed;
+  } else {
+    runtimeStats.velocity.y = 0.0f;
   }
 }
 
@@ -277,19 +323,35 @@ Hitbox Player::getActiveHitbox() {
   return {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
 }
 
-void Player::takeDamage(int damage) {
-  if (currentState == &dieState || currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
+void Player::takeDamage(int damage, bool forceInterrupt) {
+  if (currentState == &dieState || buffManager_.isInvincible())
     return;
-  runtimeStats.health -= damage;
-  runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
-  
-  // Apply a small knockback upwards to break free from continuous ground hazards
-  runtimeStats.velocity.y = -200.0f;
 
-  if (runtimeStats.health <= 0) {
-    changeState(dieState);
+  if (forceInterrupt) {
+    if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
+      return;
+      
+    runtimeStats.health -= damage;
+    runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
+    
+    // Apply a small knockback upwards to break free from continuous ground hazards
+    runtimeStats.velocity.y = -200.0f;
+
+    if (runtimeStats.health <= 0) {
+      changeState(dieState);
+    } else {
+      changeState(hurtState);
+    }
   } else {
-    changeState(hurtState);
+    // DOT damage ignores iframeTimer and hurtState invincibility, but still deals damage
+    runtimeStats.health -= damage;
+    if (runtimeStats.health <= 0) {
+      changeState(dieState);
+    } else {
+      if (currentState != &hurtState) {
+        changeState(hurtState);
+      }
+    }
   }
 }
 
@@ -305,7 +367,19 @@ void Player::onHitCeiling(float ceilY) {
   // Reserved for brick-breaking or sound effects
 }
 
-void Player::onEnterWater() { requestState(swimState); }
+void Player::onEnterWater() { 
+  if (currentState == &swimState) return;
+  // Don't interrupt a jump out of the water if the player's head is still above water
+  if (runtimeStats.isPartiallyOutsideLiquid && currentState == &jumpState) {
+      return;
+  }
+  requestState(swimState); 
+}
+void Player::onExitLiquid() { 
+  if (currentState == &swimState) {
+      requestState(fallState);
+  }
+}
 
 void Player::onOverlapLadder() {
   // Auto-enter climb only if player explicitly presses climb key (onClimb),
@@ -314,7 +388,16 @@ void Player::onOverlapLadder() {
 
 void Player::onHazard() { requestState(dieState); }
 
-void Player::onDie() { requestState(dieState); }
+void Player::onDie() { 
+    Entity::onDie();
+    worldStats.position = worldStats.startPosition;
+    runtimeStats.velocity = {0.0f, 0.0f};
+    runtimeStats.health = baseStats.maxHealth;
+    runtimeStats.mana = baseStats.maxMana;
+    clearEffects();
+    buffManager_.clear(*this);
+    requestState(idleState); 
+}
 
 void Player::updateStateFromPhysics() {
   // Do NOT interfere with self-managing states
@@ -364,4 +447,32 @@ void Player::spawnFireball() {
   cmd.spawner = this;
 
   commandQueue->push(cmd);
+}
+
+void Player::interactWithOverlapping() {
+    if (overlappingItem_) {
+        // Standing on/near an item → swap/pickup
+        overlappingItem_->forceInteract(*this);
+        overlappingItem_ = nullptr;
+    } else {
+        // Nothing nearby → use stored item
+        useStoredItem();
+    }
+}
+
+void Player::useStoredItem() {
+    auto& slot = runtimeStats.storedItemSlot;
+    if (slot.empty()) return;
+
+    auto strategy = ItemUsageFactory::create(slot);
+    if (strategy) {
+        strategy->use(*this);
+        slot = ""; // Clear inventory after use
+    } else {
+        std::cerr << "[Player] Unrecognized item in slot: " << slot << "\n";
+    }
+}
+
+void Player::dropThrough() {
+    runtimeStats.ignoreOneWayTimer = 0.2f;
 }

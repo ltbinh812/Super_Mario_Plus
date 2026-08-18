@@ -1,0 +1,60 @@
+{"frames": {
+
+"chest_03.png":
+{
+	"frame": {"x":34,"y":1,"w":24,"h":22},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":5,"w":24,"h":22},
+	"sourceSize": {"w":32,"h":32}
+},
+"chest_04.png":
+{
+	"frame": {"x":1,"y":1,"w":31,"h":30},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":31,"h":30},
+	"sourceSize": {"w":32,"h":32}
+},
+"chest_07.png":
+{
+	"frame": {"x":60,"y":1,"w":28,"h":20},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":7,"w":28,"h":20},
+	"sourceSize": {"w":32,"h":32}
+},
+"chest_08.png":
+{
+	"frame": {"x":118,"y":1,"w":28,"h":19},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":7,"w":28,"h":19},
+	"sourceSize": {"w":32,"h":32}
+},
+"chest_09.png":
+{
+	"frame": {"x":148,"y":1,"w":24,"h":19},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":7,"w":24,"h":19},
+	"sourceSize": {"w":32,"h":32}
+},
+"chest_10.png":
+{
+	"frame": {"x":90,"y":1,"w":26,"h":20},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":7,"w":26,"h":20},
+	"sourceSize": {"w":32,"h":32}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "chest_boss.png",
+	"format": "RGBA8888",
+	"size": {"w":173,"h":32},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:11d59338c75491efceb47ff04726225e:e72acdd55434a45e1602a57f8868f15b:2ccce4dfb35f512276eddb5a6d99bc26$"
+}
+}

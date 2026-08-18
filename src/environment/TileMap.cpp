@@ -17,6 +17,7 @@ TileMap::~TileMap() {
     for (auto& pair : tilesetTextures) {
         if (pair.second.id != 0) UnloadTexture(pair.second);
     }
+    if (hasBackgroundTexture) UnloadTexture(backgroundTexture);
     if (hasCanvas) UnloadRenderTexture(mapCanvas);
 }
 
@@ -96,6 +97,8 @@ void TileMap::LoadMap(const std::string& jsonFilePath, const std::string& tilese
 }
 
 bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& levelName) {
+    playerSpawns.clear();
+    entityData_.clear();
     std::ifstream file(ldtkFilePath);
     if (!file.is_open()) {
         std::cerr << "[LDtk] Khong the mo file: " << ldtkFilePath << std::endl;
@@ -111,7 +114,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     std::unordered_map<int, CollisionType> intToCollisionType;
     if (j.contains("defs") && j["defs"].contains("layers")) {
         for (const auto& layerDef : j["defs"]["layers"]) {
-            if (layerDef.contains("identifier") && layerDef["identifier"] == "Collision") {
+            if (layerDef.contains("identifier") && (layerDef["identifier"] == "Collision" || layerDef["identifier"] == "Collisions")) {
                 if (layerDef.contains("intGridValues")) {
                     for (const auto& valDef : layerDef["intGridValues"]) {
                         int value = valDef["value"];
@@ -124,6 +127,10 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                         else if (id == "Water") type = CollisionType::Water;
                         else if (id == "Die") type = CollisionType::Die;
                         else if (id == "hoa_sen" || id == "Lotus") type = CollisionType::Lotus;
+                        else if (id == "Cloud") type = CollisionType::Cloud;
+                        else if (id == "Poison") type = CollisionType::Poison;
+                        else if (id == "Lava") type = CollisionType::Lava;
+                        else if (id == "Slop") type = CollisionType::Slop;
                         intToCollisionType[value] = type;
                     }
                 }
@@ -156,10 +163,33 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     }
 
     json targetLevel = nullptr;
-    for (const auto& lvl : j["levels"]) {
-        if ((lvl.contains("identifier") && !lvl["identifier"].is_null() && lvl["identifier"] == levelName) || levelName.empty()) {
-            targetLevel = lvl;
-            break;
+    if (levelName.empty()) {
+        for (const auto& lvl : j["levels"]) {
+            bool foundStart = false;
+            if (lvl.contains("layerInstances") && !lvl["layerInstances"].is_null()) {
+                for (const auto& layer : lvl["layerInstances"]) {
+                    if (layer.contains("__type") && layer["__type"] == "Entities" && layer.contains("entityInstances") && !layer["entityInstances"].is_null()) {
+                        for (const auto& ent : layer["entityInstances"]) {
+                            if (ent.contains("__identifier") && ent["__identifier"] == "Starting_position") {
+                                foundStart = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (foundStart) break;
+                }
+            }
+            if (foundStart) {
+                targetLevel = lvl;
+                break;
+            }
+        }
+    } else {
+        for (const auto& lvl : j["levels"]) {
+            if (lvl.contains("identifier") && !lvl["identifier"].is_null() && lvl["identifier"] == levelName) {
+                targetLevel = lvl;
+                break;
+            }
         }
     }
 
@@ -172,7 +202,29 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         return false;
     }
     std::string actualLevelName = targetLevel.contains("identifier") && !targetLevel["identifier"].is_null() ? (std::string)targetLevel["identifier"] : "Unknown";
+    currentLevelName = actualLevelName;
     std::cout << "[LDtk] Da chon Level: " << actualLevelName << "\n";
+
+    if (hasBackgroundTexture) {
+        UnloadTexture(backgroundTexture);
+        hasBackgroundTexture = false;
+    }
+    if (targetLevel.contains("bgRelPath") && !targetLevel["bgRelPath"].is_null()) {
+        std::string bgRel = targetLevel["bgRelPath"];
+        std::string filename = bgRel;
+        size_t lastSlash = bgRel.find_last_of("/\\");
+        if (lastSlash != std::string::npos) filename = bgRel.substr(lastSlash + 1);
+        std::string localPath = baseDir + filename;
+        std::string fullPath = baseDir + bgRel;
+
+        if (FileExists(localPath.c_str())) {
+            backgroundTexture = LoadTexture(localPath.c_str());
+            hasBackgroundTexture = true;
+        } else if (FileExists(fullPath.c_str())) {
+            backgroundTexture = LoadTexture(fullPath.c_str());
+            hasBackgroundTexture = true;
+        }
+    }
 
     currentNeighbours.clear();
     if (targetLevel.contains("__neighbours") && !targetLevel["__neighbours"].is_null()) {
@@ -216,13 +268,26 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
 
     BeginTextureMode(mapCanvas);
     ClearBackground(BLACK); // Nền đen mặc định cho phần không có tài nguyên/không vẽ của map
+    if (hasBackgroundTexture) {
+        if (targetLevel.contains("__bgPos") && !targetLevel["__bgPos"].is_null()) {
+            auto bgPos = targetLevel["__bgPos"];
+            auto crop = bgPos["cropRect"];
+            auto scale = bgPos["scale"];
+            auto topLeft = bgPos["topLeftPx"];
+            Rectangle src = { (float)crop[0], (float)crop[1], (float)crop[2], (float)crop[3] };
+            Rectangle dest = { (float)topLeft[0], (float)topLeft[1], src.width * (float)scale[0], src.height * (float)scale[1] };
+            DrawTexturePro(backgroundTexture, src, dest, {0.0f, 0.0f}, 0.0f, WHITE);
+        } else {
+            DrawTexture(backgroundTexture, 0, 0, WHITE);
+        }
+    }
 
     for (int i = (int)layerInstances.size() - 1; i >= 0; --i) {
         const auto& layer = layerInstances[i];
         std::string layerName = (layer.contains("__identifier") && !layer["__identifier"].is_null()) ? (std::string)layer["__identifier"] : "";
         std::string layerType = (layer.contains("__type") && !layer["__type"].is_null()) ? (std::string)layer["__type"] : "";
 
-        if (layerName == "Collision") {
+        if (layerName == "Collision" || layerName == "Collisions") {
             if (layer.contains("intGridCsv") && !layer["intGridCsv"].is_null()) {
                 const auto& csv = layer["intGridCsv"];
                 for (size_t idx = 0; idx < csv.size(); ++idx) {
@@ -247,6 +312,38 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         if (layerType == "Entities") {
             if (layer.contains("entityInstances") && !layer["entityInstances"].is_null()) {
                 for (const auto& ent : layer["entityInstances"]) {
+                    if (ent.contains("__identifier") && ent["__identifier"] == "Starting_position") {
+                        playerSpawns.push_back({ (float)ent["px"][0], (float)ent["px"][1] });
+                    }
+
+                    // Collect all non-internal entities for ItemFactory
+                    std::string entId = ent.contains("__identifier") ? (std::string)ent["__identifier"] : "";
+                    static const std::vector<std::string> SKIP = {
+                        "Starting_position", "Ladder", "BigBackground", "SmallBg",
+                        "Entity", "Plant", "Teleport", "Exit"
+                    };
+                    bool skip = false;
+                    for (auto& s : SKIP) if (entId == s) { skip = true; break; }
+                    if (!skip && !entId.empty()) {
+                        LDtkEntityData data;
+                        data.identifier = entId;
+                        
+                        float pxX = ent["px"][0];
+                        float pxY = ent["px"][1];
+                        float pivotX = ent.contains("__pivot") && !ent["__pivot"].is_null() ? (float)ent["__pivot"][0] : 0.0f;
+                        float pivotY = ent.contains("__pivot") && !ent["__pivot"].is_null() ? (float)ent["__pivot"][1] : 0.0f;
+                        float w = ent.contains("width") ? (float)ent["width"] : 16.0f;
+                        float h = ent.contains("height") ? (float)ent["height"] : 16.0f;
+                        
+                        // BaseItem expects bottom-left corner
+                        data.px.x = pxX - w * pivotX;
+                        data.px.y = pxY + h * (1.0f - pivotY);
+                        
+                        data.iid = ent.contains("iid") ? (std::string)ent["iid"] : "";
+                        data.fieldInstances = ent.contains("fieldInstances") ? ent["fieldInstances"] : json::array();
+                        entityData_.push_back(data);
+                    }
+
                     if (!ent.contains("__tile") || ent["__tile"].is_null()) continue;
                     
                     const auto& tileInfo = ent["__tile"];
@@ -402,3 +499,26 @@ std::string TileMap::GetNeighbour(const std::string& dir, float globalX, float g
     return "";
 }
 
+std::vector<Vector2> TileMap::GetPlayerSpawns() const {
+    std::vector<Vector2> scaledSpawns;
+    float scale = GetWorldScale();
+    for (const auto& p : playerSpawns) {
+        // Return bottom-center of the 16x16 Starting_position entity
+        scaledSpawns.push_back({ (p.x + 8.0f) * scale, (p.y + 16.0f) * scale });
+    }
+    return scaledSpawns;
+}
+
+std::vector<LDtkEntityData> TileMap::GetEntityData() const {
+    // Scale all positions from LDtk tile space to game pixel space
+    std::vector<LDtkEntityData> scaled;
+    float scale = GetWorldScale();
+    scaled.reserve(entityData_.size());
+    for (const auto& data : entityData_) {
+        LDtkEntityData d = data;
+        d.px.x *= scale;
+        d.px.y *= scale;
+        scaled.push_back(std::move(d));
+    }
+    return scaled;
+}

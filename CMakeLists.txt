@@ -21,6 +21,8 @@ include_directories(
     include/entity
     include/entity/Player
     include/entity/Skill
+    include/entity/Item
+    include/entity/BuffEffects
     include/infrastructure
     include/command
     include/environment
@@ -41,10 +43,13 @@ set(SOURCES
     src/core/Game.cpp
     src/core/StateManager.cpp
     src/core/InputHandler.cpp
+    src/core/SaveManager.cpp
     src/states/GameState.cpp
     src/ui/Buttons.cpp
+    src/ui/PlayerHUD.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
+    src/entity/Effects.cpp
     src/entity/Player/Player.cpp
     src/entity/Player/PlayerState.cpp
     src/entity/Player/PlayerIdleState.cpp
@@ -58,6 +63,7 @@ set(SOURCES
     src/entity/Player/PlayerSwimState.cpp
     src/entity/Player/PlayerClimbState.cpp
     src/entity/Player/PlayerFactory.cpp
+    src/entity/Player/BuffManager.cpp
     src/entity/Skill/DashSkill.cpp
     src/entity/Skill/Punch1Skill.cpp
     src/entity/Skill/Punch2Skill.cpp
@@ -67,14 +73,32 @@ set(SOURCES
     src/entity/Skill/LongAttackSkill.cpp
     src/entity/Fireball.cpp
     src/entity/EntityFactory.cpp
+    src/entity/Item/ItemAtlasRegistry.cpp
+    src/entity/Item/BaseItem.cpp
+    src/entity/Item/Spring.cpp
+    src/entity/Item/Coin.cpp
+    src/entity/Item/Key.cpp
+    src/entity/Item/Door.cpp
+    src/entity/Item/Flag.cpp
+    src/entity/Item/LuckyBlock.cpp
+    src/entity/Item/ChestNormal.cpp
+    src/entity/Item/ChestBoss.cpp
+    src/entity/Item/Buff.cpp
+    src/entity/Item/Boom.cpp
+    src/entity/Item/ItemFactory.cpp
+    src/entity/Item/ItemUsageFactory.cpp
     src/combatsystem/BruteForceDetector.cpp
     src/combatsystem/CombatSystem.cpp
     src/infrastructure/AssetManager.cpp
     src/environment/TileMap.cpp
     src/environment/MapCamera.cpp
+    src/states/BaseLevelState.cpp
     src/states/World01State.cpp
     src/states/World02State.cpp
     src/states/World03State.cpp
+    src/states/World04State.cpp
+    src/states/World05State.cpp
+    src/states/World06State.cpp
 )
 
 # Executable

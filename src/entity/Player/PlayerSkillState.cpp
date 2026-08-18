@@ -23,6 +23,10 @@ void PlayerSkillState::onEnter() {
 }
 
 void PlayerSkillState::onExit() {
+    // Stop horizontal movement forced by the skill (e.g. Dash burst)
+    player.stopLeftRun();
+    player.stopRightRun();
+
     currentSkill = nullptr;
     nextSkill = nullptr;
     timer = 0.0f;
@@ -49,7 +53,19 @@ void PlayerSkillState::update(float dt) {
             currentSkill = next;
             onEnter();  // Re-enter with the new skill
         } else {
-            player.requestState(player.idleState);
+            if (!player.getRuntimeStats().isGrounded) {
+                if (player.getRuntimeStats().velocity.y > 0) {
+                    player.requestState(player.fallState);
+                } else {
+                    player.requestState(player.jumpState);
+                }
+            } else {
+                if (player.getRuntimeStats().velocity.x == 0.0f) {
+                    player.requestState(player.idleState);
+                } else {
+                    player.requestState(player.runState);
+                }
+            }
         }
     }
 }
