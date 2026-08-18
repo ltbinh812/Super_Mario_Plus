@@ -92,11 +92,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                              InputType::PRESSED); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
     }
 
-    if (player1)
-      combatSystem.registerEntity(player1.get());
-    if (player2)
-      combatSystem.registerEntity(player2.get());
-
+    // CombatSystem is now stateless, so no registerEntity calls here
     // Load item atlas (once globally, no-op if already loaded)
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
 
@@ -235,7 +231,7 @@ void BaseLevelState::Process() {
       applyBurn(ent.get());
   }
 
-  combatSystem.removeInactive();
+  // Cleanups
   activeEntities.erase(std::remove_if(activeEntities.begin(),
                                       activeEntities.end(),
                                       [&](const std::unique_ptr<Entity> &e) {
@@ -386,7 +382,6 @@ void BaseLevelState::Update(float dt) {
     auto entity = EntityFactory::create(cmd);
     if (entity) {
       entity->setCommandQueue(&spawnQueue);
-      combatSystem.registerEntity(entity.get());
       activeEntities.push_back(std::move(entity));
     }
   }
@@ -404,7 +399,13 @@ void BaseLevelState::Update(float dt) {
 
   // Cleanups moved to Process()
 
-  combatSystem.update(dt);
+  std::vector<Entity*> allEntities;
+  if (player1) allEntities.push_back(player1.get());
+  if (player2) allEntities.push_back(player2.get());
+  for (const auto& e : activeEntities) {
+      if (e && e->getIsActive()) allEntities.push_back(e.get());
+  }
+  combatSystem.update(allEntities, dt);
 }
 
 void BaseLevelState::Render(float alpha) const {
@@ -422,7 +423,13 @@ void BaseLevelState::Render(float alpha) const {
     player1->render(alpha);
   if (player2)
     player2->render(alpha);
-  combatSystem.renderDebug();
+  std::vector<Entity*> allEntities;
+  if (player1) allEntities.push_back(player1.get());
+  if (player2) allEntities.push_back(player2.get());
+  for (const auto& e : activeEntities) {
+      if (e && e->getIsActive()) allEntities.push_back(e.get());
+  }
+  combatSystem.renderDebug(allEntities);
   mapCamera.EndMode();
 
   // Render HUD over the screen
@@ -445,7 +452,7 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
   if (map.LoadLDtkMap(mapFilePath, nextLevel)) {
     currentLevel = nextLevel;
     activeEntities.clear();
-    combatSystem.clear();
+    // combatSystem is stateless so no clear needed
 
     float mapW = (float)map.GetWidth();
     float mapH = (float)map.GetHeight();
@@ -553,8 +560,7 @@ void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
   activeEntities.clear();
   activeItems.clear();
   combatSystem = CombatSystem(); // Reset combat system
-  if (player1) combatSystem.registerEntity(player1.get());
-  if (player2) combatSystem.registerEntity(player2.get());
+  // No need to register entities since CombatSystem is stateless
 
   map.LoadLDtkMap(data.levelData.mapFilePath, data.levelData.levelId);
   currentLevel = data.levelData.levelId;

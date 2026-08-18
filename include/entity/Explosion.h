@@ -25,7 +25,7 @@ public:
 
     void onHitWall(bool isRightWall) override {}
     void onCollide(Entity& other) override {}
-    void takeDamage(int damage, float knockbackDirX = 0.0f) override {}
+    void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override {}
 
     bool getIsActive() const override { return isActive; }
     void deactivate() override { isActive = false; }
