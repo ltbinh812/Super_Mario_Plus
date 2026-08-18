@@ -4,5 +4,5 @@
 void DashSkill::execute(Player& player) {
     // Apply a velocity burst in the facing direction
     float dashSpeed = 600.0f;
-    player.dash(dashSpeed);
+    player.speedUpX(dashSpeed);
 }

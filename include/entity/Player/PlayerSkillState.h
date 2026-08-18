@@ -23,6 +23,11 @@ class PlayerSkillState : public PlayerState {
 
     void onAttack() override;
 
+    void onMoveLeft() override;
+    void onMoveRight() override;
+    void onStopLeft() override;
+    void onStopRight() override;
+
     const ISkill* getCurrentSkill() const { return currentSkill; }
     float getElapsedTime() const;
     bool isHitboxActive() const;

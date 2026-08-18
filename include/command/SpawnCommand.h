@@ -11,8 +11,9 @@ enum class SpawnCategory {
 };
 
 enum class EntityType {
-    Fireball
-    // can add more entity types here later
+    Fireball,
+    Explosion,
+    SpecialBall
 };
 
 struct SpawnCommand {

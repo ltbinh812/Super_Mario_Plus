@@ -32,7 +32,7 @@ void PlayerRunState::onCrouch() {
 }
 
 void PlayerRunState::onAttack() {
-    player.useSkill("Punch1");
+    player.useSkill("Attack1");
 }
 
 void PlayerRunState::onStopLeft() {

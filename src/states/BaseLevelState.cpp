@@ -37,26 +37,26 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player1->setStartPosition(spawn1);
       player1->setCommandQueue(&spawnQueue);
       player1->setPartyInventory(partyInventory);
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), true);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), true);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), true);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), true);
+      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
       player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(),
-                             false);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), false);
+                             InputType::RELEASED);
+      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
-                             false);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), true);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), true);
+                             InputType::RELEASED);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::DOWN);
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             true);
+                             InputType::DOWN);
       player1Handler.bindKey(KEY_U,
                              std::make_unique<UseSkillCommand>("LongAttack"),
-                             true); // skill1
+                             InputType::DOWN); // skill1
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
-                             true); // block
+                             InputType::DOWN); // block
       player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(),
-                             2); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
+                             InputType::PRESSED); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
     }
 
     player2 = PlayerFactory::createPlayer("Goku", {0, 0});
@@ -67,29 +67,29 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player2->setCommandQueue(&spawnQueue);
       player2->setPartyInventory(partyInventory);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
-                             true);
+                             InputType::DOWN);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
-                             true);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), true);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), true);
+                             InputType::DOWN);
+      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
       player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(),
-                             false);
+                             InputType::RELEASED);
       player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
-                             false);
+                             InputType::RELEASED);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
-                             false);
-      player2Handler.bindKey(KEY_ONE, std::make_unique<AttackCommand>(), true);
-      player2Handler.bindKey(KEY_TWO, std::make_unique<JumpCommand>(), true);
+                             InputType::RELEASED);
+      player2Handler.bindKey(KEY_ONE, std::make_unique<AttackCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_TWO, std::make_unique<JumpCommand>(), InputType::DOWN);
       player2Handler.bindKey(KEY_THREE,
-                             std::make_unique<UseSkillCommand>("Dash"), true);
+                             std::make_unique<UseSkillCommand>("Dash"), InputType::DOWN);
       player2Handler.bindKey(KEY_FOUR,
                              std::make_unique<UseSkillCommand>("LongAttack"),
-                             true); // skill1
+                             InputType::DOWN); // skill1
       player2Handler.bindKey(KEY_RIGHT_SHIFT,
                              std::make_unique<UseSkillCommand>("Block"),
-                             true); // block (could be left or right shift)
+                             InputType::DOWN); // block (could be left or right shift)
       player2Handler.bindKey(KEY_ENTER, std::make_unique<InteractCommand>(),
-                             2); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
+                             InputType::PRESSED); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
     }
 
     if (player1)

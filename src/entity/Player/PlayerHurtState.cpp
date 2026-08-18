@@ -13,6 +13,16 @@ void PlayerHurtState::onExit() {
 
 void PlayerHurtState::update(float dt) {
     invicibleTimer -= dt;
+
+    // Apply friction to slide to a halt
+    auto& vel = player.getRuntimeStatsMutable().velocity;
+    float friction = 800.0f * dt;
+    if (vel.x > 0) {
+        vel.x = std::max(0.0f, vel.x - friction);
+    } else if (vel.x < 0) {
+        vel.x = std::min(0.0f, vel.x + friction);
+    }
+
     if (invicibleTimer <= 0.0f) {
         changePlayerState(player.idleState);
     }

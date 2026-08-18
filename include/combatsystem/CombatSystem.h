@@ -6,14 +6,10 @@
 class Entity;
 
 class CombatSystem {
-    std::vector<Entity*> entities;
     std::unique_ptr<ICollisionDetector> detector;
 
 public:
     CombatSystem();
-    void registerEntity(Entity* e);
-    void removeInactive();
-    void update(float dt);
-    void renderDebug() const;
-    void clear() { entities.clear(); }
+    void update(const std::vector<Entity*>& entities, float dt);
+    void renderDebug(const std::vector<Entity*>& entities) const;
 };

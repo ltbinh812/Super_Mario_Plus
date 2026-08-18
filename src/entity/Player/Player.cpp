@@ -4,8 +4,12 @@
 #include "PlayerCommands.h"
 #include "SpawnCommand.h"
 #include "raylib.h"
+<<<<<<< HEAD
 #include "BaseItem.h"
 #include "ItemUsageFactory.h"
+=======
+#include <cmath>
+>>>>>>> origin/minh1
 #include <iostream>
 
 Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
@@ -33,20 +37,32 @@ void Player::update(float dt) {
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
+<<<<<<< HEAD
   
   buffManager_.update(dt, *this);
+=======
+  updateFloatingTexts(dt);
+>>>>>>> origin/minh1
 }
 
 void Player::render(float alpha) {
   if (!worldStats.animation)
     return;
 
+  // Blink effect during invincibility: skip rendering on alternating intervals
+  if (runtimeStats.iframeTimer > 0.0f) {
+    // Blink at ~10 Hz: hidden when sin > 0, visible when sin < 0
+    float blinkPhase = std::sin(runtimeStats.iframeTimer * 20.0f * 3.14159f);
+    if (blinkPhase > 0.0f)
+      return;
+  }
+
   Rectangle source = worldStats.animation->getCurrentFrame();
   if (!worldStats.isFacingRight) {
     source.width = -source.width;
   }
 
-  float scale = 0.9f;
+  float scale = worldStats.animation->getScale();
   float absW = (source.width < 0 ? -source.width : source.width) * scale;
   float absH = source.height * scale;
 
@@ -54,15 +70,22 @@ void Player::render(float alpha) {
   Rectangle dest = {worldStats.position.x - (absW / 2.0f),
                     worldStats.position.y - absH, absW, absH};
 
+  Color tint = (runtimeStats.iframeTimer > 0.0f) ? RED : WHITE;
+
   DrawTexturePro(worldStats.animation->getTexture(), source, dest, {0, 0},
-                 0.0f, WHITE);
+                 0.0f, tint);
 
   // Debug hitbox
   DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+<<<<<<< HEAD
 
   for (auto& eff : activeEffects) {
       eff->render(*this, alpha);
   }
+=======
+  
+  renderFloatingTexts();
+>>>>>>> origin/minh1
 }
 
 void Player::changeState(PlayerState &state) {
@@ -93,8 +116,10 @@ void Player::useSkill(const std::string &skillname) {
   auto it = skillList.find(skillname);
   if (it != skillList.end() && it->second) {
     ISkill *skill = it->second.get();
-    if (runtimeStats.mana < skill->getManaCost())
+    if (runtimeStats.mana < skill->getManaCost()) {
+      addFloatingText("Not enough mana", BLUE, {0, 0}, 0.3);
       return;
+    }
     
     // Prevent interrupting a skill with another skill (or the same one)
     if (currentState == &skillState) {
@@ -180,12 +205,13 @@ void Player::onClimb() {
 // MOVEMENT HELPERS (called by States — Tell, Don't Ask)
 // =============================================================================
 
-void Player::playAnimation(const std::string &name) {
+void Player::playAnimation(const std::string &name, bool loop) {
   std::cout << name << '\n';
   auto it = animationList.find(name);
   if (it != animationList.end()) {
     worldStats.animation = &it->second;
     worldStats.animation->resetAnimation();
+    worldStats.animation->setLoop(loop);
   }
 }
 
@@ -233,8 +259,12 @@ void Player::standUp() {
   runtimeStats.physicsBox = baseStats.physicsBox;
 }
 
-void Player::dash(float dashSpeed) {
-  runtimeStats.velocity.x = worldStats.isFacingRight ? dashSpeed : -dashSpeed;
+void Player::speedUpX(float speedX) {
+  runtimeStats.velocity.x = worldStats.isFacingRight ? speedX : -speedX;
+}
+
+void Player::speedUpY(float speedY) {
+  runtimeStats.velocity.y = speedY;
 }
 
 void Player::idle() {
@@ -249,9 +279,14 @@ void Player::reduceMana(float cost) {
 }
 
 void Player::increaseMana(float cost) {
-  runtimeStats.mana += static_cast<int>(cost);
-  if (runtimeStats.mana > baseStats.maxMana)
-    runtimeStats.mana = baseStats.maxMana;
+  runtimeStats.manaAccumulator += cost;
+  if (runtimeStats.manaAccumulator >= 1.0f) {
+    int manaToAdd = static_cast<int>(runtimeStats.manaAccumulator);
+    runtimeStats.mana += manaToAdd;
+    runtimeStats.manaAccumulator -= manaToAdd;
+    if (runtimeStats.mana > baseStats.maxMana)
+      runtimeStats.mana = baseStats.maxMana;
+  }
 }
 
 // --- Swim & Climb helpers ---
@@ -323,7 +358,7 @@ Hitbox Player::getActiveHitbox() {
   return {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
 }
 
-void Player::takeDamage(int damage, bool forceInterrupt) {
+void Player::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
   if (currentState == &dieState || buffManager_.isInvincible())
     return;
 
@@ -334,8 +369,16 @@ void Player::takeDamage(int damage, bool forceInterrupt) {
     runtimeStats.health -= damage;
     runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
     
+    addFloatingText(std::to_string(damage), RED, {0, 0}, 0.5f);
+    
     // Apply a small knockback upwards to break free from continuous ground hazards
     runtimeStats.velocity.y = -200.0f;
+    if (knockbackDirX != 0.0f) {
+        runtimeStats.velocity.x = 250.0f * knockbackDirX;
+    } else {
+        // Default to pushing backwards if no direction provided
+        runtimeStats.velocity.x = worldStats.isFacingRight ? -250.0f : 250.0f;
+    }
 
     if (runtimeStats.health <= 0) {
       changeState(dieState);
@@ -345,6 +388,8 @@ void Player::takeDamage(int damage, bool forceInterrupt) {
   } else {
     // DOT damage ignores iframeTimer and hurtState invincibility, but still deals damage
     runtimeStats.health -= damage;
+    addFloatingText(std::to_string(damage), RED, {0, 0}, 0.5f);
+
     if (runtimeStats.health <= 0) {
       changeState(dieState);
     } else {
@@ -436,12 +481,35 @@ void Player::updateStateFromPhysics() {
 void Player::spawnFireball() {
   if (!commandQueue) return;
 
-  Vector2 offset = {worldStats.isFacingRight ? 100.0f : -100.0f, -10.0f};
-
   SpawnCommand cmd;
   cmd.type = EntityType::Fireball;
-  cmd.position = {worldStats.position.x + offset.x,
-                  worldStats.position.y + offset.y};
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnSpecialBall() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::SpecialBall;
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnExplosion() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::Explosion;
+  cmd.position = worldStats.position; // Centered on the player
   cmd.isFacingRight = worldStats.isFacingRight;
   cmd.ownerName = baseStats.name;
   cmd.spawner = this;

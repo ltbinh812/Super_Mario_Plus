@@ -5,9 +5,15 @@
 #include <unordered_map>
 #include <vector>
 
+enum class InputType {
+  PRESSED,
+  DOWN,
+  RELEASED
+};
+
 struct KeyBinding {
   std::unique_ptr<IPlayerCommand> command;
-  int triggerMode; // 0: Released, 1: Down, 2: Pressed
+  InputType type;
 };
 
 class InputHandler {
@@ -17,7 +23,7 @@ private:
 public:
   InputHandler() = default;
   void clearBindings();
-  void bindKey(int key, std::unique_ptr<IPlayerCommand> command, int triggerMode);
+  void bindKey(int key, std::unique_ptr<IPlayerCommand> command, InputType type);
   std::vector<IPlayerCommand *> handleInput();
 };
 

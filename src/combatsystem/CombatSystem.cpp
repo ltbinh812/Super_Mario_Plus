@@ -8,18 +8,7 @@
 CombatSystem::CombatSystem()
     : detector(std::make_unique<BruteForceDetector>()) {}
 
-void CombatSystem::registerEntity(Entity* e) {
-    entities.push_back(e);
-}
-
-void CombatSystem::removeInactive() {
-    entities.erase(
-        std::remove_if(entities.begin(), entities.end(),
-            [](Entity* e) { return !e->getIsActive(); }),
-        entities.end());
-}
-
-void CombatSystem::update(float dt) {
+void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
     // 1. Collect active hitboxes from all entities
     std::vector<Hitbox> activeHitboxes;
     for (auto* entity : entities) {
@@ -53,12 +42,23 @@ void CombatSystem::update(float dt) {
 
         int finalDamage = std::max(0, attackBox->damage - targetDefense);
         if (finalDamage > 0) {
-            target->takeDamage(finalDamage);
+            float dirX = 0.0f;
+            if (attackBox->owner) {
+                // Determine direction based on positions
+                float attackerX = attackBox->owner->getWorldStats().position.x;
+                float targetX = target->getWorldStats().position.x;
+                dirX = (targetX > attackerX) ? 1.0f : -1.0f;
+            } else if (attackBox->ignoreEntity) {
+                float spawnerX = attackBox->ignoreEntity->getWorldStats().position.x;
+                float targetX = target->getWorldStats().position.x;
+                dirX = (targetX > spawnerX) ? 1.0f : -1.0f;
+            }
+            target->takeDamage(finalDamage, dirX);
         }
     }
 }
 
-void CombatSystem::renderDebug() const {
+void CombatSystem::renderDebug(const std::vector<Entity*>& entities) const {
     for (auto* entity : entities) {
         if (!entity->getIsActive()) continue;
         if (entity->hasActiveHitbox()) {

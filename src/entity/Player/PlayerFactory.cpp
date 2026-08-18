@@ -2,11 +2,14 @@
 #include "AssetManager.h"
 #include "BlockSkill.h"
 #include "DashSkill.h"
-#include "Punch1Skill.h"
-#include "Punch2Skill.h"
-#include "Punch3Skill.h"
-#include "Punch4Skill.h"
+#include "Attack1Skill.h"
+#include "Attack2Skill.h"
+#include "Attack3Skill.h"
+#include "Attack4Skill.h"
 #include "LongAttackSkill.h"
+#include "JumpAttackSkill.h"
+#include "LowAttackSkill.h"
+#include "SpecialSkillAttack.h"
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -18,11 +21,14 @@ using json = nlohmann::json;
 static const std::unordered_map<std::string, std::function<std::unique_ptr<ISkill>()>> kSkillRegistry = {
     { "Dash",       []{ return std::make_unique<DashSkill>(); } },
     { "Block",      []{ return std::make_unique<BlockSkill>(); } },
-    { "Punch1",     []{ return std::make_unique<Punch1Skill>(); } },
-    { "Punch2",     []{ return std::make_unique<Punch2Skill>(); } },
-    { "Punch3",     []{ return std::make_unique<Punch3Skill>(); } },
-    { "Punch4",     []{ return std::make_unique<Punch4Skill>(); } },
+    { "Attack1",    []{ return std::make_unique<Attack1Skill>(); } },
+    { "Attack2",    []{ return std::make_unique<Attack2Skill>(); } },
+    { "Attack3",    []{ return std::make_unique<Attack3Skill>(); } },
+    { "Attack4",    []{ return std::make_unique<Attack4Skill>(); } },
     { "LongAttack", []{ return std::make_unique<LongAttackSkill>(); } },
+    { "JumpAttack", []{ return std::make_unique<JumpAttackSkill>(); } },
+    { "LowAttack",  []{ return std::make_unique<LowAttackSkill>(); } },
+    { "SpecialAttack", []{ return std::make_unique<SpecialSkillAttack>(); } },
 };
 
 std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
@@ -76,13 +82,27 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   wS.isFacingRight = true;
   wS.animation     = nullptr;
 
-  // Load all animations from JSON
+  // Resolve asset folder for auto-loading textures
+  std::string assetFolder = charData["assetFolder"].get<std::string>();
+  std::string charDisplayName = charData["name"].get<std::string>();
+
+  // Load all animations from JSON (auto-load textures from assetFolder)
   std::unordered_map<std::string, Animation> animations;
   for (auto& [animName, animData] : charData["animations"].items()) {
+    std::string texBase = animData["texture"].get<std::string>();
+    std::string texKey  = charDisplayName + "_" + texBase;
+    std::string texPath = "assets/" + assetFolder + "/" + texBase + ".png";
+
+    // Load texture if not already loaded
+    AssetManager::getInstance().loadTexture(texKey, texPath);
+
+    float scale = animData.value("scale", 1.0f);
+
     animations.emplace(animName, Animation(
-        AssetManager::getInstance().getTexture(animData["texture"].get<std::string>()),
+        AssetManager::getInstance().getTexture(texKey),
         animData["frameNum"].get<int>(),
-        animData["frameTime"].get<float>()
+        animData["frameTime"].get<float>(),
+        scale
     ));
   }
 
@@ -102,6 +122,8 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     auto& skillJson = charData["skills"][skillName];
     int atk = skillJson.value("attack", 0);
     int def = skillJson.value("defense", 0);
+    float manaCost = skillJson.value("manaCost", skill->getManaCost()); // fallback to default cost if not in JSON
+    skill->setManaCost(manaCost);
     Rectangle box = {
         skillJson["box"].value("offsetX", 0.0f),
         skillJson["box"].value("offsetY", 0.0f),
@@ -123,10 +145,20 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
       hitStart = startFrame * frameTime;
       hitEnd   = endFrame * frameTime;
     }
-    skill->setDurationAndHitbox(duration, hitStart, hitEnd);
+     skill->setDurationAndHitbox(duration, hitStart, hitEnd);
+    
+    // Inject pacing data from JSON into skill
+    float recovery = skillJson.value("recoveryDuration", 0.1f);
+    float hitstop = skillJson.value("hitStopDuration", 0.05f);
+    float anticipation = skillJson.value("anticipationDuration", 0.0f);
+    skill->setPacingData(recovery, hitstop, anticipation);
+
+    float moveControl = skillJson.value("moveControl", 0.0f);
+    skill->setMoveControl(moveControl);
 
     player->addSkill(skillName, std::move(skill));
   }
 
   return player;
 }
+

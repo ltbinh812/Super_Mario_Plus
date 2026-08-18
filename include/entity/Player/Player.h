@@ -64,10 +64,13 @@ public:
   void jump();
   void crouch();
   void standUp();
-  void dash(float dashSpeed);
+  void speedUpX(float speedX);
+  void speedUpY(float speedY);
   void reduceMana(float cost);
   void increaseMana(float cost);
   void spawnFireball();
+  void spawnExplosion();
+  void spawnSpecialBall();
 
   // --- Swim & Climb helpers (avoids raw getRuntimeStatsMutable() in States) ---
   void swim(float dirX);   // Move horizontally at water speed
@@ -79,7 +82,7 @@ public:
   // --- Combat (read-only queries for CombatSystem) ---
   bool hasActiveHitbox() const override;
   Hitbox getActiveHitbox() override;   // Non-const: avoids const_cast
-  void takeDamage(int damage, bool forceInterrupt = true) override;
+  void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
 
   // --- Polymorphic Hook overrides from Entity ---
   void onLand(float floorY) override;
@@ -92,7 +95,7 @@ public:
   void onDie() override;
 
   // --- Animation ---
-  void playAnimation(const std::string &name);
+  void playAnimation(const std::string &name, bool loop = true);
 
   // --- State instances (public so States can reference siblings) ---
   PlayerIdleState idleState;

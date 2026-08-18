@@ -337,3 +337,38 @@ void Entity::updatePhysicsSimple(float groundY, float dt) {
         runtimeStats.isGrounded = false;
     }
 }
+
+void Entity::addFloatingText(const std::string& text, Color color, Vector2 offset, float lifetime) {
+    FloatingText ft;
+    ft.text = text;
+    ft.position = {worldStats.position.x + offset.x, worldStats.position.y - runtimeStats.physicsBox.y + offset.y};
+    ft.velocity = {0, -50.0f}; // Float upwards
+    ft.color = color;
+    ft.lifetime = lifetime;
+    ft.maxLifetime = lifetime;
+    worldStats.floatingTexts.push_back(ft);
+}
+
+void Entity::updateFloatingTexts(float dt) {
+    for (auto it = worldStats.floatingTexts.begin(); it != worldStats.floatingTexts.end(); ) {
+        it->position.x += it->velocity.x * dt;
+        it->position.y += it->velocity.y * dt;
+        it->lifetime -= dt;
+        if (it->lifetime <= 0.0f) {
+            it = worldStats.floatingTexts.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+void Entity::renderFloatingTexts() {
+    for (const auto& ft : worldStats.floatingTexts) {
+        // Fade out
+        float alpha = ft.lifetime / ft.maxLifetime;
+        Color c = ft.color;
+        c.a = static_cast<unsigned char>(255 * alpha);
+        
+        DrawText(ft.text.c_str(), static_cast<int>(ft.position.x), static_cast<int>(ft.position.y), 10, c);
+    }
+}

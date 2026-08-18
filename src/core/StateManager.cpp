@@ -8,6 +8,7 @@
 #include "World04State.h"
 #include "World05State.h"
 #include "World06State.h"
+#include "CharacterSelectionState.h"
 #include <iostream>
 
 void StateManager::PushState(std::unique_ptr<GameState> state) {
@@ -27,7 +28,7 @@ void StateManager::ChangeState(std::unique_ptr<GameState> state) {
 }
 
 StateManager::StateManager() {
-  std::unique_ptr<GameState> initialState = std::make_unique<World05State>();
+  std::unique_ptr<GameState> initialState = std::make_unique<CharacterSelectionState>();
   stateStack.push(std::move(initialState));
 }
 

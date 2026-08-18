@@ -4,7 +4,7 @@
 PlayerDieState::PlayerDieState(Player& player) : PlayerState(player) {}
 
 void PlayerDieState::onEnter() {
-    player.playAnimation("die");
+    player.playAnimation("die", false);
 }
 
 void PlayerDieState::onExit() {

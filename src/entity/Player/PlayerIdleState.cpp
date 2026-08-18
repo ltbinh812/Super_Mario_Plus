@@ -12,7 +12,7 @@ void PlayerIdleState::onExit() {
 }
 
 void PlayerIdleState::update(float dt) {
-    player.increaseMana(60.0f * dt);
+    player.increaseMana(20.0f * dt); // Regenerate 5 mana per second
 }
 
 void PlayerIdleState::onMoveLeft() {
@@ -36,6 +36,6 @@ void PlayerIdleState::onCrouch() {
 }
 
 void PlayerIdleState::onAttack() {
-    player.useSkill("Punch1");
+    player.useSkill("Attack1");
 }
 
