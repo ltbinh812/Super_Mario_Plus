@@ -16,7 +16,9 @@
 #include <raymath.h>
 
 BaseLevelState::BaseLevelState(const std::string &mapFilePath,
-                               const std::string &initialLevel)
+                               const std::string &initialLevel,
+                               const std::string &p1Name,
+                               const std::string &p2Name)
     : mapCamera(416.0f), currentLevel(initialLevel), mapFilePath(mapFilePath) {
 
   bool loaded = map.LoadLDtkMap(mapFilePath, currentLevel);
@@ -31,7 +33,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
 
     partyInventory = std::make_shared<PartyInventory>();
 
-    player1 = PlayerFactory::createPlayer("Goku", {0, 0});
+    player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
     if (player1) {
       player1->setPosition(spawn1);
       player1->setStartPosition(spawn1);
@@ -46,20 +48,23 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
       player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
                              InputType::RELEASED);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::PRESSED);
       player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             InputType::DOWN);
+                             InputType::PRESSED);
       player1Handler.bindKey(KEY_U,
                              std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::DOWN); // skill1
+                             InputType::PRESSED);
+      player1Handler.bindKey(KEY_I,
+                             std::make_unique<UseSkillCommand>("SpecialAttack"),
+                             InputType::PRESSED);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
-                             InputType::DOWN); // block
+                             InputType::PRESSED);
       player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
+                             InputType::PRESSED);
     }
 
-    player2 = PlayerFactory::createPlayer("Goku", {0, 0});
+    player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
     if (player2) {
       Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 208.0f};
       player2->setPosition(spawn2);
@@ -78,18 +83,21 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                              InputType::RELEASED);
       player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
                              InputType::RELEASED);
-      player2Handler.bindKey(KEY_ONE, std::make_unique<AttackCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_TWO, std::make_unique<JumpCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_THREE,
-                             std::make_unique<UseSkillCommand>("Dash"), InputType::DOWN);
-      player2Handler.bindKey(KEY_FOUR,
+      player2Handler.bindKey(KEY_KP_1, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_2, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_3,
+                             std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_4,
                              std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::DOWN); // skill1
+                             InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_5,
+                             std::make_unique<UseSkillCommand>("SpecialAttack"),
+                             InputType::PRESSED);
       player2Handler.bindKey(KEY_RIGHT_SHIFT,
                              std::make_unique<UseSkillCommand>("Block"),
-                             InputType::DOWN); // block (could be left or right shift)
+                             InputType::PRESSED);
       player2Handler.bindKey(KEY_ENTER, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED); // nhặt/dùng item (chỉ kích hoạt 1 lần khi bấm)
+                             InputType::PRESSED);
     }
 
     // CombatSystem is now stateless, so no registerEntity calls here
@@ -256,18 +264,66 @@ void BaseLevelState::Update(float dt) {
       dynamicSolids.push_back(r);
   }
 
-  if (player1) {
-    player1->updatePhysicsWithMap(map, dynamicSolids, dt);
-    player1->updateStateFromPhysics();
-    player1->update(dt);
-  }
-  if (player2) {
-    player2->updatePhysicsWithMap(map, dynamicSolids, dt);
-    player2->updateStateFromPhysics();
-    player2->update(dt);
-  }
+    if (player1) {
+      player1->updatePhysicsWithMap(map, dynamicSolids, dt);
+      player1->updateStateFromPhysics();
+      player1->update(dt);
+    }
+    if (player2) {
+      player2->updatePhysicsWithMap(map, dynamicSolids, dt);
+      player2->updateStateFromPhysics();
+      player2->update(dt);
+    }
 
-  std::string next = "";
+    // Player-to-Player Pushing Resolution
+    if (player1 && player2 && player1->getIsActive() && player2->getIsActive()) {
+        Rectangle r1 = player1->getHitbox();
+        Rectangle r2 = player2->getHitbox();
+        if (CheckCollisionRecs(r1, r2)) {
+            float center1 = r1.x + r1.width / 2.0f;
+            float center2 = r2.x + r2.width / 2.0f;
+            float overlap = (r1.width + r2.width) / 2.0f - std::abs(center1 - center2);
+            
+            if (overlap > 0) {
+                float push = overlap / 2.0f + 0.1f; // +0.1f epsilon to fully separate
+                
+                Vector2 p1Pos = player1->getWorldStats().position;
+                Vector2 p2Pos = player2->getWorldStats().position;
+                
+                float dir1 = (center1 < center2) ? -1.0f : 1.0f;
+                float dir2 = -dir1;
+
+                // Check if P1 hits a wall if pushed
+                Rectangle nextR1 = r1;
+                nextR1.x += push * dir1;
+                bool p1HitsWall = false;
+                for (const auto& tile : map.GetCollidingTiles(nextR1)) {
+                    if (tile.type == CollisionType::Solid) { p1HitsWall = true; break; }
+                }
+
+                // Check if P2 hits a wall if pushed
+                Rectangle nextR2 = r2;
+                nextR2.x += push * dir2;
+                bool p2HitsWall = false;
+                for (const auto& tile : map.GetCollidingTiles(nextR2)) {
+                    if (tile.type == CollisionType::Solid) { p2HitsWall = true; break; }
+                }
+
+                if (!p1HitsWall && !p2HitsWall) {
+                    player1->setPosition({p1Pos.x + push * dir1, p1Pos.y});
+                    player2->setPosition({p2Pos.x + push * dir2, p2Pos.y});
+                } else if (p1HitsWall && !p2HitsWall) {
+                    // P1 is against a wall, push P2 the full amount
+                    player2->setPosition({p2Pos.x + overlap * dir2 + 0.1f, p2Pos.y});
+                } else if (!p1HitsWall && p2HitsWall) {
+                    // P2 is against a wall, push P1 the full amount
+                    player1->setPosition({p1Pos.x + overlap * dir1 + 0.1f, p1Pos.y});
+                }
+            }
+        }
+    }
+
+    std::string next = "";
   std::string dir = "";
   float edge = 16.0f;
   float tX = 0, tY = 0;

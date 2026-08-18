@@ -4,12 +4,9 @@
 #include "PlayerCommands.h"
 #include "SpawnCommand.h"
 #include "raylib.h"
-<<<<<<< HEAD
 #include "BaseItem.h"
 #include "ItemUsageFactory.h"
-=======
 #include <cmath>
->>>>>>> origin/minh1
 #include <iostream>
 
 Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
@@ -37,12 +34,8 @@ void Player::update(float dt) {
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
-<<<<<<< HEAD
-  
   buffManager_.update(dt, *this);
-=======
   updateFloatingTexts(dt);
->>>>>>> origin/minh1
 }
 
 void Player::render(float alpha) {
@@ -77,15 +70,11 @@ void Player::render(float alpha) {
 
   // Debug hitbox
   DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
-<<<<<<< HEAD
-
   for (auto& eff : activeEffects) {
       eff->render(*this, alpha);
   }
-=======
   
   renderFloatingTexts();
->>>>>>> origin/minh1
 }
 
 void Player::changeState(PlayerState &state) {

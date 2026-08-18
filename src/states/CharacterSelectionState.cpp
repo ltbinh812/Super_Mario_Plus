@@ -1,5 +1,6 @@
 #include "CharacterSelectionState.h"
 #include "World02State.h"
+#include "World05State.h"
 #include "StateCommands.h"
 #include "raylib.h"
 #include <iostream>
@@ -28,7 +29,7 @@ void CharacterSelectionState::HandleInput() {
     if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_J)) {
         std::string selectedChar = characters[selectedIndex];
         std::cout << "[CharacterSelectionState] Selected character: " << selectedChar << "\n";
-        PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<World02State>(selectedChar)));
+        PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<World05State>(selectedChar)));
     }
 }
 

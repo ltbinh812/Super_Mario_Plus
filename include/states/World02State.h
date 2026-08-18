@@ -3,6 +3,6 @@
 
 class World02State : public BaseLevelState {
 public:
-    World02State(const std::string& player1Name = "goku") : BaseLevelState("assets/maps/map02/world02.ldtk", player1Name) {}
+    World02State(const std::string& p1Name = "Goku", const std::string& p2Name = "Goku") : BaseLevelState("assets/maps/map02/world02.ldtk", "", p1Name, p2Name) {}
     ~World02State() override = default;
 };

@@ -49,7 +49,7 @@ protected:
     void TransitionToLevel(const std::string& nextLevel, const std::string& dir, float triggerGlobalX, float triggerGlobalY);
 
 public:
-    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "");
+    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
     virtual ~BaseLevelState() = default;
 
     GameSaveData createSaveData() const;
