@@ -1,60 +1,26 @@
-{"frames": {
-
-"chest_03.png":
 {
-	"frame": {"x":34,"y":1,"w":24,"h":22},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":4,"y":5,"w":24,"h":22},
-	"sourceSize": {"w":32,"h":32}
-},
-"chest_04.png":
-{
-	"frame": {"x":1,"y":1,"w":31,"h":30},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":1,"y":1,"w":31,"h":30},
-	"sourceSize": {"w":32,"h":32}
-},
-"chest_07.png":
-{
-	"frame": {"x":60,"y":1,"w":28,"h":20},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":7,"w":28,"h":20},
-	"sourceSize": {"w":32,"h":32}
-},
-"chest_08.png":
-{
-	"frame": {"x":118,"y":1,"w":28,"h":19},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":7,"w":28,"h":19},
-	"sourceSize": {"w":32,"h":32}
-},
-"chest_09.png":
-{
-	"frame": {"x":148,"y":1,"w":24,"h":19},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":4,"y":7,"w":24,"h":19},
-	"sourceSize": {"w":32,"h":32}
-},
-"chest_10.png":
-{
-	"frame": {"x":90,"y":1,"w":26,"h":20},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":3,"y":7,"w":26,"h":20},
-	"sourceSize": {"w":32,"h":32}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "chest_boss.png",
-	"format": "RGBA8888",
-	"size": {"w":173,"h":32},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:11d59338c75491efceb47ff04726225e:e72acdd55434a45e1602a57f8868f15b:2ccce4dfb35f512276eddb5a6d99bc26$"
-}
+  "frames": {
+    "boss_chest_1_idle": {
+      "frame": {"x": 0, "y": 0, "w": 192, "h": 64}
+    },
+    "boss_chest_1_active": {
+      "frame": {"x": 192, "y": 0, "w": 288, "h": 64}
+    },
+    "boss_chest_2_idle": {
+      "frame": {"x": 0, "y": 64, "w": 192, "h": 64}
+    },
+    "boss_chest_2_active": {
+      "frame": {"x": 192, "y": 64, "w": 288, "h": 64}
+    },
+    "boss_chest_3_idle": {
+      "frame": {"x": 0, "y": 128, "w": 192, "h": 64}
+    },
+    "boss_chest_3_active": {
+      "frame": {"x": 192, "y": 128, "w": 288, "h": 64}
+    }
+  },
+  "meta": {
+    "image": "chest_boss.png",
+    "size": {"w": 480, "h": 192}
+  }
 }

@@ -10,6 +10,8 @@ public:
 
     virtual std::string getName() const = 0;
     virtual std::string getFrameName() const = 0;
+    virtual int getFrameCount() const { return 1; }
+    virtual float getFrameTime() const { return 0.1f; }
     virtual float getDuration() const = 0;
 
     // Multipliers for stats (return 0.0f for no effect, e.g. 0.5f means +50%)

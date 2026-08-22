@@ -23,6 +23,7 @@ include_directories(
     include/entity/Skill
     include/entity/Item
     include/entity/BuffEffects
+    include/entity/EnemyStates
     include/infrastructure
     include/command
     include/environment
@@ -77,7 +78,12 @@ set(SOURCES
     src/entity/Fireball.cpp
     src/entity/Explosion.cpp
     src/entity/EntityFactory.cpp
+    src/entity/Mob.cpp
+    src/entity/EnemyFactory.cpp
+    src/entity/EnemyStates/EnemyIdleState.cpp
+    src/entity/EnemyStates/EnemyPatrolState.cpp
     src/entity/Item/ItemAtlasRegistry.cpp
+    src/entity/Item/AtlasAnimation.cpp
     src/entity/Item/BaseItem.cpp
     src/entity/Item/Spring.cpp
     src/entity/Item/Coin.cpp

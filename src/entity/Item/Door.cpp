@@ -21,12 +21,19 @@ Rectangle Door::getHitbox() const {
 }
 
 void Door::render(float alpha) {
-    std::string frame = isOpen() ? "door_open.png" : "door_closed.png";
+    std::string frame = isOpen() ? "door_anim_open" : "door_anim_closed";
+    
+    // Draw the 256x256 frame, centered horizontally on the 160x128 physical hitbox, resting on ground
+    float drawW = 256.0f;
+    float drawH = 256.0f;
+    
     Rectangle dest = {
-        worldStats.position.x,
-        worldStats.position.y - DOOR_H,
-        DOOR_W, DOOR_H
+        worldStats.position.x - (drawW - DOOR_W) / 2.0f,
+        worldStats.position.y - drawH + getRenderOffsetY(),
+        drawW,
+        drawH
     };
+    
     drawFrameRect(frame, dest);
 }
 

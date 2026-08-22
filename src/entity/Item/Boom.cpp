@@ -17,6 +17,10 @@ Boom::Boom(Vector2 worldPos, float scale)
     baseStats.gravityScale = 160.0f;
     // Pop up when spawned from a chest/luckyblock
     runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
+
+    animations_[ItemState::Idle] = AtlasAnimation("bomb_anim", 10, 0.1f);
+    setAnimation(ItemState::Idle);
+    explosionAnim_ = AtlasAnimation("explosion_anim", 15, 0.05f);
 }
 
 // Pre-activated thrown bomb: starts counting down immediately
@@ -25,6 +29,11 @@ Boom::Boom(Vector2 worldPos, Vector2 initVelocity)
 {
     baseStats.gravityScale = 160.0f;
     runtimeStats.velocity = initVelocity;
+
+    animations_[ItemState::Idle] = AtlasAnimation("bomb_anim", 10, 0.1f);
+    setAnimation(ItemState::Idle);
+    explosionAnim_ = AtlasAnimation("explosion_anim", 15, 0.05f);
+    
     activate();
 }
 
@@ -53,6 +62,7 @@ void Boom::update(float dt) {
         }
 
         explosionTimer_ -= dt;
+        explosionAnim_.update(dt);
         if (explosionTimer_ <= 0.0f) {
             itemState_ = ItemState::Used;
         }
@@ -88,9 +98,23 @@ void Boom::render(float alpha) {
             worldStats.position.y - EXPL_H,
             EXPL_W, EXPL_H
         };
-        drawFrameRect("explosion.png", dest);
+        const Texture2D& tex = explosionAnim_.getTexture();
+        if (tex.id != 0) {
+            DrawTexturePro(tex, explosionAnim_.getCurrentSourceRect(), dest, {0, 0}, 0.0f, WHITE);
+        }
+    } else if (active_) {
+        Color tint = frameToggle_ ? Color{255, 255, 255, 64} : WHITE;
+        if (currentAnim_ && currentAnim_->isValid()) {
+            drawAnim(tint);
+        } else {
+            drawFrame("bomb.png", tint);
+        }
     } else {
-        drawFrame(frameToggle_ ? "bomb_active.png" : "bomb.png");
+        if (currentAnim_ && currentAnim_->isValid()) {
+            drawAnim();
+        } else {
+            drawFrame("bomb.png");
+        }
     }
 }
 

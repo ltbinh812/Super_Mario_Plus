@@ -28,11 +28,20 @@ Buff::Buff(Vector2 worldPos, float scale, const std::string& specificType)
         // Just make it a RandomBuff
         effect_ = std::make_unique<RandomBuff>();
     }
+
+    // Set up the AtlasAnimation using the effect's frame data
+    animations_[ItemState::Idle] = AtlasAnimation(
+        effect_->getFrameName(), 
+        effect_->getFrameCount(), 
+        effect_->getFrameTime(), 
+        true
+    );
+    setAnimation(ItemState::Idle);
 }
 
 void Buff::render(float alpha) {
     if (itemState_ == ItemState::Used) return;
-    drawFrame(effect_->getFrameName());
+    drawAnim();
 }
 
 void Buff::onInteract(Entity& other) {

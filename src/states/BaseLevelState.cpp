@@ -1,6 +1,7 @@
 #include "BaseLevelState.h"
 #include "Effects.h"
 #include "EntityFactory.h"
+#include "EnemyFactory.h"
 #include "GameState.h"
 #include "ItemAtlasRegistry.h"
 #include "ItemFactory.h"
@@ -103,30 +104,39 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
     // CombatSystem is now stateless, so no registerEntity calls here
     // Load item atlas (once globally, no-op if already loaded)
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
 
     // Spawn items from LDtk entity data
     activeItems.clear();
     auto entityData = map.GetEntityData();
     for (const auto &data : entityData) {
-      auto item =
-          ItemFactory::create(data.identifier, data.px, data.fieldInstances);
-      if (item) {
-        item->setIid(data.iid);
-        item->setCommandQueue(&spawnQueue); // <-- FIX
-        // Restore persisted state if this item was visited before
-        if (!data.iid.empty()) {
-          auto it = persistedItemStates.find(data.iid);
-          if (it != persistedItemStates.end()) {
-            item->getRuntimeStatsMutable(); // ensure access
-            item->setItemState(it->second);
-          }
+      if (data.identifier.rfind("Mob_", 0) == 0 || data.identifier.rfind("Boss_", 0) == 0) {
+        if (!data.iid.empty() && persistedDeadEntities.find(data.iid) != persistedDeadEntities.end()) {
+            continue;
         }
-        activeItems.push_back(std::move(item));
+        auto enemy = EnemyFactory::create(data.identifier, data.px, data.fieldInstances);
+        if (enemy) {
+            enemy->setIid(data.iid);
+            enemy->setCommandQueue(&spawnQueue);
+            activeEntities.push_back(std::move(enemy));
+        }
+      } else {
+        auto item = ItemFactory::create(data.identifier, data.px, data.fieldInstances);
+        if (item) {
+          item->setIid(data.iid);
+          item->setCommandQueue(&spawnQueue);
+          if (!data.iid.empty()) {
+            auto it = persistedItemStates.find(data.iid);
+            if (it != persistedItemStates.end()) {
+              item->getRuntimeStatsMutable();
+              item->setItemState(it->second);
+            }
+          }
+          activeItems.push_back(std::move(item));
+        }
       }
     }
-    std::cout << "[BaseLevelState] Spawned " << activeItems.size()
-              << " items.\n";
-
+    TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.", activeItems.size(), activeEntities.size());
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
   }
@@ -143,6 +153,10 @@ void BaseLevelState::HandleInput() {
     auto commands = player2Handler.handleInput();
     for (auto *cmd : commands)
       cmd->Execute(*player2);
+  }
+
+  for (auto& ent : activeEntities) {
+      if (ent) ent->decideAction();
   }
 }
 
@@ -237,6 +251,11 @@ void BaseLevelState::Process() {
     applyBurn(player2.get());
     for (auto &ent : activeEntities)
       applyBurn(ent.get());
+  }
+
+  // Process AI and Logic for Entities
+  for (auto& ent : activeEntities) {
+      if (ent) ent->process();
   }
 
   // Cleanups
@@ -532,20 +551,32 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
 
     // Re-spawn items for the new level (restoring persisted states)
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
     activeItems.clear();
     auto entityData = map.GetEntityData();
     for (const auto &data : entityData) {
-      auto item =
-          ItemFactory::create(data.identifier, data.px, data.fieldInstances);
-      if (item) {
-        item->setIid(data.iid);
-        item->setCommandQueue(&spawnQueue); // <-- FIX
-        if (!data.iid.empty()) {
-          auto it = persistedItemStates.find(data.iid);
-          if (it != persistedItemStates.end())
-            item->setItemState(it->second);
+      if (data.identifier.rfind("Mob_", 0) == 0 || data.identifier.rfind("Boss_", 0) == 0) {
+        if (!data.iid.empty() && persistedDeadEntities.find(data.iid) != persistedDeadEntities.end()) {
+            continue;
         }
-        activeItems.push_back(std::move(item));
+        auto enemy = EnemyFactory::create(data.identifier, data.px, data.fieldInstances);
+        if (enemy) {
+            enemy->setIid(data.iid);
+            enemy->setCommandQueue(&spawnQueue);
+            activeEntities.push_back(std::move(enemy));
+        }
+      } else {
+        auto item = ItemFactory::create(data.identifier, data.px, data.fieldInstances);
+        if (item) {
+          item->setIid(data.iid);
+          item->setCommandQueue(&spawnQueue);
+          if (!data.iid.empty()) {
+            auto it = persistedItemStates.find(data.iid);
+            if (it != persistedItemStates.end())
+              item->setItemState(it->second);
+          }
+          activeItems.push_back(std::move(item));
+        }
       }
     }
   }
@@ -624,18 +655,30 @@ void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
   // Respawn items based on restored persisted state
   auto entityData = map.GetEntityData();
   for (const auto& d : entityData) {
-    auto item = ItemFactory::create(d.identifier, d.px, d.fieldInstances);
-    if (item) {
-      item->setIid(d.iid);
-      item->setCommandQueue(&spawnQueue);
-      if (!d.iid.empty()) {
-        auto it = persistedItemStates.find(d.iid);
-        if (it != persistedItemStates.end()) {
-          item->getRuntimeStatsMutable();
-          item->setItemState(it->second);
-        }
+    if (d.identifier.rfind("Mob_", 0) == 0 || d.identifier.rfind("Boss_", 0) == 0) {
+      if (!d.iid.empty() && persistedDeadEntities.find(d.iid) != persistedDeadEntities.end()) {
+          continue;
       }
-      activeItems.push_back(std::move(item));
+      auto enemy = EnemyFactory::create(d.identifier, d.px, d.fieldInstances);
+      if (enemy) {
+          enemy->setIid(d.iid);
+          enemy->setCommandQueue(&spawnQueue);
+          activeEntities.push_back(std::move(enemy));
+      }
+    } else {
+      auto item = ItemFactory::create(d.identifier, d.px, d.fieldInstances);
+      if (item) {
+        item->setIid(d.iid);
+        item->setCommandQueue(&spawnQueue);
+        if (!d.iid.empty()) {
+          auto it = persistedItemStates.find(d.iid);
+          if (it != persistedItemStates.end()) {
+            item->getRuntimeStatsMutable();
+            item->setItemState(it->second);
+          }
+        }
+        activeItems.push_back(std::move(item));
+      }
     }
   }
 

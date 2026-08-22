@@ -1,8 +1,10 @@
 #pragma once
 #include "Entity.h"
 #include "ItemAtlasRegistry.h"
+#include "AtlasAnimation.h"
 #include "raylib.h"
 #include <string>
+#include <unordered_map>
 
 // State Pattern: item lifecycle
 enum class ItemState { Idle, Active, Used };
@@ -58,6 +60,16 @@ protected:
     float scale_;   // 2.0f (LDtk 16px -> game 32px)
     float animTimer_ = 0.0f;
     float pickupDelay_ = 0.0f;
+
+    std::unordered_map<ItemState, AtlasAnimation> animations_;
+    AtlasAnimation* currentAnim_ = nullptr;
+
+    // Set the current animation based on the state
+    void setAnimation(ItemState state);
+
+    // Draw the current frame of the current animation
+    void drawAnim(Color tint = WHITE) const;
+    void drawAnimRect(Rectangle destRect, Color tint = WHITE) const;
 
     // Draw a single frame from the atlas at this item's world position
     void drawFrame(const std::string& frameName, Color tint = WHITE) const;

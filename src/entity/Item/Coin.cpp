@@ -13,6 +13,10 @@ Coin::Coin(Vector2 worldPos, float scale)
     baseStats.gravityScale = 160.0f;
     // Pop up if spawned dynamically
     runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
+
+    // Set up default animation
+    animations_[ItemState::Idle] = AtlasAnimation("coin_anim", 6, 0.1f);
+    setAnimation(ItemState::Idle);
 }
 
 void Coin::update(float dt) {
@@ -21,7 +25,13 @@ void Coin::update(float dt) {
 
 void Coin::render(float alpha) {
     if (itemState_ == ItemState::Used) return;
-    drawFrame("coin_gold.png");
+    
+    // Draw using animation if it has frames, otherwise fallback to drawFrame for the static image
+    if (currentAnim_ && currentAnim_->isValid()) {
+        drawAnim();
+    } else {
+        drawFrame("coin_gold.png");
+    }
 }
 
 void Coin::onInteract(Entity& other) {

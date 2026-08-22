@@ -1,12 +1,8 @@
 {"frames": {
 
-"explosion.png":
+"explosion_anim":
 {
-	"frame": {"x":1,"y":1,"w":992,"h":572},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":79,"y":29,"w":992,"h":572},
-	"sourceSize": {"w":1090,"h":630}
+	"frame": {"x":0,"y":0,"w":960,"h":128}
 }},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",

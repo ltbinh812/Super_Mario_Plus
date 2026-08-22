@@ -32,6 +32,8 @@ public:
   virtual ~Entity() = default;
   virtual void update(float dt) = 0;
   virtual void render(float alpha) = 0;
+  virtual void decideAction() {}
+  virtual void process() {}
 
   void addFloatingText(const std::string& text, Color color, Vector2 offset = {0, -20}, float lifetime = 1.0f);
 
