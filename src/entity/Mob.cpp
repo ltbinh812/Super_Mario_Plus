@@ -1,13 +1,18 @@
 #include "Mob.h"
 #include "IMobState.h"
+#include "EnemyStates/EnemyHurtState.h"
+#include "EnemyStates/EnemyDieState.h"
+#include "Player.h"
 #include <iostream>
 #include <cmath>
+#include <raymath.h>
 
-Mob::Mob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bStats)
+Mob::Mob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bStats, const MobConfig& cfg)
     : Entity(bStats, CharacterRuntimeStats(), CharacterWorldStats()),
-      mobType(type), currentAnim(nullptr), stateTimer(0.0f),
+      mobType(type), config(cfg), currentAnim(nullptr), stateTimer(0.0f),
       spawnPoint(worldPos), isFacingRight(false), isDead(false), hurtTimer(0.0f)
 {
+    faction = EntityFaction::Enemy;
     worldStats.position = worldPos;
     runtimeStats.health = bStats.maxHealth;
     runtimeStats.physicsBox = bStats.physicsBox;
@@ -74,6 +79,22 @@ void Mob::render(float alpha) {
     };
 
     DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, WHITE);
+
+    // Draw Health Bar if not dead
+    if (!isDead && baseStats.maxHealth > 0) {
+        float hpPercent = (float)runtimeStats.health / baseStats.maxHealth;
+        if (hpPercent < 0.0f) hpPercent = 0.0f;
+        
+        float barWidth = 20.0f;
+        float barHeight = 4.0f;
+        float barX = worldStats.position.x - barWidth / 2.0f;
+        float barY = worldStats.position.y + 2.0f; // Just below the mob
+        
+        // Background (black)
+        DrawRectangle((int)barX, (int)barY, (int)barWidth, (int)barHeight, BLACK);
+        // Foreground (green)
+        DrawRectangle((int)barX, (int)barY, (int)(barWidth * hpPercent), (int)barHeight, GREEN);
+    }
 }
 
 void Mob::decideAction() {
@@ -93,21 +114,34 @@ void Mob::process() {
     }
 }
 
+Player* Mob::getClosestPlayer() const {
+    Player* closest = nullptr;
+    float minDistance = 999999.0f;
+    Vector2 myPos = getPosition();
+
+    for (Player* p : targetPlayers) {
+        if (p && !p->isDead()) {
+            float dist = Vector2Distance(myPos, p->getPosition());
+            if (dist < minDistance) {
+                minDistance = dist;
+                closest = p;
+            }
+        }
+    }
+    return closest;
+}
+
 void Mob::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
     if (isDead || hurtTimer > 0.0f) return;
 
     runtimeStats.health -= damage;
-    hurtTimer = 0.5f;
 
     if (runtimeStats.health <= 0) {
         runtimeStats.health = 0;
         isDead = true;
-        setAnimation(mobType + "_die");
-        runtimeStats.velocity.x = 0;
+        changeState(std::make_unique<EnemyDieState>());
     } else if (forceInterrupt) {
-        setAnimation(mobType + "_hurt");
-        runtimeStats.velocity.x = knockbackDirX * 100.0f;
-        runtimeStats.velocity.y = -150.0f;
+        changeState(std::make_unique<EnemyHurtState>(knockbackDirX, 0.5f));
     }
 }
 

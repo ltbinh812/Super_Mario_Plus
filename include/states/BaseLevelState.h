@@ -47,6 +47,13 @@ protected:
     float triggerGlobalY = 0.0f;
 
     void TransitionToLevel(const std::string& nextLevel, const std::string& dir, float triggerGlobalX, float triggerGlobalY);
+    void spawnEntitiesFromMap();
+    void bindPlayerInputs();
+
+    void processDeathCondition(float dt);
+    void processPlayerPushing();
+    void processItemInteractions();
+    void processSpawnQueue();
 
 public:
     BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");

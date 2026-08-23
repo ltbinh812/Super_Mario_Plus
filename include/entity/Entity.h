@@ -2,6 +2,7 @@
 #include "CharacterStats.h"
 #include "IEntityState.h"
 #include "Hitbox.h"
+#include "EntityFaction.h"
 #include "raylib.h"
 #include "CommandQueue.h"
 #include "Effects.h"
@@ -19,6 +20,7 @@ protected:
   CommandQueue* commandQueue = nullptr;
   std::string iid_; // Unique identifier from LDtk map
   std::vector<std::unique_ptr<IEffect>> activeEffects;
+  EntityFaction faction = EntityFaction::None;
 
   // Internal physics helpers
   void handleTriggers(const TileMap& map, float dt);
@@ -39,6 +41,8 @@ public:
 
   virtual bool getIsActive() const { return true; }
   virtual void deactivate() {}
+  
+  virtual void setTargetPlayers(const std::vector<class Player*>& players) {}
 
   // Physics & Collision Template Method (Axis-Separated AABB Resolution)
   virtual void updatePhysicsWithMap(const TileMap& map, const std::vector<Rectangle>& dynamicSolids, float dt);
@@ -78,6 +82,7 @@ public:
   const CharacterBaseStats &getBaseStats() const { return baseStats; }
   const CharacterRuntimeStats &getRuntimeStats() const { return runtimeStats; }
   const CharacterWorldStats &getWorldStats() const { return worldStats; }
+  Vector2 getPosition() const { return worldStats.position; }
 
   // Mutable accessors — only for subclasses that truly need direct mutation (e.g. State classes via Player helpers)
   CharacterBaseStats &getBaseStatsMutable() { return baseStats; }
@@ -94,4 +99,7 @@ public:
 
   const std::string& getIid() const { return iid_; }
   void setIid(const std::string& iid) { iid_ = iid; }
+  
+  EntityFaction getFaction() const { return faction; }
+  void setFaction(EntityFaction f) { faction = f; }
 };

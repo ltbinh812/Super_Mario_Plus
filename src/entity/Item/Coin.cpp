@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
-
+#include <raymath.h>
 static const float BLOCK_SIZE = 32.0f;
 
 Coin::Coin(Vector2 worldPos, float scale)
@@ -21,6 +21,31 @@ Coin::Coin(Vector2 worldPos, float scale)
 
 void Coin::update(float dt) {
     BaseItem::update(dt);
+}
+
+void Coin::process(const std::vector<Player*>& players) {
+    Player* targetPlayer = nullptr;
+    float minDst = 160.0f; // Pull radius (5 blocks)
+    
+    for (Player* p : players) {
+        if (p && p->getBuffManager().hasGoldMagnet()) {
+            float dst = Vector2Distance(p->getWorldStats().position, worldStats.position);
+            if (dst < minDst) {
+                minDst = dst;
+                targetPlayer = p;
+            }
+        }
+    }
+
+    if (targetPlayer) {
+        Vector2 dir = Vector2Normalize(Vector2Subtract(targetPlayer->getWorldStats().position, worldStats.position));
+        float pullSpeed = 400.0f;
+        runtimeStats.velocity.x = dir.x * pullSpeed;
+        runtimeStats.velocity.y = dir.y * pullSpeed;
+        baseStats.gravityScale = 0.0f;
+    } else {
+        baseStats.gravityScale = 160.0f;
+    }
 }
 
 void Coin::render(float alpha) {

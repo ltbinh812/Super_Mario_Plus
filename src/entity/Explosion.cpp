@@ -29,7 +29,10 @@ static CharacterWorldStats getExplosionWorldStats(Vector2 startPos, bool isFacin
 Explosion::Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig& config, Entity* spawner)
     : Entity(getExplosionBaseStats(config), getExplosionRuntimeStats(config), getExplosionWorldStats(startPos, isFacingRight)),
       lifetime(config.lifetime), attackPower(config.damage), 
-      hitboxW(config.hitboxW), hitboxH(config.hitboxH), spawner(spawner) {
+      hitboxW(config.hitboxW), hitboxH(config.hitboxH), spawner(spawner), onHitEffect(config.onHitEffect),
+      hitboxStartFrame(config.hitboxStartFrame), hitboxEndFrame(config.hitboxEndFrame) {
+    
+    faction = spawner ? spawner->getFaction() : EntityFaction::Neutral;
     
     if (!config.textureName.empty()) {
         auto& assetMgr = AssetManager::getInstance();
@@ -83,10 +86,21 @@ void Explosion::render(float alpha) {
 }
 
 bool Explosion::hasActiveHitbox() const {
-    return isActive;
+    if (!isActive) return false;
+    if (animation) {
+        int currentFrame = animation->getCurrentFrameIndex();
+        return currentFrame >= hitboxStartFrame && currentFrame <= hitboxEndFrame;
+    }
+    return true;
 }
 
 Hitbox Explosion::getActiveHitbox() {
     Rectangle rect = { worldStats.position.x - hitboxW / 2.0f, worldStats.position.y - hitboxH, hitboxW, hitboxH };
-    return { rect, attackPower, 0, this, spawner };
+    Hitbox hb = { rect, attackPower, 0, this, spawner, onHitEffect };
+    if (faction == EntityFaction::Player) {
+        hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+    } else if (faction == EntityFaction::Enemy) {
+        hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
+    }
+    return hb;
 }

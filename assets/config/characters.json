@@ -1676,5 +1676,22 @@
             "frameNum": 1,
             "frameTime": 0.1
         }
+    },
+    "Boom": {
+        "explosion": {
+            "hitboxW": 96,
+            "offsetX": 0,
+            "frameNum": 15,
+            "frameTime": 0.06,
+            "hitboxStartFrame": 1,
+            "hitboxEndFrame": 3,
+            "lifetime": 0.9,
+            "textureName": "explosion",
+            "scale": 1,
+            "damage": 30,
+            "hitboxH": 96,
+            "offsetY": 0
+        },
+        "assetFolder": "maps/item"
     }
 }

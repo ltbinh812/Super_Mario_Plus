@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "CommandQueue.h"
 #include "SpawnCommand.h"
+#include "Effects.h"
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
@@ -20,7 +21,6 @@ Boom::Boom(Vector2 worldPos, float scale)
 
     animations_[ItemState::Idle] = AtlasAnimation("bomb_anim", 10, 0.1f);
     setAnimation(ItemState::Idle);
-    explosionAnim_ = AtlasAnimation("explosion_anim", 15, 0.05f);
 }
 
 // Pre-activated thrown bomb: starts counting down immediately
@@ -32,7 +32,6 @@ Boom::Boom(Vector2 worldPos, Vector2 initVelocity)
 
     animations_[ItemState::Idle] = AtlasAnimation("bomb_anim", 10, 0.1f);
     setAnimation(ItemState::Idle);
-    explosionAnim_ = AtlasAnimation("explosion_anim", 15, 0.05f);
     
     activate();
 }
@@ -50,20 +49,29 @@ void Boom::update(float dt) {
     BaseItem::update(dt);
 
     if (exploded_) {
-        // Push ExplosionDamage command exactly once so Process() can apply area burn
+        // Push Explosion command exactly once so CombatSystem handles it
         if (!damageEmitted_ && commandQueue) {
             SpawnCommand cmd;
-            cmd.category       = SpawnCategory::ExplosionDamage;
-            cmd.explosionRect  = getExplosionRect();
+            cmd.category       = SpawnCategory::Entity;
+            cmd.type           = EntityType::Explosion;
+            cmd.position       = { worldStats.position.x, worldStats.position.y }; // Center
+            cmd.isFacingRight  = true;
+            cmd.ownerName      = "Boom";
+            cmd.spawner        = this;
+            
+            cmd.onHitEffect = [](Entity* target) {
+                if (target) {
+                    auto burn = std::make_unique<LavaEffect>();
+                    burn->setInLava(false);
+                    target->addEffect(std::move(burn));
+                    std::cout << "[Explosion] Damage and Burn applied to " << target->getBaseStats().name << "!\n";
+                }
+            };
+            
             commandQueue->push(cmd);
             damageEmitted_ = true;
-            std::cout << "[Boom] ExplosionDamage queued at "
+            std::cout << "[Boom] Explosion Entity queued at "
                       << worldStats.position.x << ", " << worldStats.position.y << "\n";
-        }
-
-        explosionTimer_ -= dt;
-        explosionAnim_.update(dt);
-        if (explosionTimer_ <= 0.0f) {
             itemState_ = ItemState::Used;
         }
         return;
@@ -80,7 +88,6 @@ void Boom::update(float dt) {
 
     if (timer_ <= 0.0f) {
         exploded_      = true;
-        explosionTimer_ = EXPLOSION_SHOW;
         // Stop moving when it explodes
         runtimeStats.velocity = {0.0f, 0.0f};
         std::cout << "[Boom] EXPLOSION!\n";
@@ -90,19 +97,8 @@ void Boom::update(float dt) {
 // ─── Rendering ──────────────────────────────────────────────────────────────
 
 void Boom::render(float alpha) {
-    if (itemState_ == ItemState::Used) return;
-    if (exploded_) {
-        // Pivot: center of bottom edge of explosion rect
-        Rectangle dest = {
-            worldStats.position.x - EXPL_W / 2.0f,
-            worldStats.position.y - EXPL_H,
-            EXPL_W, EXPL_H
-        };
-        const Texture2D& tex = explosionAnim_.getTexture();
-        if (tex.id != 0) {
-            DrawTexturePro(tex, explosionAnim_.getCurrentSourceRect(), dest, {0, 0}, 0.0f, WHITE);
-        }
-    } else if (active_) {
+    if (itemState_ == ItemState::Used || exploded_) return;
+    if (active_) {
         Color tint = frameToggle_ ? Color{255, 255, 255, 64} : WHITE;
         if (currentAnim_ && currentAnim_->isValid()) {
             drawAnim(tint);
@@ -150,14 +146,4 @@ void Boom::forceInteract(Entity& other) {
     }
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
-Rectangle Boom::getExplosionRect() const {
-    // Pivot: center of bottom edge  (worldStats.position.y = bottom of item)
-    return {
-        worldStats.position.x - EXPL_W / 2.0f,
-        worldStats.position.y - EXPL_H,
-        EXPL_W,
-        EXPL_H
-    };
-}

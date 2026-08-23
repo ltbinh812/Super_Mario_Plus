@@ -22,12 +22,9 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                                const std::string &p2Name)
     : mapCamera(416.0f), currentLevel(initialLevel), mapFilePath(mapFilePath) {
 
-  bool loaded = map.LoadLDtkMap(mapFilePath, currentLevel);
-  if (loaded && map.GetHeight() > 0) {
-    if (currentLevel.empty())
-      currentLevel = map.GetCurrentLevelName();
-    std::cout << "[BaseLevelState] Loaded " << mapFilePath << " ("
-              << currentLevel << ") successfully!\n";
+  std::cout << "[BaseLevelState] Loading map: " << mapFilePath << " level: " << initialLevel << "\n";
+  if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
+    std::cout << "[BaseLevelState] Map loaded successfully!\n";
 
     auto spawns = map.GetPlayerSpawns();
     Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 208.0f};
@@ -40,29 +37,6 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player1->setStartPosition(spawn1);
       player1->setCommandQueue(&spawnQueue);
       player1->setPartyInventory(partyInventory);
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(),
-                             InputType::RELEASED);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
-                             InputType::RELEASED);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_U,
-                             std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_I,
-                             std::make_unique<UseSkillCommand>("SpecialAttack"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED);
     }
 
     player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
@@ -72,70 +46,14 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player2->setStartPosition(spawn2);
       player2->setCommandQueue(&spawnQueue);
       player2->setPartyInventory(partyInventory);
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
-                             InputType::DOWN);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
-                             InputType::DOWN);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_KP_1, std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_2, std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_3,
-                             std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_4,
-                             std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_5,
-                             std::make_unique<UseSkillCommand>("SpecialAttack"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_RIGHT_SHIFT,
-                             std::make_unique<UseSkillCommand>("Block"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_ENTER, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED);
     }
 
-    // CombatSystem is now stateless, so no registerEntity calls here
-    // Load item atlas (once globally, no-op if already loaded)
+    bindPlayerInputs();
+
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
     ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
 
-    // Spawn items from LDtk entity data
-    activeItems.clear();
-    auto entityData = map.GetEntityData();
-    for (const auto &data : entityData) {
-      if (data.identifier.rfind("Mob_", 0) == 0 || data.identifier.rfind("Boss_", 0) == 0) {
-        if (!data.iid.empty() && persistedDeadEntities.find(data.iid) != persistedDeadEntities.end()) {
-            continue;
-        }
-        auto enemy = EnemyFactory::create(data.identifier, data.px, data.fieldInstances);
-        if (enemy) {
-            enemy->setIid(data.iid);
-            enemy->setCommandQueue(&spawnQueue);
-            activeEntities.push_back(std::move(enemy));
-        }
-      } else {
-        auto item = ItemFactory::create(data.identifier, data.px, data.fieldInstances);
-        if (item) {
-          item->setIid(data.iid);
-          item->setCommandQueue(&spawnQueue);
-          if (!data.iid.empty()) {
-            auto it = persistedItemStates.find(data.iid);
-            if (it != persistedItemStates.end()) {
-              item->getRuntimeStatsMutable();
-              item->setItemState(it->second);
-            }
-          }
-          activeItems.push_back(std::move(item));
-        }
-      }
-    }
+    spawnEntitiesFromMap();
     TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.", activeItems.size(), activeEntities.size());
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
@@ -143,7 +61,6 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
 }
 
 void BaseLevelState::HandleInput() {
-  float dt = GetFrameTime();
   if (player1) {
     auto commands = player1Handler.handleInput();
     for (auto *cmd : commands)
@@ -155,194 +72,25 @@ void BaseLevelState::HandleInput() {
       cmd->Execute(*player2);
   }
 
+  std::vector<Player*> players;
+  if (player1) players.push_back(player1.get());
+  if (player2) players.push_back(player2.get());
+
   for (auto& ent : activeEntities) {
-      if (ent) ent->decideAction();
+      if (ent) {
+          ent->setTargetPlayers(players);
+          ent->decideAction();
+      }
   }
 }
 
 void BaseLevelState::Process() {
   float dt = GetFrameTime();
 
-  if (respawnTimer > 0.0f) {
-    respawnTimer -= dt;
-    if (respawnTimer <= 0.0f) {
-      respawnTimer = -1.0f;
-      
-      if (SaveManager::getInstance().hasCheckpoint()) {
-          restoreFromSaveData(SaveManager::getInstance().getCheckpoint());
-      } else {
-          // If no checkpoint, we could reload the map entirely from scratch
-          // But for now, we'll just reload the current level from scratch
-          map.LoadLDtkMap(mapFilePath, currentLevel);
-          auto spawns = map.GetPlayerSpawns();
-          if (player1) { player1->setPosition(spawns.size() > 0 ? spawns[0] : Vector2{180, 208}); player1->getRuntimeStatsMutable().health = player1->getBaseStats().maxHealth; }
-          if (player2) { player2->setPosition(spawns.size() > 1 ? spawns[1] : Vector2{220, 208}); player2->getRuntimeStatsMutable().health = player2->getBaseStats().maxHealth; }
-      }
-
-      if (player1) {
-          player1->forceState(player1->idleState);
-          player1->getRuntimeStatsMutable().velocity = {0,0};
-          player1->clearEffects();
-      }
-      if (player2) {
-          player2->forceState(player2->idleState);
-          player2->getRuntimeStatsMutable().velocity = {0,0};
-          player2->clearEffects();
-      }
-    }
-  } else {
-    auto checkDeathCondition = [&](Player *p) {
-      if (!p)
-        return false;
-      if (p->getRuntimeStats().health <= 0)
-        return true;
-      if (p->getWorldStats().position.y > map.GetHeight() + 32.0f)
-        return true;
-      return false;
-    };
-
-    if (checkDeathCondition(player1.get()) ||
-        checkDeathCondition(player2.get())) {
-      if (player1->getRuntimeStats().health > 0)
-        player1->takeDamage(9999);
-      if (player2->getRuntimeStats().health > 0)
-        player2->takeDamage(9999);
-      respawnTimer = 1.5f;
-    }
-  }
-
-  if (!nextLevelToLoad.empty()) {
-    TransitionToLevel(nextLevelToLoad, nextLevelDir, triggerGlobalX,
-                      triggerGlobalY);
-    nextLevelToLoad = "";
-  }
-
-  if (player1 && player2) {
-    mapCamera.UpdateMultiplayer(player1->getWorldStats().position,
-                                player2->getWorldStats().position,
-                                map.GetWidth(), map.GetHeight(), dt);
-  } else if (player1) {
-    mapCamera.Update(player1->getWorldStats().position, map.GetWidth(),
-                     map.GetHeight(), dt);
-  } else if (player2) {
-    mapCamera.Update(player2->getWorldStats().position, map.GetWidth(),
-                     map.GetHeight(), dt);
-  }
-
-  // Handle explosion damage: burn all entities (players + NPCs) inside blast
-  // rect
-  auto explosionCmds =
-      spawnQueue.peekAndConsumeByCategory(SpawnCategory::ExplosionDamage);
-  for (const auto &cmd : explosionCmds) {
-    const Rectangle &blast = cmd.explosionRect;
-    auto applyBurn = [&](Entity *e) {
-      if (!e || !e->getIsActive())
-        return;
-      if (CheckCollisionRecs(e->getHitbox(), blast)) {
-        e->takeDamage(30);                          // Instant explosion damage
-        auto burn = std::make_unique<LavaEffect>(); // Chữ hoa L cho LavaEffect
-        burn->setInLava(
-            false); // Chú ý: Hàm này tên là setInLava, không phải setInBurn
-        e->addEffect(std::move(burn));
-        std::cout << "[Explosion] Damage and Burn applied!\n";
-      }
-    };
-    applyBurn(player1.get());
-    applyBurn(player2.get());
-    for (auto &ent : activeEntities)
-      applyBurn(ent.get());
-  }
-
-  // Process AI and Logic for Entities
-  for (auto& ent : activeEntities) {
-      if (ent) ent->process();
-  }
-
-  // Cleanups
-  activeEntities.erase(std::remove_if(activeEntities.begin(),
-                                      activeEntities.end(),
-                                      [&](const std::unique_ptr<Entity> &e) {
-                                        if (!e->getIsActive()) {
-                                            if (!e->getIid().empty()) {
-                                                persistedDeadEntities.insert(e->getIid());
-                                            }
-                                            return true;
-                                        }
-                                        return false;
-                                      }),
-                       activeEntities.end());
-}
-
-void BaseLevelState::Update(float dt) {
-  std::vector<Rectangle> dynamicSolids;
-  for (const auto &item : activeItems) {
-    if (!item->getIsActive())
-      continue;
-    Rectangle r = item->getSolidRect();
-    if (r.width > 0 && r.height > 0)
-      dynamicSolids.push_back(r);
-  }
-
-    if (player1) {
-      player1->updatePhysicsWithMap(map, dynamicSolids, dt);
-      player1->updateStateFromPhysics();
-      player1->update(dt);
-    }
-    if (player2) {
-      player2->updatePhysicsWithMap(map, dynamicSolids, dt);
-      player2->updateStateFromPhysics();
-      player2->update(dt);
-    }
-
-    // Player-to-Player Pushing Resolution
-    if (player1 && player2 && player1->getIsActive() && player2->getIsActive()) {
-        Rectangle r1 = player1->getHitbox();
-        Rectangle r2 = player2->getHitbox();
-        if (CheckCollisionRecs(r1, r2)) {
-            float center1 = r1.x + r1.width / 2.0f;
-            float center2 = r2.x + r2.width / 2.0f;
-            float overlap = (r1.width + r2.width) / 2.0f - std::abs(center1 - center2);
-            
-            if (overlap > 0) {
-                float push = overlap / 2.0f + 0.1f; // +0.1f epsilon to fully separate
-                
-                Vector2 p1Pos = player1->getWorldStats().position;
-                Vector2 p2Pos = player2->getWorldStats().position;
-                
-                float dir1 = (center1 < center2) ? -1.0f : 1.0f;
-                float dir2 = -dir1;
-
-                // Check if P1 hits a wall if pushed
-                Rectangle nextR1 = r1;
-                nextR1.x += push * dir1;
-                bool p1HitsWall = false;
-                for (const auto& tile : map.GetCollidingTiles(nextR1)) {
-                    if (tile.type == CollisionType::Solid) { p1HitsWall = true; break; }
-                }
-
-                // Check if P2 hits a wall if pushed
-                Rectangle nextR2 = r2;
-                nextR2.x += push * dir2;
-                bool p2HitsWall = false;
-                for (const auto& tile : map.GetCollidingTiles(nextR2)) {
-                    if (tile.type == CollisionType::Solid) { p2HitsWall = true; break; }
-                }
-
-                if (!p1HitsWall && !p2HitsWall) {
-                    player1->setPosition({p1Pos.x + push * dir1, p1Pos.y});
-                    player2->setPosition({p2Pos.x + push * dir2, p2Pos.y});
-                } else if (p1HitsWall && !p2HitsWall) {
-                    // P1 is against a wall, push P2 the full amount
-                    player2->setPosition({p2Pos.x + overlap * dir2 + 0.1f, p2Pos.y});
-                } else if (!p1HitsWall && p2HitsWall) {
-                    // P2 is against a wall, push P1 the full amount
-                    player1->setPosition({p1Pos.x + overlap * dir1 + 0.1f, p1Pos.y});
-                }
-            }
-        }
-    }
-
-    std::string next = "";
+  processDeathCondition(dt);
+  processPlayerPushing();
+  
+  std::string next = "";
   std::string dir = "";
   float edge = 16.0f;
   float tX = 0, tY = 0;
@@ -379,10 +127,61 @@ void BaseLevelState::Update(float dt) {
   checkEdge(player2.get());
 
   if (!next.empty()) {
-    nextLevelToLoad = next;
-    nextLevelDir = dir;
-    triggerGlobalX = tX;
-    triggerGlobalY = tY;
+    TransitionToLevel(next, dir, tX, tY);
+  }
+
+  if (player1 && player2) {
+    mapCamera.UpdateMultiplayer(player1->getWorldStats().position,
+                                player2->getWorldStats().position,
+                                map.GetWidth(), map.GetHeight(), dt);
+  } else if (player1) {
+    mapCamera.Update(player1->getWorldStats().position, map.GetWidth(),
+                     map.GetHeight(), dt);
+  } else if (player2) {
+    mapCamera.Update(player2->getWorldStats().position, map.GetWidth(),
+                     map.GetHeight(), dt);
+  }
+
+  for (auto& ent : activeEntities) {
+      if (ent) ent->process();
+  }
+
+  activeEntities.erase(std::remove_if(activeEntities.begin(),
+                                      activeEntities.end(),
+                                      [&](const std::unique_ptr<Entity> &e) {
+                                        if (!e->getIsActive()) {
+                                            if (!e->getIid().empty()) {
+                                                persistedDeadEntities.insert(e->getIid());
+                                            }
+                                            return true;
+                                        }
+                                        return false;
+                                      }),
+                       activeEntities.end());
+
+  processItemInteractions();
+  processSpawnQueue();
+}
+
+void BaseLevelState::Update(float dt) {
+  std::vector<Rectangle> dynamicSolids;
+  for (const auto &item : activeItems) {
+    if (!item->getIsActive())
+      continue;
+    Rectangle r = item->getSolidRect();
+    if (r.width > 0 && r.height > 0)
+      dynamicSolids.push_back(r);
+  }
+
+  if (player1) {
+    player1->updatePhysicsWithMap(map, dynamicSolids, dt);
+    player1->updateStateFromPhysics();
+    player1->update(dt);
+  }
+  if (player2) {
+    player2->updatePhysicsWithMap(map, dynamicSolids, dt);
+    player2->updateStateFromPhysics();
+    player2->update(dt);
   }
 
   for (auto &entity : activeEntities) {
@@ -390,89 +189,15 @@ void BaseLevelState::Update(float dt) {
     entity->update(dt);
   }
 
-  // Update items and check player overlap
   for (auto &item : activeItems) {
     if (!item->getIsActive())
       continue;
     item->update(dt);
 
-    if (auto coin = dynamic_cast<Coin*>(item.get())) {
-        Player* targetPlayer = nullptr;
-        float minDst = 160.0f; // Pull radius (5 blocks)
-        
-        auto checkMagnet = [&](Player* p) {
-            if (p && p->getBuffManager().hasGoldMagnet()) {
-                float dst = Vector2Distance(p->getWorldStats().position, coin->getWorldStats().position);
-                if (dst < minDst) {
-                    minDst = dst;
-                    targetPlayer = p;
-                }
-            }
-        };
-        
-        checkMagnet(player1.get());
-        checkMagnet(player2.get());
-
-        if (targetPlayer) {
-            Vector2 dir = Vector2Normalize(Vector2Subtract(targetPlayer->getWorldStats().position, coin->getWorldStats().position));
-            float pullSpeed = 400.0f;
-            coin->getRuntimeStatsMutable().velocity.x = dir.x * pullSpeed;
-            coin->getRuntimeStatsMutable().velocity.y = dir.y * pullSpeed;
-            coin->getBaseStatsMutable().gravityScale = 0.0f;
-        } else {
-            coin->getBaseStatsMutable().gravityScale = 160.0f;
-        }
-    }
-
-    // If item is dynamic (has gravity), apply physics so it can fall and bounce
     if (item->getBaseStats().gravityScale > 0.0f || dynamic_cast<Coin*>(item.get())) {
-      // Empty dynamicSolids since items don't usually collide with other moving
-      // boxes, just the map
       item->updatePhysicsWithMap(map, std::vector<Rectangle>{}, dt);
     }
-
-    Rectangle itemBox = item->getHitbox();
-    auto handleInteract = [&](Player* p) {
-        if (p && CheckCollisionRecs(itemBox, p->getHitbox())) {
-            ItemState oldState = item->getItemState();
-            item->onInteract(*p);
-            
-            // Check if it's a flag that just got activated
-            if (oldState != ItemState::Active && item->getItemState() == ItemState::Active && dynamic_cast<Flag*>(item.get()) != nullptr) {
-                SaveManager::getInstance().setCheckpoint(createSaveData());
-                SaveManager::getInstance().saveToFile("save.json");
-            }
-        }
-    };
-    
-    handleInteract(player1.get());
-    handleInteract(player2.get());
   }
-
-  auto entityCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Entity);
-  for (const auto &cmd : entityCmds) {
-    if (!cmd.iid.empty() && persistedDeadEntities.count(cmd.iid)) {
-        continue; // Skip spawning if it's dead
-    }
-    auto entity = EntityFactory::create(cmd);
-    if (entity) {
-      entity->setCommandQueue(&spawnQueue);
-      activeEntities.push_back(std::move(entity));
-    }
-  }
-
-  auto itemCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Item);
-  for (const auto &cmd : itemCmds) {
-    // Pass velocity for ThrownBoom; other items ignore it
-    auto item = ItemFactory::createDynamic(cmd.itemIdentifier, cmd.position,
-                                           cmd.velocity);
-    if (item) {
-      item->setCommandQueue(&spawnQueue);
-      activeItems.push_back(std::move(item));
-    }
-  }
-
-  // Cleanups moved to Process()
 
   std::vector<Entity*> allEntities;
   if (player1) allEntities.push_back(player1.get());
@@ -498,6 +223,7 @@ void BaseLevelState::Render(float alpha) const {
     player1->render(alpha);
   if (player2)
     player2->render(alpha);
+    
   std::vector<Entity*> allEntities;
   if (player1) allEntities.push_back(player1.get());
   if (player2) allEntities.push_back(player2.get());
@@ -507,7 +233,6 @@ void BaseLevelState::Render(float alpha) const {
   combatSystem.renderDebug(allEntities);
   mapCamera.EndMode();
 
-  // Render HUD over the screen
   PlayerHUD::render(player1.get(), player2.get(), partyInventory.get());
 }
 
@@ -517,7 +242,6 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
                                        float triggerGlobalY) {
   std::cout << "[BaseLevelState] Transitioning to " << nextLevel << "...\n";
 
-  // Persist item states before clearing
   for (const auto &item : activeItems) {
     if (!item->getIid().empty()) {
       persistedItemStates[item->getIid()] = item->getItemState();
@@ -527,7 +251,7 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
   if (map.LoadLDtkMap(mapFilePath, nextLevel)) {
     currentLevel = nextLevel;
     activeEntities.clear();
-    // combatSystem is stateless so no clear needed
+    activeItems.clear();
 
     float mapW = (float)map.GetWidth();
     float mapH = (float)map.GetHeight();
@@ -549,43 +273,14 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
     player1->setPosition({targetXNew, targetYNew});
     player2->setPosition({targetXNew, targetYNew});
 
-    // Re-spawn items for the new level (restoring persisted states)
-    ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
-    activeItems.clear();
-    auto entityData = map.GetEntityData();
-    for (const auto &data : entityData) {
-      if (data.identifier.rfind("Mob_", 0) == 0 || data.identifier.rfind("Boss_", 0) == 0) {
-        if (!data.iid.empty() && persistedDeadEntities.find(data.iid) != persistedDeadEntities.end()) {
-            continue;
-        }
-        auto enemy = EnemyFactory::create(data.identifier, data.px, data.fieldInstances);
-        if (enemy) {
-            enemy->setIid(data.iid);
-            enemy->setCommandQueue(&spawnQueue);
-            activeEntities.push_back(std::move(enemy));
-        }
-      } else {
-        auto item = ItemFactory::create(data.identifier, data.px, data.fieldInstances);
-        if (item) {
-          item->setIid(data.iid);
-          item->setCommandQueue(&spawnQueue);
-          if (!data.iid.empty()) {
-            auto it = persistedItemStates.find(data.iid);
-            if (it != persistedItemStates.end())
-              item->setItemState(it->second);
-          }
-          activeItems.push_back(std::move(item));
-        }
-      }
-    }
+    spawnEntitiesFromMap();
   }
 }
 
 GameSaveData BaseLevelState::createSaveData() const {
   GameSaveData data;
   data.isValid = true;
-  data.levelData.worldId = ""; // Optional for now
+  data.levelData.worldId = "";
   data.levelData.levelId = currentLevel;
   data.levelData.mapFilePath = mapFilePath;
   data.levelData.persistedItemStates = persistedItemStates;
@@ -618,13 +313,11 @@ GameSaveData BaseLevelState::createSaveData() const {
 void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
   if (!data.isValid) return;
 
-  // Restore inventory
   if (partyInventory) {
     partyInventory->coins = data.inventory.coins;
     partyInventory->keys = data.inventory.keys;
   }
 
-  // Restore player stats and positions
   auto applyPlayer = [](Player* p, const PlayerSaveData& pd) {
     if (p && pd.exists) {
       p->setPosition({pd.posX, pd.posY});
@@ -639,49 +332,210 @@ void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
   applyPlayer(player1.get(), data.p1);
   applyPlayer(player2.get(), data.p2);
 
-  // Restore Level State
   persistedItemStates = data.levelData.persistedItemStates;
   persistedDeadEntities = data.levelData.persistedDeadEntities;
 
-  // Reload the map from LDtk to reset dynamic objects
   activeEntities.clear();
   activeItems.clear();
-  combatSystem = CombatSystem(); // Reset combat system
-  // No need to register entities since CombatSystem is stateless
+  combatSystem = CombatSystem();
 
   map.LoadLDtkMap(data.levelData.mapFilePath, data.levelData.levelId);
   currentLevel = data.levelData.levelId;
 
-  // Respawn items based on restored persisted state
-  auto entityData = map.GetEntityData();
-  for (const auto& d : entityData) {
-    if (d.identifier.rfind("Mob_", 0) == 0 || d.identifier.rfind("Boss_", 0) == 0) {
-      if (!d.iid.empty() && persistedDeadEntities.find(d.iid) != persistedDeadEntities.end()) {
-          continue;
-      }
-      auto enemy = EnemyFactory::create(d.identifier, d.px, d.fieldInstances);
-      if (enemy) {
-          enemy->setIid(d.iid);
-          enemy->setCommandQueue(&spawnQueue);
-          activeEntities.push_back(std::move(enemy));
-      }
-    } else {
-      auto item = ItemFactory::create(d.identifier, d.px, d.fieldInstances);
-      if (item) {
-        item->setIid(d.iid);
-        item->setCommandQueue(&spawnQueue);
-        if (!d.iid.empty()) {
-          auto it = persistedItemStates.find(d.iid);
-          if (it != persistedItemStates.end()) {
-            item->getRuntimeStatsMutable();
-            item->setItemState(it->second);
-          }
+  spawnEntitiesFromMap();
+}
+
+void BaseLevelState::spawnEntitiesFromMap() {
+    activeItems.clear();
+    auto entityData = map.GetEntityData();
+    for (const auto &data : entityData) {
+        if (data.identifier.rfind("Mob_", 0) == 0 || data.identifier.rfind("Boss_", 0) == 0) {
+            if (!data.iid.empty() && persistedDeadEntities.find(data.iid) != persistedDeadEntities.end()) {
+                continue;
+            }
+            auto enemy = EnemyFactory::create(data.identifier, data.px, data.fieldInstances);
+            if (enemy) {
+                enemy->setIid(data.iid);
+                enemy->setCommandQueue(&spawnQueue);
+                activeEntities.push_back(std::move(enemy));
+            }
+        } else {
+            auto item = ItemFactory::create(data.identifier, data.px, data.fieldInstances);
+            if (item) {
+                item->setIid(data.iid);
+                item->setCommandQueue(&spawnQueue);
+                if (!data.iid.empty()) {
+                    auto it = persistedItemStates.find(data.iid);
+                    if (it != persistedItemStates.end()) {
+                        item->getRuntimeStatsMutable();
+                        item->setItemState(it->second);
+                    }
+                }
+                activeItems.push_back(std::move(item));
+            }
         }
-        activeItems.push_back(std::move(item));
+    }
+}
+
+void BaseLevelState::bindPlayerInputs() {
+    if (player1) {
+      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_I, std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+
+    if (player2) {
+      player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(KEY_KP_1, std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_2, std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_3, std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_4, std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_KP_5, std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_RIGHT_SHIFT, std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player2Handler.bindKey(KEY_ENTER, std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+}
+
+void BaseLevelState::processDeathCondition(float dt) {
+  if (respawnTimer > 0.0f) {
+    respawnTimer -= dt;
+    if (respawnTimer <= 0.0f) {
+      respawnTimer = -1.0f;
+      
+      if (SaveManager::getInstance().hasCheckpoint()) {
+          restoreFromSaveData(SaveManager::getInstance().getCheckpoint());
+          if (player1) player1->respawn(player1->getWorldStats().position);
+          if (player2) player2->respawn(player2->getWorldStats().position);
+      } else {
+          map.LoadLDtkMap(mapFilePath, currentLevel);
+          auto spawns = map.GetPlayerSpawns();
+          if (player1) player1->respawn(spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 208.0f});
+          if (player2) player2->respawn(spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 208.0f});
       }
+    }
+  } else {
+    auto checkDeathCondition = [&](Player *p) {
+      return p && (p->isDead() || p->isOutOfBounds(map.GetHeight() + 32.0f));
+    };
+
+    if (checkDeathCondition(player1.get()) ||
+        checkDeathCondition(player2.get())) {
+      if (player1 && !player1->isDead())
+        player1->takeDamage(9999);
+      if (player2 && !player2->isDead())
+        player2->takeDamage(9999);
+      respawnTimer = 1.5f;
+    }
+  }
+}
+
+void BaseLevelState::processPlayerPushing() {
+  if (player1 && player2 && player1->getIsActive() && player2->getIsActive()) {
+      Rectangle r1 = player1->getHitbox();
+      Rectangle r2 = player2->getHitbox();
+      if (CheckCollisionRecs(r1, r2)) {
+          float center1 = r1.x + r1.width / 2.0f;
+          float center2 = r2.x + r2.width / 2.0f;
+          float overlap = (r1.width + r2.width) / 2.0f - std::abs(center1 - center2);
+          
+          if (overlap > 0) {
+              float push = overlap / 2.0f + 0.1f;
+              
+              Vector2 p1Pos = player1->getWorldStats().position;
+              Vector2 p2Pos = player2->getWorldStats().position;
+              
+              float dir1 = (center1 < center2) ? -1.0f : 1.0f;
+              float dir2 = -dir1;
+
+              Rectangle nextR1 = r1;
+              nextR1.x += push * dir1;
+              bool p1HitsWall = false;
+              for (const auto& tile : map.GetCollidingTiles(nextR1)) {
+                  if (tile.type == CollisionType::Solid) { p1HitsWall = true; break; }
+              }
+
+              Rectangle nextR2 = r2;
+              nextR2.x += push * dir2;
+              bool p2HitsWall = false;
+              for (const auto& tile : map.GetCollidingTiles(nextR2)) {
+                  if (tile.type == CollisionType::Solid) { p2HitsWall = true; break; }
+              }
+
+              if (!p1HitsWall && !p2HitsWall) {
+                  player1->setPosition({p1Pos.x + push * dir1, p1Pos.y});
+                  player2->setPosition({p2Pos.x + push * dir2, p2Pos.y});
+              } else if (p1HitsWall && !p2HitsWall) {
+                  player2->setPosition({p2Pos.x + overlap * dir2 + 0.1f, p2Pos.y});
+              } else if (!p1HitsWall && p2HitsWall) {
+                  player1->setPosition({p1Pos.x + overlap * dir1 + 0.1f, p1Pos.y});
+              }
+          }
+      }
+  }
+}
+
+
+void BaseLevelState::processItemInteractions() {
+  for (auto &item : activeItems) {
+    if (!item->getIsActive())
+      continue;
+    
+    item->process({player1.get(), player2.get()});
+
+    Rectangle itemBox = item->getHitbox();
+    auto handleInteract = [&](Player* p) {
+        if (p && CheckCollisionRecs(itemBox, p->getHitbox())) {
+            ItemState oldState = item->getItemState();
+            item->onInteract(*p);
+            
+            if (oldState != ItemState::Active && item->getItemState() == ItemState::Active && dynamic_cast<Flag*>(item.get()) != nullptr) {
+                SaveManager::getInstance().setCheckpoint(createSaveData());
+                SaveManager::getInstance().saveToFile("save.json");
+            }
+        }
+    };
+    
+    handleInteract(player1.get());
+    handleInteract(player2.get());
+  }
+}
+
+void BaseLevelState::processSpawnQueue() {
+  auto entityCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Entity);
+  for (const auto &cmd : entityCmds) {
+    if (!cmd.iid.empty() && persistedDeadEntities.count(cmd.iid)) {
+        continue;
+    }
+    auto entity = EntityFactory::create(cmd);
+    if (entity) {
+      entity->setCommandQueue(&spawnQueue);
+      activeEntities.push_back(std::move(entity));
     }
   }
 
-  // Active enemies are spawned by CommandQueue during update loop, but we need to ensure their IIDs are checked.
-  // We'll update the Entity spawn logic in Process() to check persistedDeadEntities.
+  auto itemCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Item);
+  for (const auto &cmd : itemCmds) {
+    auto item = ItemFactory::createDynamic(cmd.itemIdentifier, cmd.position, cmd.velocity);
+    if (item) {
+      item->setCommandQueue(&spawnQueue);
+      activeItems.push_back(std::move(item));
+    }
+  }
 }

@@ -82,6 +82,10 @@ set(SOURCES
     src/entity/EnemyFactory.cpp
     src/entity/EnemyStates/EnemyIdleState.cpp
     src/entity/EnemyStates/EnemyPatrolState.cpp
+    src/entity/EnemyStates/EnemyRunState.cpp
+    src/entity/EnemyStates/EnemyAttackState.cpp
+    src/entity/EnemyStates/EnemyHurtState.cpp
+    src/entity/EnemyStates/EnemyDieState.cpp
     src/entity/Item/ItemAtlasRegistry.cpp
     src/entity/Item/AtlasAnimation.cpp
     src/entity/Item/BaseItem.cpp

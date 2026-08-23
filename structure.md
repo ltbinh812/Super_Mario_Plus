@@ -135,6 +135,7 @@ SuperMarioPlus/
 - **`CharacterFactory`**: Factory Pattern để tự động sinh ra các nhân vật dựa trên chuỗi định danh (Tên).
 - **`Mario, Luigi, Peach, Toad, Wario`**: Các lớp cụ thể đại diện cho người chơi, được override các kỹ năng tương ứng.
 - **`Goomba`**: Kẻ thù cơ bản, kế thừa từ `Character`.
+- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, và xử lý đẩy lùi (knockback).
 
 #### Abilities (Strategy Pattern)
 - **`AbilityStrategy`**: Interface định nghĩa `Execute()`.

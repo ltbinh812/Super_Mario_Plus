@@ -1,0 +1,31 @@
+{
+  "mob_mushroom": {
+    "name": "mob_mushroom",
+    "maxHealth": 50,
+    "moveVelocity": 100.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": { "w": 32.0, "h": 32.0 },
+    "attackData": {
+      "damage": 10,
+      "hitboxStartFrame": 3,
+      "hitboxEndFrame": 6,
+      "hitboxTotalFrames": 10,
+      "frameTime": 0.1,
+      "box": { "offsetX": 0.0, "offsetY": 0.0, "w": 30.0, "h": 30.0 }
+    },
+    "aiData": {
+      "detectionRange": 250.0,
+      "attackRange": 40.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animationFrames": {
+      "attack": 10,
+      "run": 8,
+      "idle": 7,
+      "hurt": 5,
+      "die": 15
+    }
+  }
+}

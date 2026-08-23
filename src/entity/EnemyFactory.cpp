@@ -14,8 +14,8 @@ using json = nlohmann::json;
 
 class BasicMob : public Mob {
 public:
-    BasicMob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bStats)
-        : Mob(worldPos, type, bStats) {}
+    BasicMob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bStats, const MobConfig& config)
+        : Mob(worldPos, type, bStats, config) {}
         
     void initAnimations(int attackFrames, int runFrames, int idleFrames, int hurtFrames, int dieFrames) {
         // Assuming sprite JSON is loaded in ItemAtlasRegistry
@@ -39,28 +39,73 @@ std::unique_ptr<Entity> EnemyFactory::create(
 {
     TraceLog(LOG_INFO, "[EnemyFactory] Spawn requested for: %s at (%f, %f)", identifier.c_str(), worldPos.x, worldPos.y);
 
-    // Defaults
-    CharacterBaseStats bStats;
-    bStats.maxHealth = 50;
-    bStats.moveVelocity = 100.0f;
-    bStats.jumpVelocity = 300.0f;
-    bStats.gravityScale = 10.0f;
-    bStats.physicsBox = { 32.0f, 32.0f };
-
-    // We can load from enemies.json later, for now hardcode Mob_mushroom
-    if (identifier == "Mob_mushroom" || identifier == "Mob_Test") {
-        auto mob = std::make_unique<BasicMob>(worldPos, "mob_mushroom", bStats);
-        
-        // attack(10), run(8), idle(7), hurt(5), die(15)
-        mob->initAnimations(10, 8, 7, 5, 15);
-        
-        // Start in Patrol state
-        mob->changeState(std::make_unique<EnemyPatrolState>());
-        
-        TraceLog(LOG_INFO, "[EnemyFactory] Successfully spawned %s", identifier.c_str());
-        return mob;
+    std::ifstream file("assets/config/enemies.json");
+    if (!file.is_open()) {
+        TraceLog(LOG_ERROR, "[EnemyFactory] Cannot open assets/config/enemies.json");
+        return nullptr;
     }
 
-    TraceLog(LOG_INFO, "[EnemyFactory] Unknown identifier: %s", identifier.c_str());
-    return nullptr;
+    json jsonData;
+    file >> jsonData;
+
+    // Default identifier if not found, or maybe fallback. But we use Mob_mushroom for testing often.
+    std::string key = identifier;
+    if (key == "Mob_Test") key = "Mob_mushroom"; // fallback for old maps
+    
+    // Convert to lowercase to match json keys since it might be "mob_mushroom"
+    std::string lowerKey = key;
+    std::transform(lowerKey.begin(), lowerKey.end(), lowerKey.begin(), ::tolower);
+
+    if (!jsonData.contains(lowerKey)) {
+        TraceLog(LOG_ERROR, "[EnemyFactory] Unknown identifier in json: %s", lowerKey.c_str());
+        return nullptr;
+    }
+
+    auto& mobData = jsonData[lowerKey];
+
+    CharacterBaseStats bStats;
+    bStats.maxHealth = mobData["maxHealth"].get<int>();
+    bStats.moveVelocity = mobData["moveVelocity"].get<float>();
+    bStats.jumpVelocity = mobData["jumpVelocity"].get<float>();
+    bStats.gravityScale = mobData["gravityScale"].get<float>();
+    bStats.physicsBox = { mobData["physicsBox"]["w"].get<float>(), mobData["physicsBox"]["h"].get<float>() };
+
+    MobConfig config;
+    config.name = lowerKey;
+    
+    auto& attackData = mobData["attackData"];
+    config.attackData.damage = attackData["damage"].get<int>();
+    config.attackData.hitboxStartFrame = attackData["hitboxStartFrame"].get<int>();
+    config.attackData.hitboxEndFrame = attackData["hitboxEndFrame"].get<int>();
+    config.attackData.hitboxTotalFrames = attackData["hitboxTotalFrames"].get<int>();
+    config.attackData.frameTime = attackData["frameTime"].get<float>();
+    config.attackData.box = { 
+        attackData["box"]["offsetX"].get<float>(),
+        attackData["box"]["offsetY"].get<float>(),
+        attackData["box"]["w"].get<float>(),
+        attackData["box"]["h"].get<float>()
+    };
+
+    auto& aiData = mobData["aiData"];
+    config.aiData.detectionRange = aiData["detectionRange"].get<float>();
+    config.aiData.attackRange = aiData["attackRange"].get<float>();
+    config.aiData.patrolSpeed = aiData["patrolSpeed"].get<float>();
+    config.aiData.patrolTime = aiData["patrolTime"].get<float>();
+
+    auto mob = std::make_unique<BasicMob>(worldPos, lowerKey, bStats, config);
+    
+    auto& anims = mobData["animationFrames"];
+    mob->initAnimations(
+        anims["attack"].get<int>(),
+        anims["run"].get<int>(),
+        anims["idle"].get<int>(),
+        anims["hurt"].get<int>(),
+        anims["die"].get<int>()
+    );
+    
+    // Start in Patrol state
+    mob->changeState(std::make_unique<EnemyPatrolState>());
+    
+    TraceLog(LOG_INFO, "[EnemyFactory] Successfully spawned %s", key.c_str());
+    return mob;
 }

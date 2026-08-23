@@ -17,9 +17,6 @@ public:
     float getRenderOffsetY() const override;
     bool hasExploded() const { return exploded_; }
 
-    // Returns the explosion world-rect (valid only after exploded_ == true)
-    Rectangle getExplosionRect() const;
-
 private:
     bool active_      = false;
     bool exploded_    = false;
@@ -27,12 +24,6 @@ private:
     float timer_      = 2.0f;
     float animTimer_  = 0.0f;
     bool frameToggle_ = false;
-    float explosionTimer_ = 0.75f;
-    AtlasAnimation explosionAnim_;
     static constexpr float TOGGLE_INTERVAL = 0.15f;
     static constexpr float EXPLODE_TIME    = 2.0f;
-    static constexpr float EXPLOSION_SHOW  = 0.75f;
-    // 5 blocks wide x 3 blocks tall (1 block = 32px)
-    static constexpr float EXPL_W = 5 * 32.0f;
-    static constexpr float EXPL_H = 3 * 32.0f;
 };

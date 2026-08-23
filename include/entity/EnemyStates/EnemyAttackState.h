@@ -1,12 +1,16 @@
 #pragma once
 #include "../IMobState.h"
 
-class EnemyPatrolState : public IMobState {
+class EnemyAttackState : public IMobState {
 private:
-    float patrolSpeed;
-    float patrolTime;
+    float windupTime;
+    float activeTime;
+    float recoveryTime;
+    float timer;
+    bool hasAttacked;
+    int damage;
 public:
-    EnemyPatrolState();
+    EnemyAttackState();
     void enter(Mob& mob) override;
     void decideAction(Mob& mob) override;
     void process(Mob& mob) override;

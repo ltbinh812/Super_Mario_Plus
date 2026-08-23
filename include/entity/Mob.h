@@ -7,12 +7,35 @@
 
 class IMobState;
 
+struct MobAttackData {
+    int damage;
+    int hitboxStartFrame;
+    int hitboxEndFrame;
+    int hitboxTotalFrames;
+    float frameTime;
+    Rectangle box;
+};
+
+struct MobAIData {
+    float detectionRange;
+    float attackRange;
+    float patrolSpeed;
+    float patrolTime;
+};
+
+struct MobConfig {
+    std::string name;
+    MobAttackData attackData;
+    MobAIData aiData;
+};
+
 class Mob : public Entity {
 protected:
     std::unique_ptr<IMobState> currentState;
     std::unordered_map<std::string, AtlasAnimation> animations;
     AtlasAnimation* currentAnim;
     std::string mobType;
+    MobConfig config;
     
     // AI Variables
     float stateTimer;
@@ -20,9 +43,13 @@ protected:
     bool isFacingRight;
     bool isDead;
     float hurtTimer;
+    
+    std::vector<class Player*> targetPlayers;
+    bool isHitboxActive;
+    Hitbox currentHitbox;
 
 public:
-    Mob(Vector2 worldPos, const std::string& mobType, const CharacterBaseStats& bStats);
+    Mob(Vector2 worldPos, const std::string& mobType, const CharacterBaseStats& bStats, const MobConfig& config);
     ~Mob() override;
 
     void update(float dt) override;
@@ -36,6 +63,13 @@ public:
     void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
     bool getIsActive() const override;
     
+    void setTargetPlayers(const std::vector<class Player*>& players) override { targetPlayers = players; }
+    class Player* getClosestPlayer() const;
+    
+    bool hasActiveHitbox() const override { return isHitboxActive; }
+    Hitbox getActiveHitbox() override { return currentHitbox; }
+    void setHitboxActive(bool active, Hitbox hb = {}) { isHitboxActive = active; currentHitbox = hb; }
+    
     // Map collisions
     void onHitWall(bool rightWall) override;
     void onLand(float floorY) override;
@@ -46,6 +80,7 @@ public:
     
     // Utility
     const std::string& getMobType() const { return mobType; }
+    const MobConfig& getConfig() const { return config; }
     bool getIsFacingRight() const { return isFacingRight; }
     void setFacingRight(bool right) { isFacingRight = right; }
     float getStateTimer() const { return stateTimer; }

@@ -1,10 +1,10 @@
 {
     "inventory": {
-        "coins": 0,
-        "keys": 1
+        "coins": 1,
+        "keys": 0
     },
     "levelData": {
-        "levelId": "Level_0",
+        "levelId": "",
         "mapFilePath": "assets/maps/map05/world05.ldtk",
         "persistedDeadEntities": [],
         "persistedItemStates": {},

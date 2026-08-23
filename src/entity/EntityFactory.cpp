@@ -119,12 +119,15 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.hitboxH   = ex.value("hitboxH", 100.0f);
                 cfg.offsetX   = ex.value("offsetX", 50.0f);
                 cfg.offsetY   = ex.value("offsetY", 0.0f);
-                cfg.frameNum  = ex.value("frameNum", 1);
+                cfg.frameNum = ex.value("frameNum", 1);
                 cfg.frameTime = ex.value("frameTime", 0.1f);
-                cfg.scale     = ex.value("scale", 1.0f);
+                cfg.scale = ex.value("scale", 1.0f);
+                cfg.hitboxStartFrame = ex.value("hitboxStartFrame", 0);
+                cfg.hitboxEndFrame = ex.value("hitboxEndFrame", 999);
 
                 // Auto-load texture
                 std::string texBase = ex.value("textureName", std::string(""));
+                cfg.textureName = texBase;
                 if (!texBase.empty() && jsonData[cmd.ownerName].contains("assetFolder")) {
                     std::string folder = jsonData[cmd.ownerName]["assetFolder"].get<std::string>();
                     std::string texKey = cmd.ownerName + "_" + texBase;
@@ -133,6 +136,8 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                     cfg.textureName = texKey;
                 }
             }
+            
+            cfg.onHitEffect = cmd.onHitEffect;
 
             // Apply spawn offset based on facing direction
             Vector2 spawnPos = cmd.position;

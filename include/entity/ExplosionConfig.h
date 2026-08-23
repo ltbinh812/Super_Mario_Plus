@@ -1,5 +1,8 @@
 #pragma once
 #include <string>
+#include <functional>
+
+class Entity;
 
 struct ExplosionConfig {
     float lifetime       = 0.5f;
@@ -12,4 +15,7 @@ struct ExplosionConfig {
     int   frameNum       = 1;
     float frameTime      = 0.1f;
     float scale          = 1.0f;
+    int   hitboxStartFrame = 0;
+    int   hitboxEndFrame   = 999;
+    std::function<void(Entity*)> onHitEffect = nullptr;
 };

@@ -13,6 +13,9 @@ private:
     bool isActive = true;
     Entity* spawner;
     std::unique_ptr<Animation> animation;
+    std::function<void(Entity*)> onHitEffect;
+    int hitboxStartFrame;
+    int hitboxEndFrame;
 
 public:
     Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig& config, Entity* spawner);

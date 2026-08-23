@@ -18,6 +18,7 @@ public:
     Animation(const Texture2D& tex, int frameNum, float frameTime, float scale = 1.0f);
     void update(float dt);
     Rectangle getCurrentFrame() const;
+    int getCurrentFrameIndex() const { return curFrame; }
     const Texture2D& getTexture() const;
     int getFrameNum() const { return frameNum; }
     float getFrameTime() const { return frameTime; }

@@ -21,6 +21,7 @@ public:
     virtual ~BaseItem() = default;
 
     virtual void update(float dt) override;
+    virtual void process(const std::vector<class Player*>& players) {}
     virtual void render(float alpha) override = 0;
 
     virtual void onHitWall(bool isRightWall) override {}

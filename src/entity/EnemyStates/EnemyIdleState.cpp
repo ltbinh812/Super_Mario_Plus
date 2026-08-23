@@ -10,8 +10,19 @@ void EnemyIdleState::enter(Mob& mob) {
     mob.setVelocity({0.0f, mob.getVelocity().y});
 }
 
+#include "EnemyRunState.h"
+#include "Player.h"
+#include <raymath.h>
+
 void EnemyIdleState::decideAction(Mob& mob) {
-    // For now, just idle. Later, check for player aggro here.
+    Player* target = mob.getClosestPlayer();
+    if (target) {
+        float dist = Vector2Distance(mob.getPosition(), target->getPosition());
+        if (dist <= 250.0f) {
+            mob.changeState(std::make_unique<EnemyRunState>());
+            return;
+        }
+    }
 }
 
 void EnemyIdleState::process(Mob& mob) {
