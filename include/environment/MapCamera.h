@@ -12,6 +12,17 @@ private:
     float zoom;
     float fixedViewportHeight; // Chuẩn cố định 416.0f (lấy Map 1 làm chuẩn)
 
+    // Smooth Camera Properties
+    Vector2 deadzoneSize;
+    Vector2 logicalTarget;
+    float followSpeedX;
+    float followSpeedY;
+    float lookAheadDistance;
+    float lookAheadSpeed;
+    float currentLookAheadX;
+    float targetZoom;
+    float zoomSpeed;
+
 public:
     explicit MapCamera(float viewportHeight = 416.0f);
     ~MapCamera() = default;
@@ -20,11 +31,12 @@ public:
     void UpdateZoom();
 
     // Cập nhật vị trí camera (góc trái trên map luôn trùng góc trái trên màn hình)
-    void Update(Vector2 targetPos, int mapWidth, int mapHeight, float dt = 0.0f);
+    void Update(Vector2 targetPos, Vector2 playerVelocity, int mapWidth, int mapHeight, float dt = 0.0f);
 
     // Điều khiển camera thủ công cho chế độ khám phá/debug
     void MoveManual(Vector2 delta);
-    void SetZoom(float newZoom) { zoom = newZoom; camera.zoom = zoom; }
+    void SetZoom(float newZoom) { zoom = newZoom; camera.zoom = zoom; targetZoom = newZoom; }
+    void SetTargetZoom(float newTargetZoom) { targetZoom = newTargetZoom; }
 
     // Accessors
     float GetZoom() const { return zoom; }

@@ -15,6 +15,7 @@
 class CameraFollowMode : public ICameraMode {
 private:
     Vector2 targetPos1;
+    Vector2 targetVel;
     int mapWidth;
     int mapHeight;
 
@@ -25,7 +26,7 @@ public:
      * Cập nhật thông tin target mỗi frame (vị trí player thay đổi liên tục).
      * Phải gọi trước update() mỗi frame.
      */
-    void setTarget(Vector2 pos, int mapW, int mapH);
+    void setTarget(Vector2 pos, Vector2 vel, int mapW, int mapH);
 
     void update(MapCamera& cam, float dt) override;
     bool isFinished() const override;

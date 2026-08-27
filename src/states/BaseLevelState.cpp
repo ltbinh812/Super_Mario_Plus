@@ -20,7 +20,7 @@
 BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                                const std::string &initialLevel,
                                const std::string &p1Name)
-    : mapCamera(416.0f), currentLevel(initialLevel), mapFilePath(mapFilePath) {
+    : mapCamera(600.0f), currentLevel(initialLevel), mapFilePath(mapFilePath) {
 
   std::cout << "[BaseLevelState] Loading map: " << mapFilePath << " level: " << initialLevel << "\n";
   if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
@@ -146,7 +146,7 @@ void BaseLevelState::Process() {
 
   if (!cutsceneManager.isActive()) {
     if (player1) {
-      mapCamera.Update(player1->getWorldStats().position, map.GetWidth(),
+      mapCamera.Update(player1->getWorldStats().position, player1->getRuntimeStats().velocity, map.GetWidth(),
                        map.GetHeight(), dt);
     }
   }
