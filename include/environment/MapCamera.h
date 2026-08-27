@@ -1,7 +1,10 @@
 #pragma once
+#include "ICameraMode.h"
 #include "raylib.h"
 #include <algorithm>
 #include <string>
+#include <memory>
+#include <queue>
 
 class MapCamera {
 private:
@@ -32,4 +35,27 @@ public:
 
     void BeginMode() const;
     void EndMode() const;
+
+    // === Camera Mode System (State Pattern) ===
+    // Đẩy mode mới vào queue. Nếu không có mode nào đang chạy, mode mới sẽ bắt đầu ngay.
+    void pushMode(std::unique_ptr<ICameraMode> mode);
+    // Hủy tất cả mode trong queue và mode hiện tại, thoát cinematic
+    void clearModes();
+    // Gọi mỗi frame để update mode hiện tại; tự động chuyển sang mode tiếp theo khi mode hiện tại kết thúc
+    void updateMode(float dt);
+    // Kiểm tra camera đang ở cinematic mode (có mode nào đang chạy) hay không
+    bool isCinematic() const { return isInCinematicMode; }
+
+    // Direct setters — chỉ dành cho ICameraMode subclasses gọi (thay đổi camera internals)
+    void setCameraTarget(Vector2 t) { camera.target = t; }
+    void setCameraZoom(float z) { zoom = z; camera.zoom = z; }
+    void setCameraOffset(Vector2 o) { camera.offset = o; }
+
+private:
+    std::unique_ptr<ICameraMode> currentMode;
+    std::queue<std::unique_ptr<ICameraMode>> modeQueue;
+    bool isInCinematicMode = false;
+
+    // Chuyển sang mode tiếp theo trong queue (nếu có)
+    void advanceMode();
 };

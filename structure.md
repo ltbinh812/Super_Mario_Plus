@@ -39,11 +39,26 @@ SuperMarioPlus/
 │   │   ├── Game.h
 │   │   ├── StateManager.h
 │   │   └── Command.h
+│   ├── cutscene/
+│   │   ├── CutsceneManager.h
+│   │   ├── CutsceneScript.h
+│   │   └── CutsceneTrigger.h
+│   ├── dialogue/
+│   │   ├── DialogueBox.h
+│   │   ├── DialogueData.h
+│   │   ├── DialogueLoader.h
+│   │   └── DialogueRegistry.h
 │   ├── environment/
 │   │   ├── Background.h
+│   │   ├── CameraFollowMode.h
+│   │   ├── CameraPanMode.h
+│   │   ├── CameraZoomMode.h
 │   │   ├── Cloud.h
 │   │   ├── Decoration.h
-│   │   └── Platform.h
+│   │   ├── ICameraMode.h
+│   │   ├── MapCamera.h
+│   │   ├── Platform.h
+│   │   └── TileMap.h
 │   ├── states/
 │   │   ├── CharacterState.h
 │   │   ├── GameState.h
@@ -76,11 +91,23 @@ SuperMarioPlus/
 │   │   ├── Game.cpp
 │   │   ├── StateManager.cpp
 │   │   └── main.cpp
+│   ├── cutscene/
+│   │   ├── CutsceneManager.cpp
+│   │   └── CutsceneTrigger.cpp
+│   ├── dialogue/
+│   │   ├── DialogueBox.cpp
+│   │   ├── DialogueLoader.cpp
+│   │   └── DialogueRegistry.cpp
 │   ├── environment/
 │   │   ├── Background.cpp
+│   │   ├── CameraFollowMode.cpp
+│   │   ├── CameraPanMode.cpp
+│   │   ├── CameraZoomMode.cpp
 │   │   ├── Cloud.cpp
 │   │   ├── Decoration.cpp
-│   │   └── Platform.cpp
+│   │   ├── MapCamera.cpp
+│   │   ├── Platform.cpp
+│   │   └── TileMap.cpp
 │   ├── states/
 │   │   ├── GameState.cpp
 │   │   ├── IntroState.cpp
@@ -141,8 +168,23 @@ SuperMarioPlus/
 - **`AbilityStrategy`**: Interface định nghĩa `Execute()`.
 - **`DashAbility`, `FireballAbility`, `FloatAbility`, `GroundPoundAbility`, `HighJumpAbility`**: Các lớp triển khai kỹ năng cụ thể cho từng nhân vật. Gắn linh hoạt vào Character.
 
-#### Environment
+#### Environment & Camera
 - **`Background`, `Cloud`, `Decoration`, `Platform`**: Các lớp thực thể quản lý việc vẽ hình nền, nền tảng vật lý (có xử lý va chạm), mây trôi và các phụ kiện trang trí trong World.
+- **`TileMap`**: Quản lý load và render map LDtk, parse entity data.
+- **`MapCamera`**: Quản lý camera 2D, hỗ trợ single/multiplayer và State Pattern qua các Camera Mode.
+- **`ICameraMode`**: Interface cho các camera mode (State Pattern).
+- **`CameraFollowMode`**: Mode mặc định bám theo 1 hoặc 2 người chơi.
+- **`CameraPanMode`**: Mode camera trượt mượt mà đến tọa độ chỉ định (Cinematic).
+- **`CameraZoomMode`**: Mode camera zoom mượt mà đến tỷ lệ phóng đại chỉ định (Cinematic).
+
+#### Cutscene & Dialogue
+- **`DialogueData`**: Chứa struct dữ liệu `DialogueSequence` và `DialogueLine` (Mô hình Dữ liệu thuần).
+- **`DialogueLoader`**: Chịu trách nhiệm parse các file JSON dialogue.
+- **`DialogueRegistry`**: Singleton lưu trữ các dialogue đã parse để tái sử dụng nhanh chóng.
+- **`DialogueBox`**: Vẽ hộp thoại kiểu RPG, quản lý Typewriter effect.
+- **`CutsceneScript`**: Struct chứa tham số của 1 cutscene (dialogueId, cameraPanTarget...).
+- **`CutsceneTrigger`**: Region trên map load từ LDtk, kích hoạt Cutscene khi Player đi vào.
+- **`CutsceneManager`**: Orchestrator điều phối Camera Spanning và DialogueBox (quản lý 4 Phase: PanIn, Dialogue, PanBack, Done). Block input người chơi nhưng giữ game running.
 
 #### Items
 - **`BaseItem`**: Abstract class cho các vật thể tương tác tĩnh (không có gravity) như Coin, Rương. Nó cung cấp hàm `drawAnim` hỗ trợ hiển thị Animation.

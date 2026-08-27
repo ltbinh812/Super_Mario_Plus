@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "CommandQueue.h"
 #include "BaseItem.h"
+#include "CutsceneManager.h"
+#include "CutsceneTrigger.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -54,6 +56,12 @@ protected:
     void processPlayerPushing();
     void processItemInteractions();
     void processSpawnQueue();
+    void processCutsceneTriggers();
+    void spawnCutsceneTriggersFromMap();
+
+    // === Cutscene System ===
+    CutsceneManager cutsceneManager;
+    std::vector<CutsceneTrigger> cutsceneTriggers;
 
 public:
     BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");

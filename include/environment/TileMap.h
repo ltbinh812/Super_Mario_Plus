@@ -28,6 +28,8 @@ struct LDtkEntityData {
     Vector2     px;                  // position in LDTK pixels (un-scaled)
     std::string iid;                 // unique instance ID for state persistence
     nlohmann::json fieldInstances;   // raw fieldInstances array
+    float width = 16.0f;             // entity width
+    float height = 16.0f;            // entity height
 };
 
 class TileMap {

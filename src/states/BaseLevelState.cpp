@@ -11,6 +11,7 @@
 #include "Flag.h"
 #include "PlayerHUD.h"
 #include "Coin.h"
+#include "DialogueRegistry.h"
 #include <algorithm>
 #include <iostream>
 #include <raylib.h>
@@ -54,6 +55,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
     ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
 
     spawnEntitiesFromMap();
+    spawnCutsceneTriggersFromMap();
     TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.", activeItems.size(), activeEntities.size());
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
@@ -61,17 +63,24 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
 }
 
 void BaseLevelState::HandleInput() {
-  if (player1) {
-    auto commands = player1Handler.handleInput();
-    for (auto *cmd : commands)
-      cmd->Execute(*player1);
-  }
-  if (player2) {
-    auto commands = player2Handler.handleInput();
-    for (auto *cmd : commands)
-      cmd->Execute(*player2);
+  // Khi cutscene active: chỉ forward input cho cutscene, BLOCK input player
+  // Nhưng entity AI vẫn chạy bình thường (decideAction ở dưới)
+  if (cutsceneManager.isActive()) {
+    cutsceneManager.handleInput();
+  } else {
+    if (player1) {
+      auto commands = player1Handler.handleInput();
+      for (auto *cmd : commands)
+        cmd->Execute(*player1);
+    }
+    if (player2) {
+      auto commands = player2Handler.handleInput();
+      for (auto *cmd : commands)
+        cmd->Execute(*player2);
+    }
   }
 
+  // Entity AI vẫn chạy bình thường kể cả khi cutscene đang diễn ra
   std::vector<Player*> players;
   if (player1) players.push_back(player1.get());
   if (player2) players.push_back(player2.get());
@@ -87,6 +96,12 @@ void BaseLevelState::HandleInput() {
 void BaseLevelState::Process() {
   float dt = GetFrameTime();
 
+  // Cutscene process luôn chạy (kiểm tra phase transition)
+  if (cutsceneManager.isActive()) {
+    cutsceneManager.process();
+  }
+
+  // Gameplay logic vẫn chạy bình thường kể cả khi cutscene đang diễn ra
   processDeathCondition(dt);
   processPlayerPushing();
   
@@ -130,16 +145,18 @@ void BaseLevelState::Process() {
     TransitionToLevel(next, dir, tX, tY);
   }
 
-  if (player1 && player2) {
-    mapCamera.UpdateMultiplayer(player1->getWorldStats().position,
-                                player2->getWorldStats().position,
-                                map.GetWidth(), map.GetHeight(), dt);
-  } else if (player1) {
-    mapCamera.Update(player1->getWorldStats().position, map.GetWidth(),
-                     map.GetHeight(), dt);
-  } else if (player2) {
-    mapCamera.Update(player2->getWorldStats().position, map.GetWidth(),
-                     map.GetHeight(), dt);
+  if (!cutsceneManager.isActive()) {
+    if (player1 && player2) {
+      mapCamera.UpdateMultiplayer(player1->getWorldStats().position,
+                                  player2->getWorldStats().position,
+                                  map.GetWidth(), map.GetHeight(), dt);
+    } else if (player1) {
+      mapCamera.Update(player1->getWorldStats().position, map.GetWidth(),
+                       map.GetHeight(), dt);
+    } else if (player2) {
+      mapCamera.Update(player2->getWorldStats().position, map.GetWidth(),
+                       map.GetHeight(), dt);
+    }
   }
 
   for (auto& ent : activeEntities) {
@@ -161,9 +178,16 @@ void BaseLevelState::Process() {
 
   processItemInteractions();
   processSpawnQueue();
+  processCutsceneTriggers();
 }
 
 void BaseLevelState::Update(float dt) {
+  // Cutscene update luôn chạy (camera mode, dialogue timer)
+  if (cutsceneManager.isActive()) {
+    cutsceneManager.update(dt);
+  }
+
+  // Gameplay physics vẫn chạy bình thường
   std::vector<Rectangle> dynamicSolids;
   for (const auto &item : activeItems) {
     if (!item->getIsActive())
@@ -231,9 +255,19 @@ void BaseLevelState::Render(float alpha) const {
       if (e && e->getIsActive()) allEntities.push_back(e.get());
   }
   combatSystem.renderDebug(allEntities);
+
+  for (const auto& trigger : cutsceneTriggers) {
+      trigger.renderDebug();
+  }
+  
   mapCamera.EndMode();
 
   PlayerHUD::render(player1.get(), player2.get(), partyInventory.get());
+
+  // Cutscene dialogue box vẽ trên cùng (screen space, ngoài camera)
+  if (cutsceneManager.isActive()) {
+    cutsceneManager.render(alpha);
+  }
 }
 
 void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
@@ -274,6 +308,7 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
     player2->setPosition({targetXNew, targetYNew});
 
     spawnEntitiesFromMap();
+    spawnCutsceneTriggersFromMap();
   }
 }
 
@@ -538,4 +573,60 @@ void BaseLevelState::processSpawnQueue() {
       activeItems.push_back(std::move(item));
     }
   }
+}
+
+void BaseLevelState::processCutsceneTriggers() {
+  // Không check trigger khi cutscene đang active
+  if (cutsceneManager.isActive()) return;
+
+  for (auto& trigger : cutsceneTriggers) {
+    auto checkPlayer = [&](Player* p) {
+      if (!p || !p->getIsActive()) return;
+      Rectangle hitbox = p->getHitbox();
+      if (trigger.checkTrigger(hitbox)) {
+        // Lấy vị trí Player hiện tại để camera quay về sau
+        Vector2 playerPos = p->getWorldStats().position;
+        cutsceneManager.startCutscene(trigger.getScript(), mapCamera, playerPos);
+        trigger.markTriggered();
+      }
+    };
+
+    checkPlayer(player1.get());
+    if (!cutsceneManager.isActive()) {
+      checkPlayer(player2.get());
+    }
+
+    // Dừng check nếu đã bắt đầu cutscene
+    if (cutsceneManager.isActive()) break;
+  }
+}
+
+void BaseLevelState::spawnCutsceneTriggersFromMap() {
+  cutsceneTriggers.clear();
+  auto entityData = map.GetEntityData();
+
+  for (const auto& data : entityData) {
+    // Tìm entity type "CutsceneTrigger" từ LDtk
+    if (data.identifier == "CutsceneTrigger") {
+      Vector2 size = {data.width, data.height};
+
+      CutsceneTrigger trigger(data.px, size, data.fieldInstances, map.GetWorldScale());
+
+      // Load dialogue file nếu có dialogueId
+      const std::string& dialogueId = trigger.getScript().dialogueId;
+      if (!dialogueId.empty() && !DialogueRegistry::getInstance().has(dialogueId)) {
+        std::string path = "assets/dialogues/" + dialogueId + ".json";
+        DialogueRegistry::getInstance().loadFromFile(path);
+      }
+
+      // Khôi phục trạng thái oneShot từ cutsceneManager
+      if (cutsceneManager.isTriggered(trigger.getTriggerId())) {
+        trigger.setHasTriggered(true);
+      }
+
+      cutsceneTriggers.push_back(std::move(trigger));
+    }
+  }
+
+  TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d cutscene triggers.", (int)cutsceneTriggers.size());
 }

@@ -95,3 +95,48 @@ void MapCamera::BeginMode() const {
 void MapCamera::EndMode() const {
     EndMode2D();
 }
+
+// === Camera Mode System Implementation ===
+
+void MapCamera::pushMode(std::unique_ptr<ICameraMode> mode) {
+    if (!mode) return;
+
+    if (!currentMode) {
+        // Không có mode nào đang chạy → bắt đầu ngay
+        currentMode = std::move(mode);
+        isInCinematicMode = true;
+    } else {
+        // Đã có mode đang chạy → xếp hàng chờ
+        modeQueue.push(std::move(mode));
+    }
+}
+
+void MapCamera::clearModes() {
+    currentMode.reset();
+    // Clear toàn bộ queue
+    std::queue<std::unique_ptr<ICameraMode>> empty;
+    std::swap(modeQueue, empty);
+    isInCinematicMode = false;
+}
+
+void MapCamera::updateMode(float dt) {
+    if (!currentMode) return;
+
+    currentMode->update(*this, dt);
+
+    if (currentMode->isFinished()) {
+        advanceMode();
+    }
+}
+
+void MapCamera::advanceMode() {
+    // Mode hiện tại đã hoàn thành → chuyển sang mode tiếp theo trong queue
+    if (!modeQueue.empty()) {
+        currentMode = std::move(modeQueue.front());
+        modeQueue.pop();
+    } else {
+        // Hết mode → thoát cinematic
+        currentMode.reset();
+        isInCinematicMode = false;
+    }
+}

@@ -27,6 +27,8 @@ include_directories(
     include/infrastructure
     include/command
     include/environment
+    include/dialogue
+    include/cutscene
 )
 
 if(WIN32)
@@ -114,6 +116,14 @@ set(SOURCES
     src/states/World05State.cpp
     src/states/World06State.cpp
     src/states/CharacterSelectionState.cpp
+    src/environment/CameraFollowMode.cpp
+    src/environment/CameraPanMode.cpp
+    src/environment/CameraZoomMode.cpp
+    src/dialogue/DialogueLoader.cpp
+    src/dialogue/DialogueBox.cpp
+    src/dialogue/DialogueRegistry.cpp
+    src/cutscene/CutsceneManager.cpp
+    src/cutscene/CutsceneTrigger.cpp
 )
 
 # Executable

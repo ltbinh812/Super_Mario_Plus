@@ -341,6 +341,8 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                         
                         data.iid = ent.contains("iid") ? (std::string)ent["iid"] : "";
                         data.fieldInstances = ent.contains("fieldInstances") ? ent["fieldInstances"] : json::array();
+                        data.width = w;
+                        data.height = h;
                         entityData_.push_back(data);
                     }
 
@@ -518,6 +520,8 @@ std::vector<LDtkEntityData> TileMap::GetEntityData() const {
         LDtkEntityData d = data;
         d.px.x *= scale;
         d.px.y *= scale;
+        d.width *= scale;
+        d.height *= scale;
         scaled.push_back(std::move(d));
     }
     return scaled;
