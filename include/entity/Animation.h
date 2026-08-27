@@ -24,6 +24,7 @@ public:
     float getFrameTime() const { return frameTime; }
     void setLoop(bool loop) { loop_ = loop; }
     bool isLooping() const { return loop_; }
+    bool isFinished() const { return !loop_ && curFrame >= frameNum - 1; }
     float getScale() const { return scale_; }
     void setScale(float scale) { scale_ = scale; }
 

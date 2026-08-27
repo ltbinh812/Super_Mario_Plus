@@ -17,7 +17,7 @@ static std::string getFrameName(const std::string& itemIdentifier) {
     return "";
 }
 
-void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory* inventory) {
+void PlayerHUD::render(const Player* p1, const PartyInventory* inventory) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
@@ -222,7 +222,6 @@ void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory*
     };
 
     drawPlayerHUD(p1, true);
-    drawPlayerHUD(p2, false);
     
     if (inventory) {
         std::string coins = "Coins: " + std::to_string(inventory->coins);

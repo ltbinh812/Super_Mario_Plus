@@ -162,11 +162,15 @@ SuperMarioPlus/
 - **`CharacterFactory`**: Factory Pattern để tự động sinh ra các nhân vật dựa trên chuỗi định danh (Tên).
 - **`Mario, Luigi, Peach, Toad, Wario`**: Các lớp cụ thể đại diện cho người chơi, được override các kỹ năng tương ứng.
 - **`Goomba`**: Kẻ thù cơ bản, kế thừa từ `Character`.
-- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, và xử lý đẩy lùi (knockback).
+- **`Boss`**: Kế thừa `Mob`, hỗ trợ cơ chế Cutscene ID (Observer pattern) thông qua hàm `onCutsceneStart` và `onCutsceneEnd` để đồng bộ Boss Intro.
+- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`, `EnemySkillState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, xử lý đẩy lùi (knockback), và đặc biệt `EnemySkillState` hỗ trợ random xuất chiêu dựa trên `IEnemySkill`.
+- **Boss States (`BossIdleState`, `BossIntroState`)**: Các state chuyên biệt dành cho Boss để xử lý logic chờ Cutscene và chống Animation Popping.
 
-#### Abilities (Strategy Pattern)
-- **`AbilityStrategy`**: Interface định nghĩa `Execute()`.
+#### Abilities & Skills (Strategy Pattern)
+- **`AbilityStrategy`**: Interface định nghĩa `Execute()` cho các kỹ năng của Player.
 - **`DashAbility`, `FireballAbility`, `FloatAbility`, `GroundPoundAbility`, `HighJumpAbility`**: Các lớp triển khai kỹ năng cụ thể cho từng nhân vật. Gắn linh hoạt vào Character.
+- **`IEnemySkill`**: Interface độc lập (Decoupled) dùng riêng cho AI của Quái/Boss. Cung cấp hàm `execute(Mob&)` cùng với logic tính toán hitbox, damage, thời gian thi triển.
+- **`BasicMeleeEnemySkill`**: Kỹ năng mẫu cơ bản dành cho Quái (tự động gây sát thương nếu Player nằm trong tầm đánh).
 
 #### Environment & Camera
 - **`Background`, `Cloud`, `Decoration`, `Platform`**: Các lớp thực thể quản lý việc vẽ hình nền, nền tảng vật lý (có xử lý va chạm), mây trôi và các phụ kiện trang trí trong World.

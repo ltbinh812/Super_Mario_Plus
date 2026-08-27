@@ -9047,22 +9047,6 @@
 							"__worldY": 400
 						},
 						{
-							"__identifier": "Mob_mushroom",
-							"__grid": [80,25],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FF0000",
-							"iid": "d8f2f4e0-96d0-11f1-9d3b-91d0852693eb",
-							"width": 32,
-							"height": 32,
-							"defUid": 357,
-							"px": [1288,416],
-							"fieldInstances": [],
-							"__worldX": 1288,
-							"__worldY": 416
-						},
-						{
 							"__identifier": "CutsceneTrigger",
 							"__grid": [69,21],
 							"__pivot": [0,0],
@@ -9090,6 +9074,22 @@
 							],
 							"__worldX": 1104,
 							"__worldY": 336
+						},
+						{
+							"__identifier": "Mob_mushroom",
+							"__grid": [90,26],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FF0000",
+							"iid": "ec65ff20-96d0-11f1-a23f-4180047a9d34",
+							"width": 32,
+							"height": 32,
+							"defUid": 357,
+							"px": [1448,432],
+							"fieldInstances": [],
+							"__worldX": 1448,
+							"__worldY": 432
 						}
 					]
 				},

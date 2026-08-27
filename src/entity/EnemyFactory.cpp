@@ -1,6 +1,9 @@
 #include "EnemyFactory.h"
 #include "Mob.h"
+#include "Boss.h"
 #include "Item/AtlasAnimation.h"
+#include "infrastructure/AssetManager.h"
+#include "Skill/BasicMeleeEnemySkill.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -73,18 +76,24 @@ std::unique_ptr<Entity> EnemyFactory::create(
     MobConfig config;
     config.name = lowerKey;
     
-    auto& attackData = mobData["attackData"];
-    config.attackData.damage = attackData["damage"].get<int>();
-    config.attackData.hitboxStartFrame = attackData["hitboxStartFrame"].get<int>();
-    config.attackData.hitboxEndFrame = attackData["hitboxEndFrame"].get<int>();
-    config.attackData.hitboxTotalFrames = attackData["hitboxTotalFrames"].get<int>();
-    config.attackData.frameTime = attackData["frameTime"].get<float>();
-    config.attackData.box = { 
-        attackData["box"]["offsetX"].get<float>(),
-        attackData["box"]["offsetY"].get<float>(),
-        attackData["box"]["w"].get<float>(),
-        attackData["box"]["h"].get<float>()
-    };
+    if (mobData.contains("attackData")) {
+        auto& attackData = mobData["attackData"];
+        config.attackData.damage = attackData.value("damage", 10);
+        config.attackData.hitboxStartFrame = attackData.value("hitboxStartFrame", 0);
+        config.attackData.hitboxEndFrame = attackData.value("hitboxEndFrame", 0);
+        config.attackData.hitboxTotalFrames = attackData.value("hitboxTotalFrames", 1);
+        config.attackData.frameTime = attackData.value("frameTime", 0.1f);
+        if (attackData.contains("box")) {
+            config.attackData.box = { 
+                attackData["box"].value("offsetX", 0.0f),
+                attackData["box"].value("offsetY", 0.0f),
+                attackData["box"].value("w", 0.0f),
+                attackData["box"].value("h", 0.0f)
+            };
+        }
+    } else {
+        config.attackData = {};
+    }
 
     auto& aiData = mobData["aiData"];
     config.aiData.detectionRange = aiData["detectionRange"].get<float>();
@@ -92,19 +101,113 @@ std::unique_ptr<Entity> EnemyFactory::create(
     config.aiData.patrolSpeed = aiData["patrolSpeed"].get<float>();
     config.aiData.patrolTime = aiData["patrolTime"].get<float>();
 
-    auto mob = std::make_unique<BasicMob>(worldPos, lowerKey, bStats, config);
-    
-    auto& anims = mobData["animationFrames"];
-    mob->initAnimations(
-        anims["attack"].get<int>(),
-        anims["run"].get<int>(),
-        anims["idle"].get<int>(),
-        anims["hurt"].get<int>(),
-        anims["die"].get<int>()
-    );
-    
-    // Start in Patrol state
-    mob->changeState(std::make_unique<EnemyPatrolState>());
+    std::unique_ptr<Mob> mob = nullptr;
+
+    if (key.find("Boss_") == 0) {
+        // Parse cutsceneId from LDtk fieldInstances
+        std::string cutsceneId = "";
+        if (fieldInstances.is_array()) {
+            for (auto& field : fieldInstances) {
+                if (field["__identifier"] == "cutsceneId" && field.contains("__value") && !field["__value"].is_null()) {
+                    cutsceneId = field["__value"].get<std::string>();
+                }
+            }
+        }
+        mob = std::make_unique<Boss>(worldPos, lowerKey, bStats, config, cutsceneId);
+        // State will be set by Boss constructor based on cutsceneId
+    } else {
+        mob = std::make_unique<BasicMob>(worldPos, lowerKey, bStats, config);
+        // Start in Patrol state for normal mobs
+        mob->changeState(std::make_unique<EnemyPatrolState>());
+    }
+
+    // NEW: Check for Standard Animations
+    if (mobData.contains("assetFolder")) {
+        std::string assetFolder = mobData["assetFolder"].get<std::string>();
+        std::unordered_map<std::string, Animation> standardAnims;
+        
+        if (mobData.contains("animations")) {
+            for (auto& [animName, animData] : mobData["animations"].items()) {
+                std::string texBase = animData["texture"].get<std::string>();
+                std::string texKey  = lowerKey + "_" + texBase;
+                std::string texPath = "assets/" + assetFolder + "/" + texBase + ".png";
+                
+                AssetManager::getInstance().loadTexture(texKey, texPath);
+                
+                float scale = animData.value("scale", 1.0f);
+                standardAnims.emplace(animName, Animation(
+                    AssetManager::getInstance().getTexture(texKey),
+                    animData["frameNum"].get<int>(),
+                    animData["frameTime"].get<float>(),
+                    scale
+                ));
+            }
+        }
+        mob->setStandardAnimations(std::move(standardAnims));
+        mob->setAnimation("idle");
+    } else {
+        // FALLBACK: Atlas Animation
+        auto& anims = mobData["animationFrames"];
+        if (auto* boss = dynamic_cast<Boss*>(mob.get())) {
+            int introFrames = anims.contains("intro") ? anims["intro"].get<int>() : 0;
+            boss->initAnimations(
+                anims["attack"].get<int>(),
+                anims["run"].get<int>(),
+                anims["idle"].get<int>(),
+                anims["hurt"].get<int>(),
+                anims["die"].get<int>(),
+                introFrames
+            );
+        } else if (auto* basicMob = dynamic_cast<BasicMob*>(mob.get())) {
+            basicMob->initAnimations(
+                anims["attack"].get<int>(),
+                anims["run"].get<int>(),
+                anims["idle"].get<int>(),
+                anims["hurt"].get<int>(),
+                anims["die"].get<int>()
+            );
+        }
+    }
+
+    // NEW: Check for Skills
+    if (mobData.contains("enemySkills")) {
+        for (auto& [skillName, skillData] : mobData["enemySkills"].items()) {
+            // For now, map all to BasicMeleeEnemySkill, in the future we can use a Registry
+            int dmg = skillData.value("damage", 10);
+            
+            // Calculate hitboxes based on frameTime if available
+            float frameTime = 0.1f;
+            int totalFrames = 1;
+            
+            if (mobData.contains("animations") && mobData["animations"].contains(skillName)) {
+                frameTime = mobData["animations"][skillName].value("frameTime", 0.1f);
+                totalFrames = mobData["animations"][skillName].value("frameNum", 1);
+            } else if (mobData.contains("animationFrames")) {
+                // If using atlas, skillName usually maps to something like "mob_mushroom_attack"
+                // but the key in animationFrames is just "attack".
+                // We'll just extract the suffix after the last underscore if present.
+                std::string baseName = skillName;
+                size_t lastUnderscore = skillName.find_last_of('_');
+                if (lastUnderscore != std::string::npos) {
+                    baseName = skillName.substr(lastUnderscore + 1);
+                }
+                if (mobData["animationFrames"].contains(baseName)) {
+                    totalFrames = mobData["animationFrames"][baseName].get<int>();
+                }
+            }
+            
+            int startFrame = skillData.value("hitboxStartFrame", 0);
+            int endFrame = skillData.value("hitboxEndFrame", 1);
+            
+            float startTime = startFrame * frameTime;
+            float endTime = endFrame * frameTime;
+            float duration = totalFrames * frameTime;
+
+            mob->addEnemySkill(std::make_unique<BasicMeleeEnemySkill>(
+                skillName, dmg, startTime, endTime, duration
+            ));
+        }
+    }
     
     TraceLog(LOG_INFO, "[EnemyFactory] Successfully spawned %s", key.c_str());
     return mob;

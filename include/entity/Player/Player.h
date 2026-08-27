@@ -98,6 +98,7 @@ public:
   void onOverlapLadder() override;
   void onHazard() override;
   void onDie() override;
+  void onCutsceneStart(const std::string& triggerId) override;
 
   // --- Animation ---
   void playAnimation(const std::string &name, bool loop = true);

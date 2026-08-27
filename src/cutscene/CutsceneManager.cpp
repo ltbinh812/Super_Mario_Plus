@@ -69,6 +69,8 @@ void CutsceneManager::handleInput() {
 
 // === process(): Kiểm tra phase transition ===
 void CutsceneManager::process() {
+    justFinishedFlag = false; // Reset cờ mỗi frame
+    
     switch (phase) {
         case CutscenePhase::PanIn:
             // Camera pan xong → chuyển sang Dialogue
@@ -118,6 +120,8 @@ void CutsceneManager::process() {
 
         case CutscenePhase::Done:
             // Cleanup
+            finishedCutsceneId = currentScript.triggerId;
+            justFinishedFlag = true;
             phase = CutscenePhase::Idle;
             camera = nullptr;
             std::cout << "[CutsceneManager] Cutscene finished.\n";

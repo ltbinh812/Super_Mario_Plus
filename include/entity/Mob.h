@@ -4,6 +4,9 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <vector>
+#include "Animation.h"
+#include "Skill/IEnemySkill.h"
 
 class IMobState;
 
@@ -34,6 +37,12 @@ protected:
     std::unique_ptr<IMobState> currentState;
     std::unordered_map<std::string, AtlasAnimation> animations;
     AtlasAnimation* currentAnim;
+    
+    // New Standard Animation and Skill system
+    std::unordered_map<std::string, Animation> standardAnimations;
+    Animation* currentStandardAnim = nullptr;
+    std::vector<std::unique_ptr<IEnemySkill>> enemySkills;
+    
     std::string mobType;
     MobConfig config;
     
@@ -78,6 +87,20 @@ public:
     void changeState(std::unique_ptr<IMobState> newState);
     void setAnimation(const std::string& animName);
     
+    // Standard asset methods
+    void setStandardAnimations(std::unordered_map<std::string, Animation> anims) {
+        standardAnimations = std::move(anims);
+    }
+    void addEnemySkill(std::unique_ptr<IEnemySkill> skill) {
+        enemySkills.push_back(std::move(skill));
+    }
+    const std::vector<std::unique_ptr<IEnemySkill>>& getEnemySkills() const {
+        return enemySkills;
+    }
+    bool hasStandardAnimations() const {
+        return !standardAnimations.empty();
+    }
+    
     // Utility
     const std::string& getMobType() const { return mobType; }
     const MobConfig& getConfig() const { return config; }
@@ -95,4 +118,5 @@ public:
     bool checkIsDead() const { return isDead; }
     
     AtlasAnimation* getCurrentAnim() { return currentAnim; }
+    Animation* getCurrentStandardAnim() { return currentStandardAnim; }
 };

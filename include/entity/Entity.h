@@ -68,6 +68,9 @@ public:
 
   virtual void dropThrough();
 
+  virtual void onCutsceneStart(const std::string& triggerId) {}
+  virtual void onCutsceneEnd(const std::string& triggerId) {}
+
   void addEffect(std::unique_ptr<IEffect> effect);
   bool hasEffect(const std::string& name) const;
   void updateEffects(float dt);

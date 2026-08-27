@@ -1,6 +1,7 @@
 #include "EnemyStates/EnemyRunState.h"
 #include "EnemyStates/EnemyIdleState.h"
 #include "EnemyStates/EnemyAttackState.h"
+#include "EnemyStates/EnemySkillState.h"
 #include "Mob.h"
 #include "Player.h"
 #include <cmath>
@@ -32,7 +33,12 @@ void EnemyRunState::decideAction(Mob& mob) {
     }
     
     if (dist <= attackRange) {
-        mob.changeState(std::make_unique<EnemyAttackState>());
+        if (!mob.getEnemySkills().empty()) {
+            int skillIndex = GetRandomValue(0, mob.getEnemySkills().size() - 1);
+            mob.changeState(std::make_unique<EnemySkillState>(mob.getEnemySkills()[skillIndex].get()));
+        } else {
+            mob.changeState(std::make_unique<EnemyAttackState>());
+        }
         return;
     }
 }

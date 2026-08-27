@@ -45,6 +45,9 @@ private:
     Vector2 playerReturnPos = {0, 0};  // Vị trí Player để camera quay về
     float normalZoom = 1.0f;           // Zoom level ban đầu trước khi cutscene bắt đầu
 
+    std::string finishedCutsceneId = "";
+    bool justFinishedFlag = false;
+
     // Track các cutscene oneShot đã trigger (persist trong level)
     std::unordered_set<std::string> triggeredIds;
 
@@ -68,6 +71,9 @@ public:
     // === Truy vấn trạng thái ===
     bool isActive() const { return phase != CutscenePhase::Idle; }
     bool isTriggered(const std::string& triggerId) const;
+    
+    bool justFinished() const { return justFinishedFlag; }
+    const std::string& getFinishedCutsceneId() const { return finishedCutsceneId; }
 
     // === Quản lý state persistence ===
     const std::unordered_set<std::string>& getTriggeredIds() const { return triggeredIds; }

@@ -35,7 +35,9 @@ void Mob::update(float dt) {
         hurtTimer -= dt;
     }
 
-    if (currentAnim) {
+    if (currentStandardAnim) {
+        currentStandardAnim->update(dt);
+    } else if (currentAnim) {
         currentAnim->update(dt);
     }
     
@@ -49,36 +51,58 @@ void Mob::update(float dt) {
 }
 
 void Mob::render(float alpha) {
-    if (!currentAnim || !currentAnim->isValid()) return;
-
     // Blink effect when hurt
     if (hurtTimer > 0.0f && !isDead) {
         int blink = (int)(hurtTimer * 20.0f);
         if (blink % 2 == 0) return;
     }
 
-    const Texture2D& tex = currentAnim->getTexture();
-    if (tex.id == 0) {
-        TraceLog(LOG_ERROR, "[Mob] ERROR: Texture ID is 0 for %s!", mobType.c_str());
-        return;
+    if (hasStandardAnimations() && currentStandardAnim) {
+        const Texture2D& tex = currentStandardAnim->getTexture();
+        if (tex.id == 0) return;
+
+        Rectangle src = currentStandardAnim->getCurrentFrame();
+        if (!isFacingRight) {
+            src.width = -std::abs(src.width);
+        } else {
+            src.width = std::abs(src.width);
+        }
+
+        float scale = currentStandardAnim->getScale();
+        float drawW = std::abs(src.width) * scale;
+        float drawH = std::abs(src.height) * scale;
+
+        Rectangle dest = {
+            worldStats.position.x - drawW / 2.0f,
+            worldStats.position.y - drawH,
+            drawW,
+            drawH
+        };
+
+        DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, WHITE);
+    } else if (currentAnim && currentAnim->isValid()) {
+        const Texture2D& tex = currentAnim->getTexture();
+        if (tex.id == 0) return;
+
+        Rectangle src = currentAnim->getCurrentSourceRect();
+        if (!isFacingRight) {
+            src.width = -std::abs(src.width);
+        } else {
+            src.width = std::abs(src.width);
+        }
+
+        float drawW = std::abs(src.width);
+        float drawH = std::abs(src.height);
+
+        Rectangle dest = {
+            worldStats.position.x - drawW / 2.0f,
+            worldStats.position.y - drawH,
+            drawW,
+            drawH
+        };
+
+        DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, WHITE);
     }
-
-    Rectangle src = currentAnim->getCurrentSourceRect();
-    if (!isFacingRight) {
-        src.width = -src.width;
-    }
-
-    float drawW = std::abs(src.width);
-    float drawH = std::abs(src.height);
-
-    Rectangle dest = {
-        worldStats.position.x - drawW / 2.0f,
-        worldStats.position.y - drawH,
-        drawW,
-        drawH
-    };
-
-    DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, WHITE);
 
     // Draw Health Bar if not dead
     if (!isDead && baseStats.maxHealth > 0) {
@@ -162,11 +186,21 @@ void Mob::changeState(std::unique_ptr<IMobState> newState) {
 }
 
 void Mob::setAnimation(const std::string& animName) {
-    auto it = animations.find(animName);
-    if (it != animations.end()) {
-        if (currentAnim != &it->second) {
-            currentAnim = &it->second;
-            currentAnim->reset();
+    if (hasStandardAnimations()) {
+        auto it = standardAnimations.find(animName);
+        if (it != standardAnimations.end()) {
+            if (currentStandardAnim != &it->second) {
+                currentStandardAnim = &it->second;
+                currentStandardAnim->resetAnimation();
+            }
+        }
+    } else {
+        auto it = animations.find(animName);
+        if (it != animations.end()) {
+            if (currentAnim != &it->second) {
+                currentAnim = &it->second;
+                currentAnim->reset();
+            }
         }
     }
 }

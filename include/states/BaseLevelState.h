@@ -23,11 +23,9 @@ protected:
     CombatSystem combatSystem;
 
     std::unique_ptr<Player> player1;
-    std::unique_ptr<Player> player2;
     std::shared_ptr<PartyInventory> partyInventory;
 
     InputHandler player1Handler;
-    InputHandler player2Handler;
 
     CommandQueue spawnQueue;
     std::vector<std::unique_ptr<Entity>> activeEntities;
@@ -53,7 +51,6 @@ protected:
     void bindPlayerInputs();
 
     void processDeathCondition(float dt);
-    void processPlayerPushing();
     void processItemInteractions();
     void processSpawnQueue();
     void processCutsceneTriggers();
@@ -64,7 +61,7 @@ protected:
     std::vector<CutsceneTrigger> cutsceneTriggers;
 
 public:
-    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
+    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku");
     virtual ~BaseLevelState() = default;
 
     GameSaveData createSaveData() const;

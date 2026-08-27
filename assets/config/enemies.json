@@ -6,14 +6,6 @@
     "jumpVelocity": 300.0,
     "gravityScale": 160.0,
     "physicsBox": { "w": 32.0, "h": 32.0 },
-    "attackData": {
-      "damage": 10,
-      "hitboxStartFrame": 3,
-      "hitboxEndFrame": 6,
-      "hitboxTotalFrames": 10,
-      "frameTime": 0.1,
-      "box": { "offsetX": 0.0, "offsetY": 0.0, "w": 30.0, "h": 30.0 }
-    },
     "aiData": {
       "detectionRange": 250.0,
       "attackRange": 40.0,
@@ -26,6 +18,41 @@
       "idle": 7,
       "hurt": 5,
       "die": 15
+    },
+    "enemySkills": {
+      "mob_mushroom_attack": { 
+        "damage": 10, 
+        "hitboxStartFrame": 3, 
+        "hitboxEndFrame": 6 
+      }
+    }
+  },
+  "boss_test": {
+    "name": "boss_test",
+    "assetFolder": "boss/boss_test",
+    "maxHealth": 100,
+    "moveVelocity": 50.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": { "w": 32.0, "h": 32.0 },
+    "aiData": {
+      "detectionRange": 400.0,
+      "attackRange": 60.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "idle": { "texture": "idle", "frameNum": 4, "frameTime": 0.1 },
+      "run": { "texture": "run", "frameNum": 6, "frameTime": 0.1 },
+      "intro": { "texture": "intro", "frameNum": 8, "frameTime": 0.1 },
+      "attack1": { "texture": "attack1", "frameNum": 6, "frameTime": 0.1 }
+    },
+    "enemySkills": {
+      "attack1": { 
+        "damage": 20, 
+        "hitboxStartFrame": 3, 
+        "hitboxEndFrame": 5 
+      }
     }
   }
 }

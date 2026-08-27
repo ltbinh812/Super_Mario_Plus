@@ -563,3 +563,9 @@ void Player::useStoredItem() {
 void Player::dropThrough() {
     runtimeStats.ignoreOneWayTimer = 0.2f;
 }
+
+void Player::onCutsceneStart(const std::string& triggerId) {
+    // We do nothing here immediately. 
+    // BaseLevelState will gently stop the player only when they are on the ground,
+    // allowing them to complete their jump arcs if triggered mid-air.
+}

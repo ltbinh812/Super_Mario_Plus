@@ -15,10 +15,8 @@
 class CameraFollowMode : public ICameraMode {
 private:
     Vector2 targetPos1;
-    Vector2 targetPos2;
     int mapWidth;
     int mapHeight;
-    bool isMultiplayer;
 
 public:
     CameraFollowMode();
@@ -28,7 +26,6 @@ public:
      * Phải gọi trước update() mỗi frame.
      */
     void setTarget(Vector2 pos, int mapW, int mapH);
-    void setTargetMultiplayer(Vector2 pos1, Vector2 pos2, int mapW, int mapH);
 
     void update(MapCamera& cam, float dt) override;
     bool isFinished() const override;

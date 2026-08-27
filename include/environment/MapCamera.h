@@ -21,7 +21,6 @@ public:
 
     // Cập nhật vị trí camera (góc trái trên map luôn trùng góc trái trên màn hình)
     void Update(Vector2 targetPos, int mapWidth, int mapHeight, float dt = 0.0f);
-    void UpdateMultiplayer(Vector2 pos1, Vector2 pos2, int mapWidth, int mapHeight, float dt = 0.0f);
 
     // Điều khiển camera thủ công cho chế độ khám phá/debug
     void MoveManual(Vector2 delta);

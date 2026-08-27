@@ -24,6 +24,7 @@ include_directories(
     include/entity/Item
     include/entity/BuffEffects
     include/entity/EnemyStates
+    include/entity/BossStates
     include/infrastructure
     include/command
     include/environment
@@ -77,17 +78,22 @@ set(SOURCES
     src/entity/Skill/JumpAttackSkill.cpp
     src/entity/Skill/LowAttackSkill.cpp
     src/entity/Skill/SpecialSkillAttack.cpp
+    src/entity/Skill/BasicMeleeEnemySkill.cpp
     src/entity/Fireball.cpp
     src/entity/Explosion.cpp
     src/entity/EntityFactory.cpp
     src/entity/Mob.cpp
+    src/entity/Boss.cpp
     src/entity/EnemyFactory.cpp
+    src/entity/BossStates/BossIdleState.cpp
+    src/entity/BossStates/BossIntroState.cpp
     src/entity/EnemyStates/EnemyIdleState.cpp
     src/entity/EnemyStates/EnemyPatrolState.cpp
     src/entity/EnemyStates/EnemyRunState.cpp
     src/entity/EnemyStates/EnemyAttackState.cpp
     src/entity/EnemyStates/EnemyHurtState.cpp
     src/entity/EnemyStates/EnemyDieState.cpp
+    src/entity/EnemyStates/EnemySkillState.cpp
     src/entity/Item/ItemAtlasRegistry.cpp
     src/entity/Item/AtlasAnimation.cpp
     src/entity/Item/BaseItem.cpp
