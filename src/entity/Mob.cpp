@@ -188,6 +188,13 @@ void Mob::changeState(std::unique_ptr<IMobState> newState) {
 void Mob::setAnimation(const std::string& animName) {
     if (hasStandardAnimations()) {
         auto it = standardAnimations.find(animName);
+        if (it == standardAnimations.end()) {
+            std::string prefix = mobType + "_";
+            if (animName.find(prefix) == 0) {
+                std::string base = animName.substr(prefix.length());
+                it = standardAnimations.find(base);
+            }
+        }
         if (it != standardAnimations.end()) {
             if (currentStandardAnim != &it->second) {
                 currentStandardAnim = &it->second;

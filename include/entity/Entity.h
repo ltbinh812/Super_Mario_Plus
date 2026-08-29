@@ -99,6 +99,7 @@ public:
       worldStats.startPosition = pos; 
   }
   void setCommandQueue(CommandQueue* cq) { commandQueue = cq; }
+  CommandQueue* getCommandQueue() const { return commandQueue; }
 
   const std::string& getIid() const { return iid_; }
   void setIid(const std::string& iid) { iid_ = iid; }

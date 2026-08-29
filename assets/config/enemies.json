@@ -5,7 +5,10 @@
     "moveVelocity": 100.0,
     "jumpVelocity": 300.0,
     "gravityScale": 160.0,
-    "physicsBox": { "w": 32.0, "h": 32.0 },
+    "physicsBox": {
+      "w": 32.0,
+      "h": 32.0
+    },
     "aiData": {
       "detectionRange": 250.0,
       "attackRange": 40.0,
@@ -20,39 +23,1211 @@
       "die": 15
     },
     "enemySkills": {
-      "mob_mushroom_attack": { 
-        "damage": 10, 
-        "hitboxStartFrame": 3, 
-        "hitboxEndFrame": 6 
+      "mob_mushroom_attack": {
+        "damage": 10,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 6,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
       }
     }
   },
-  "boss_test": {
-    "name": "boss_test",
-    "assetFolder": "boss/boss_test",
-    "maxHealth": 100,
-    "moveVelocity": 50.0,
+  "boss_doflam": {
+    "name": "Boss_doflam",
+    "assetFolder": "boss/doflam",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
     "jumpVelocity": 300.0,
     "gravityScale": 160.0,
-    "physicsBox": { "w": 32.0, "h": 32.0 },
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
     "aiData": {
-      "detectionRange": 400.0,
-      "attackRange": 60.0,
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
       "patrolSpeed": 50.0,
       "patrolTime": 3.0
     },
     "animations": {
-      "idle": { "texture": "idle", "frameNum": 4, "frameTime": 0.1 },
-      "run": { "texture": "run", "frameNum": 6, "frameTime": 0.1 },
-      "intro": { "texture": "intro", "frameNum": 8, "frameTime": 0.1 },
-      "attack1": { "texture": "attack1", "frameNum": 6, "frameTime": 0.1 }
+      "intro": {
+        "texture": "intro",
+        "frameNum": 28,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 4,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 16,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 32,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 11,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 7,
+        "frameTime": 0.1
+      }
     },
     "enemySkills": {
-      "attack1": { 
-        "damage": 20, 
-        "hitboxStartFrame": 3, 
-        "hitboxEndFrame": 5 
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 14,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 30,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 9,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 5,
+        "hitboxEndFrame": 7,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
       }
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_2",
+      "frameNum": 7,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_1",
+      "frameNum": 10,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_3",
+      "frameNum": 8,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    }
+  },
+  "boss_franky": {
+    "name": "Boss_franky",
+    "assetFolder": "boss/franky",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
+    "aiData": {
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "intro": {
+        "texture": "intro",
+        "frameNum": 30,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 3,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 15,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 20,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 38,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 18,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 8,
+        "frameTime": 0.1
+      }
+    },
+    "enemySkills": {
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 11,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 5,
+        "hitboxEndFrame": 13,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 6,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 26,
+        "hitboxEndFrame": 37,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 5,
+        "hitboxEndFrame": 10,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      }
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_2",
+      "frameNum": 5,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_3",
+      "frameNum": 15,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_1",
+      "frameNum": 13,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    }
+  },
+  "boss_itachi": {
+    "name": "Boss_itachi",
+    "assetFolder": "boss/itachi",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
+    "aiData": {
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "intro": {
+        "texture": "intro",
+        "frameNum": 10,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 4,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 12,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 5,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      }
+    },
+    "enemySkills": {
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 9,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 1,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      }
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_2",
+      "frameNum": 3,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_3",
+      "frameNum": 56,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_1",
+      "frameNum": 9,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    }
+  },
+  "boss_sasukeboss": {
+    "name": "Boss_sasukeboss",
+    "assetFolder": "boss/sasukeboss",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
+    "aiData": {
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "intro": {
+        "texture": "intro",
+        "frameNum": 24,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 4,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 20,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 10,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 11,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 5,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      }
+    },
+    "enemySkills": {
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 14,
+        "hitboxEndFrame": 19,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 0,
+        "hitboxEndFrame": 9,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 8,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      }
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_2",
+      "frameNum": 6,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_3",
+      "frameNum": 15,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_1",
+      "frameNum": 7,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    }
+  },
+  "boss_shank": {
+    "name": "Boss_shank",
+    "assetFolder": "boss/shank",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
+    "aiData": {
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "intro": {
+        "texture": "intro",
+        "frameNum": 22,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 3,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 5,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 21,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 9,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 8,
+        "frameTime": 0.1
+      }
+    },
+    "enemySkills": {
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 7,
+        "hitboxEndFrame": 20,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 5,
+        "hitboxEndFrame": 7,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 4,
+        "hitboxEndFrame": 7,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      }
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_2",
+      "frameNum": 5,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_3",
+      "frameNum": 4,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_1",
+      "frameNum": 7,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    }
+  },
+  "boss_narutoboss": {
+    "name": "Boss_narutoboss",
+    "assetFolder": "boss/narutoboss",
+    "maxHealth": 1000,
+    "moveVelocity": 80.0,
+    "jumpVelocity": 300.0,
+    "gravityScale": 160.0,
+    "physicsBox": {
+      "w": 64.0,
+      "h": 64.0
+    },
+    "aiData": {
+      "detectionRange": 500.0,
+      "attackRange": 80.0,
+      "patrolSpeed": 50.0,
+      "patrolTime": 3.0
+    },
+    "animations": {
+      "intro": {
+        "texture": "intro",
+        "frameNum": 7,
+        "frameTime": 0.1
+      },
+      "idle": {
+        "texture": "idle",
+        "frameNum": 4,
+        "frameTime": 0.15
+      },
+      "run": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "die": {
+        "texture": "die",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "hurt": {
+        "texture": "hurt",
+        "frameNum": 2,
+        "frameTime": 0.1
+      },
+      "attack_1": {
+        "texture": "attack_1",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "attack_2": {
+        "texture": "attack_2",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "attack_3": {
+        "texture": "attack_3",
+        "frameNum": 6,
+        "frameTime": 0.1
+      },
+      "attack_4": {
+        "texture": "attack_4",
+        "frameNum": 8,
+        "frameTime": 0.1
+      },
+      "special_attack": {
+        "texture": "special_attack",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "long_attack": {
+        "texture": "long_attack",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "explosion_attack": {
+        "texture": "explosion_attack",
+        "frameNum": 4,
+        "frameTime": 0.1
+      },
+      "patrol": {
+        "texture": "run",
+        "frameNum": 6,
+        "frameTime": 0.1
+      }
+    },
+    "enemySkills": {
+      "attack_1": {
+        "damage": 20,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 50.0,
+          "h": 60.0
+        }
+      },
+      "attack_2": {
+        "damage": 25,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 4,
+        "box": {
+          "offsetX": 30.0,
+          "offsetY": -15.0,
+          "w": 60.0,
+          "h": 70.0
+        }
+      },
+      "attack_3": {
+        "damage": 30,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 10.0,
+          "offsetY": -20.0,
+          "w": 40.0,
+          "h": 50.0
+        }
+      },
+      "attack_4": {
+        "damage": 35,
+        "hitboxStartFrame": 4,
+        "hitboxEndFrame": 5,
+        "box": {
+          "offsetX": 25.0,
+          "offsetY": -5.0,
+          "w": 55.0,
+          "h": 65.0
+        }
+      },
+      "special_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "explosion_attack": {
+        "damage": 50,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 3,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      },
+      "long_attack": {
+        "damage": 40,
+        "hitboxStartFrame": 1,
+        "hitboxEndFrame": 2,
+        "box": {
+          "offsetX": 20.0,
+          "offsetY": -10.0,
+          "w": 64.0,
+          "h": 64.0
+        }
+      }
+    },
+    "specialball": {
+      "damage": 45,
+      "textureName": "vfx_1",
+      "frameNum": 4,
+      "frameTime": 0.1,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
+      "speed": 500.0,
+      "lifetime": 4.0
+    },
+    "fireball": {
+      "damage": 30,
+      "textureName": "vfx_3",
+      "frameNum": 4,
+      "frameTime": 0.1,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -20.0,
+      "speed": 400.0,
+      "lifetime": 3.0
+    },
+    "exploball": {
+      "damage": 60,
+      "textureName": "vfx_2",
+      "frameNum": 6,
+      "frameTime": 0.05,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
     }
   }
 }

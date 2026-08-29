@@ -1,20 +1,22 @@
 #pragma once
 #include "Skill/IEnemySkill.h"
+#include "EntityFactory.h" // EntityType enum
 #include <string>
-#include <raylib.h>
 
-class BasicMeleeEnemySkill : public IEnemySkill {
+class Mob;
+
+class ProjectileEnemySkill : public IEnemySkill {
 private:
     std::string animName;
     int damage;
     float hitboxStartTime;
     float hitboxEndTime;
     float duration;
-    Rectangle box;
+    EntityType projType;
 
 public:
-    BasicMeleeEnemySkill(const std::string& anim, int dmg, float startT, float endT, float dur, Rectangle b = {0,0,0,0})
-        : animName(anim), damage(dmg), hitboxStartTime(startT), hitboxEndTime(endT), duration(dur), box(b) {}
+    ProjectileEnemySkill(const std::string& anim, int dmg, float startT, float endT, float dur, EntityType pType = EntityType::Fireball)
+        : animName(anim), damage(dmg), hitboxStartTime(startT), hitboxEndTime(endT), duration(dur), projType(pType) {}
 
     void execute(Mob& mob) override;
 

@@ -4,6 +4,8 @@
 #include "Item/AtlasAnimation.h"
 #include "infrastructure/AssetManager.h"
 #include "Skill/BasicMeleeEnemySkill.h"
+#include "Skill/ProjectileEnemySkill.h"
+#include "Skill/ExplosionEnemySkill.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -135,12 +137,20 @@ std::unique_ptr<Entity> EnemyFactory::create(
                 AssetManager::getInstance().loadTexture(texKey, texPath);
                 
                 float scale = animData.value("scale", 1.0f);
-                standardAnims.emplace(animName, Animation(
+                Animation anim(
                     AssetManager::getInstance().getTexture(texKey),
                     animData["frameNum"].get<int>(),
                     animData["frameTime"].get<float>(),
                     scale
-                ));
+                );
+                
+                if (animData.contains("loop")) {
+                    anim.setLoop(animData["loop"].get<bool>());
+                } else {
+                    anim.setLoop(animName == "idle" || animName == "patrol" || animName == "run");
+                }
+                
+                standardAnims.emplace(animName, anim);
             }
         }
         mob->setStandardAnimations(std::move(standardAnims));
@@ -203,9 +213,31 @@ std::unique_ptr<Entity> EnemyFactory::create(
             float endTime = endFrame * frameTime;
             float duration = totalFrames * frameTime;
 
-            mob->addEnemySkill(std::make_unique<BasicMeleeEnemySkill>(
-                skillName, dmg, startTime, endTime, duration
-            ));
+            Rectangle box = {0,0,0,0};
+            if (skillData.contains("box")) {
+                box.x = skillData["box"].value("offsetX", 0.0f);
+                box.y = skillData["box"].value("offsetY", 0.0f);
+                box.width = skillData["box"].value("w", 0.0f);
+                box.height = skillData["box"].value("h", 0.0f);
+            }
+
+            if (skillName.find("explosion") != std::string::npos) {
+                mob->addEnemySkill(std::make_unique<ExplosionEnemySkill>(
+                    skillName, dmg, startTime, endTime, duration
+                ));
+            } else if (skillName.find("special") != std::string::npos || skillName.find("special_ball") != std::string::npos) {
+                mob->addEnemySkill(std::make_unique<ProjectileEnemySkill>(
+                    skillName, dmg, startTime, endTime, duration, EntityType::SpecialBall
+                ));
+            } else if (skillName.find("long") != std::string::npos || skillName.find("fireball") != std::string::npos || skillName.find("projectile") != std::string::npos) {
+                mob->addEnemySkill(std::make_unique<ProjectileEnemySkill>(
+                    skillName, dmg, startTime, endTime, duration, EntityType::Fireball
+                ));
+            } else {
+                mob->addEnemySkill(std::make_unique<BasicMeleeEnemySkill>(
+                    skillName, dmg, startTime, endTime, duration, box
+                ));
+            }
         }
     }
     

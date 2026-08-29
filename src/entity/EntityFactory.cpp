@@ -11,14 +11,24 @@ using json = nlohmann::json;
 
 std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
     // Load character data from JSON
-    std::ifstream file("assets/config/characters.json");
-    if (!file.is_open()) {
+    std::ifstream charFile("assets/config/characters.json");
+    json jsonData;
+    if (charFile.is_open()) {
+        charFile >> jsonData;
+    } else {
         std::cerr << "[EntityFactory] Cannot open characters.json" << std::endl;
-        return nullptr;
     }
 
-    json jsonData;
-    file >> jsonData;
+    // Try to also load enemies.json so bosses can spawn projectiles
+    std::ifstream enemyFile("assets/config/enemies.json");
+    if (enemyFile.is_open()) {
+        json enemyData;
+        enemyFile >> enemyData;
+        // Merge enemyData into jsonData
+        for (auto& [key, val] : enemyData.items()) {
+            jsonData[key] = val;
+        }
+    }
 
     switch (cmd.type) {
         case EntityType::Fireball: {

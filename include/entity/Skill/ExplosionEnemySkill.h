@@ -1,20 +1,20 @@
 #pragma once
 #include "Skill/IEnemySkill.h"
 #include <string>
-#include <raylib.h>
 
-class BasicMeleeEnemySkill : public IEnemySkill {
+class Mob;
+
+class ExplosionEnemySkill : public IEnemySkill {
 private:
     std::string animName;
     int damage;
     float hitboxStartTime;
     float hitboxEndTime;
     float duration;
-    Rectangle box;
 
 public:
-    BasicMeleeEnemySkill(const std::string& anim, int dmg, float startT, float endT, float dur, Rectangle b = {0,0,0,0})
-        : animName(anim), damage(dmg), hitboxStartTime(startT), hitboxEndTime(endT), duration(dur), box(b) {}
+    ExplosionEnemySkill(const std::string& anim, int dmg, float startT, float endT, float dur)
+        : animName(anim), damage(dmg), hitboxStartTime(startT), hitboxEndTime(endT), duration(dur) {}
 
     void execute(Mob& mob) override;
 

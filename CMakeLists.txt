@@ -79,6 +79,8 @@ set(SOURCES
     src/entity/Skill/LowAttackSkill.cpp
     src/entity/Skill/SpecialSkillAttack.cpp
     src/entity/Skill/BasicMeleeEnemySkill.cpp
+    src/entity/Skill/ProjectileEnemySkill.cpp
+    src/entity/Skill/ExplosionEnemySkill.cpp
     src/entity/Fireball.cpp
     src/entity/Explosion.cpp
     src/entity/EntityFactory.cpp
