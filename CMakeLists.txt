@@ -89,6 +89,13 @@ set(SOURCES
     src/entity/EnemyFactory.cpp
     src/entity/BossStates/BossIdleState.cpp
     src/entity/BossStates/BossIntroState.cpp
+    src/entity/BossStates/BossRunState.cpp
+    src/entity/BossStates/BossAttackState.cpp
+    src/entity/BossStates/BossPatrolState.cpp
+    src/entity/BossStates/BossDieState.cpp
+    src/entity/BossStates/BossHurtState.cpp
+    src/entity/BossStates/BossSkillState.cpp
+    src/entity/BossStates/BossDebugInputState.cpp
     src/entity/EnemyStates/EnemyIdleState.cpp
     src/entity/EnemyStates/EnemyPatrolState.cpp
     src/entity/EnemyStates/EnemyRunState.cpp

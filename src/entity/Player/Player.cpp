@@ -213,7 +213,7 @@ void Player::onClimb() {
 // =============================================================================
 
 void Player::playAnimation(const std::string &name, bool loop) {
-  std::cout << name << '\n';
+// std::cout << name << '\n';
   auto it = animationList.find(name);
   if (it != animationList.end()) {
     worldStats.animation = &it->second;
@@ -372,8 +372,8 @@ void Player::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
     return;
 
   if (forceInterrupt) {
-    // if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
-    //   return;
+    if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
+      return;
       
     runtimeStats.health -= damage;
     runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility

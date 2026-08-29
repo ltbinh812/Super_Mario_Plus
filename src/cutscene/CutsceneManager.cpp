@@ -31,8 +31,8 @@ void CutsceneManager::startCutscene(const CutsceneScript& script, MapCamera& cam
         triggeredIds.insert(script.triggerId);
     }
 
-    std::cout << "[CutsceneManager] Starting cutscene: " << script.triggerId
-              << " (dialogue: " << script.dialogueId << ")\n";
+    // std::cout << "[CutsceneManager] Starting cutscene: " << script.triggerId
+    //           << " (dialogue: " << script.dialogueId << ")\n";
 
     // Quyết định phase đầu tiên
     if (script.hasCameraPan() || script.hasCameraZoom()) {
@@ -124,7 +124,7 @@ void CutsceneManager::process() {
             justFinishedFlag = true;
             phase = CutscenePhase::Idle;
             camera = nullptr;
-            std::cout << "[CutsceneManager] Cutscene finished.\n";
+            // std::cout << "[CutsceneManager] Cutscene finished.\n";
             break;
 
         case CutscenePhase::Idle:

@@ -52,6 +52,7 @@ protected:
     bool isFacingRight;
     bool isDead;
     float hurtTimer;
+    float deadTimer;
     
     std::vector<class Player*> targetPlayers;
     bool isHitboxActive;

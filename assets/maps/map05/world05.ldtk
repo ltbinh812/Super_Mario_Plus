@@ -8432,8 +8432,8 @@
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
+			"pivotX": 0.5,
+			"pivotY": 1,
 			"fieldDefs": [
 				{
 					"identifier": "cutsceneId",
@@ -9486,7 +9486,7 @@
 						},
 						{
 							"__identifier": "CutsceneTrigger",
-							"__grid": [69,21],
+							"__grid": [68,21],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -9495,7 +9495,7 @@
 							"width": 80,
 							"height": 80,
 							"defUid": 358,
-							"px": [1104,336],
+							"px": [1088,336],
 							"fieldInstances": [
 								{ "__identifier": "dialogueId", "__type": "String", "__value": "test", "__tile": null, "defUid": 359, "realEditorValues": [{
 									"id": "V_String",
@@ -9510,7 +9510,7 @@
 									"params": [ true ]
 								}] }
 							],
-							"__worldX": 1104,
+							"__worldX": 1088,
 							"__worldY": 336
 						},
 						{
@@ -9530,18 +9530,18 @@
 							"__worldY": 432
 						},
 						{
-							"__identifier": "Boss_itachi",
+							"__identifier": "Boss_doflam",
 							"__grid": [75,25],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
-							"__smartColor": "#3A4466",
-							"iid": "b4422490-96d0-11f1-9e0f-5dfd2d823ad7",
+							"__smartColor": "#5A6988",
+							"iid": "ffd3a4f0-96d0-11f1-9e0f-abc0869bc220",
 							"width": 32,
 							"height": 32,
-							"defUid": 370,
+							"defUid": 368,
 							"px": [1208,416],
-							"fieldInstances": [{ "__identifier": "cutsceneId", "__type": "String", "__value": "test", "__tile": null, "defUid": 371, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cutsceneId", "__type": "String", "__value": "test", "__tile": null, "defUid": 369, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["test"]
 							}] }],

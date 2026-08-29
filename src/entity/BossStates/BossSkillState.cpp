@@ -2,12 +2,13 @@
 #include "BossStates/BossRunState.h"
 #include "BossStates/BossIdleState.h"
 #include "BossStates/BossAttackState.h"
+#include "BossStates/BossDebugInputState.h"
 #include "Mob.h"
 #include "Player.h"
 
 void BossSkillState::enter(Mob& mob) {
     if (currentSkill) {
-        mob.setAnimation(currentSkill->getSkillName()); // Chạy animation trùng tên skill (ví dụ: skill1)
+        mob.setAnimation(currentSkill->getAnimName()); // Chạy animation trùng tên skill (ví dụ: skill1)
         mob.setVelocity({0.0f, mob.getVelocity().y});
         mob.resetStateTimer();
         hasExecuted = false;
@@ -24,6 +25,11 @@ void BossSkillState::decideAction(Mob& mob) {
     
     // Nếu skill đã thi triển xong
     if (mob.getStateTimer() >= currentSkill->getDuration()) {
+        if (returnToDebugMode) {
+            mob.changeState(std::make_unique<BossDebugInputState>());
+            return;
+        }
+
         int randVal = rand() % 100;
         
         // Random quyết định hành động tiếp theo
@@ -46,11 +52,25 @@ void BossSkillState::process(Mob& mob) {
     mob.addStateTimer(GetFrameTime());
     float elapsedTime = mob.getStateTimer();
     
-    if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() && elapsedTime <= currentSkill->getHitboxEndTime()) {
-        currentSkill->execute(mob);
-        hasExecuted = true;
+    bool inHitboxWindow = elapsedTime >= currentSkill->getHitboxStartTime() && elapsedTime <= currentSkill->getHitboxEndTime();
+    
+    if (inHitboxWindow) {
+        if (currentSkill->emitsHitbox()) {
+            mob.setHitboxActive(true, currentSkill->getHitbox(mob));
+        }
+        if (!hasExecuted) {
+            currentSkill->execute(mob);
+            hasExecuted = true;
+        }
+    } else {
+        if (currentSkill->emitsHitbox()) {
+            mob.setHitboxActive(false);
+        }
     }
 }
 
 void BossSkillState::exit(Mob& mob) {
+    if (currentSkill && currentSkill->emitsHitbox()) {
+        mob.setHitboxActive(false);
+    }
 }

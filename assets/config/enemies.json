@@ -211,7 +211,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 10,
@@ -223,7 +223,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_3",
       "frameNum": 8,
@@ -410,7 +410,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
@@ -422,7 +422,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 13,
@@ -609,7 +609,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 56,
@@ -621,7 +621,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 9,
@@ -808,7 +808,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
@@ -820,7 +820,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
@@ -1007,7 +1007,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 4,
@@ -1019,7 +1019,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
@@ -1194,7 +1194,7 @@
         }
       }
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 4,
@@ -1218,7 +1218,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_2",
       "frameNum": 6,
