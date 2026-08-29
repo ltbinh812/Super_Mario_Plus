@@ -5,8 +5,15 @@
 class Mob;
 
 class IEnemySkill {
+protected:
+    float dashMultiplier = 2.0f;
+
 public:
     virtual ~IEnemySkill() = default;
+
+    // Configurable dash velocity multiplier when attacking
+    virtual void setDashMultiplier(float val) { dashMultiplier = val; }
+    virtual float getDashMultiplier() const { return dashMultiplier; }
 
     // Executes the skill logic on the Mob
     virtual void execute(Mob& mob) = 0;

@@ -9,14 +9,20 @@
 void BossSkillState::enter(Mob& mob) {
     if (currentSkill) {
         mob.setAnimation(currentSkill->getAnimName()); // Chạy animation trùng tên skill (ví dụ: skill1)
-        mob.setVelocity({0.0f, mob.getVelocity().y});
         mob.resetStateTimer();
         hasExecuted = false;
         
         Player* p = mob.getClosestPlayer();
+        float moveDir = 0.0f;
         if (p) {
-            mob.setFacingRight(p->getPosition().x > mob.getPosition().x);
+            bool faceRight = p->getPosition().x > mob.getPosition().x;
+            mob.setFacingRight(faceRight);
+            moveDir = faceRight ? 1.0f : -1.0f;
         }
+        
+        // Cấp 1 lực lao tới người chơi tùy theo config của skill
+        float dashMult = currentSkill->getDashMultiplier();
+        mob.setVelocity({moveDir * mob.getBaseStats().moveVelocity * dashMult, mob.getVelocity().y});
     }
 }
 
@@ -53,6 +59,11 @@ void BossSkillState::process(Mob& mob) {
     float elapsedTime = mob.getStateTimer();
     
     bool inHitboxWindow = elapsedTime >= currentSkill->getHitboxStartTime() && elapsedTime <= currentSkill->getHitboxEndTime();
+    
+    // Dừng lao tới khi bắt đầu ra đòn thực sự (tạo cảm giác lực đâm mạnh và cắm chân xuống)
+    if (elapsedTime >= currentSkill->getHitboxStartTime()) {
+        mob.setVelocity({0.0f, mob.getVelocity().y});
+    }
     
     if (inHitboxWindow) {
         if (currentSkill->emitsHitbox()) {
