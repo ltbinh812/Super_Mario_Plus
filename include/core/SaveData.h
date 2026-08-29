@@ -32,7 +32,6 @@ struct LevelSaveData {
 struct GameSaveData {
     bool isValid = false;
     PlayerSaveData p1;
-    PlayerSaveData p2;
     InventorySaveData inventory;
     LevelSaveData levelData;
 };

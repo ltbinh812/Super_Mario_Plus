@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "raylib.h"
 #include <string>
 #include <unordered_map>
@@ -23,14 +23,14 @@ public:
 
     bool isLoaded() const { return loaded_; }
 
+    // Loads a single atlas: reads the .json for frame rects, loads the .png texture
+    void loadAtlas(const std::string& name, const std::string& jsonPath, const std::string& pngPath);
+
 private:
     ItemAtlasRegistry() = default;
     ~ItemAtlasRegistry() = default;
     ItemAtlasRegistry(const ItemAtlasRegistry&) = delete;
     ItemAtlasRegistry& operator=(const ItemAtlasRegistry&) = delete;
-
-    // Loads a single atlas: reads the .json for frame rects, loads the .png texture
-    void loadAtlas(const std::string& name, const std::string& jsonPath, const std::string& pngPath);
 
     std::unordered_map<std::string, Texture2D> textures_;       // atlas name -> Texture
     std::unordered_map<std::string, Rectangle> frames_;         // frame name -> src rect

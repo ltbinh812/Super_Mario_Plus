@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "CommandQueue.h"
 #include "BaseItem.h"
+#include "CutsceneManager.h"
+#include "CutsceneTrigger.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -50,14 +52,25 @@ protected:
     float triggerGlobalY = 0.0f;
 
     void TransitionToLevel(const std::string& nextLevel, const std::string& dir, float triggerGlobalX, float triggerGlobalY);
+    void spawnEntitiesFromMap();
+    void bindPlayerInputs();
+
+    void processDeathCondition(float dt);
+    void processItemInteractions();
+    void processSpawnQueue();
+    void processCutsceneTriggers();
+    void spawnCutsceneTriggersFromMap();
+
+    // === Cutscene System ===
+    CutsceneManager cutsceneManager;
+    std::vector<CutsceneTrigger> cutsceneTriggers;
 
 public:
     // Original LDtk constructor
-    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
+    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "");
     
     // [NEW] Constructor cho chế độ Test Play từ MapEditorState
     BaseLevelState(const CustomMapData& customMap, const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
-    
     virtual ~BaseLevelState() = default;
 
     GameSaveData createSaveData() const;

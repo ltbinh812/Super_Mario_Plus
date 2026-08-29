@@ -4,7 +4,7 @@
 class JumpBuff : public IBuffEffect {
 public:
     std::string getName() const override { return "Jump"; }
-    std::string getFrameName() const override { return "item_jump_fix01 (Custom).png"; }
+    std::string getFrameName() const override { return "item_jump_drop"; }
     float getDuration() const override { return 8.0f; }
     
     // +50% Jump Power

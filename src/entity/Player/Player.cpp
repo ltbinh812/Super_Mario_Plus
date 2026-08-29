@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "BaseItem.h"
 #include "ItemUsageFactory.h"
+#include "Effects.h"
 #include <cmath>
 #include <iostream>
 
@@ -18,6 +19,7 @@ Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
       animationList(std::move(animations)) {
   currentState = &idleState;
   currentState->onEnter();
+  faction = EntityFaction::Player;
 }
 
 void Player::update(float dt) {
@@ -95,6 +97,22 @@ void Player::requestState(PlayerState &state) {
 
 void Player::forceState(PlayerState &state) {
   changeState(state);
+}
+
+bool Player::isDead() const {
+  return runtimeStats.health <= 0;
+}
+
+bool Player::isOutOfBounds(float limitY) const {
+  return worldStats.position.y > limitY;
+}
+
+void Player::respawn(Vector2 startPos) {
+  worldStats.position = startPos;
+  runtimeStats.velocity = {0.0f, 0.0f};
+  runtimeStats.health = baseStats.maxHealth;
+  clearEffects();
+  forceState(idleState);
 }
 
 // =============================================================================
@@ -344,7 +362,9 @@ Hitbox Player::getActiveHitbox() {
       worldStats.position.y - runtimeStats.physicsBox.y + box.y, box.width,
       box.height};
   // Clean: no const_cast — getActiveHitbox() is non-const
-  return {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
+  Hitbox hb = {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
+  hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+  return hb;
 }
 
 void Player::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
@@ -352,8 +372,8 @@ void Player::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
     return;
 
   if (forceInterrupt) {
-    if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
-      return;
+    // if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
+    //   return;
       
     runtimeStats.health -= damage;
     runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
@@ -497,11 +517,21 @@ void Player::spawnExplosion() {
   if (!commandQueue) return;
 
   SpawnCommand cmd;
+  cmd.category = SpawnCategory::Entity;
   cmd.type = EntityType::Explosion;
   cmd.position = worldStats.position; // Centered on the player
   cmd.isFacingRight = worldStats.isFacingRight;
   cmd.ownerName = baseStats.name;
   cmd.spawner = this;
+  
+  cmd.onHitEffect = [](Entity* target) {
+      if (target) {
+          auto burn = std::make_unique<LavaEffect>();
+          burn->setInLava(false);
+          target->addEffect(std::move(burn));
+          std::cout << "[Explosion] Damage and Burn applied to " << target->getBaseStats().name << "!\n";
+      }
+  };
 
   commandQueue->push(cmd);
 }
@@ -532,4 +562,10 @@ void Player::useStoredItem() {
 
 void Player::dropThrough() {
     runtimeStats.ignoreOneWayTimer = 0.2f;
+}
+
+void Player::onCutsceneStart(const std::string& triggerId) {
+    // We do nothing here immediately. 
+    // BaseLevelState will gently stop the player only when they are on the ground,
+    // allowing them to complete their jump arcs if triggered mid-air.
 }

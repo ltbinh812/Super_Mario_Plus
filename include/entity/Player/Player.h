@@ -34,6 +34,11 @@ public:
   // Force a state transition (ignores canExit guard, e.g. for respawning)
   void forceState(PlayerState &state);
 
+  // Life cycle encapsulation
+  bool isDead() const;
+  bool isOutOfBounds(float limitY) const;
+  void respawn(Vector2 startPos);
+
   // Skill system
   void useSkill(const std::string &skillname);
   void addSkill(const std::string &name, std::unique_ptr<ISkill> skill);
@@ -93,6 +98,7 @@ public:
   void onOverlapLadder() override;
   void onHazard() override;
   void onDie() override;
+  void onCutsceneStart(const std::string& triggerId) override;
 
   // --- Animation ---
   void playAnimation(const std::string &name, bool loop = true);

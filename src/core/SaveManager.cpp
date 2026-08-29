@@ -17,14 +17,6 @@ bool SaveManager::saveToFile(const std::string& filepath) {
         {"maxHealth", currentCheckpoint.p1.maxHealth},
         {"isFacingRight", currentCheckpoint.p1.isFacingRight}
     };
-    j["p2"] = {
-        {"exists", currentCheckpoint.p2.exists},
-        {"posX", currentCheckpoint.p2.posX},
-        {"posY", currentCheckpoint.p2.posY},
-        {"health", currentCheckpoint.p2.health},
-        {"maxHealth", currentCheckpoint.p2.maxHealth},
-        {"isFacingRight", currentCheckpoint.p2.isFacingRight}
-    };
     j["inventory"] = {
         {"keys", currentCheckpoint.inventory.keys},
         {"coins", currentCheckpoint.inventory.coins}
@@ -84,7 +76,6 @@ bool SaveManager::loadFromFile(const std::string& filepath) {
     };
 
     if (j.contains("p1")) parsePlayer(j["p1"], data.p1);
-    if (j.contains("p2")) parsePlayer(j["p2"], data.p2);
 
     if (j.contains("inventory")) {
         data.inventory.keys = j["inventory"].value("keys", 0);

@@ -34,6 +34,7 @@ void ItemAtlasRegistry::loadAtlas(const std::string& name, const std::string& js
         std::cerr << "[ItemAtlasRegistry] Failed to load texture: " << pngPath << "\n";
         return;
     }
+    SetTextureFilter(tex, TEXTURE_FILTER_POINT);
     textures_[name] = tex;
 
     // Parse JSON for frame rects

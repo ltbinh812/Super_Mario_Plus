@@ -339,7 +339,7 @@ void MainMenuState::Process() {
     float targetZoom = std::max(zoomX, zoomY);
     if (targetZoom <= 0.0f) targetZoom = 1.0f; // safety
     
-    mapCamera.Update({mapW / 2.0f, mapH / 2.0f}, mapW, mapH, 0.0f);
+    mapCamera.Update({mapW / 2.0f, mapH / 2.0f}, {0.0f, 0.0f}, mapW, mapH, 0.0f);
     mapCamera.SetZoom(targetZoom);
 }
 

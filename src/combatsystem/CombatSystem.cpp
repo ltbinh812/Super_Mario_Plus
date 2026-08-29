@@ -31,6 +31,9 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
         // Skip block-type hitboxes (defense only, no outgoing damage)
         if (attackBox->damage <= 0) continue;
 
+        // Filter by faction
+        if (!attackBox->canHit(target->getFaction())) continue;
+
         // Check if target is actively blocking
         int targetDefense = 0;
         if (target->hasActiveHitbox()) {
@@ -54,6 +57,10 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
                 dirX = (targetX > spawnerX) ? 1.0f : -1.0f;
             }
             target->takeDamage(finalDamage, dirX);
+            
+            if (attackBox->onHitEffect) {
+                attackBox->onHitEffect(target);
+            }
         }
     }
 }

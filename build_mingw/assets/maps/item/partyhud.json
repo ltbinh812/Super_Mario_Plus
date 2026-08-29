@@ -1,0 +1,68 @@
+{"frames": {
+
+"boss_health_bar.png":
+{
+	"frame": {"x":1,"y":59,"w":129,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":129,"h":21},
+	"sourceSize": {"w":129,"h":21}
+},
+"breath_underwater.png":
+{
+	"frame": {"x":132,"y":58,"w":59,"h":12},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":12},
+	"sourceSize": {"w":59,"h":12}
+},
+"double_bar.png":
+{
+	"frame": {"x":59,"y":23,"w":145,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":145,"h":16},
+	"sourceSize": {"w":145,"h":16}
+},
+"mana.png":
+{
+	"frame": {"x":132,"y":72,"w":59,"h":12},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":12},
+	"sourceSize": {"w":59,"h":12}
+},
+"player_health_bar.png":
+{
+	"frame": {"x":59,"y":41,"w":125,"h":15},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":15},
+	"sourceSize": {"w":125,"h":15}
+},
+"portraitfra.png":
+{
+	"frame": {"x":1,"y":1,"w":56,"h":56},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":56},
+	"sourceSize": {"w":56,"h":56}
+},
+"single_bar.png":
+{
+	"frame": {"x":59,"y":1,"w":145,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":145,"h":20},
+	"sourceSize": {"w":145,"h":20}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "partyhud.png",
+	"format": "RGBA8888",
+	"size": {"w":205,"h":85},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e3aea2844730401559587f013dfb5dde:cbe4ef6184232f4772b2eef2e19a0f87:d698648ba1cfbe30be0cb4e1bb1689b6$"
+}
+}

@@ -5,24 +5,50 @@
 #include <cmath>
 #include "CommandQueue.h"
 
-static const float BLOCK_SIZE = 32.0f;
-
-static const char* FRAMES[] = { "chest_01.png", "chest_02.png", "chest_11.png" };
+static const float HITBOX_W = 32.0f;
+static const float HITBOX_H = 32.0f;
 
 ChestNormal::ChestNormal(Vector2 worldPos, float scale)
-    : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
+    : BaseItem(worldPos, HITBOX_W, HITBOX_H)
 {
-    frame_ = FRAMES[rand() % 3];
+    // 4 types of chests: 1 to 4
+    chestType_ = (rand() % 4) + 1;
+    
+    std::string idleFrame = "normal_chest_" + std::to_string(chestType_) + "_idle";
+    std::string activeFrame = "normal_chest_" + std::to_string(chestType_) + "_active";
+
+    animations_[ItemState::Idle] = AtlasAnimation(idleFrame, 5, 0.1f, true);
+    animations_[ItemState::Active] = AtlasAnimation(activeFrame, 5, 0.1f, false);
+    
+    setAnimation(ItemState::Idle);
 }
 
 void ChestNormal::render(float alpha) {
-    Color tint = (itemState_ == ItemState::Active) ? Fade(WHITE, 0.5f) : WHITE;
-    drawFrame(frame_, tint);
+    if (!currentAnim_ || !currentAnim_->isValid()) return;
+
+    const Texture2D& tex = currentAnim_->getTexture();
+    if (tex.id == 0) return;
+
+    Rectangle src = currentAnim_->getCurrentSourceRect();
+    
+    // Draw using the chest's frame size (96x64), centered on the 32x32 hitbox
+    float drawW = 96.0f;
+    float drawH = 64.0f;
+    
+    Rectangle dest = {
+        worldStats.position.x - (drawW - hitW_) / 2.0f,
+        worldStats.position.y - drawH + getRenderOffsetY(),
+        drawW,
+        drawH
+    };
+    
+    DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, WHITE);
 }
 
 void ChestNormal::onInteract(Entity& other) {
     if (itemState_ == ItemState::Active) return;
     itemState_ = ItemState::Active;
+    setAnimation(ItemState::Active);
 
     if (commandQueue) {
         SpawnCommand cmd;
@@ -42,6 +68,5 @@ void ChestNormal::onInteract(Entity& other) {
 }
 
 float ChestNormal::getRenderOffsetY() const {
-    if (itemState_ == ItemState::Active) return 0.0f;
-    return BaseItem::getRenderOffsetY();
+    return 0.0f;
 }

@@ -37,6 +37,9 @@ void BaseItem::update(float dt) {
     if (pickupDelay_ > 0.0f) {
         pickupDelay_ -= dt;
     }
+    if (currentAnim_) {
+        currentAnim_->update(dt);
+    }
 }
 
 void BaseItem::drawFrame(const std::string& frameName, Color tint) const {
@@ -45,6 +48,7 @@ void BaseItem::drawFrame(const std::string& frameName, Color tint) const {
     if (tex.id == 0) return;
 
     Rectangle src = reg.getFrame(frameName);
+    src.x += 0.1f; src.y += 0.1f; src.width -= 0.2f; src.height -= 0.2f;
     // Destination: scale from atlas pixel size to game size
     Rectangle dest = {
         worldStats.position.x,
@@ -60,6 +64,7 @@ void BaseItem::drawFrameRect(const std::string& frameName, Rectangle destRect, C
     const Texture2D& tex = reg.getTexture(frameName);
     if (tex.id == 0) return;
     Rectangle src = reg.getFrame(frameName);
+    src.x += 0.1f; src.y += 0.1f; src.width -= 0.2f; src.height -= 0.2f;
     destRect.y += getRenderOffsetY();
     DrawTexturePro(tex, src, destRect, { 0, 0 }, 0.0f, tint);
 }
@@ -75,3 +80,40 @@ float BaseItem::getRenderOffsetY() const {
     }
     return 0.0f;
 }
+
+void BaseItem::setAnimation(ItemState state) {
+    auto it = animations_.find(state);
+    if (it != animations_.end()) {
+        currentAnim_ = &it->second;
+    } else {
+        currentAnim_ = nullptr;
+    }
+}
+
+void BaseItem::drawAnim(Color tint) const {
+    if (!currentAnim_ || !currentAnim_->isValid()) return;
+
+    const Texture2D& tex = currentAnim_->getTexture();
+    if (tex.id == 0) return;
+
+    Rectangle src = currentAnim_->getCurrentSourceRect();
+    Rectangle dest = {
+        worldStats.position.x,
+        worldStats.position.y - hitH_ + getRenderOffsetY(),
+        hitW_,
+        hitH_
+    };
+    DrawTexturePro(tex, src, dest, { 0, 0 }, 0.0f, tint);
+}
+
+void BaseItem::drawAnimRect(Rectangle destRect, Color tint) const {
+    if (!currentAnim_ || !currentAnim_->isValid()) return;
+
+    const Texture2D& tex = currentAnim_->getTexture();
+    if (tex.id == 0) return;
+
+    Rectangle src = currentAnim_->getCurrentSourceRect();
+    destRect.y += getRenderOffsetY();
+    DrawTexturePro(tex, src, destRect, { 0, 0 }, 0.0f, tint);
+}
+

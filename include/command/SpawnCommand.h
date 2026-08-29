@@ -1,13 +1,13 @@
 #pragma once
 #include <raylib.h>
 #include <string>
+#include <functional>
 
 class Entity;
 
 enum class SpawnCategory {
     Entity,
-    Item,
-    ExplosionDamage  // Boom pushes this when exploding; Process() handles area damage
+    Item
 };
 
 enum class EntityType {
@@ -26,6 +26,5 @@ struct SpawnCommand {
     std::string ownerName;  // character name for EntityFactory JSON config lookup
     std::string iid;        // Instance ID from LDtk for state tracking
     Entity* spawner = nullptr; // the entity that spawned this
-    // Used for ExplosionDamage category:
-    Rectangle explosionRect = {0, 0, 0, 0}; // World-space blast rect (5x3 blocks)
+    std::function<void(Entity*)> onHitEffect = nullptr;
 };

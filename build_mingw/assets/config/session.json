@@ -1,0 +1,34 @@
+{
+    "players": [
+        {
+            "id": 1,
+            "character": "Goku",
+            "controls": {
+                "jump": 87,
+                "left": 65,
+                "right": 68,
+                "skill1": 74,
+                "skill2": 75
+            },
+            "start_pos": {
+                "x": 100.0,
+                "y": 100.0
+            }
+        },
+        {
+            "id": 2,
+            "character": "Goku",
+            "controls": {
+                "jump": 265,
+                "left": 263,
+                "right": 262,
+                "skill1": 44,
+                "skill2": 46
+            },
+            "start_pos": {
+                "x": 200.0,
+                "y": 100.0
+            }
+        }
+    ]
+}

@@ -11,14 +11,24 @@ using json = nlohmann::json;
 
 std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
     // Load character data from JSON
-    std::ifstream file("assets/config/characters.json");
-    if (!file.is_open()) {
+    std::ifstream charFile("assets/config/characters.json");
+    json jsonData;
+    if (charFile.is_open()) {
+        charFile >> jsonData;
+    } else {
         std::cerr << "[EntityFactory] Cannot open characters.json" << std::endl;
-        return nullptr;
     }
 
-    json jsonData;
-    file >> jsonData;
+    // Try to also load enemies.json so bosses can spawn projectiles
+    std::ifstream enemyFile("assets/config/enemies.json");
+    if (enemyFile.is_open()) {
+        json enemyData;
+        enemyFile >> enemyData;
+        // Merge enemyData into jsonData
+        for (auto& [key, val] : enemyData.items()) {
+            jsonData[key] = val;
+        }
+    }
 
     switch (cmd.type) {
         case EntityType::Fireball: {
@@ -119,12 +129,15 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.hitboxH   = ex.value("hitboxH", 100.0f);
                 cfg.offsetX   = ex.value("offsetX", 50.0f);
                 cfg.offsetY   = ex.value("offsetY", 0.0f);
-                cfg.frameNum  = ex.value("frameNum", 1);
+                cfg.frameNum = ex.value("frameNum", 1);
                 cfg.frameTime = ex.value("frameTime", 0.1f);
-                cfg.scale     = ex.value("scale", 1.0f);
+                cfg.scale = ex.value("scale", 1.0f);
+                cfg.hitboxStartFrame = ex.value("hitboxStartFrame", 0);
+                cfg.hitboxEndFrame = ex.value("hitboxEndFrame", 999);
 
                 // Auto-load texture
                 std::string texBase = ex.value("textureName", std::string(""));
+                cfg.textureName = texBase;
                 if (!texBase.empty() && jsonData[cmd.ownerName].contains("assetFolder")) {
                     std::string folder = jsonData[cmd.ownerName]["assetFolder"].get<std::string>();
                     std::string texKey = cmd.ownerName + "_" + texBase;
@@ -133,6 +146,8 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                     cfg.textureName = texKey;
                 }
             }
+            
+            cfg.onHitEffect = cmd.onHitEffect;
 
             // Apply spawn offset based on facing direction
             Vector2 spawnPos = cmd.position;

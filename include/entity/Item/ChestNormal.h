@@ -1,8 +1,7 @@
 #pragma once
 #include "BaseItem.h"
-#include <string>
 
-// Drops: random Buff or Boom. Frame: chest_01/02/11 (random).
+// Drops: random Buff or Boom. Uses 4 random chest types with 5-frame animations.
 class ChestNormal : public BaseItem {
 public:
     ChestNormal(Vector2 worldPos, float scale = 2.0f);
@@ -11,5 +10,5 @@ public:
     float getRenderOffsetY() const override;
 
 private:
-    std::string frame_;
+    int chestType_;
 };

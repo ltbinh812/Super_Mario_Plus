@@ -36,6 +36,15 @@ SuperMarioPlus/
 │   │   ├── Game.h
 │   │   ├── StateManager.h
 │   │   └── Command.h
+│   ├── cutscene/
+│   │   ├── CutsceneManager.h
+│   │   ├── CutsceneScript.h
+│   │   └── CutsceneTrigger.h
+│   ├── dialogue/
+│   │   ├── DialogueBox.h
+│   │   ├── DialogueData.h
+│   │   ├── DialogueLoader.h
+│   │   └── DialogueRegistry.h
 │   ├── editor/
 │   │   ├── EditorBlockDef.h
 │   │   ├── EditorBlockRegistry.h
@@ -55,9 +64,15 @@ SuperMarioPlus/
 │   │   └── UndoRedoStack.h
 │   ├── environment/
 │   │   ├── Background.h
+│   │   ├── CameraFollowMode.h
+│   │   ├── CameraPanMode.h
+│   │   ├── CameraZoomMode.h
 │   │   ├── Cloud.h
 │   │   ├── Decoration.h
-│   │   └── Platform.h
+│   │   ├── ICameraMode.h
+│   │   ├── MapCamera.h
+│   │   ├── Platform.h
+│   │   └── TileMap.h
 │   ├── states/
 │   │   ├── CharacterState.h
 │   │   ├── GameState.h
@@ -95,11 +110,23 @@ SuperMarioPlus/
 │   │   ├── Game.cpp
 │   │   ├── StateManager.cpp
 │   │   └── main.cpp
+│   ├── cutscene/
+│   │   ├── CutsceneManager.cpp
+│   │   └── CutsceneTrigger.cpp
+│   ├── dialogue/
+│   │   ├── DialogueBox.cpp
+│   │   ├── DialogueLoader.cpp
+│   │   └── DialogueRegistry.cpp
 │   ├── environment/
 │   │   ├── Background.cpp
+│   │   ├── CameraFollowMode.cpp
+│   │   ├── CameraPanMode.cpp
+│   │   ├── CameraZoomMode.cpp
 │   │   ├── Cloud.cpp
 │   │   ├── Decoration.cpp
-│   │   └── Platform.cpp
+│   │   ├── MapCamera.cpp
+│   │   ├── Platform.cpp
+│   │   └── TileMap.cpp
 │   ├── states/
 │   │   ├── GameState.cpp
 │   │   ├── IntroState.cpp
@@ -160,10 +187,15 @@ SuperMarioPlus/
 - **`CharacterFactory`**: Factory Pattern để tự động sinh ra các nhân vật dựa trên chuỗi định danh (Tên).
 - **`Mario, Luigi, Peach, Toad, Wario`**: Các lớp cụ thể đại diện cho người chơi, được override các kỹ năng tương ứng.
 - **`Goomba`**: Kẻ thù cơ bản, kế thừa từ `Character`.
+- **`Boss`**: Kế thừa `Mob`, hỗ trợ cơ chế Cutscene ID (Observer pattern) thông qua hàm `onCutsceneStart` và `onCutsceneEnd` để đồng bộ Boss Intro.
+- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`, `EnemySkillState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, xử lý đẩy lùi (knockback), và đặc biệt `EnemySkillState` hỗ trợ random xuất chiêu dựa trên `IEnemySkill`.
+- **Boss States (`BossIdleState`, `BossIntroState`, `BossPatrolState`, `BossRunState`, `BossHurtState`, `BossAttackState`, `BossDieState`, `BossSkillState`)**: Các state chuyên biệt dành cho Boss. Trong đó `Idle/Intro` xử lý logic chờ Cutscene, còn lại dùng để quản lý AI (tìm đường, chọn skill ngẫu nhiên khi tấn công) cho toàn bộ các Boss trong game (Data-Driven qua file cấu hình). `BossSkillState` hỗ trợ tự động load hitbox và animation của từng chiêu riêng biệt tương tự như `EnemySkillState`.
 
-#### Abilities (Strategy Pattern)
-- **`AbilityStrategy`**: Interface định nghĩa `Execute()`.
+#### Abilities & Skills (Strategy Pattern)
+- **`AbilityStrategy`**: Interface định nghĩa `Execute()` cho các kỹ năng của Player.
 - **`DashAbility`, `FireballAbility`, `FloatAbility`, `GroundPoundAbility`, `HighJumpAbility`**: Các lớp triển khai kỹ năng cụ thể cho từng nhân vật. Gắn linh hoạt vào Character.
+- **`IEnemySkill`**: Interface độc lập (Decoupled) dùng riêng cho AI của Quái/Boss. Cung cấp hàm `execute(Mob&)` cùng với logic tính toán hitbox, damage, thời gian thi triển.
+- **`BasicMeleeEnemySkill`**: Kỹ năng mẫu cơ bản dành cho Quái (tự động gây sát thương nếu Player nằm trong tầm đánh).
 
 #### Editor
 - **`MapEditorState`**: GameState chính quản lý toàn bộ level editor (vẽ map, ghost preview, panels, input loop).
@@ -175,9 +207,29 @@ SuperMarioPlus/
 - **`UndoRedoStack`**: Hệ thống undo/redo lưu snapshot toàn bộ map data (lightweight vì là sparse data).
 - **`EditorCamera` & `EditorMapResizer`**: Xử lý việc cuộn, thu phóng camera bằng chuột giữa và các nút kéo biên (handle) để mở rộng/thu hẹp map.
 
-#### Environment
-
+#### Environment & Camera
 - **`Background`, `Cloud`, `Decoration`, `Platform`**: Các lớp thực thể quản lý việc vẽ hình nền, nền tảng vật lý (có xử lý va chạm), mây trôi và các phụ kiện trang trí trong World.
+- **`TileMap`**: Quản lý load và render map LDtk, parse entity data.
+- **`MapCamera`**: Quản lý camera 2D, hỗ trợ single/multiplayer và State Pattern qua các Camera Mode.
+- **`ICameraMode`**: Interface cho các camera mode (State Pattern).
+- **`CameraFollowMode`**: Mode mặc định bám theo 1 hoặc 2 người chơi.
+- **`CameraPanMode`**: Mode camera trượt mượt mà đến tọa độ chỉ định (Cinematic).
+- **`CameraZoomMode`**: Mode camera zoom mượt mà đến tỷ lệ phóng đại chỉ định (Cinematic).
+
+#### Cutscene & Dialogue
+- **`DialogueData`**: Chứa struct dữ liệu `DialogueSequence` và `DialogueLine` (Mô hình Dữ liệu thuần).
+- **`DialogueLoader`**: Chịu trách nhiệm parse các file JSON dialogue.
+- **`DialogueRegistry`**: Singleton lưu trữ các dialogue đã parse để tái sử dụng nhanh chóng.
+- **`DialogueBox`**: Vẽ hộp thoại kiểu RPG, quản lý Typewriter effect.
+- **`CutsceneScript`**: Struct chứa tham số của 1 cutscene (dialogueId, cameraPanTarget...).
+- **`CutsceneTrigger`**: Region trên map load từ LDtk, kích hoạt Cutscene khi Player đi vào.
+- **`CutsceneManager`**: Orchestrator điều phối Camera Spanning và DialogueBox (quản lý 4 Phase: PanIn, Dialogue, PanBack, Done). Block input người chơi nhưng giữ game running.
+
+#### Items
+- **`BaseItem`**: Abstract class cho các vật thể tương tác tĩnh (không có gravity) như Coin, Rương. Nó cung cấp hàm `drawAnim` hỗ trợ hiển thị Animation.
+- **`AtlasAnimation`**: Quản lý Animation cho các Item tĩnh bằng cách cắt Rectangle toán học dựa trên một Texture chung. Hỗ trợ sprite strips trên Atlas.
+- **`ItemAtlasRegistry`**: Flyweight Singleton lưu một Texture khổng lồ (`a.png`) cho mọi Item để tối ưu Draw Calls.
+- **`Coin`, `Chest`, `Spring`, ...**: Các class Item cụ thể kế thừa từ `BaseItem`.
 
 #### UI
 - **`HUD`**: Lớp chứa logic in thông tin lên màn hình (Máu, Điểm, Thời gian).

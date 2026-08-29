@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Item/AtlasAnimation.h"
 
 class Entity;
 
@@ -38,10 +39,10 @@ class LavaEffect : public IEffect {
 private:
     float duration = 5.0f;
     float tickTimer = 0.0f;
-    float animTimer = 0.0f;
-    int currentFrame = 0;
     bool inLava = true;
+    AtlasAnimation anim_;
 public:
+    LavaEffect();
     bool update(Entity& entity, float dt) override;
     void refresh() override;
     void setInLava(bool value) { inLava = value; }

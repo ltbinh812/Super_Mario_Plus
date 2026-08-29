@@ -10,6 +10,10 @@ Key::Key(Vector2 worldPos, float scale)
 {
     baseStats.gravityScale = 160.0f;
     runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
+
+    animations_[ItemState::Idle] = AtlasAnimation("key_anim", 24, 0.1f);
+    animations_[ItemState::Active] = AtlasAnimation("key_anim", 24, 0.1f);
+    setAnimation(ItemState::Idle);
 }
 
 void Key::update(float dt) {
@@ -39,7 +43,12 @@ void Key::update(float dt) {
 
 void Key::render(float alpha) {
     if (itemState_ == ItemState::Used) return;
-    drawFrame("key_green.png");
+    
+    if (currentAnim_ && currentAnim_->isValid()) {
+        drawAnim();
+    } else {
+        drawFrame("key_green.png");
+    }
 }
 
 void Key::onInteract(Entity& other) {
@@ -53,6 +62,7 @@ void Key::onInteract(Entity& other) {
             keyIndex_ = p->getPartyInventory()->keys;
         }
         itemState_ = ItemState::Active;
+        setAnimation(ItemState::Active);
         followingTarget_ = p;
         
         // Remove physics to allow hovering

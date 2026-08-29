@@ -68,6 +68,8 @@ void PoisonEffect::render(const Entity& entity, float alpha) {
     }
 }
 
+LavaEffect::LavaEffect() : anim_("fire_effect", 8, 0.1f, true) {}
+
 bool LavaEffect::update(Entity& entity, float dt) {
     tickTimer += dt;
     float tickLimit = inLava ? 0.2f : 0.5f;
@@ -81,25 +83,7 @@ bool LavaEffect::update(Entity& entity, float dt) {
         duration -= dt;
     }
 
-    // Animation Logic
-    animTimer += dt;
-    float timePerFrame = 0.05f;
-    float dieDuration = 7 * timePerFrame;
-
-    if (animTimer < 7 * timePerFrame) {
-        // Grow phase
-        currentFrame = static_cast<int>(animTimer / timePerFrame);
-        if (currentFrame > 6) currentFrame = 6;
-    } else if (!inLava && duration <= dieDuration) {
-        // Die phase
-        int frameOffset = static_cast<int>((dieDuration - duration) / timePerFrame);
-        currentFrame = 15 + frameOffset;
-        if (currentFrame > 21) currentFrame = 21;
-    } else {
-        // Loop phase (frames 7 to 14)
-        float loopTimer = std::fmod(animTimer - 7 * timePerFrame, 8 * timePerFrame);
-        currentFrame = 7 + static_cast<int>(loopTimer / timePerFrame);
-    }
+    anim_.update(dt);
 
     return duration <= 0.0f; // Remove when duration ends (only counts down when outside)
 }
@@ -111,11 +95,11 @@ void LavaEffect::refresh() {
 }
 
 void LavaEffect::render(const Entity& entity, float alpha) {
-    auto& reg = ItemAtlasRegistry::getInstance();
-    std::string frameName = "fire_effect_" + std::to_string(currentFrame);
+    if (!anim_.isValid()) return;
     
-    Rectangle src = reg.getFrame(frameName);
-    const Texture2D& tex = reg.getTexture(frameName);
+    Rectangle src = anim_.getCurrentSourceRect();
+    const Texture2D& tex = anim_.getTexture();
+    if (tex.id == 0) return;
 
     Rectangle hitbox = entity.getHitbox();
     float scale = 1.0f;
@@ -128,5 +112,5 @@ void LavaEffect::render(const Entity& entity, float alpha) {
         w, h
     };
 
-    DrawTexturePro(tex, src, dest, {0,0}, 0.0f, WHITE);
+    DrawTexturePro(tex, src, dest, {0,0}, 0.0f, Color{ 255, 255, 255, 200 }); // Slightly transparent
 }

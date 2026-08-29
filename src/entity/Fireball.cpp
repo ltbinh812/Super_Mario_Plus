@@ -36,6 +36,8 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
       originY(startPos.y),
       spawner(spawner)
 {
+    faction = spawner ? spawner->getFaction() : EntityFaction::Neutral;
+    
     // Load animation texture if specified
     if (!config.textureName.empty()) {
         auto& assetMgr = AssetManager::getInstance();
@@ -121,7 +123,13 @@ bool Fireball::hasActiveHitbox() const {
 
 Hitbox Fireball::getActiveHitbox() {
     Rectangle rect = getHitbox();
-    return { rect, attackPower, 0, this, spawner };
+    Hitbox hb = { rect, attackPower, 0, this, spawner };
+    if (faction == EntityFaction::Player) {
+        hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+    } else if (faction == EntityFaction::Enemy) {
+        hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
+    }
+    return hb;
 }
 
 void Fireball::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {

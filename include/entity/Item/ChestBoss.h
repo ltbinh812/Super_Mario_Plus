@@ -1,8 +1,7 @@
 #pragma once
 #include "BaseItem.h"
-#include <string>
 
-// Drops: Key. Frame: chest_03/04/07/08/09/10 (random).
+// Drops: Key. Uses 3 random boss chest types (2-frame idle, 3-frame active).
 class ChestBoss : public BaseItem {
 public:
     ChestBoss(Vector2 worldPos, float scale = 2.0f);
@@ -11,5 +10,5 @@ public:
     float getRenderOffsetY() const override;
 
 private:
-    std::string frame_;
+    int chestType_;
 };
