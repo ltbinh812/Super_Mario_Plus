@@ -5,19 +5,26 @@
 
 void EnemySkillState::enter(Mob& mob) {
     if (currentSkill) {
-        // Stop horizontal movement
-        mob.setVelocity({0, 0});
-        
         // Play animation
         mob.setAnimation(currentSkill->getAnimName());
         
         timer = currentSkill->getDuration();
         hasExecuted = false;
         
-        // Make sure mob is facing the closest player (optional but good for combat)
         Player* p = mob.getClosestPlayer();
+        float moveDir = 0.0f;
         if (p) {
-            mob.setFacingRight(p->getPosition().x > mob.getPosition().x);
+            bool faceRight = p->getPosition().x > mob.getPosition().x;
+            mob.setFacingRight(faceRight);
+            moveDir = faceRight ? 1.0f : -1.0f;
+        }
+        
+        // Cấp lực lao tới theo config của skill (giống boss)
+        float dashMult = currentSkill->getDashMultiplier();
+        if (dashMult > 0.0f) {
+            mob.setVelocity({moveDir * mob.getBaseStats().moveVelocity * dashMult, mob.getVelocity().y});
+        } else {
+            mob.setVelocity({0.0f, mob.getVelocity().y});
         }
     }
 }
@@ -32,9 +39,25 @@ void EnemySkillState::process(Mob& mob) {
     mob.addStateTimer(GetFrameTime());
     float elapsedTime = mob.getStateTimer();
     
-    if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() && elapsedTime <= currentSkill->getHitboxEndTime()) {
-        currentSkill->execute(mob);
-        hasExecuted = true;
+    bool inHitboxWindow = elapsedTime >= currentSkill->getHitboxStartTime() && elapsedTime <= currentSkill->getHitboxEndTime();
+    
+    // Dừng lao tới khi bắt đầu ra đòn (giống boss)
+    if (elapsedTime >= currentSkill->getHitboxStartTime()) {
+        mob.setVelocity({0.0f, mob.getVelocity().y});
+    }
+    
+    if (inHitboxWindow) {
+        if (currentSkill->emitsHitbox()) {
+            mob.setHitboxActive(true, currentSkill->getHitbox(mob));
+        }
+        if (!hasExecuted) {
+            currentSkill->execute(mob);
+            hasExecuted = true;
+        }
+    } else {
+        if (currentSkill->emitsHitbox()) {
+            mob.setHitboxActive(false);
+        }
     }
 
     if (elapsedTime >= currentSkill->getDuration()) {
@@ -44,5 +67,7 @@ void EnemySkillState::process(Mob& mob) {
 }
 
 void EnemySkillState::exit(Mob& mob) {
-    // Reset any state if needed
+    if (currentSkill && currentSkill->emitsHitbox()) {
+        mob.setHitboxActive(false);
+    }
 }

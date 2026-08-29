@@ -129,8 +129,8 @@
         "box": {
           "offsetX": -10.0,
           "offsetY": -80.0,
-          "w": 50.0,
-          "h": 60.0
+          "w": 60.0,
+          "h": 80.0
         },
         "dashMultiplier": 2.0
       },
@@ -139,8 +139,8 @@
         "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 30.0,
-          "offsetY": -15.0,
+          "offsetX": -20.0,
+          "offsetY": -80.0,
           "w": 60.0,
           "h": 70.0
         },
@@ -151,10 +151,10 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 30,
         "box": {
-          "offsetX": 10.0,
-          "offsetY": -20.0,
-          "w": 40.0,
-          "h": 50.0
+          "offsetX": 0.0,
+          "offsetY": -80.0,
+          "w": 50.0,
+          "h": 80.0
         },
         "dashMultiplier": 2.0
       },
@@ -163,10 +163,10 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 25.0,
-          "offsetY": -5.0,
-          "w": 55.0,
-          "h": 65.0
+          "offsetX": -50.0,
+          "offsetY": -60.0,
+          "w": 100.0,
+          "h": 60.0
         },
         "dashMultiplier": 2.0
       },
