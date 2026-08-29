@@ -5,9 +5,14 @@
 class Boss : public Mob {
 private:
     std::string cutsceneId;
+    bool isDebugMode = false;
+    bool isWaitingForCutscene = false;
 
 public:
     Boss(Vector2 worldPos, const std::string& mobType, const CharacterBaseStats& bStats, const MobConfig& config, const std::string& cutsceneId);
+    
+    void update(float dt) override;
+    void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
     
     void onCutsceneStart(const std::string& triggerId) override;
     void onCutsceneEnd(const std::string& triggerId) override;
@@ -15,4 +20,5 @@ public:
     void initAnimations(int attackFrames, int runFrames, int idleFrames, int hurtFrames, int dieFrames, int introFrames);
     
     const std::string& getCutsceneId() const { return cutsceneId; }
+    bool getIsWaitingForCutscene() const { return isWaitingForCutscene; }
 };

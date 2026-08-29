@@ -2,11 +2,15 @@
 #include "BossStates/BossRunState.h"
 #include "BossStates/BossDieState.h"
 #include "Mob.h"
+#include <algorithm>
+#include <cctype>
 
 BossHurtState::BossHurtState() : hurtTimer(0.0f) {}
 
 void BossHurtState::enter(Mob& mob) {
-    mob.setAnimation("hurt");
+    std::string lowerType = mob.getMobType();
+    std::transform(lowerType.begin(), lowerType.end(), lowerType.begin(), ::tolower);
+    mob.setAnimation(lowerType + "_hurt");
     mob.setVelocity({0.0f, mob.getVelocity().y});
 }
 

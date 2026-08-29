@@ -18,6 +18,9 @@ public:
 
     void execute(Mob& mob) override;
 
+    bool emitsHitbox() const override { return true; }
+    Hitbox getHitbox(Mob& mob) const override;
+
     float getDuration() const override { return duration; }
     const std::string& getAnimName() const override { return animName; }
     float getHitboxStartTime() const override { return hitboxStartTime; }

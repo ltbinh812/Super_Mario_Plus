@@ -156,6 +156,9 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     float moveControl = skillJson.value("moveControl", 0.0f);
     skill->setMoveControl(moveControl);
 
+    float dashMultiplier = skillJson.value("dashMultiplier", 2.0f);
+    skill->setDashMultiplier(dashMultiplier);
+
     player->addSkill(skillName, std::move(skill));
   }
 

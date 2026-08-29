@@ -25,6 +25,7 @@ protected:
     
     // Movement multiplier during skill execution
     float moveControl = 0.0f;
+    float dashMultiplier = 2.0f;
 public: 
     ISkill(float mn = 0.0f, float dr = 0.0f) : manaCost(mn), duration(dr) {}
     virtual ~ISkill() = default;
@@ -68,5 +69,8 @@ public:
 
     float getMoveControl() const { return moveControl; }
     void setMoveControl(float mc) { moveControl = mc; }
+    
+    float getDashMultiplier() const { return dashMultiplier; }
+    void setDashMultiplier(float dm) { dashMultiplier = dm; }
 };
     

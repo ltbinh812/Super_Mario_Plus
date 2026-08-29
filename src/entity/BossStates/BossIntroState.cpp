@@ -1,6 +1,6 @@
 #include "BossIntroState.h"
 #include "Boss.h"
-#include "EnemyStates/EnemyIdleState.h"
+#include "BossStates/BossIdleState.h"
 #include <iostream>
 
 void BossIntroState::enter(Mob& mob) {
@@ -38,10 +38,10 @@ void BossIntroState::process(Mob& mob) {
 
     // Check anti-popping condition: Cutscene is done AND animation is done.
     if (isCutsceneFinished && animFinished) {
-        std::cout << "[BossIntroState] Cutscene and animation finished. Entering Idle State.\n";
+        // std::cout << "[BossIntroState] Cutscene and animation finished. Entering Idle State.\n";
         Boss* boss = dynamic_cast<Boss*>(&mob);
         if (boss) {
-            mob.changeState(std::make_unique<EnemyIdleState>());
+            mob.changeState(std::make_unique<BossIdleState>());
         }
     }
 }

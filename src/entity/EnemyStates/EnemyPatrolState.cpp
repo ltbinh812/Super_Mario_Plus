@@ -41,3 +41,7 @@ void EnemyPatrolState::process(Mob& mob) {
 
 void EnemyPatrolState::exit(Mob& mob) {
 }
+
+void EnemyPatrolState::onHitWall(Mob& mob, bool rightWall) {
+    mob.setFacingRight(!mob.getIsFacingRight());
+}

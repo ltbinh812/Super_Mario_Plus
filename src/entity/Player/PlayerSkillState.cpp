@@ -10,6 +10,13 @@ void PlayerSkillState::onEnter() {
         player.stopLeftRun();
         player.stopRightRun();
 
+        // Apply dash burst
+        float dashMult = currentSkill->getDashMultiplier();
+        if (dashMult > 0.0f) {
+            float moveDir = player.getWorldStats().isFacingRight ? 1.0f : -1.0f;
+            player.getRuntimeStatsMutable().velocity.x = moveDir * player.getBaseStats().moveVelocity * dashMult;
+        }
+
         // Deduct mana
         player.reduceMana(currentSkill->getManaCost());
 
@@ -37,8 +44,12 @@ void PlayerSkillState::update(float dt) {
     timer = std::max(timer, 0.0f);
 
     float elapsedTime = getElapsedTime();
+
     if (!hasExecuted && elapsedTime >= currentSkill->getHitboxStartTime() &&
            elapsedTime <= currentSkill->getHitboxEndTime()) {
+        // Stop dash right when the hitbox starts (planting feet)
+        player.getRuntimeStatsMutable().velocity.x = 0.0f;
+        
         // Execute skill effect (velocity burst, fireball spawn, etc.) ONLY ONCE per activation
         currentSkill->execute(player);
         hasExecuted = true;

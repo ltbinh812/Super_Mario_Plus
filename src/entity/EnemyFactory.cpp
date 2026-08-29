@@ -221,23 +221,30 @@ std::unique_ptr<Entity> EnemyFactory::create(
                 box.height = skillData["box"].value("h", 0.0f);
             }
 
+            std::unique_ptr<IEnemySkill> createdSkill = nullptr;
+
             if (skillName.find("explosion") != std::string::npos) {
-                mob->addEnemySkill(std::make_unique<ExplosionEnemySkill>(
+                createdSkill = std::make_unique<ExplosionEnemySkill>(
                     skillName, dmg, startTime, endTime, duration
-                ));
+                );
             } else if (skillName.find("special") != std::string::npos || skillName.find("special_ball") != std::string::npos) {
-                mob->addEnemySkill(std::make_unique<ProjectileEnemySkill>(
+                createdSkill = std::make_unique<ProjectileEnemySkill>(
                     skillName, dmg, startTime, endTime, duration, EntityType::SpecialBall
-                ));
+                );
             } else if (skillName.find("long") != std::string::npos || skillName.find("fireball") != std::string::npos || skillName.find("projectile") != std::string::npos) {
-                mob->addEnemySkill(std::make_unique<ProjectileEnemySkill>(
+                createdSkill = std::make_unique<ProjectileEnemySkill>(
                     skillName, dmg, startTime, endTime, duration, EntityType::Fireball
-                ));
+                );
             } else {
-                mob->addEnemySkill(std::make_unique<BasicMeleeEnemySkill>(
+                createdSkill = std::make_unique<BasicMeleeEnemySkill>(
                     skillName, dmg, startTime, endTime, duration, box
-                ));
+                );
             }
+
+            // Set configuration
+            createdSkill->setDashMultiplier(skillData.value("dashMultiplier", 2.0f));
+
+            mob->addEnemySkill(std::move(createdSkill));
         }
     }
     

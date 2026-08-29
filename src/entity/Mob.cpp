@@ -10,7 +10,7 @@
 Mob::Mob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bStats, const MobConfig& cfg)
     : Entity(bStats, CharacterRuntimeStats(), CharacterWorldStats()),
       mobType(type), config(cfg), currentAnim(nullptr), stateTimer(0.0f),
-      spawnPoint(worldPos), isFacingRight(false), isDead(false), hurtTimer(0.0f)
+      spawnPoint(worldPos), isFacingRight(false), isDead(false), hurtTimer(0.0f), deadTimer(0.0f)
 {
     faction = EntityFaction::Enemy;
     worldStats.position = worldPos;
@@ -27,7 +27,18 @@ Mob::~Mob() {
 
 void Mob::update(float dt) {
     if (isDead) {
-        if (currentAnim) currentAnim->update(dt);
+        bool animFinished = false;
+        if (hasStandardAnimations() && currentStandardAnim) {
+            currentStandardAnim->update(dt);
+            animFinished = currentStandardAnim->isFinished();
+        } else if (currentAnim) {
+            currentAnim->update(dt);
+            animFinished = currentAnim->isFinished();
+        }
+        
+        if (animFinished) {
+            deadTimer += dt;
+        }
         return;
     }
 
@@ -45,7 +56,7 @@ void Mob::update(float dt) {
     static float logT = 0.0f;
     logT += dt;
     if (logT > 1.0f) {
-        TraceLog(LOG_INFO, "[Mob] %s is at (%f, %f) Active: %d", mobType.c_str(), worldStats.position.x, worldStats.position.y, getIsActive());
+        // TraceLog(LOG_INFO, "[Mob] %s is at (%f, %f) Active: %d", mobType.c_str(), worldStats.position.x, worldStats.position.y, getIsActive());
         logT = 0.0f;
     }
 }
@@ -119,6 +130,10 @@ void Mob::render(float alpha) {
         // Foreground (green)
         DrawRectangle((int)barX, (int)barY, (int)(barWidth * hpPercent), (int)barHeight, GREEN);
     }
+
+    // Render Physics Box
+    Rectangle hitbox = getHitbox();
+    DrawRectangleLinesEx(hitbox, 1.0f, RED);
 }
 
 void Mob::decideAction() {
@@ -170,8 +185,14 @@ void Mob::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
 }
 
 bool Mob::getIsActive() const {
-    // If dead, we might keep it active until animation finishes, but for simplicity:
-    return !isDead || (currentAnim && !currentAnim->isFinished());
+    if (!isDead) return true;
+    
+    // Giữ xác lại trên màn hình thêm 1.5 giây sau khi chạy xong animation die
+    if (deadTimer > 1.5f) {
+        return false;
+    }
+    
+    return true;
 }
 
 void Mob::changeState(std::unique_ptr<IMobState> newState) {
@@ -213,12 +234,8 @@ void Mob::setAnimation(const std::string& animName) {
 }
 
 void Mob::onHitWall(bool rightWall) {
-    if (rightWall && isFacingRight) {
-        isFacingRight = false;
-        runtimeStats.velocity.x = -std::abs(runtimeStats.velocity.x);
-    } else if (!rightWall && !isFacingRight) {
-        isFacingRight = true;
-        runtimeStats.velocity.x = std::abs(runtimeStats.velocity.x);
+    if (currentState) {
+        currentState->onHitWall(*this, rightWall);
     }
 }
 
