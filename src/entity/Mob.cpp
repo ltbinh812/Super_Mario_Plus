@@ -130,6 +130,10 @@ void Mob::render(float alpha) {
         // Foreground (green)
         DrawRectangle((int)barX, (int)barY, (int)(barWidth * hpPercent), (int)barHeight, GREEN);
     }
+
+    // Render Physics Box
+    Rectangle hitbox = getHitbox();
+    DrawRectangleLinesEx(hitbox, 1.0f, RED);
 }
 
 void Mob::decideAction() {
@@ -230,12 +234,8 @@ void Mob::setAnimation(const std::string& animName) {
 }
 
 void Mob::onHitWall(bool rightWall) {
-    if (rightWall && isFacingRight) {
-        isFacingRight = false;
-        runtimeStats.velocity.x = -std::abs(runtimeStats.velocity.x);
-    } else if (!rightWall && !isFacingRight) {
-        isFacingRight = true;
-        runtimeStats.velocity.x = std::abs(runtimeStats.velocity.x);
+    if (currentState) {
+        currentState->onHitWall(*this, rightWall);
     }
 }
 

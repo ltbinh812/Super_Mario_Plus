@@ -29,7 +29,8 @@ void BossPatrolState::process(Mob& mob) {
     patrolTimer += GetFrameTime();
     
     float speed = mob.getConfig().aiData.patrolSpeed;
-    mob.setVelocity({speed * direction, mob.getVelocity().y});
+    float vx = mob.getIsFacingRight() ? speed : -speed;
+    mob.setVelocity({vx, mob.getVelocity().y});
 
     if (patrolTimer >= currentPatrolTime) {
         mob.changeState(std::make_unique<BossIdleState>());
@@ -37,4 +38,8 @@ void BossPatrolState::process(Mob& mob) {
 }
 
 void BossPatrolState::exit(Mob& mob) {
+}
+
+void BossPatrolState::onHitWall(Mob& mob, bool rightWall) {
+    mob.setFacingRight(!mob.getIsFacingRight());
 }

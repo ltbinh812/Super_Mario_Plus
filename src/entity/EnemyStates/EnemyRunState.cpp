@@ -59,3 +59,9 @@ void EnemyRunState::process(Mob& mob) {
 
 void EnemyRunState::exit(Mob& mob) {
 }
+
+void EnemyRunState::onHitWall(Mob& mob, bool rightWall) {
+    if (mob.getRuntimeStats().isGrounded) {
+        mob.setVelocity({mob.getVelocity().x, -mob.getBaseStats().jumpVelocity});
+    }
+}

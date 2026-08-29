@@ -41,7 +41,7 @@
     "assetFolder": "boss/doflam",
     "maxHealth": 1000,
     "moveVelocity": 80.0,
-    "jumpVelocity": 300.0,
+    "jumpVelocity": 500.0,
     "gravityScale": 160.0,
     "physicsBox": {
       "w": 64.0,

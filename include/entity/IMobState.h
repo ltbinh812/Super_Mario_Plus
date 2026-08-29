@@ -10,4 +10,5 @@ public:
     virtual void decideAction(Mob& mob) = 0;
     virtual void process(Mob& mob) = 0;
     virtual void exit(Mob& mob) = 0;
+    virtual void onHitWall(Mob& mob, bool rightWall) {}
 };
