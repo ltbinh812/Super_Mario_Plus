@@ -14,6 +14,9 @@
 #include <unordered_set>
 #include "SaveData.h"
 
+// Forward declare để tránh kéo vào toàn bộ editor headers
+struct CustomMapData;
+
 class BaseLevelState : public GameState {
 protected:
     TileMap map;
@@ -49,7 +52,12 @@ protected:
     void TransitionToLevel(const std::string& nextLevel, const std::string& dir, float triggerGlobalX, float triggerGlobalY);
 
 public:
+    // Original LDtk constructor
     BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
+    
+    // [NEW] Constructor cho chế độ Test Play từ MapEditorState
+    BaseLevelState(const CustomMapData& customMap, const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
+    
     virtual ~BaseLevelState() = default;
 
     GameSaveData createSaveData() const;

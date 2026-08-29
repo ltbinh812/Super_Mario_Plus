@@ -1,4 +1,7 @@
 #include "BaseLevelState.h"
+#include "MainMenuState.h"
+#include "StateCommands.h"
+#include "core/SettingsManager.h"
 #include "Effects.h"
 #include "EntityFactory.h"
 #include "GameState.h"
@@ -10,10 +13,12 @@
 #include "Flag.h"
 #include "PlayerHUD.h"
 #include "Coin.h"
+#include "CustomMapData.h"
 #include <algorithm>
 #include <iostream>
 #include <raylib.h>
 #include <raymath.h>
+
 
 BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                                const std::string &initialLevel,
@@ -39,29 +44,23 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player1->setStartPosition(spawn1);
       player1->setCommandQueue(&spawnQueue);
       player1->setPartyInventory(partyInventory);
-      player1Handler.bindKey(KEY_A, std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_D, std::make_unique<MoveRightCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_W, std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_S, std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player1Handler.bindKey(KEY_S, std::make_unique<StopCrouchCommand>(),
-                             InputType::RELEASED);
-      player1Handler.bindKey(KEY_A, std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(KEY_D, std::make_unique<StopRightCommand>(),
-                             InputType::RELEASED);
-      player1Handler.bindKey(KEY_J, std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(KEY_K, std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(KEY_L, std::make_unique<UseSkillCommand>("Dash"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_U,
-                             std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_I,
-                             std::make_unique<UseSkillCommand>("SpecialAttack"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"),
-                             InputType::PRESSED);
-      player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED);
+      
+      auto& sm = SettingsManager::GetInstance();
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      
+      player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
     }
 
     player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
@@ -71,33 +70,23 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
       player2->setStartPosition(spawn2);
       player2->setCommandQueue(&spawnQueue);
       player2->setPartyInventory(partyInventory);
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<MoveLeftCommand>(),
-                             InputType::DOWN);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<MoveRightCommand>(),
-                             InputType::DOWN);
-      player2Handler.bindKey(KEY_UP, std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player2Handler.bindKey(KEY_DOWN, std::make_unique<StopCrouchCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_LEFT, std::make_unique<StopLeftCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_RIGHT, std::make_unique<StopRightCommand>(),
-                             InputType::RELEASED);
-      player2Handler.bindKey(KEY_KP_1, std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_2, std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_3,
-                             std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_4,
-                             std::make_unique<UseSkillCommand>("LongAttack"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_KP_5,
-                             std::make_unique<UseSkillCommand>("SpecialAttack"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_RIGHT_SHIFT,
-                             std::make_unique<UseSkillCommand>("Block"),
-                             InputType::PRESSED);
-      player2Handler.bindKey(KEY_ENTER, std::make_unique<InteractCommand>(),
-                             InputType::PRESSED);
+      
+      auto& sm = SettingsManager::GetInstance();
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      
+      player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
     }
 
     // CombatSystem is now stateless, so no registerEntity calls here
@@ -131,6 +120,97 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
   }
 }
+
+// =============================================================================
+// [NEW] Constructor cho chế độ Test Play từ MapEditorState
+// =============================================================================
+BaseLevelState::BaseLevelState(const CustomMapData& customMap,
+                               const std::string &p1Name,
+                               const std::string &p2Name)
+    : mapCamera(416.0f), currentLevel(customMap.name), mapFilePath("custom") {
+
+  bool loaded = map.LoadCustomMap(customMap);
+  if (loaded && map.GetHeight() > 0) {
+    std::cout << "[BaseLevelState] Loaded custom map ("
+              << currentLevel << ") successfully!\n";
+
+    auto spawns = map.GetPlayerSpawns();
+    Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 208.0f};
+
+    partyInventory = std::make_shared<PartyInventory>();
+
+    player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
+    if (player1) {
+      player1->setPosition(spawn1);
+      player1->setStartPosition(spawn1);
+      player1->setCommandQueue(&spawnQueue);
+      player1->setPartyInventory(partyInventory);
+      
+      auto& sm = SettingsManager::GetInstance();
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      
+      player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+
+    player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
+    if (player2) {
+      Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 208.0f};
+      player2->setPosition(spawn2);
+      player2->setStartPosition(spawn2);
+      player2->setCommandQueue(&spawnQueue);
+      player2->setPartyInventory(partyInventory);
+      
+      auto& sm = SettingsManager::GetInstance();
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      
+      player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+
+    ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+
+    activeItems.clear();
+    auto entityData = map.GetEntityData();
+    for (const auto &data : entityData) {
+      auto item =
+          ItemFactory::create(data.identifier, data.px, data.fieldInstances);
+      if (item) {
+        item->setIid(data.iid);
+        item->setCommandQueue(&spawnQueue);
+        activeItems.push_back(std::move(item));
+      }
+    }
+    std::cout << "[BaseLevelState] Spawned " << activeItems.size()
+              << " items.\n";
+
+  } else {
+    std::cerr << "[BaseLevelState] Error loading custom map data!\n";
+  }
+}
+
 
 void BaseLevelState::HandleInput() {
   float dt = GetFrameTime();
@@ -421,7 +501,7 @@ void BaseLevelState::Update(float dt) {
             // Check if it's a flag that just got activated
             if (oldState != ItemState::Active && item->getItemState() == ItemState::Active && dynamic_cast<Flag*>(item.get()) != nullptr) {
                 SaveManager::getInstance().setCheckpoint(createSaveData());
-                SaveManager::getInstance().saveToFile("save.json");
+                SaveManager::getInstance().saveToFile("saves/save.json");
             }
         }
     };

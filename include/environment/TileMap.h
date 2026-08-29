@@ -5,8 +5,11 @@
 #include <unordered_map>
 #include "nlohmann/json.hpp"
 
+// Forward-declare so TileMap.h does not pull in all editor headers at compile time
+struct CustomMapData;
+
 enum class CollisionType {
-    None = 0, Solid, OneWay, Hazard, Ladder, Water, Die, Lotus, Cloud, Poison, Lava, Slop
+    None = 0, Solid, OneWay, Hazard, Ladder, Water, Die, Lotus, Cloud, Poison, Lava, Slop, Vine
 };
 
 struct CollisionTile {
@@ -48,6 +51,9 @@ private:
     bool hasBackgroundTexture = false;
     RenderTexture2D mapCanvas; // Batch Buffer: Gom toàn bộ background tĩnh vào 1 Canvas
     bool hasCanvas = false;
+    float canvasW = 0;
+    float canvasH = 0;
+    bool isCanvasPreScaled = false;
 
     std::vector<std::vector<int>> backgroundLayer;
     std::vector<std::vector<int>> displayLayer;
@@ -65,7 +71,11 @@ public:
 
     void LoadMap(const std::string& jsonFilePath, const std::string& tilesetPath, const std::string& backgroundPath);
     bool LoadLDtkMap(const std::string& ldtkFilePath, const std::string& levelName = "");
-    
+
+    // [NEW] Load from in-game editor data (no LDtk required).
+    // Fills collisionLayer, entityData_, playerSpawns, and renders mapCanvas
+    // exactly as LoadLDtkMap does — so BaseLevelState needs zero changes.
+    bool LoadCustomMap(const CustomMapData& data);
     void Draw() const;
     std::vector<CollisionTile> GetCollidingTiles(Rectangle entityRect) const;
     std::string GetNeighbour(const std::string& dir, float globalX, float globalY) const;

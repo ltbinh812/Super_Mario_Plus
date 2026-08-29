@@ -1,10 +1,14 @@
 #include "TileMap.h"
+#include "CustomMapData.h"
+#include "EditorBlockRegistry.h"
+#include "AutoTiler.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
+
 
 TileMap::TileMap() : tileSize(16), columns(0), rows(0), levelWidth(0), levelHeight(0) {
     tileSheet.id = 0;
@@ -131,6 +135,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                         else if (id == "Poison") type = CollisionType::Poison;
                         else if (id == "Lava") type = CollisionType::Lava;
                         else if (id == "Slop") type = CollisionType::Slop;
+                        else if (id == "Vine") type = CollisionType::Vine;
                         intToCollisionType[value] = type;
                     }
                 }
@@ -254,16 +259,48 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     
     auto& layerInstances = targetLevel["layerInstances"];
     if (!layerInstances.empty()) {
-        tileSize = layerInstances[0]["__gridSize"];
-        columns = layerInstances[0]["__cWid"];
-        rows = layerInstances[0]["__cHei"];
+        // Find the Collision layer to define the global physical grid
+        bool foundCollisionGrid = false;
+        for (const auto& layer : layerInstances) {
+            std::string lName = layer.contains("__identifier") && !layer["__identifier"].is_null() ? (std::string)layer["__identifier"] : "";
+            if (lName == "Collision" || lName == "Collisions") {
+                tileSize = layer["__gridSize"];
+                columns = layer["__cWid"];
+                rows = layer["__cHei"];
+                foundCollisionGrid = true;
+                break;
+            }
+        }
+        
+        if (!foundCollisionGrid) {
+            // Fallback to the layer that has gridTiles or autoLayerTiles
+            for (const auto& layer : layerInstances) {
+                if ((layer.contains("autoLayerTiles") && !layer["autoLayerTiles"].is_null() && !layer["autoLayerTiles"].empty()) ||
+                    (layer.contains("gridTiles") && !layer["gridTiles"].is_null() && !layer["gridTiles"].empty()) ||
+                    (layer.contains("intGridCsv") && !layer["intGridCsv"].is_null() && !layer["intGridCsv"].empty())) {
+                    tileSize = layer["__gridSize"];
+                    columns = layer["__cWid"];
+                    rows = layer["__cHei"];
+                    foundCollisionGrid = true;
+                    break;
+                }
+            }
+        }
+        
+        if (!foundCollisionGrid) {
+            tileSize = layerInstances[0]["__gridSize"];
+            columns = layerInstances[0]["__cWid"];
+            rows = layerInstances[0]["__cHei"];
+        }
     }
 
     collisionLayer = std::vector<std::vector<CollisionType>>(rows, std::vector<CollisionType>(columns, CollisionType::None));
 
-    if (hasCanvas) UnloadRenderTexture(mapCanvas);
-
+    if (hasCanvas) { UnloadRenderTexture(mapCanvas); }
     mapCanvas = LoadRenderTexture(levelWidth, levelHeight);
+    canvasW = (float)levelWidth;
+    canvasH = (float)levelHeight;
+    isCanvasPreScaled = false;
     hasCanvas = true;
 
     BeginTextureMode(mapCanvas);
@@ -374,6 +411,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         int tsDefUid = layer["__tilesetDefUid"].is_null() ? -1 : (int)layer["__tilesetDefUid"];
         if (tsDefUid != -1 && tilesetTextures.find(tsDefUid) != tilesetTextures.end()) {
             Texture2D tex = tilesetTextures[tsDefUid];
+            int layerGridSize = layer.contains("__gridSize") ? (int)layer["__gridSize"] : tileSize;
             for (const auto& tile : tiles) {
                 int px = tile["px"][0];
                 int py = tile["px"][1];
@@ -381,7 +419,7 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                 int srcY = tile["src"][1];
                 int f = tile["f"];
 
-                Rectangle srcRect = { (float)srcX, (float)srcY, (float)tileSize, (float)tileSize };
+                Rectangle srcRect = { (float)srcX, (float)srcY, (float)layerGridSize, (float)layerGridSize };
                 if (f == 1 || f == 3) srcRect.width = -srcRect.width;
                 if (f == 2 || f == 3) srcRect.height = -srcRect.height;
 
@@ -397,9 +435,11 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
 
 void TileMap::Draw() const {
     if (hasCanvas) {
-        float scale = GetWorldScale();
-        Rectangle src = { 0.0f, 0.0f, (float)mapCanvas.texture.width, -(float)mapCanvas.texture.height };
-        Rectangle dest = { 0.0f, 0.0f, (float)mapCanvas.texture.width * scale, (float)mapCanvas.texture.height * scale };
+        float drawScale = isCanvasPreScaled ? 1.0f : GetWorldScale();
+        // Dùng đúng canvasW, canvasH đã lưu lúc tạo
+        Rectangle src = { 0.0f, 0.0f, canvasW, -canvasH };
+        // Tùy theo canvas đã scale chưa mà ta vẽ to ra (cho standard) hoặc giữ nguyên (cho custom)
+        Rectangle dest = { 0.0f, 0.0f, canvasW * drawScale, canvasH * drawScale };
         DrawTexturePro(mapCanvas.texture, src, dest, { 0.0f, 0.0f }, 0.0f, WHITE);
         return;
     }
@@ -521,4 +561,224 @@ std::vector<LDtkEntityData> TileMap::GetEntityData() const {
         scaled.push_back(std::move(d));
     }
     return scaled;
+}
+
+// =============================================================================
+// [NEW] LoadCustomMap — load từ in-game editor, không cần file LDtk
+//
+// Chiến lược:
+//  1. Điền collisionLayer từ EditorBlockRegistry (tương đương layer "Collisions" của LDtk)
+//  2. Điền entityData_ và playerSpawns (tương đương entity layer của LDtk)
+//  3. Load tileset textures (lazy, dùng lại tilesetTextures map đã có)
+//  4. Vẽ tile visuals vào mapCanvas (dùng DrawTexturePro để scale 8/16px → 32px)
+//
+// Sau khi gọi xong, BaseLevelState dùng:
+//  - map.GetCollidingTiles()   ← dùng collisionLayer  (không đổi)
+//  - map.GetPlayerSpawns()     ← dùng playerSpawns    (không đổi)
+//  - map.GetEntityData()       ← dùng entityData_     (không đổi)
+//  - map.Draw()                ← dùng mapCanvas       (không đổi)
+// =============================================================================
+bool TileMap::LoadCustomMap(const CustomMapData& data) {
+    // --- Reset state ---
+    currentLevelName   = data.name;
+    tileSize           = data.tileSize;   // 16 (native LDtk size)
+    columns            = data.width;
+    rows               = data.height;
+    levelWidth         = data.width  * tileSize;
+    levelHeight        = data.height * tileSize;
+    worldX             = 0;
+    worldY             = 0;
+    currentNeighbours.clear();   // single-level editor, không có neighbours
+
+    // --- 1. Build collision layer ---
+    collisionLayer.assign(rows, std::vector<CollisionType>(columns, CollisionType::None));
+    auto& reg = EditorBlockRegistry::getInstance();
+    for (const auto& [key, blockId] : data.tiles) {
+        int gx = key % data.width;
+        int gy = key / data.width;
+        if (gx >= 0 && gx < columns && gy >= 0 && gy < rows) {
+            collisionLayer[gy][gx] = reg.getCollision(blockId);
+        }
+    }
+
+    // --- 2. Build entity data & player spawns ---
+    entityData_.clear();
+    playerSpawns.clear();
+    for (const auto& e : data.entities) {
+        if (e.type == "PlayerSpawn") {
+            // PlayerSpawn → pixel position (top-left của ô grid)
+            playerSpawns.push_back({
+                (float)(e.gridX * tileSize),
+                (float)(e.gridY * tileSize)
+            });
+        } else {
+            LDtkEntityData ldtk;
+            ldtk.identifier    = e.type;
+            ldtk.px            = { (float)(e.gridX * tileSize), (float)(e.gridY * tileSize) };
+            ldtk.iid           = "custom_" + std::to_string(e.gridX) + "_" + std::to_string(e.gridY);
+            ldtk.fieldInstances = e.fields.is_null() ? nlohmann::json::array() : e.fields;
+            entityData_.push_back(ldtk);
+        }
+    }
+
+    // --- 3. Lazy-load tileset textures ---
+    // Key = tilesetPath string, value = Texture2D
+    // Dùng lại tilesetTextures (unordered_map<int, Texture2D>) nhưng cần map string → int uid
+    // Giải pháp: dùng hash của path string làm uid (đủ collision-free cho số lượng nhỏ)
+    std::unordered_map<std::string, int> pathToUid;
+    std::unordered_map<int, std::string> uidToPath;
+
+    auto getOrLoadTexture = [&](const std::string& path) -> int {
+        if (path.empty()) return -1;
+        auto it = pathToUid.find(path);
+        if (it != pathToUid.end()) return it->second;
+
+        int uid = (int)std::hash<std::string>{}(path) & 0x7FFFFFFF;  // positive int
+        if (tilesetTextures.find(uid) == tilesetTextures.end()) {
+            Texture2D tex = LoadTexture(path.c_str());
+            if (tex.id == 0) {
+                std::cerr << "[LoadCustomMap] Cannot load texture: " << path << "\n";
+                pathToUid[path] = -1;
+                return -1;
+            }
+            tilesetTextures[uid] = tex;
+            uidToPath[uid] = path;
+            std::cout << "[LoadCustomMap] Loaded texture: " << path << "\n";
+        }
+        pathToUid[path] = uid;
+        return uid;
+    };
+
+    // --- 4. Render mapCanvas ---
+    float scale = GetWorldScale();   // tileSize < 32 → scale = 32/tileSize (thường = 2.0)
+    int cw = (int)(levelWidth  * scale);
+    int ch = (int)(levelHeight * scale);
+
+    if (hasCanvas) { UnloadRenderTexture(mapCanvas); hasCanvas = false; }
+    mapCanvas  = LoadRenderTexture(cw, ch);
+    canvasW = (float)cw;
+    canvasH = (float)ch;
+    isCanvasPreScaled = true;
+    hasCanvas  = true;
+
+    BeginTextureMode(mapCanvas);
+    ClearBackground(BLANK);
+
+    float destTileSize = (float)tileSize * scale;  // = 32px nếu native=16
+
+    // --- Pass 1: Vẽ fallback màu sắc cho các ô KHÔNG CÓ texture
+    for (const auto& [key, blockId] : data.tiles) {
+        if (!reg.has(blockId)) continue;
+        const auto& def = reg.get(blockId);
+
+        // Nếu block có texture (qua rules hoặc trực tiếp def.tilesetPath), KHÔNG VẼ fallback để tránh bị lộ màu dưới vùng viền trong suốt
+        if (AutoTiler::getInstance().hasRulesForBlock(blockId) || !def.tilesetPath.empty()) continue;
+
+        int gx = key % data.width;
+        int gy = key / data.width;
+        float destX = (float)(gx * tileSize) * scale;
+        float destY = (float)(gy * tileSize) * scale;
+        Rectangle dest = { destX, destY, destTileSize, destTileSize };
+        DrawRectangleRec(dest, def.fallbackColor);
+    }
+
+    // --- Hàm lấy độ ưu tiên Z-Index cho layer (nhỏ = vẽ trước/nằm dưới)
+    auto getLayerPriority = [](const std::string& layerId) -> int {
+        if (layerId == "Bg_textures") return 10;
+        if (layerId == "IntGrid7_water") return 20;
+        if (layerId == "IntGrid6_vence") return 30;
+        if (layerId == "Wall_shadows") return 40;
+        if (layerId == "IntGrid5_lava") return 50;
+        if (layerId == "IntGrid4_leaf") return 60;
+        if (layerId == "IntGrid3_cloud") return 70;
+        if (layerId == "IntGrid2") return 80;
+        return 100; // Foreground chính (IntGrid, IntGridd, IntGrid1, IntGrid_layer)
+    };
+
+    // --- Pass 2: Full Auto-Layer scan — giống cơ chế LDtk gốc
+    std::unordered_set<int> autoTiledCells;
+    auto autoOutputs = AutoTiler::getInstance().buildLayer(data, autoTiledCells);
+    
+    // Sắp xếp lại danh sách các output theo Z-Index toàn cục
+    std::stable_sort(autoOutputs.begin(), autoOutputs.end(), [&](const AutoTileOutput& a, const AutoTileOutput& b) {
+        int pa = getLayerPriority(a.groupLayerId);
+        int pb = getLayerPriority(b.groupLayerId);
+        if (pa != pb) return pa < pb; // Khác Layer: Vẽ theo priority (nhỏ vẽ trước)
+        
+        // Cùng Layer: LDtk vẽ Group 0 đè lên (nằm trên) Group N
+        // Nghĩa là Group N phải được vẽ TRƯỚC Group 0
+        if (a.groupIndex != b.groupIndex) return a.groupIndex > b.groupIndex;
+        
+        // Cùng Group: LDtk vẽ Rule 0 đè lên Rule M
+        return a.ruleIndex > b.ruleIndex;
+    });
+
+    for (const auto& out : autoOutputs) {
+        if (out.tilesetPath.empty()) continue;
+        int uid = getOrLoadTexture(out.tilesetPath);
+        if (uid < 0 || !tilesetTextures.count(uid)) continue;
+        Texture2D tex = tilesetTextures.at(uid);
+
+        // Thay vì dùng chung scale của toàn map, ta tính scale RIÊNG cho từng viên gạch.
+        // Mục tiêu: Gạch (dù 8 hay 16 gốc) đều phóng to lấp đầy 1 ô vật lý 32x32 pixel!
+        float tileScale = 32.0f / (float)out.tileSize; 
+        
+        float destX = out.px * tileScale;
+        float destY = out.py * tileScale;
+
+        // Cờ lật (f): 0=None, 1=FlipX, 2=FlipY, 3=FlipX & FlipY
+        Rectangle src = out.uv;
+        if (out.f & 1) src.width = -src.width;
+        if (out.f & 2) src.height = -src.height;
+
+        // Đảm bảo dest có width/height dương, nhưng để draw chính xác khi có lật ảnh thì 
+        // dest.width và dest.height phải dương, còn lật ảnh thì src.width/height mang dấu âm.
+        float destWidth = std::abs(src.width) * tileScale;
+        float destHeight = std::abs(src.height) * tileScale;
+        Rectangle dest = { destX, destY, destWidth, destHeight };
+
+        DrawTexturePro(tex, src, dest, {0, 0}, 0.0f, WHITE);
+    }
+
+    // --- Pass 3: Vẽ fallback cho blocks không có rule group hoặc không match rule nào
+    for (const auto& [key, blockId] : data.tiles) {
+        if (!reg.has(blockId)) continue;
+        
+        int gx = key % data.width;
+        int gy = key / data.width;
+        
+        // Nếu block này ĐÃ tự động sinh ra được tile của chính nó thông qua AutoTiler, thì không cần vẽ fallback.
+        if (autoTiledCells.count(gy * data.width + gx)) continue;
+        
+        // Nếu nó CÓ khai báo trong rules nhưng bị thiếu rule (e.g. đặt block lẻ) thì nó sẽ không có trong autoTiledCells
+        // nên nó sẽ vẽ fallback! (Đây chính là lý do World 01 dirt bị mất tích nếu bị "bóp" thành rules rỗng)
+
+        const auto& def = reg.get(blockId);
+        if (def.tilesetPath.empty()) continue;
+
+        int uid = getOrLoadTexture(def.tilesetPath);
+        if (uid < 0 || !tilesetTextures.count(uid)) continue;
+        Texture2D tex = tilesetTextures.at(uid);
+
+        float destX = (float)(gx * tileSize) * scale;
+        float destY = (float)(gy * tileSize) * scale;
+        
+        float scaleX = destTileSize / std::abs(def.uv.width);
+        float scaleY = destTileSize / std::abs(def.uv.height);
+        float minScale = std::min(scaleX, scaleY);
+        
+        float newW = std::abs(def.uv.width) * minScale;
+        float newH = std::abs(def.uv.height) * minScale;
+        float offX = (destTileSize - newW) / 2.0f;
+        float offY = (destTileSize - newH) / 2.0f;
+        
+        Rectangle dest = { destX + offX, destY + offY, newW, newH };
+        DrawTexturePro(tex, def.uv, dest, {0, 0}, 0.0f, WHITE);
+    }
+
+    EndTextureMode();
+
+    std::cout << "[TileMap] LoadCustomMap: " << data.name
+              << " (" << columns << "x" << rows << ") OK.\n";
+    return true;
 }

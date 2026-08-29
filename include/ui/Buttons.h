@@ -25,6 +25,17 @@ class Button {
     Button& setRadius(float radius);
     Button& setOnClick(std::function<void()> onClick);
     void updateBound();
+    void expandHitbox(float left, float right, float top, float bottom) {
+        bound_.x -= left;
+        bound_.width += (left + right);
+        bound_.y -= top;
+        bound_.height += (top + bottom);
+    }
+
+    bool isHovered() const { return isHovered_; }
+    bool isPressed() const { return isPressed_; }
+    Vector2 getPosition() const { return position_; }
+    Vector2 getSize() const { return size_; }
 
     void handleInput(Vector2 mousePos, bool mousePressed, bool mouseReleased);
     void update();

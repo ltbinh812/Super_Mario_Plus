@@ -1,5 +1,12 @@
 #include "Game.h"
 #include "AssetManager.h"
+#include "MainMenuState.h"
+#include "LoadingState.h"
+
+Game::Game() {
+    auto factory = []() { return std::make_unique<MainMenuState>(); };
+    stateManager.PushState(std::make_unique<LoadingState>(factory, 2.0f));
+}
 
 void Game::runGame() {
 

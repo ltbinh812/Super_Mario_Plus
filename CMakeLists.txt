@@ -17,6 +17,7 @@ include_directories(
     include/combatsystem
     include/states
     include/ui
+    include/ui/transitions
     include/core
     include/entity
     include/entity/Player
@@ -41,12 +42,33 @@ endif()
 set(SOURCES 
     src/core/main.cpp
     src/core/Game.cpp
+    src/core/SettingsManager.cpp
     src/core/StateManager.cpp
     src/core/InputHandler.cpp
     src/core/SaveManager.cpp
     src/states/GameState.cpp
+    src/editor/EditorBlockRegistry.cpp
+    src/editor/AutoTiler.cpp
+    src/editor/CustomMapSerializer.cpp
+    src/editor/PlaceTileTool.cpp
+    src/editor/PlaceEntityTool.cpp
+    src/editor/EraseTool.cpp
+    src/editor/EditorToolManager.cpp
+    src/editor/EditorCamera.cpp
+    src/editor/EditorMapResizer.cpp
+    src/editor/CategoryPanel.cpp
+    src/editor/BlockVariantPanel.cpp
+    src/editor/EditorBottomPanel.cpp
+    src/editor/UndoRedoStack.cpp
+    src/editor/EditorSaveLoadUI.cpp
+    src/editor/EditorTextureCache.cpp
+    src/editor/EntityPalette.cpp
+    src/states/MapEditorState.cpp
     src/ui/Buttons.cpp
     src/ui/PlayerHUD.cpp
+    src/ui/UIAtlasAnimator.cpp
+    src/ui/CharacterInfoPanel.cpp
+    src/ui/transitions/IrisTransition.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
     src/entity/Effects.cpp
@@ -103,7 +125,10 @@ set(SOURCES
     src/states/World04State.cpp
     src/states/World05State.cpp
     src/states/World06State.cpp
-    src/states/CharacterSelectionState.cpp
+    src/states/MainMenuState.cpp
+    src/states/MapSelectionState.cpp
+    src/states/LoadingState.cpp
+    src/UI/ButtonGroup.cpp
 )
 
 # Executable
@@ -111,6 +136,14 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link raylib
 target_link_libraries(${PROJECT_NAME} ${RAYLIB_LIB} ${PLATFORM_LIBS})
+
+# Add Include Directories
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/editor
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/states
+)
 
 # Copy assets folder to build directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
