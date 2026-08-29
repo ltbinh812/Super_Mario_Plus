@@ -2,6 +2,7 @@
 #include "StateCommands.h"
 #include "SettingsManager.h"
 #include "World01State.h" // For play button transition
+#include "World05State.h"
 #include "CharacterInfoPanel.h"
 #include "MapEditorState.h" // For level editor button
 #include "PlayerCommands.h"
@@ -110,8 +111,10 @@ MainMenuState::MainMenuState()
         }, baseDelay + 3 * delayIncrement);
         
     mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "EXIT",
-        []() {
-            // Close window logic
+        [this]() {
+            this->PushStateCommand(std::make_unique<::ChangeStateCommand>(
+                std::make_unique<World05State>()
+            ));
         }, baseDelay + 4 * delayIncrement);
 
     // Calculate available space for buttons inside panel
