@@ -14,6 +14,8 @@ static std::string getFrameName(const std::string& itemIdentifier) {
     if (itemIdentifier == "Invisibility") return "item_invisibility_fix01 (Custom).png";
     if (itemIdentifier == "GoldMagnet") return "item_gold_magnet_fix01 (Custom).png";
     if (itemIdentifier == "TimeStop") return "item_time_stop_fix01 (Custom).png";
+    if (itemIdentifier == "Poison") return "item_poison_fix01 (Custom).png";
+    if (itemIdentifier == "Heal") return "item_heal_fix01 (Custom).png";
     return "";
 }
 

@@ -15,6 +15,7 @@ public:
     virtual void refresh() = 0;
     
     virtual std::string getName() const = 0;
+    virtual float getSpeedMultiplier() const { return 1.0f; }
     virtual void render(const Entity& entity, float alpha) {}
 };
 
@@ -32,6 +33,7 @@ public:
     void refresh() override;
     void setInPoison(bool value) { inPoison = value; }
     std::string getName() const override { return "Poison"; }
+    float getSpeedMultiplier() const override { return 0.5f; }
     void render(const Entity& entity, float alpha) override;
 };
 

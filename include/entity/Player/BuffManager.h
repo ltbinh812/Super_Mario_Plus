@@ -12,6 +12,7 @@ public:
     void addBuff(std::unique_ptr<IBuffEffect> buff, Player& player);
     void update(float dt, Player& player);
     void clear(Player& player);
+    void render(const Player& player, float alpha) const;
 
     // Multipliers (sums all active buffs)
     float getTotalSpeedMultiplier() const;
@@ -20,6 +21,7 @@ public:
 
     // Flags (true if any active buff provides it)
     bool isInvincible() const;
+    bool isInvisible() const;
     bool canTimeStop() const;
     bool hasGoldMagnet() const;
 

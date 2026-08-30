@@ -8,6 +8,7 @@
 #include "InvisiBuff.h"
 #include "GoldMagnetBuff.h"
 #include "TimeStopBuff.h"
+#include "HealBuff.h"
 #include <string>
 #include <iostream>
 
@@ -24,6 +25,7 @@ public:
         else if (buffType_ == "Invisibility") buff = std::make_unique<InvisiBuff>();
         else if (buffType_ == "GoldMagnet") buff = std::make_unique<GoldMagnetBuff>();
         else if (buffType_ == "TimeStop") buff = std::make_unique<TimeStopBuff>();
+        else if (buffType_ == "Heal") buff = std::make_unique<HealBuff>();
 
         if (buff) {
             player.getBuffManager().addBuff(std::move(buff), player);

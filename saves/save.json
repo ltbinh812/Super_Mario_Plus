@@ -1,7 +1,7 @@
 {
     "inventory": {
-        "coins": 0,
-        "keys": 0
+        "coins": 2,
+        "keys": 1
     },
     "levelData": {
         "levelId": "",
@@ -12,10 +12,10 @@
     },
     "p1": {
         "exists": true,
-        "health": 300,
+        "health": 290,
         "isFacingRight": true,
         "maxHealth": 300,
-        "posX": 1971.0,
+        "posX": 1968.989990234375,
         "posY": 799.989990234375
     }
 }

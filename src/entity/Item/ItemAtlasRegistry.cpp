@@ -22,6 +22,7 @@ void ItemAtlasRegistry::loadAll(const std::string& itemDir) {
     loadAtlas("fire_effect",  itemDir + "fire_effect.json",  itemDir + "fire_effect.png");
     loadAtlas("poison_effect1",   itemDir + "poison_effect1.json",   itemDir + "poison_effect1.png");
     loadAtlas("poison_effect2",   itemDir + "poison_effect2.json",   itemDir + "poison_effect2.png");
+    loadAtlas("buff_effect",      itemDir + "buff_effect.json",      itemDir + "buff_effect.png");
 
     loaded_ = true;
     std::cout << "[ItemAtlasRegistry] Loaded " << frames_.size() << " frames from " << textures_.size() << " atlases.\n";

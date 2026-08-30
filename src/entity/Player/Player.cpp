@@ -76,6 +76,8 @@ void Player::render(float alpha) {
       eff->render(*this, alpha);
   }
   
+  buffManager_.render(*this, alpha);
+  
   renderFloatingTexts();
 }
 

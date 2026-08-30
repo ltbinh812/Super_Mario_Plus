@@ -159,7 +159,7 @@ Player* Mob::getClosestPlayer() const {
     Vector2 myPos = getPosition();
 
     for (Player* p : targetPlayers) {
-        if (p && !p->isDead()) {
+        if (p && !p->isDead() && !p->getBuffManager().isInvisible()) {
             float dist = Vector2Distance(myPos, p->getPosition());
             if (dist < minDistance) {
                 minDistance = dist;

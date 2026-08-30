@@ -53,12 +53,16 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
 
                 // Auto-load fireball texture from assetFolder
                 std::string texBase = fb.value("textureName", std::string(""));
-                if (!texBase.empty() && jsonData[cmd.ownerName].contains("assetFolder")) {
-                    std::string folder = jsonData[cmd.ownerName]["assetFolder"].get<std::string>();
-                    std::string texKey = cmd.ownerName + "_" + texBase;
-                    std::string texPath = "assets/" + folder + "/" + texBase + ".png";
-                    AssetManager::getInstance().loadTexture(texKey, texPath);
-                    cfg.textureName = texKey;
+                if (!texBase.empty()) {
+                    if (jsonData[cmd.ownerName].contains("assetFolder")) {
+                        std::string folder = jsonData[cmd.ownerName]["assetFolder"].get<std::string>();
+                        std::string texKey = cmd.ownerName + "_" + texBase;
+                        std::string texPath = "assets/" + folder + "/" + texBase + ".png";
+                        AssetManager::getInstance().loadTexture(texKey, texPath);
+                        cfg.textureName = texKey;
+                    } else {
+                        cfg.textureName = texBase;
+                    }
                 }
             }
 

@@ -1,0 +1,44 @@
+{
+  "frames": {
+    "mob_guardian_idle": {
+      "frame": {"x":0,"y":0,"w":1152,"h":96},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1152,"h":96},
+      "sourceSize": {"w":1152,"h":96}
+    },
+    "mob_guardian_run": {
+      "frame": {"x":0,"y":96,"w":1920,"h":96},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1920,"h":96},
+      "sourceSize": {"w":1920,"h":96}
+    },
+    "mob_guardian_attack": {
+      "frame": {"x":0,"y":192,"w":2688,"h":96},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":2688,"h":96},
+      "sourceSize": {"w":2688,"h":96}
+    },
+    "mob_guardian_hurt": {
+      "frame": {"x":0,"y":288,"w":1344,"h":96},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1344,"h":96},
+      "sourceSize": {"w":1344,"h":96}
+    },
+    "mob_guardian_die": {
+      "frame": {"x":0,"y":384,"w":3072,"h":96},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":3072,"h":96},
+      "sourceSize": {"w":3072,"h":96}
+    }
+  },
+  "meta": {
+    "image": "mob_guardian.png",
+    "size": {"w": 3072, "h": 480},
+    "scale": "1"
+  }
+}

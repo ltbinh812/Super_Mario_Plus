@@ -7,6 +7,7 @@
 #include "EnemyFactory.h"
 #include "GameState.h"
 #include "ItemAtlasRegistry.h"
+#include "infrastructure/AssetManager.h"
 #include "ItemFactory.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
@@ -93,6 +94,15 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
 
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
     ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_rat", "assets/mobs/mob_rat.json", "assets/mobs/mob_rat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_tree", "assets/mobs/mob_tree.json", "assets/mobs/mob_tree.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_skeleton", "assets/mobs/mob_skeleton.json", "assets/mobs/mob_skeleton.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_goblin", "assets/mobs/mob_goblin.json", "assets/mobs/mob_goblin.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_guardian", "assets/mobs/mob_guardian.json", "assets/mobs/mob_guardian.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_bat", "assets/mobs/mob_bat.json", "assets/mobs/mob_bat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_soldier", "assets/mobs/mob_soldier.json", "assets/mobs/mob_soldier.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_slime", "assets/mobs/mob_slime.json", "assets/mobs/mob_slime.png");
+    AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
 
     spawnEntitiesFromMap();
     spawnCutsceneTriggersFromMap();
@@ -178,6 +188,16 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
     }
 
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_rat", "assets/mobs/mob_rat.json", "assets/mobs/mob_rat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_tree", "assets/mobs/mob_tree.json", "assets/mobs/mob_tree.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_skeleton", "assets/mobs/mob_skeleton.json", "assets/mobs/mob_skeleton.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_goblin", "assets/mobs/mob_goblin.json", "assets/mobs/mob_goblin.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_guardian", "assets/mobs/mob_guardian.json", "assets/mobs/mob_guardian.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_bat", "assets/mobs/mob_bat.json", "assets/mobs/mob_bat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_soldier", "assets/mobs/mob_soldier.json", "assets/mobs/mob_soldier.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_slime", "assets/mobs/mob_slime.json", "assets/mobs/mob_slime.png");
+    AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
 
     activeItems.clear();
     auto entityData = map.GetEntityData();
@@ -398,7 +418,12 @@ void BaseLevelState::Update(float dt) {
     player2->updateStateFromPhysics();
     player2->update(dt);
   }
+  bool timeStopped = false;
+  if (player1 && player1->getBuffManager().canTimeStop()) timeStopped = true;
+  if (player2 && player2->getBuffManager().canTimeStop()) timeStopped = true;
+
   for (auto &entity : activeEntities) {
+    if (timeStopped && entity->getFaction() == EntityFaction::Enemy) continue;
     entity->updatePhysicsWithMap(map, dynamicSolids, dt);
     entity->update(dt);
   }
