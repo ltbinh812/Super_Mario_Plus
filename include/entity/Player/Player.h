@@ -88,6 +88,8 @@ public:
   bool hasActiveHitbox() const override;
   Hitbox getActiveHitbox() override;   // Non-const: avoids const_cast
   void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
+  void setPvPMode(bool pvp) { isPvPMode_ = pvp; }
+  bool getPvPMode() const { return isPvPMode_; }
 
   // --- Polymorphic Hook overrides from Entity ---
   void onLand(float floorY) override;
@@ -124,4 +126,5 @@ private:
   class BaseItem* overlappingItem_ = nullptr;
   std::shared_ptr<PartyInventory> partyInventory_;
   BuffManager buffManager_;
+  bool isPvPMode_ = false;
 };

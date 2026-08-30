@@ -90,6 +90,12 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
         player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
       }
     }
+    
+    if (player1 && player2 && isPvPMode_) {
+        player1->setPvPMode(true);
+        player2->setPvPMode(true);
+    }
+    
     bindPlayerInputs();
 
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
@@ -185,6 +191,12 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
       player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
       player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
       player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+    
+    if (player1 && player2) {
+        player1->setPvPMode(true);
+        player2->setPvPMode(true);
+        isPvPMode_ = true;
     }
 
     ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
@@ -493,7 +505,7 @@ void BaseLevelState::Render(float alpha) const {
   
   mapCamera.EndMode();
 
-  PlayerHUD::render(player1.get(), partyInventory.get());
+  PlayerHUD::render(player1.get(), player2.get(), partyInventory.get());
 
   // Cutscene dialogue box vẽ trên cùng (screen space, ngoài camera)
   if (cutsceneManager.isActive()) {

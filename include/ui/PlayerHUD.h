@@ -4,5 +4,5 @@
 
 class PlayerHUD {
 public:
-    static void render(const Player* p1, const PartyInventory* inventory);
+    static void render(const Player* p1, const Player* p2, const PartyInventory* inventory);
 };

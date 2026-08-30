@@ -22,6 +22,7 @@ struct CharacterCard {
     float targetScale;
     bool isHovered;
     bool isSelected;
+    float animOffsetY; // For the intro slide-up animation
 
     // We store pointer to Animation because Animation doesn't have default constructor
     std::unique_ptr<Animation> idleAnim; 
@@ -35,6 +36,7 @@ private:
     std::string player1Choice;
     std::string player2Choice;
     LevelFactory nextStateFactory;
+    std::function<std::unique_ptr<GameState>()> backStateFactory;
 
     Texture2D backgroundTex;
     Texture2D islandTex;
@@ -44,6 +46,7 @@ private:
     std::unique_ptr<ITransition> transitionOut;
     bool isTransitioningIn;
     bool isTransitioningOut;
+    bool isTransitioningToPlayer2;
 
     std::vector<CharacterCard> cards;
     
@@ -53,6 +56,10 @@ private:
     int hoveredCardIndex; 
     float islandAnimTimer;
     bool islandIsPlayingSkill;
+    float islandAnimOffsetY;
+    
+    // Intro animation
+    float introTimer;
 
     // Back button
     Texture2D backBtnNormal;
@@ -75,7 +82,7 @@ private:
     void UpdateIslandLogic(float dt);
 
 public:
-    CharacterSelectionState(int numPlayers, LevelFactory factory);
+    CharacterSelectionState(int numPlayers, LevelFactory factory, std::function<std::unique_ptr<GameState>()> backStateFactory = nullptr);
     ~CharacterSelectionState() override;
 
     void HandleInput() override;

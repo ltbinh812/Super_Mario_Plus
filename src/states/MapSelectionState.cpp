@@ -194,13 +194,15 @@ void MapSelectionState::Update(float dt) {
                             default: return std::make_unique<World01State>(p1);
                         }
                     };
-                    factory = [levelFact]() { return std::make_unique<CharacterSelectionState>(1, levelFact); };
+                    MapSelectionMode curMode = currentMode;
+                    factory = [levelFact, curMode]() { return std::make_unique<CharacterSelectionState>(1, levelFact, [curMode]() { return std::make_unique<MapSelectionState>(curMode); }); };
                 } else if (currentMode == MapSelectionMode::PvP) {
                     LevelFactory levelFact = [idx](std::string p1, std::string p2) -> std::unique_ptr<GameState> {
                         std::string mapPath = "assets/maps/pvp_map0" + std::to_string(idx) + "/world0" + std::to_string(idx) + ".ldtk";
                         return std::make_unique<BaseLevelState>(mapPath, "", p1, p2, true);
                     };
-                    factory = [levelFact]() { return std::make_unique<CharacterSelectionState>(2, levelFact); };
+                    MapSelectionMode curMode = currentMode;
+                    factory = [levelFact, curMode]() { return std::make_unique<CharacterSelectionState>(2, levelFact, [curMode]() { return std::make_unique<MapSelectionState>(curMode); }); };
                 }
             }
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(std::make_unique<LoadingState>(factory, 1.0f)));

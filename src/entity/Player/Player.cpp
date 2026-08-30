@@ -366,6 +366,9 @@ Hitbox Player::getActiveHitbox() {
   // Clean: no const_cast — getActiveHitbox() is non-const
   Hitbox hb = {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
   hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+  if (isPvPMode_) {
+      hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+  }
   return hb;
 }
 

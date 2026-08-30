@@ -5,16 +5,18 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include "AssetManager.h"
+#include "raylib.h"
 
 using json = nlohmann::json;
 
-CharacterSelectionState::CharacterSelectionState(int numPlayers, LevelFactory factory)
-    : numPlayersRequired(numPlayers), currentPlayerSelecting(1), nextStateFactory(std::move(factory)) 
+CharacterSelectionState::CharacterSelectionState(int numPlayers, LevelFactory factory, std::function<std::unique_ptr<GameState>()> backStateFactory)
+    : numPlayersRequired(numPlayers), currentPlayerSelecting(1), nextStateFactory(std::move(factory)), backStateFactory(std::move(backStateFactory))
 {
     isTransitioningIn = true;
     isTransitioningOut = false;
-    transitionIn = std::make_unique<IrisTransition>(true, 1.0f);
-    transitionOut = std::make_unique<IrisTransition>(false, 1.0f);
+    isTransitioningToPlayer2 = false;
+    transitionIn = std::make_unique<IrisTransition>();
+    transitionOut = std::make_unique<IrisTransition>();
 
     backgroundTex = LoadTexture("assets/UI_screens/map_selection.png"); // Re-use background
     islandTex = LoadTexture("assets/UI_screens/flying_island.png");
@@ -43,6 +45,9 @@ CharacterSelectionState::CharacterSelectionState(int numPlayers, LevelFactory fa
     islandIsPlayingSkill = false;
     islandScale = (float)GetScreenHeight() / (float)islandTex.width * 0.60;
     islandPos = { (float)GetScreenWidth() * 0.25f, (float)GetScreenHeight() * 0.50f };
+    islandAnimOffsetY = (float)GetScreenHeight(); // Start below screen
+    
+    introTimer = 0.0f;
 
     InitCards();
 }
@@ -72,12 +77,12 @@ void CharacterSelectionState::InitCards() {
     
     // Spread 6 cards nicely
     Vector2 positions[6] = {
-        {screenW * 0.75f, screenH * 0.35f},
-        {screenW * 0.50f, screenH * 0.35f},
-        {screenW * 0.75f, screenH * 0.35f},
-        {screenW * 0.25f, screenH * 0.65f},
-        {screenW * 0.50f, screenH * 0.65f},
-        {screenW * 0.75f, screenH * 0.65f}
+        {screenW * 0.52f, screenH * 0.28f},
+        {screenW * 0.70f, screenH * 0.28f},
+        {screenW * 0.88f, screenH * 0.28f},
+        {screenW * 0.52f, screenH * 0.70f},
+        {screenW * 0.70f, screenH * 0.70f},
+        {screenW * 0.88f, screenH * 0.70f}
     };
 
     int i = 0;
@@ -98,14 +103,17 @@ void CharacterSelectionState::InitCards() {
         card.charName = name;
         card.cardTex = cardBgTex;
         card.position = positions[i];
-        card.baseScale = 0.5f;
+        card.baseScale = (float)GetScreenHeight() / (float)cardBgTex.height * 0.36f;
         card.currentScale = card.baseScale;
         card.targetScale = card.baseScale;
         card.isHovered = false;
         card.isSelected = false;
+        card.animOffsetY = (float)GetScreenHeight(); // Start below screen
         
         float w = card.cardTex.width * card.baseScale;
         float h = card.cardTex.height * card.baseScale;
+        // std::cout << "checker: " << card.baseScale << " " << GetScreenHeight() << " " << 
+        //     cardBgTex.height << " " << h << std::endl;
         card.hitBox = {card.position.x - w/2.0f, card.position.y - h/2.0f, w, h};
         
         // Load Idle Animation
@@ -206,11 +214,6 @@ void CharacterSelectionState::Process() {
 
     if (isBackClicked) {
         isBackClicked = false;
-        // The MapSelectionState will be returned to since this state was pushed.
-        // Wait, if it was pushed, we can pop. If it was changed, we need a ChangeStateCommand.
-        // We will just change state back to MapSelectionState. Wait, the exact previous mode is lost if we don't pass it!
-        // The user didn't request a BACK button, but I'll add a simple PopStateCommand for it.
-        // Actually, if we use Pop, it returns to the MapSelectionState exactly as it was.
         isReturningToMenu = true;
         isTransitioningOut = true;
         transitionOut->Start(true);
@@ -227,8 +230,9 @@ void CharacterSelectionState::Process() {
                         isTransitioningOut = true;
                         transitionOut->Start(true);
                     } else {
-                        currentPlayerSelecting = 2; // Move to Player 2
-                        for (auto& c : cards) c.isSelected = false; // Reset selection
+                        isTransitioningToPlayer2 = true;
+                        isTransitioningOut = true;
+                        transitionOut->Start(true);
                     }
                 } else if (currentPlayerSelecting == 2) {
                     player2Choice = cards[i].charName;
@@ -289,18 +293,53 @@ void CharacterSelectionState::Update(float dt) {
         transitionOut->Update(dt);
         if (transitionOut->IsFinished()) {
             if (isReturningToMenu) {
-                this->PushStateCommand(std::make_unique<::PopStateCommand>());
+                if (backStateFactory) {
+                    this->PushStateCommand(std::make_unique<::ChangeStateCommand>(backStateFactory()));
+                } else {
+                    this->PushStateCommand(std::make_unique<::PopStateCommand>());
+                }
                 return;
             }
+            
+            if (isTransitioningToPlayer2) {
+                currentPlayerSelecting = 2;
+                for (auto& c : cards) c.isSelected = false;
+                isTransitioningToPlayer2 = false;
+                isTransitioningOut = false;
+                isTransitioningIn = true;
+                introTimer = 0.0f;
+                islandAnimOffsetY = (float)GetScreenHeight();
+                for (auto& c : cards) c.animOffsetY = (float)GetScreenHeight();
+                transitionIn->Start(false); // Restart transition in
+                return;
+            }
+            
+            std::string p1 = player1Choice;
+            std::string p2 = player2Choice;
+            LevelFactory factory = nextStateFactory;
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(
-                std::make_unique<LoadingState>([this]() { return nextStateFactory(player1Choice, player2Choice); }, 1.0f)
+                std::make_unique<LoadingState>([factory, p1, p2]() { return factory(p1, p2); }, 1.0f)
             ));
             return;
         }
     }
 
+    introTimer += dt;
+
+    // Animate Island (Spring bounce)
+    if (introTimer > 0.0f) {
+        islandAnimOffsetY = (float)GetScreenHeight() * exp(-4.0f * introTimer) * cos(12.0f * introTimer);
+    }
+
     // Update cards animations and logic
-    for (auto& card : cards) {
+    for (size_t i = 0; i < cards.size(); i++) {
+        auto& card = cards[i];
+        
+        // Intro animation
+        float cardT = introTimer - 0.1f * (i + 1); // Delay each card by 0.1s
+        if (cardT > 0.0f) {
+            card.animOffsetY = (float)GetScreenHeight() * exp(-4.0f * cardT) * cos(12.0f * cardT);
+        }
         if (card.isHovered || card.isSelected) {
             card.targetScale = card.baseScale * 1.15f;
         } else {
@@ -312,7 +351,7 @@ void CharacterSelectionState::Update(float dt) {
 
         float w = card.cardTex.width * card.currentScale;
         float h = card.cardTex.height * card.currentScale;
-        card.hitBox = {card.position.x - w/2.0f, card.position.y - h/2.0f, w, h};
+        card.hitBox = {card.position.x - w/2.0f, card.position.y + card.animOffsetY - h/2.0f, w, h};
         
         if (card.idleAnim) {
             card.idleAnim->update(dt);
@@ -325,11 +364,11 @@ void CharacterSelectionState::Update(float dt) {
 void CharacterSelectionState::Render(float alpha) const {
     ClearBackground(BLACK);
 
-    if (backgroundTex.id != 0) {
-        Rectangle src = { 0, 0, (float)backgroundTex.width, (float)backgroundTex.height };
-        Rectangle dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
-        DrawTexturePro(backgroundTex, src, dest, {0, 0}, 0.0f, WHITE);
-    }
+    // if (backgroundTex.id != 0) {
+    //     Rectangle src = { 0, 0, (float)backgroundTex.width, (float)backgroundTex.height };
+    //     Rectangle dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+    //     DrawTexturePro(backgroundTex, src, dest, {0, 0}, 0.0f, WHITE);
+    // }
 
     // Draw Title
     std::string titleStr = (currentPlayerSelecting == 1) ? "PLAYER 1: SELECT CHARACTER" : "PLAYER 2: SELECT CHARACTER";
@@ -337,7 +376,7 @@ void CharacterSelectionState::Render(float alpha) const {
     Vector2 textSize = MeasureTextEx(customFont, titleStr.c_str(), fontSize, 2.0f);
     Vector2 titlePos = { (GetScreenWidth() - textSize.x) / 2.0f, 30.0f };
     DrawTextEx(customFont, titleStr.c_str(), {titlePos.x + 4.0f, titlePos.y + 4.0f}, fontSize, 2.0f, {0, 0, 0, 200});
-    DrawTextEx(customFont, titleStr.c_str(), titlePos, fontSize, 2.0f, WHITE);
+    DrawTextEx(customFont, titleStr.c_str(), titlePos, fontSize, 2.0f, (currentPlayerSelecting == 1 ? Color({0, 255, 0, 255}) : Color({255, 102, 0, 255})));
 
     // Draw Island
     if (islandTex.id != 0) {
@@ -345,7 +384,7 @@ void CharacterSelectionState::Render(float alpha) const {
         float islandW = islandTex.width * islandScale;
         float islandH = islandTex.height * islandScale;
         Vector2 origin = { islandW / 2.0f, islandH / 2.0f };
-        DrawTexturePro(islandTex, src, {islandPos.x, islandPos.y, islandW, islandH}, origin, 0.0f, WHITE);
+        DrawTexturePro(islandTex, src, {islandPos.x, islandPos.y + islandAnimOffsetY, islandW, islandH}, origin, 0.0f, WHITE);
     }
 
     // Draw Selected Character on Island
@@ -364,8 +403,8 @@ void CharacterSelectionState::Render(float alpha) const {
         if (currentAnim) {
             Rectangle src = currentAnim->getCurrentFrame();
             // Flip x to face left maybe? Or just keep it as is
-            float scale = currentAnim->getScale() * 2.0f * islandScale; // Make it bigger on island and scale it with island
-            Rectangle dest = { islandPos.x, islandPos.y - (40.0f * islandScale), src.width * scale, src.height * scale };
+            float scale = islandTex.width * islandScale / src.width * 0.5f;
+            Rectangle dest = { islandPos.x, islandPos.y + islandAnimOffsetY - (45.0f * islandScale), src.width * scale, src.height * scale };
             Vector2 origin = { dest.width / 2.0f, dest.height / 2.0f };
             DrawTexturePro(currentAnim->getTexture(), src, dest, origin, 0.0f, WHITE);
         }
@@ -375,20 +414,17 @@ void CharacterSelectionState::Render(float alpha) const {
     for (const auto& card : cards) {
         if (card.cardTex.id != 0) {
             Rectangle src = { 0, 0, (float)card.cardTex.width, (float)card.cardTex.height };
-            Rectangle dest = { card.position.x, card.position.y, src.width * card.currentScale, src.height * card.currentScale };
+            Rectangle dest = { card.position.x, card.position.y + card.animOffsetY, src.width * card.currentScale, src.height * card.currentScale };
             Vector2 origin = { dest.width / 2.0f, dest.height / 2.0f };
             DrawTexturePro(card.cardTex, src, dest, origin, 0.0f, WHITE);
             
-            // Highlight if selected
-            if (card.isSelected) {
-                DrawRectangleLinesEx({dest.x - 4, dest.y - 4, dest.width + 8, dest.height + 8}, 4.0f, YELLOW);
-            }
+
 
             // Draw character idle on top of card
             if (card.idleAnim) {
                 Rectangle animSrc = card.idleAnim->getCurrentFrame();
-                float animScale = card.idleAnim->getScale() * card.currentScale * 1.5f;
-                Rectangle animDest = { card.position.x, card.position.y, 
+                float animScale = (card.hitBox.width * 0.85f) / (float)animSrc.width;
+                Rectangle animDest = { card.position.x, card.position.y + card.animOffsetY, 
                                        animSrc.width * animScale, animSrc.height * animScale };
                 Vector2 animOrigin = { animDest.width / 2.0f, animDest.height / 2.0f };
                 DrawTexturePro(card.idleAnim->getTexture(), animSrc, animDest, animOrigin, 0.0f, WHITE);
@@ -397,7 +433,7 @@ void CharacterSelectionState::Render(float alpha) const {
             // Draw character name
             int nameFontSize = 30 * card.currentScale;
             Vector2 nameSize = MeasureTextEx(customFont, card.charName.c_str(), nameFontSize, 1.0f);
-            Vector2 namePos = { card.position.x - nameSize.x / 2.0f, card.position.y + dest.height / 2.0f - nameSize.y - 10.0f * card.currentScale };
+            Vector2 namePos = { card.position.x - nameSize.x / 2.0f, card.position.y + card.animOffsetY + dest.height / 2.0f - nameSize.y - 10.0f * card.currentScale };
             DrawTextEx(customFont, card.charName.c_str(), namePos, nameFontSize, 1.0f, BLACK);
         }
     }
