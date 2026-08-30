@@ -120,9 +120,15 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- C:/msys64/ucrt64/include/c++/14.2.0/iostream \
- C:/msys64/ucrt64/include/c++/14.2.0/ostream \
- C:/msys64/ucrt64/include/c++/14.2.0/ios \
+ D:/Git/.SuperMarioPlus/include/command/StateCommands.h \
+ D:/Git/.SuperMarioPlus/include/core/StateManager.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/stack \
+ C:/msys64/ucrt64/include/c++/14.2.0/deque \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_deque.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/deque.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_stack.h \
+ D:/Git/.SuperMarioPlus/include/states/LoadingState.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/localefwd.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++locale.h \
@@ -131,9 +137,6 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: \
  C:/msys64/ucrt64/include/sec_api/stdio_s.h \
  C:/msys64/ucrt64/include/c++/14.2.0/cctype \
  C:/msys64/ucrt64/include/ctype.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/ios_base.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_classes.h \
- C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/ostream_insert.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/cxxabi_forced.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_string.h \
@@ -151,21 +154,173 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/cerrno \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/charconv.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_string.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/functional \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/std_function.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable_policy.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/array \
+ C:/msys64/ucrt64/include/c++/14.2.0/compare \
+ D:/Git/.SuperMarioPlus/include/states/MainMenuState.h \
+ D:/Git/.SuperMarioPlus/include/states/BaseLevelState.h \
+ D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
+ D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_heap.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/uniform_int_dist.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_algorithm_defs.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/iterator \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stream_iterator.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/streambuf_iterator.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/streambuf \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/ios_base.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_classes.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_classes.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/system_error \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/error_constants.h \
  C:/msys64/ucrt64/include/c++/14.2.0/stdexcept \
- C:/msys64/ucrt64/include/c++/14.2.0/streambuf \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/streambuf.tcc \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_ios.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/utility \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_relops.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/forward_list \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/forward_list.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/forward_list.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/map \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tree.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_map.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_multimap.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/valarray \
+ C:/msys64/ucrt64/include/c++/14.2.0/cmath \
+ C:/msys64/ucrt64/include/math.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/specfun.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/limits \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/gamma.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/special_function_util.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/bessel_function.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/beta_function.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/ell_integral.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/exp_integral.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/hypergeometric.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/legendre_function.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/modified_bessel_func.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/poly_hermite.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/poly_laguerre.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/tr1/riemann_zeta.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/valarray_array.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/valarray_array.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/valarray_before.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/slice_array.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/valarray_after.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/gslice.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/gslice_array.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/mask_array.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/indirect_array.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
+ C:/msys64/ucrt64/include/c++/14.2.0/version \
+ C:/msys64/ucrt64/include/c++/14.2.0/cassert \
+ C:/msys64/ucrt64/include/assert.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/cstring \
+ C:/msys64/ucrt64/include/string.h \
+ C:/msys64/ucrt64/include/sec_api/string_s.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/filesystem \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/fs_fwd.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/chrono.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/ratio \
+ C:/msys64/ucrt64/include/c++/14.2.0/ctime \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/parse_numbers.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/fs_path.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/locale \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets.h \
  C:/msys64/ucrt64/include/c++/14.2.0/cwctype \
  C:/msys64/ucrt64/include/wctype.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/ctype_base.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/streambuf_iterator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/ctype_inline.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets.tcc \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_ios.tcc \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/ostream.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets_nonio.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/time_members.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/messages_members.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/codecvt.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets_nonio.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_conv.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/iomanip \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/quoted_string.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/sstream \
  C:/msys64/ucrt64/include/c++/14.2.0/istream \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc
+ C:/msys64/ucrt64/include/c++/14.2.0/ios \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_ios.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_ios.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/ostream \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/ostream.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/sstream.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/codecvt \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/fs_dir.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/fs_ops.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/numeric \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/any \
+ D:/Git/.SuperMarioPlus/include/environment/MapCamera.h \
+ D:/Git/.SuperMarioPlus/include/environment/ICameraMode.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/queue \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_queue.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/CombatSystem.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/ICollisionDetector.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
+ D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
+ D:/Git/.SuperMarioPlus/include/core/InputHandler.h \
+ D:/Git/.SuperMarioPlus/include/command/IPlayerCommand.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/Player.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
+ D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
+ D:/Git/.SuperMarioPlus/include/entity/Entity.h \
+ D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
+ D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
+ D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
+ D:/Git/.SuperMarioPlus/include/entity/Effects.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/BuffManager.h \
+ D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerStates.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerIdleState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerRunState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerJumpState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerFallState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerCrouchState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerHurtState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerDieState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSkillState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Skill/ISkill.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSwimState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerClimbState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/BaseItem.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/ItemAtlasRegistry.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneManager.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneScript.h \
+ D:/Git/.SuperMarioPlus/include/dialogue/DialogueBox.h \
+ D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/unordered_set \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_set.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneTrigger.h \
+ D:/Git/.SuperMarioPlus/include/ui/IngameSettingsPanel.h \
+ D:/Git/.SuperMarioPlus/include/ui/ButtonGroup.h \
+ D:/Git/.SuperMarioPlus/include/ui/Buttons.h \
+ D:/Git/.SuperMarioPlus/include/ui/IMenuPanel.h \
+ D:/Git/.SuperMarioPlus/include/core/SaveData.h \
+ D:/Git/.SuperMarioPlus/include/ui/CharacterInfoPanel.h \
+ D:/Git/.SuperMarioPlus/include/ui/UIAtlasAnimator.h \
+ D:/Git/.SuperMarioPlus/include/states/World01State.h \
+ D:/Git/.SuperMarioPlus/include/states/World02State.h \
+ D:/Git/.SuperMarioPlus/include/states/World03State.h \
+ D:/Git/.SuperMarioPlus/include/states/World04State.h \
+ D:/Git/.SuperMarioPlus/include/states/World05State.h \
+ D:/Git/.SuperMarioPlus/include/states/World06State.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/iostream

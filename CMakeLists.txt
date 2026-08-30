@@ -72,6 +72,7 @@ set(SOURCES
     src/ui/PlayerHUD.cpp
     src/ui/UIAtlasAnimator.cpp
     src/ui/CharacterInfoPanel.cpp
+    src/ui/IngameSettingsPanel.cpp
     src/ui/transitions/IrisTransition.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
@@ -154,6 +155,7 @@ set(SOURCES
     src/states/World06State.cpp
     src/states/MainMenuState.cpp
     src/states/MapSelectionState.cpp
+    src/states/CharacterSelectionState.cpp
     src/states/LoadingState.cpp
     src/ui/ButtonGroup.cpp
     src/environment/CameraFollowMode.cpp

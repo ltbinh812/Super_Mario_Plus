@@ -62,6 +62,7 @@ private:
     std::unique_ptr<ITransition> transitionIn;
     bool isChangingState;
     bool isTransitioningIn;
+    bool isPvPModeSelected = false;
 
 public:
     MainMenuState();

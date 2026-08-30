@@ -271,4 +271,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj: \
  D:/Git/.SuperMarioPlus/include/entity/IMobState.h \
  D:/Git/.SuperMarioPlus/include/entity/EnemyStates/EnemyRunState.h \
  D:/Git/.SuperMarioPlus/include/entity/BossStates/BossIntroState.h \
- C:/msys64/ucrt64/include/c++/14.2.0/iostream
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossHurtState.h \
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossDieState.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/iostream \
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossDebugInputState.h

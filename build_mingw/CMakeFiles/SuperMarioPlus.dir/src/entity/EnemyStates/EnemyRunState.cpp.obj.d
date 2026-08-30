@@ -102,23 +102,14 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator_args.h \
  C:/msys64/ucrt64/include/c++/14.2.0/tuple \
- D:/Git/.SuperMarioPlus/include/entity/Mob.h \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
  D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
- C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
- C:/msys64/ucrt64/include/stdint.h \
- C:/msys64/ucrt64/include/c++/14.2.0/vector \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_uninitialized.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/functional \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/std_function.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/typeinfo \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
@@ -127,6 +118,22 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/vector \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_uninitialized.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/array \
+ C:/msys64/ucrt64/include/c++/14.2.0/compare \
+ D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
+ C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
+ C:/msys64/ucrt64/include/stdint.h \
+ D:/Git/.SuperMarioPlus/include/entity/Mob.h \
+ D:/Git/.SuperMarioPlus/include/entity/Entity.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
+ D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
  D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
@@ -136,11 +143,6 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tempbuf.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_algorithm_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- C:/msys64/ucrt64/include/c++/14.2.0/functional \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/std_function.h \
- C:/msys64/ucrt64/include/c++/14.2.0/typeinfo \
- C:/msys64/ucrt64/include/c++/14.2.0/array \
- C:/msys64/ucrt64/include/c++/14.2.0/compare \
  C:/msys64/ucrt64/include/c++/14.2.0/iterator \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stream_iterator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/streambuf_iterator.h \
@@ -265,8 +267,6 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
  D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
  D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
  D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
  D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
  D:/Git/.SuperMarioPlus/include/entity/Effects.h \

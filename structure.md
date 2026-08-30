@@ -74,6 +74,7 @@ SuperMarioPlus/
 │   │   ├── Platform.h
 │   │   └── TileMap.h
 │   ├── states/
+│   │   ├── CharacterSelectionState.h
 │   │   ├── CharacterState.h
 │   │   ├── GameState.h
 │   │   ├── IntroState.h
@@ -90,6 +91,7 @@ SuperMarioPlus/
 │       ├── CharacterSelectionOverlay.h
 │       ├── HUD.h
 │       ├── PlayerHUD.h
+│       ├── IngameSettingsPanel.h
 │       ├── OverlayUI.h
 │       ├── SettingsOverlay.h
 │       └── UIComponent.h
@@ -128,6 +130,7 @@ SuperMarioPlus/
 │   │   ├── Platform.cpp
 │   │   └── TileMap.cpp
 │   ├── states/
+│   │   ├── CharacterSelectionState.cpp
 │   │   ├── GameState.cpp
 │   │   ├── IntroState.cpp
 │   │   ├── LoadingState.cpp
@@ -178,6 +181,7 @@ SuperMarioPlus/
 - **`LoadingState`**: State đóng vai trò như một wrapper, hiển thị thanh tiến trình loading và đếm thời gian trước khi chuyển sang state đích (State Pattern).
 - **`MenuState` (`Menu`)**: Màn hình chọn nhân vật và bắt đầu game.
 - **`MapSelectionState`**: Màn hình chọn map hiển thị `map_selection.png` và xử lý hiệu ứng mở rộng vòng tròn.
+- **`CharacterSelectionState`**: Màn hình chọn nhân vật độc lập, sử dụng Factory Lambda để cho phép chọn nhân vật linh hoạt trước khi load vào World hoặc Custom Map.
 - **`World1_1State` (`World`)**: Quản lý màn hình chơi chính (Mario, Quái, Môi trường). Bắt các OverlayUI khi ấn phím đặc biệt.
 - **`SettingState`**: Màn hình thiết lập hệ thống từ Intro.
 - **`CharacterState` / `PlayerStates`**: Base interface và các lớp triển khai cho State Pattern của nhân vật (Idle, Running, Jumping).
@@ -232,7 +236,8 @@ SuperMarioPlus/
 - **`Coin`, `Chest`, `Spring`, ...**: Các class Item cụ thể kế thừa từ `BaseItem`.
 
 #### UI
-- **`HUD`**: Lớp chứa logic in thông tin lên màn hình (Máu, Điểm, Thời gian).
+- **`HUD` / `PlayerHUD`**: Hiển thị avatar tròn, thanh HP/MP/Breath và ô chứa Item của người chơi.
+- **`IngameSettingsPanel`**: Giao diện Settings in-game (Controls, Sounds, Quit to Menu) được kích hoạt qua nút bánh răng cưa (cogwheel) ở góc trên bên trái trong 6 World và Custom Map.
 - **`OverlayUI`**: Interface cho giao diện hiển thị đè lên màn chơi (Settings, Chọn nhân vật), hỗ trợ `Render(float alpha) const`.
 - **`SettingsOverlay`**: Menu tùy chỉnh đè lên World (Save, Load, Về Menu chính).
 - **`CharacterSelectionOverlay`**: UI cho phép 2 người chơi swap chọn nhân vật đè lên World (Mario, Luigi, v.v.).

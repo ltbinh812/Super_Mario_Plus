@@ -29,11 +29,35 @@ void MapCamera::UpdateZoom() {
     camera.offset = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
 }
 
-void MapCamera::Update(Vector2 targetPos, Vector2 playerVelocity, int mapWidth, int mapHeight, float dt) {
-    // 1. Dynamic Zooming
+void MapCamera::Update(Vector2 targetPos, Vector2 playerVelocity, int mapWidth, int mapHeight, float dt, const Vector2* targetPos2) {
+    // 1. Calculate actual target and dynamic zooming
+    Vector2 actualTarget = targetPos;
     int screenH = GetScreenHeight();
-    if (screenH > 0 && fixedViewportHeight > 0.0f) {
-        float baseZoom = (float)screenH / fixedViewportHeight;
+    float baseZoom = (screenH > 0 && fixedViewportHeight > 0.0f) ? (float)screenH / fixedViewportHeight : 1.0f;
+
+    if (targetPos2 != nullptr) {
+        // Calculate midpoint
+        actualTarget.x = (targetPos.x + targetPos2->x) / 2.0f;
+        actualTarget.y = (targetPos.y + targetPos2->y) / 2.0f;
+        
+        // Calculate dynamic zoom based on distance
+        float distanceX = std::abs(targetPos.x - targetPos2->x);
+        float distanceY = std::abs(targetPos.y - targetPos2->y);
+        
+        float screenW = (float)GetScreenWidth();
+        
+        // Padding from edges
+        float paddingX = screenW * 0.3f; // 15% on each side
+        float paddingY = screenH * 0.3f; 
+        
+        float requiredZoomX = (screenW - paddingX) / (distanceX > 1.0f ? distanceX : 1.0f);
+        float requiredZoomY = (screenH - paddingY) / (distanceY > 1.0f ? distanceY : 1.0f);
+        
+        float requiredZoom = std::min(requiredZoomX, requiredZoomY);
+        
+        // Cho phép zoom out vô hạn (không giới hạn minZoom), nhưng không bao giờ zoom in vượt quá baseZoom
+        targetZoom = std::min(requiredZoom, baseZoom);
+    } else {
         if (targetZoom == 0.0f) targetZoom = baseZoom; // Default
     }
     
@@ -50,11 +74,11 @@ void MapCamera::Update(Vector2 targetPos, Vector2 playerVelocity, int mapWidth, 
     float topEdge = logicalTarget.y - deadzoneSize.y / 2.0f;
     float bottomEdge = logicalTarget.y + deadzoneSize.y / 2.0f;
 
-    if (targetPos.x < leftEdge) logicalTarget.x -= (leftEdge - targetPos.x);
-    else if (targetPos.x > rightEdge) logicalTarget.x += (targetPos.x - rightEdge);
+    if (actualTarget.x < leftEdge) logicalTarget.x -= (leftEdge - actualTarget.x);
+    else if (actualTarget.x > rightEdge) logicalTarget.x += (actualTarget.x - rightEdge);
 
-    if (targetPos.y < topEdge) logicalTarget.y -= (topEdge - targetPos.y);
-    else if (targetPos.y > bottomEdge) logicalTarget.y += (targetPos.y - bottomEdge);
+    if (actualTarget.y < topEdge) logicalTarget.y -= (topEdge - actualTarget.y);
+    else if (actualTarget.y > bottomEdge) logicalTarget.y += (actualTarget.y - bottomEdge);
 
     // 3. Target Look-ahead
     float targetLookAheadX = 0.0f;
@@ -85,12 +109,14 @@ void MapCamera::Update(Vector2 targetPos, Vector2 playerVelocity, int mapWidth, 
         float minX = viewW / 2.0f;
         float maxX = std::max(minX, (float)mapWidth - viewW / 2.0f);
         camera.target.x = std::clamp(camera.target.x, minX, maxX);
+        logicalTarget.x = std::clamp(logicalTarget.x, minX, maxX);
     }
 
     if (mapHeight > 0) {
         float minY = viewH / 2.0f;
         float maxY = std::max(minY, (float)mapHeight - viewH / 2.0f);
         camera.target.y = std::clamp(camera.target.y, minY, maxY);
+        logicalTarget.y = std::clamp(logicalTarget.y, minY, maxY);
     }
 }
 

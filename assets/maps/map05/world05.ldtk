@@ -8767,7 +8767,7 @@
 			]
 		},
 		{
-			"identifier": "Boss_sasuke",
+			"identifier": "Boss_sasukeboss",
 			"uid": 378,
 			"tags": [],
 			"exportToToc": false,
@@ -9453,38 +9453,6 @@
 							"__worldY": 368
 						},
 						{
-							"__identifier": "Starting_position",
-							"__grid": [18,25],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#C0CBDC",
-							"iid": "f5ab9920-96d0-11f1-bbeb-d76b59b77c58",
-							"width": 16,
-							"height": 16,
-							"defUid": 355,
-							"px": [288,400],
-							"fieldInstances": [],
-							"__worldX": 288,
-							"__worldY": 400
-						},
-						{
-							"__identifier": "Starting_position",
-							"__grid": [12,25],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#C0CBDC",
-							"iid": "0f6a7ac0-96d0-11f1-8095-d96fb6d4cce5",
-							"width": 16,
-							"height": 16,
-							"defUid": 355,
-							"px": [192,400],
-							"fieldInstances": [],
-							"__worldX": 192,
-							"__worldY": 400
-						},
-						{
 							"__identifier": "CutsceneTrigger",
 							"__grid": [68,21],
 							"__pivot": [0,0],
@@ -9530,23 +9498,36 @@
 							"__worldY": 432
 						},
 						{
-							"__identifier": "Boss_doflam",
-							"__grid": [75,25],
+							"__identifier": "Starting_position",
+							"__grid": [60,22],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#C0CBDC",
+							"iid": "2d64c8a0-96d0-11f1-81c0-33a4e4539968",
+							"width": 16,
+							"height": 16,
+							"defUid": 355,
+							"px": [960,352],
+							"fieldInstances": [],
+							"__worldX": 960,
+							"__worldY": 352
+						},
+						{
+							"__identifier": "Boss_sasukeboss",
+							"__grid": [77,23],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
-							"__smartColor": "#5A6988",
-							"iid": "ffd3a4f0-96d0-11f1-9e0f-abc0869bc220",
+							"__smartColor": "#181425",
+							"iid": "e91fc020-96d0-11f1-81c0-4b2dde6ddd2e",
 							"width": 32,
 							"height": 32,
-							"defUid": 368,
-							"px": [1208,416],
-							"fieldInstances": [{ "__identifier": "cutsceneId", "__type": "String", "__value": "test", "__tile": null, "defUid": 369, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["test"]
-							}] }],
-							"__worldX": 1208,
-							"__worldY": 416
+							"defUid": 378,
+							"px": [1240,384],
+							"fieldInstances": [{ "__identifier": "cutsceneId", "__type": "String", "__value": null, "__tile": null, "defUid": 379, "realEditorValues": [] }],
+							"__worldX": 1240,
+							"__worldY": 384
 						}
 					]
 				},

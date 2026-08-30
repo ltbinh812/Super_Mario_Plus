@@ -98,8 +98,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator_args.h \
  C:/msys64/ucrt64/include/c++/14.2.0/tuple \
- D:/Git/.SuperMarioPlus/include/entity/EntityFactory.h \
- D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
  D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
@@ -122,12 +121,15 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/array \
  C:/msys64/ucrt64/include/c++/14.2.0/compare \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
  C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  C:/msys64/ucrt64/include/stdint.h \
+ D:/Git/.SuperMarioPlus/include/entity/EntityFactory.h \
+ D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
+ D:/Git/.SuperMarioPlus/include/entity/Entity.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
+ D:/Git/.SuperMarioPlus/include/entity/Animation.h \
  D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
  D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
@@ -262,8 +264,6 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
  D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
  D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
  D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
  D:/Git/.SuperMarioPlus/include/entity/Effects.h \
  D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \

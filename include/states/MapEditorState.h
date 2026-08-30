@@ -61,8 +61,8 @@ private:
 
     // --- State flags ---
     bool mapDirty_          = true;
-    bool showSaveLoadUI_    = false;
-    bool saveLoadModeIsSave_= true;
+    bool showSaveLoadUI_ = false;
+    SaveLoadMode saveLoadMode_ = SaveLoadMode::Save;
 
     // --- Back Button ---
     Texture2D backBtnTex_;

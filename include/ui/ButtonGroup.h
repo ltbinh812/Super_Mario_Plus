@@ -116,6 +116,11 @@ private:
     bool isListeningForKey_ = false;
     KeybindRow* listeningRow_ = nullptr;
     
+    // Quit to Menu Support
+    bool hasQuitToMenu_ = false;
+    std::function<void()> onQuitToMenu_;
+    MenuButtonState quitConfirmBtn_;
+    
     // Helper to load cached textures for keybind rows
     void LoadSettingsTextures();
     
@@ -147,6 +152,10 @@ public:
     
     void SetCustomFont(Font font) { customFont_ = font; hasCustomFont_ = true; }
     void UpdateLayout(float startY, float gap);
+    
+    void SetOnQuitToMenu(std::function<void()> callback);
+    void ResetActiveTab() { activeTab_ = "Controls"; scrollY_ = 0.0f; }
+    const std::string& GetActiveTab() const { return activeTab_; }
     
     void Update(float dt) override;
     void Render() const override;

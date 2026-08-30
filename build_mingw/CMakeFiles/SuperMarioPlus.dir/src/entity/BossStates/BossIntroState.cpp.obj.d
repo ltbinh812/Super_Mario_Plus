@@ -269,5 +269,5 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj: \
  D:/Git/.SuperMarioPlus/include/entity/Effects.h \
  D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
  D:/Git/.SuperMarioPlus/include/entity/Skill/IEnemySkill.h \
- D:/Git/.SuperMarioPlus/include/entity/EnemyStates/EnemyIdleState.h \
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossIdleState.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

@@ -13,14 +13,14 @@ void EditorSaveLoadUI::init() {
 void EditorSaveLoadUI::refreshSlotStatus() {
     for (int i = 0; i < 10; ++i) {
         if (CustomMapSerializer::slotExists(i)) {
-            slotStatus_[i] = "Slot " + std::to_string(i) + " (Overwrite)";
+            slotStatus_[i] = "Slot " + std::to_string(i) + " (Saved)";
         } else {
             slotStatus_[i] = "Slot " + std::to_string(i) + " (Empty)";
         }
     }
 }
 
-void EditorSaveLoadUI::render(float screenW, float screenH, bool isSaveMode) const {
+void EditorSaveLoadUI::render(float screenW, float screenH, SaveLoadMode mode) const {
     // Darken background
     DrawRectangle(0, 0, (int)screenW, (int)screenH, Color{0, 0, 0, 150});
 
@@ -34,7 +34,7 @@ void EditorSaveLoadUI::render(float screenW, float screenH, bool isSaveMode) con
     DrawRectangleLinesEx({panelX, panelY, panelW, panelH}, 2.0f, Color{100, 100, 150, 255});
 
     // Title
-    const char* title = isSaveMode ? "SAVE MAP" : "LOAD MAP";
+    const char* title = (mode == SaveLoadMode::Save) ? "SAVE MAP" : "LOAD MAP";
     int titleW = MeasureText(title, 20);
     DrawText(title, (int)(panelX + (panelW - titleW) / 2), (int)(panelY + 20), 20, WHITE);
 
@@ -52,7 +52,7 @@ void EditorSaveLoadUI::render(float screenW, float screenH, bool isSaveMode) con
         
         // Highlight empty slots differently when loading (can't load empty)
         bool exists = (slotStatus_[i].find("Empty") == std::string::npos);
-        if (!isSaveMode && !exists) {
+        if (mode == SaveLoadMode::Load && !exists) {
             bg = Color{40, 40, 50, 255}; // Dim if loading and empty
         }
 
@@ -60,7 +60,7 @@ void EditorSaveLoadUI::render(float screenW, float screenH, bool isSaveMode) con
         DrawRectangleLinesEx(btnRect, 1.0f, Color{100, 100, 140, 255});
 
         int textW = MeasureText(slotStatus_[i].c_str(), 16);
-        Color tc = (!isSaveMode && !exists) ? Color{120, 120, 130, 255} : WHITE;
+        Color tc = (mode == SaveLoadMode::Load && !exists) ? Color{120, 120, 130, 255} : WHITE;
         DrawText(slotStatus_[i].c_str(), (int)(btnRect.x + 20), (int)(btnRect.y + 8), 16, tc);
     }
 

@@ -41,7 +41,6 @@ public:
     const std::string& getSelectedEntityType() const { return entityPalette_.getSelectedId(); }
     EditorToolType     getActiveTool()         const { return activeTool_; }
 
-    // --- Action request flags (reset mỗi frame) ---
     bool requestSave()   const { return reqSave_; }
     bool requestLoad()   const { return reqLoad_; }
     bool requestExit()   const { return reqExit_; }

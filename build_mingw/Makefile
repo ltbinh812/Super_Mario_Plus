@@ -872,6 +872,102 @@ src/entity/Boss.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.s
 .PHONY : src/entity/Boss.cpp.s
 
+src/entity/BossStates/BossAttackState.obj: src/entity/BossStates/BossAttackState.cpp.obj
+.PHONY : src/entity/BossStates/BossAttackState.obj
+
+# target to build an object file
+src/entity/BossStates/BossAttackState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj
+.PHONY : src/entity/BossStates/BossAttackState.cpp.obj
+
+src/entity/BossStates/BossAttackState.i: src/entity/BossStates/BossAttackState.cpp.i
+.PHONY : src/entity/BossStates/BossAttackState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossAttackState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.i
+.PHONY : src/entity/BossStates/BossAttackState.cpp.i
+
+src/entity/BossStates/BossAttackState.s: src/entity/BossStates/BossAttackState.cpp.s
+.PHONY : src/entity/BossStates/BossAttackState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossAttackState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.s
+.PHONY : src/entity/BossStates/BossAttackState.cpp.s
+
+src/entity/BossStates/BossDebugInputState.obj: src/entity/BossStates/BossDebugInputState.cpp.obj
+.PHONY : src/entity/BossStates/BossDebugInputState.obj
+
+# target to build an object file
+src/entity/BossStates/BossDebugInputState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj
+.PHONY : src/entity/BossStates/BossDebugInputState.cpp.obj
+
+src/entity/BossStates/BossDebugInputState.i: src/entity/BossStates/BossDebugInputState.cpp.i
+.PHONY : src/entity/BossStates/BossDebugInputState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossDebugInputState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.i
+.PHONY : src/entity/BossStates/BossDebugInputState.cpp.i
+
+src/entity/BossStates/BossDebugInputState.s: src/entity/BossStates/BossDebugInputState.cpp.s
+.PHONY : src/entity/BossStates/BossDebugInputState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossDebugInputState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.s
+.PHONY : src/entity/BossStates/BossDebugInputState.cpp.s
+
+src/entity/BossStates/BossDieState.obj: src/entity/BossStates/BossDieState.cpp.obj
+.PHONY : src/entity/BossStates/BossDieState.obj
+
+# target to build an object file
+src/entity/BossStates/BossDieState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj
+.PHONY : src/entity/BossStates/BossDieState.cpp.obj
+
+src/entity/BossStates/BossDieState.i: src/entity/BossStates/BossDieState.cpp.i
+.PHONY : src/entity/BossStates/BossDieState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossDieState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.i
+.PHONY : src/entity/BossStates/BossDieState.cpp.i
+
+src/entity/BossStates/BossDieState.s: src/entity/BossStates/BossDieState.cpp.s
+.PHONY : src/entity/BossStates/BossDieState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossDieState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.s
+.PHONY : src/entity/BossStates/BossDieState.cpp.s
+
+src/entity/BossStates/BossHurtState.obj: src/entity/BossStates/BossHurtState.cpp.obj
+.PHONY : src/entity/BossStates/BossHurtState.obj
+
+# target to build an object file
+src/entity/BossStates/BossHurtState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj
+.PHONY : src/entity/BossStates/BossHurtState.cpp.obj
+
+src/entity/BossStates/BossHurtState.i: src/entity/BossStates/BossHurtState.cpp.i
+.PHONY : src/entity/BossStates/BossHurtState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossHurtState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.i
+.PHONY : src/entity/BossStates/BossHurtState.cpp.i
+
+src/entity/BossStates/BossHurtState.s: src/entity/BossStates/BossHurtState.cpp.s
+.PHONY : src/entity/BossStates/BossHurtState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossHurtState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.s
+.PHONY : src/entity/BossStates/BossHurtState.cpp.s
+
 src/entity/BossStates/BossIdleState.obj: src/entity/BossStates/BossIdleState.cpp.obj
 .PHONY : src/entity/BossStates/BossIdleState.obj
 
@@ -919,6 +1015,78 @@ src/entity/BossStates/BossIntroState.s: src/entity/BossStates/BossIntroState.cpp
 src/entity/BossStates/BossIntroState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.s
 .PHONY : src/entity/BossStates/BossIntroState.cpp.s
+
+src/entity/BossStates/BossPatrolState.obj: src/entity/BossStates/BossPatrolState.cpp.obj
+.PHONY : src/entity/BossStates/BossPatrolState.obj
+
+# target to build an object file
+src/entity/BossStates/BossPatrolState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj
+.PHONY : src/entity/BossStates/BossPatrolState.cpp.obj
+
+src/entity/BossStates/BossPatrolState.i: src/entity/BossStates/BossPatrolState.cpp.i
+.PHONY : src/entity/BossStates/BossPatrolState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossPatrolState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.i
+.PHONY : src/entity/BossStates/BossPatrolState.cpp.i
+
+src/entity/BossStates/BossPatrolState.s: src/entity/BossStates/BossPatrolState.cpp.s
+.PHONY : src/entity/BossStates/BossPatrolState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossPatrolState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.s
+.PHONY : src/entity/BossStates/BossPatrolState.cpp.s
+
+src/entity/BossStates/BossRunState.obj: src/entity/BossStates/BossRunState.cpp.obj
+.PHONY : src/entity/BossStates/BossRunState.obj
+
+# target to build an object file
+src/entity/BossStates/BossRunState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj
+.PHONY : src/entity/BossStates/BossRunState.cpp.obj
+
+src/entity/BossStates/BossRunState.i: src/entity/BossStates/BossRunState.cpp.i
+.PHONY : src/entity/BossStates/BossRunState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossRunState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.i
+.PHONY : src/entity/BossStates/BossRunState.cpp.i
+
+src/entity/BossStates/BossRunState.s: src/entity/BossStates/BossRunState.cpp.s
+.PHONY : src/entity/BossStates/BossRunState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossRunState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.s
+.PHONY : src/entity/BossStates/BossRunState.cpp.s
+
+src/entity/BossStates/BossSkillState.obj: src/entity/BossStates/BossSkillState.cpp.obj
+.PHONY : src/entity/BossStates/BossSkillState.obj
+
+# target to build an object file
+src/entity/BossStates/BossSkillState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj
+.PHONY : src/entity/BossStates/BossSkillState.cpp.obj
+
+src/entity/BossStates/BossSkillState.i: src/entity/BossStates/BossSkillState.cpp.i
+.PHONY : src/entity/BossStates/BossSkillState.i
+
+# target to preprocess a source file
+src/entity/BossStates/BossSkillState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.i
+.PHONY : src/entity/BossStates/BossSkillState.cpp.i
+
+src/entity/BossStates/BossSkillState.s: src/entity/BossStates/BossSkillState.cpp.s
+.PHONY : src/entity/BossStates/BossSkillState.s
+
+# target to generate assembly for a file
+src/entity/BossStates/BossSkillState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.s
+.PHONY : src/entity/BossStates/BossSkillState.cpp.s
 
 src/entity/Effects.obj: src/entity/Effects.cpp.obj
 .PHONY : src/entity/Effects.obj
@@ -2768,6 +2936,30 @@ src/ui/CharacterInfoPanel.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.s
 .PHONY : src/ui/CharacterInfoPanel.cpp.s
 
+src/ui/IngameSettingsPanel.obj: src/ui/IngameSettingsPanel.cpp.obj
+.PHONY : src/ui/IngameSettingsPanel.obj
+
+# target to build an object file
+src/ui/IngameSettingsPanel.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj
+.PHONY : src/ui/IngameSettingsPanel.cpp.obj
+
+src/ui/IngameSettingsPanel.i: src/ui/IngameSettingsPanel.cpp.i
+.PHONY : src/ui/IngameSettingsPanel.i
+
+# target to preprocess a source file
+src/ui/IngameSettingsPanel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.i
+.PHONY : src/ui/IngameSettingsPanel.cpp.i
+
+src/ui/IngameSettingsPanel.s: src/ui/IngameSettingsPanel.cpp.s
+.PHONY : src/ui/IngameSettingsPanel.s
+
+# target to generate assembly for a file
+src/ui/IngameSettingsPanel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\SuperMarioPlus.dir\build.make CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.s
+.PHONY : src/ui/IngameSettingsPanel.cpp.s
+
 src/ui/PlayerHUD.obj: src/ui/PlayerHUD.cpp.obj
 .PHONY : src/ui/PlayerHUD.obj
 
@@ -2942,12 +3134,33 @@ help:
 	@echo ... src/entity/Boss.obj
 	@echo ... src/entity/Boss.i
 	@echo ... src/entity/Boss.s
+	@echo ... src/entity/BossStates/BossAttackState.obj
+	@echo ... src/entity/BossStates/BossAttackState.i
+	@echo ... src/entity/BossStates/BossAttackState.s
+	@echo ... src/entity/BossStates/BossDebugInputState.obj
+	@echo ... src/entity/BossStates/BossDebugInputState.i
+	@echo ... src/entity/BossStates/BossDebugInputState.s
+	@echo ... src/entity/BossStates/BossDieState.obj
+	@echo ... src/entity/BossStates/BossDieState.i
+	@echo ... src/entity/BossStates/BossDieState.s
+	@echo ... src/entity/BossStates/BossHurtState.obj
+	@echo ... src/entity/BossStates/BossHurtState.i
+	@echo ... src/entity/BossStates/BossHurtState.s
 	@echo ... src/entity/BossStates/BossIdleState.obj
 	@echo ... src/entity/BossStates/BossIdleState.i
 	@echo ... src/entity/BossStates/BossIdleState.s
 	@echo ... src/entity/BossStates/BossIntroState.obj
 	@echo ... src/entity/BossStates/BossIntroState.i
 	@echo ... src/entity/BossStates/BossIntroState.s
+	@echo ... src/entity/BossStates/BossPatrolState.obj
+	@echo ... src/entity/BossStates/BossPatrolState.i
+	@echo ... src/entity/BossStates/BossPatrolState.s
+	@echo ... src/entity/BossStates/BossRunState.obj
+	@echo ... src/entity/BossStates/BossRunState.i
+	@echo ... src/entity/BossStates/BossRunState.s
+	@echo ... src/entity/BossStates/BossSkillState.obj
+	@echo ... src/entity/BossStates/BossSkillState.i
+	@echo ... src/entity/BossStates/BossSkillState.s
 	@echo ... src/entity/Effects.obj
 	@echo ... src/entity/Effects.i
 	@echo ... src/entity/Effects.s
@@ -3179,6 +3392,9 @@ help:
 	@echo ... src/ui/CharacterInfoPanel.obj
 	@echo ... src/ui/CharacterInfoPanel.i
 	@echo ... src/ui/CharacterInfoPanel.s
+	@echo ... src/ui/IngameSettingsPanel.obj
+	@echo ... src/ui/IngameSettingsPanel.i
+	@echo ... src/ui/IngameSettingsPanel.s
 	@echo ... src/ui/PlayerHUD.obj
 	@echo ... src/ui/PlayerHUD.i
 	@echo ... src/ui/PlayerHUD.s

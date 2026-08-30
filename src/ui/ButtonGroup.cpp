@@ -230,6 +230,24 @@ void ButtonGroup::AddSlider(const std::string& label, std::function<float()> get
     sliders_.push_back(row);
 }
 
+void ButtonGroup::SetOnQuitToMenu(std::function<void()> callback) {
+    LoadSettingsTextures();
+    hasQuitToMenu_ = true;
+    onQuitToMenu_ = callback;
+    
+    quitConfirmBtn_.texNormal = barTex_;
+    quitConfirmBtn_.texPress = barPressTex_;
+    quitConfirmBtn_.action = "QuitConfirm";
+    quitConfirmBtn_.labelText = "QUIT TO MENU";
+    
+    float w = 150.0f * btnScale_;
+    float h = quitConfirmBtn_.texNormal.height * btnScale_ * 1.2f;
+    quitConfirmBtn_.btn = Button();
+    quitConfirmBtn_.btn.setSize({w, h});
+    quitConfirmBtn_.btn.setOnClick(callback);
+    quitConfirmBtn_.isVisible = true;
+}
+
 
 void ButtonGroup::UpdateLayout(float startY, float gap) {
     // Setup Scissor Area for scrolling content
@@ -302,7 +320,13 @@ void ButtonGroup::UpdateLayout(float startY, float gap) {
     float maxY = std::max(rowY, sliderY);
     maxScrollY_ = std::max(0.0f, (maxY - startY) - scissorArea_.height + 20.0f * panelScale_);
 
-    
+    if (hasQuitToMenu_) {
+        float btnW = quitConfirmBtn_.btn.getSize().x;
+        float qX = panelPos_.x + (panelW_ - btnW) / 2.0f + 25.0f * panelScale_;
+        float qY = startY + 70.0f * panelScale_;
+        quitConfirmBtn_.btn.setPosition({qX, qY});
+    }
+
     if (hasHeaderBtn_) {
         float headerY = panelPos_.y + 20.0f * panelScale_;
         float undoX = panelPos_.x + 15.0f * panelScale_;
@@ -415,6 +439,11 @@ void ButtonGroup::Update(float dt) {
             tab.btn.update();
         }
     }
+
+    // Check click on Quit Confirm button
+    if (hasQuitToMenu_ && (activeTab_ == "Quit to Menu" || activeTab_ == "Quit")) {
+        quitConfirmBtn_.btn.update();
+    }
     
     if (!anyHovered) {
         hoveredIndex_ = -1;
@@ -511,6 +540,11 @@ void ButtonGroup::HandleInput(Vector2 mousePos, bool mousePressed, bool mouseRel
             if (mouseReleased) {
                 row.isDragging = false;
             }
+        }
+    } else if (activeTab_ == "Quit to Menu" || activeTab_ == "Quit") {
+        if (hasQuitToMenu_) {
+            Vector2 scrolledMouse = { mousePos.x, mousePos.y + scrollY_ };
+            quitConfirmBtn_.btn.handleInput(scrolledMouse, mousePressed, mouseReleased);
         }
     }
 
@@ -709,6 +743,34 @@ void ButtonGroup::Render() const {
             // Draw Percentage
             std::string perc = std::to_string((int)(val * 100)) + "%";
             DrawText(perc.c_str(), dest.x + dest.width + 15.0f * panelScale_, barCenterY - fontSize/2.0f, fontSize, BLACK);
+        }
+    } else if (activeTab_ == "Quit to Menu" || activeTab_ == "Quit") {
+        if (hasQuitToMenu_) {
+            int fontSize = 13 * panelScale_;
+            const char* msg = "Are you sure you want to quit to Main Menu?";
+            int msgW = MeasureText(msg, fontSize);
+            float msgX = panelPos_.x + (panelW_ - msgW) / 2.0f + 25.0f * panelScale_;
+            float msgY = panelPos_.y + 65.0f * panelScale_ + yOffset;
+            DrawText(msg, (int)msgX, (int)msgY, fontSize, BLACK);
+            
+            const char* subMsg = "All unsaved progress in this level will be lost.";
+            int subFontSize = 10 * panelScale_;
+            int subW = MeasureText(subMsg, subFontSize);
+            float subX = panelPos_.x + (panelW_ - subW) / 2.0f + 25.0f * panelScale_;
+            float subY = msgY + 22.0f * panelScale_;
+            DrawText(subMsg, (int)subX, (int)subY, subFontSize, DARKGRAY);
+            
+            Vector2 qPos = quitConfirmBtn_.btn.getPosition();
+            Texture2D qTex = quitConfirmBtn_.btn.isPressed() ? quitConfirmBtn_.texPress : quitConfirmBtn_.texNormal;
+            float btnW = quitConfirmBtn_.btn.getSize().x;
+            float btnH = quitConfirmBtn_.btn.getSize().y;
+            
+            NPatchInfo nPatch = { {0, 0, (float)qTex.width, (float)qTex.height}, 6, 6, 6, 6, NPATCH_NINE_PATCH };
+            DrawTextureNPatch(qTex, nPatch, {qPos.x, qPos.y - scrollY_ + yOffset, btnW, btnH}, {0,0}, 0.0f, WHITE);
+            
+            int btnFSize = 12 * panelScale_;
+            int bTextW = MeasureText(quitConfirmBtn_.labelText.c_str(), btnFSize);
+            DrawText(quitConfirmBtn_.labelText.c_str(), (int)(qPos.x + (btnW - bTextW)/2), (int)(qPos.y - scrollY_ + yOffset + (btnH - btnFSize)/2), btnFSize, MAROON);
         }
     }
 

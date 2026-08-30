@@ -27,6 +27,7 @@ MainMenuState::MainMenuState()
       
     // Disable items parsing for Menu (user said "không quan tâm item")
     activeItems.clear();
+    enableIngameSettings_ = false;
 
     // Load UI textures
     hudFrameTexture = LoadTexture("assets/UI_screens/menu_bg_main.png");
@@ -83,18 +84,22 @@ MainMenuState::MainMenuState()
     float baseDelay = 0.3f;
     float delayIncrement = 0.15f;
 
-    mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "PLAY",
+    mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "1-PLAYER MODE",
         [this]() {
             if (!this->isChangingState) {
                 this->isChangingState = true;
+                this->isPvPModeSelected = false;
                 this->transitionOut->Start(true);
             }
         }, baseDelay + 0 * delayIncrement);
         
-    mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "CHARACTERS",
+    mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "2-PLAYER MODE",
         [this]() {
-            activeGroup = "Characters";
-            menuPanels["Characters"]->TriggerEntry();
+            if (!this->isChangingState) {
+                this->isChangingState = true;
+                this->isPvPModeSelected = true;
+                this->transitionOut->Start(true);
+            }
         }, baseDelay + 1 * delayIncrement);
         
     mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "LEVEL EDITOR",
@@ -220,12 +225,7 @@ MainMenuState::MainMenuState()
     
     menuPanels["Settings"] = settingsGroup;
     
-    // Character Info Panel
-    auto charInfoPanel = std::make_shared<CharacterInfoPanel>();
-    charInfoPanel->SetOnCloseCallback([this]() {
-        activeGroup = "Main";
-    });
-    menuPanels["Characters"] = charInfoPanel;
+    // Character Info Panel Removed
     
     activeGroup = "Main";
 
@@ -387,7 +387,8 @@ void MainMenuState::Update(float dt) {
     if (isChangingState) {
         transitionOut->Update(dt);
         if (transitionOut->IsFinished()) {
-            auto factory = []() { return std::make_unique<MapSelectionState>(); };
+            MapSelectionMode mode = isPvPModeSelected ? MapSelectionMode::PvP : MapSelectionMode::SinglePlayer;
+            auto factory = [mode]() { return std::make_unique<MapSelectionState>(mode); };
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(
                 std::make_unique<LoadingState>(factory, 1.0f)
             ));

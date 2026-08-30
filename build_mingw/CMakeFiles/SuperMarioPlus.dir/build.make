@@ -491,11 +491,26 @@ CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.s"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\ui\CharacterInfoPanel.cpp -o CMakeFiles\SuperMarioPlus.dir\src\ui\CharacterInfoPanel.cpp.s
 
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj: D:/Git/.SuperMarioPlus/src/ui/IngameSettingsPanel.cpp
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\ui\IngameSettingsPanel.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\ui\IngameSettingsPanel.cpp.obj -c D:\Git\.SuperMarioPlus\src\ui\IngameSettingsPanel.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\ui\IngameSettingsPanel.cpp > CMakeFiles\SuperMarioPlus.dir\src\ui\IngameSettingsPanel.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\ui\IngameSettingsPanel.cpp -o CMakeFiles\SuperMarioPlus.dir\src\ui\IngameSettingsPanel.cpp.s
+
 CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
 CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj: D:/Git/.SuperMarioPlus/src/ui/transitions/IrisTransition.cpp
 CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\ui\transitions\IrisTransition.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\ui\transitions\IrisTransition.cpp.obj -c D:\Git\.SuperMarioPlus\src\ui\transitions\IrisTransition.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.i: cmake_force
@@ -510,7 +525,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Animation.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Animation.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Animation.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Animation.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.i: cmake_force
@@ -525,7 +540,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj: CMakeFiles/SuperMarioPl
 CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Entity.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Entity.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Entity.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Entity.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.i: cmake_force
@@ -540,7 +555,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj: CMakeFiles/SuperMarioP
 CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Effects.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Effects.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Effects.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Effects.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Effects.cpp.i: cmake_force
@@ -555,7 +570,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj: CMakeFiles/Super
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/Player.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\Player.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\Player.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\Player.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/Player.cpp.i: cmake_force
@@ -570,7 +585,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerState.cpp.i: cmake_force
@@ -585,7 +600,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerIdleState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerIdleState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerIdleState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerIdleState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerIdleState.cpp.i: cmake_force
@@ -600,7 +615,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerRunState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerRunState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerRunState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerRunState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerRunState.cpp.i: cmake_force
@@ -615,7 +630,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerJumpState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerJumpState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerJumpState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerJumpState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerJumpState.cpp.i: cmake_force
@@ -630,7 +645,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerFallState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerFallState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerFallState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerFallState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFallState.cpp.i: cmake_force
@@ -645,7 +660,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj: CMake
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerCrouchState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerCrouchState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerCrouchState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerCrouchState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerCrouchState.cpp.i: cmake_force
@@ -660,7 +675,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerHurtState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerHurtState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerHurtState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerHurtState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerHurtState.cpp.i: cmake_force
@@ -675,7 +690,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerDieState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerDieState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerDieState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerDieState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerDieState.cpp.i: cmake_force
@@ -690,7 +705,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj: CMakeF
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerSkillState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerSkillState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerSkillState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerSkillState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSkillState.cpp.i: cmake_force
@@ -705,7 +720,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerSwimState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerSwimState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerSwimState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerSwimState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerSwimState.cpp.i: cmake_force
@@ -720,7 +735,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj: CMakeF
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerClimbState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerClimbState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerClimbState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerClimbState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerClimbState.cpp.i: cmake_force
@@ -735,7 +750,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj: CMakeFile
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/PlayerFactory.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerFactory.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\PlayerFactory.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\PlayerFactory.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/PlayerFactory.cpp.i: cmake_force
@@ -750,7 +765,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Player/BuffManager.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Player\BuffManager.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Player\BuffManager.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Player\BuffManager.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.i: cmake_force
@@ -765,7 +780,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj: CMakeFiles/Sup
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/DashSkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\DashSkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\DashSkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\DashSkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/DashSkill.cpp.i: cmake_force
@@ -780,7 +795,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/Attack1Skill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack1Skill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack1Skill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\Attack1Skill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack1Skill.cpp.i: cmake_force
@@ -795,7 +810,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/Attack2Skill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack2Skill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack2Skill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\Attack2Skill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack2Skill.cpp.i: cmake_force
@@ -810,7 +825,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/Attack3Skill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack3Skill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack3Skill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\Attack3Skill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack3Skill.cpp.i: cmake_force
@@ -825,7 +840,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/Attack4Skill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack4Skill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\Attack4Skill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\Attack4Skill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/Attack4Skill.cpp.i: cmake_force
@@ -840,7 +855,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj: CMakeFiles/Su
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/BlockSkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\BlockSkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\BlockSkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\BlockSkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BlockSkill.cpp.i: cmake_force
@@ -855,7 +870,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/LongAttackSkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\LongAttackSkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\LongAttackSkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\LongAttackSkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LongAttackSkill.cpp.i: cmake_force
@@ -870,7 +885,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/JumpAttackSkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\JumpAttackSkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\JumpAttackSkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\JumpAttackSkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/JumpAttackSkill.cpp.i: cmake_force
@@ -885,7 +900,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj: CMakeFile
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/LowAttackSkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\LowAttackSkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\LowAttackSkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\LowAttackSkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/LowAttackSkill.cpp.i: cmake_force
@@ -900,7 +915,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj: CMake
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/SpecialSkillAttack.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\SpecialSkillAttack.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\SpecialSkillAttack.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\SpecialSkillAttack.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/SpecialSkillAttack.cpp.i: cmake_force
@@ -915,7 +930,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj: CMa
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/BasicMeleeEnemySkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\BasicMeleeEnemySkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\BasicMeleeEnemySkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\BasicMeleeEnemySkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/BasicMeleeEnemySkill.cpp.i: cmake_force
@@ -930,7 +945,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: CMa
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/ProjectileEnemySkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\ProjectileEnemySkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\ProjectileEnemySkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\ProjectileEnemySkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ProjectileEnemySkill.cpp.i: cmake_force
@@ -945,7 +960,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj: CMak
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Skill/ExplosionEnemySkill.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\ExplosionEnemySkill.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Skill\ExplosionEnemySkill.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Skill\ExplosionEnemySkill.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Skill/ExplosionEnemySkill.cpp.i: cmake_force
@@ -960,7 +975,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj: CMakeFiles/SuperMario
 CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Fireball.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Fireball.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Fireball.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Fireball.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Fireball.cpp.i: cmake_force
@@ -975,7 +990,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Explosion.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Explosion.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Explosion.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Explosion.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Explosion.cpp.i: cmake_force
@@ -990,7 +1005,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj: CMakeFiles/Super
 CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EntityFactory.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EntityFactory.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EntityFactory.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EntityFactory.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EntityFactory.cpp.i: cmake_force
@@ -1005,7 +1020,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj: CMakeFiles/SuperMarioPlus.
 CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Mob.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Mob.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Mob.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Mob.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Mob.cpp.i: cmake_force
@@ -1020,7 +1035,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj: CMakeFiles/SuperMarioPlus
 CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Boss.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Boss.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Boss.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Boss.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.i: cmake_force
@@ -1035,7 +1050,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyFactory.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyFactory.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyFactory.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyFactory.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.i: cmake_force
@@ -1050,7 +1065,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj: CMake
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossIdleState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossIdleState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossIdleState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossIdleState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.i: cmake_force
@@ -1065,7 +1080,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj: CMak
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossIntroState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossIntroState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossIntroState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossIntroState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.i: cmake_force
@@ -1076,11 +1091,116 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.s: cmake_
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.s"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossIntroState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossIntroState.cpp.s
 
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossRunState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossRunState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossRunState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossRunState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossRunState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossRunState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossRunState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossRunState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossAttackState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossAttackState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossAttackState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossAttackState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossAttackState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossAttackState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossAttackState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossAttackState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossPatrolState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossPatrolState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossPatrolState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossPatrolState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossPatrolState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossPatrolState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossPatrolState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossPatrolState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossDieState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDieState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDieState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDieState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDieState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDieState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDieState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDieState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossHurtState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossHurtState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossHurtState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossHurtState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossHurtState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossHurtState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossHurtState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossHurtState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossSkillState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossSkillState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossSkillState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossSkillState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossSkillState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossSkillState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossSkillState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossSkillState.cpp.s
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/BossStates/BossDebugInputState.cpp
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDebugInputState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDebugInputState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDebugInputState.cpp
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDebugInputState.cpp > CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDebugInputState.cpp.i
+
+CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Git\.SuperMarioPlus\src\entity\BossStates\BossDebugInputState.cpp -o CMakeFiles\SuperMarioPlus.dir\src\entity\BossStates\BossDebugInputState.cpp.s
+
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/flags.make
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyIdleState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyIdleState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyIdleState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyIdleState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.i: cmake_force
@@ -1095,7 +1215,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj: C
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyPatrolState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyPatrolState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyPatrolState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyPatrolState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.i: cmake_force
@@ -1110,7 +1230,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: CMak
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyRunState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyRunState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyRunState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyRunState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.i: cmake_force
@@ -1125,7 +1245,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj: C
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyAttackState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyAttackState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyAttackState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyAttackState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyAttackState.cpp.i: cmake_force
@@ -1140,7 +1260,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj: CMa
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyHurtState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyHurtState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyHurtState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyHurtState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyHurtState.cpp.i: cmake_force
@@ -1155,7 +1275,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: CMak
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemyDieState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyDieState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemyDieState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyDieState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.i: cmake_force
@@ -1170,7 +1290,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj: CM
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/EnemyStates/EnemySkillState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemySkillState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\EnemyStates\EnemySkillState.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemySkillState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemySkillState.cpp.i: cmake_force
@@ -1185,7 +1305,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj: CMakeFi
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/ItemAtlasRegistry.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemAtlasRegistry.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemAtlasRegistry.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\ItemAtlasRegistry.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemAtlasRegistry.cpp.i: cmake_force
@@ -1200,7 +1320,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj: CMakeFiles
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/AtlasAnimation.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\AtlasAnimation.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\AtlasAnimation.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\AtlasAnimation.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/AtlasAnimation.cpp.i: cmake_force
@@ -1215,7 +1335,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj: CMakeFiles/Super
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/BaseItem.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\BaseItem.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\BaseItem.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\BaseItem.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/BaseItem.cpp.i: cmake_force
@@ -1230,7 +1350,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj: CMakeFiles/SuperMa
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Spring.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Spring.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Spring.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Spring.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Spring.cpp.i: cmake_force
@@ -1245,7 +1365,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Coin.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Coin.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Coin.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Coin.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Coin.cpp.i: cmake_force
@@ -1260,7 +1380,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj: CMakeFiles/SuperMario
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Key.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Key.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Key.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Key.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Key.cpp.i: cmake_force
@@ -1275,7 +1395,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Door.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Door.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Door.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Door.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Door.cpp.i: cmake_force
@@ -1290,7 +1410,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Flag.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Flag.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Flag.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Flag.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Flag.cpp.i: cmake_force
@@ -1305,7 +1425,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj: CMakeFiles/Sup
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/LuckyBlock.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\LuckyBlock.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\LuckyBlock.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\LuckyBlock.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/LuckyBlock.cpp.i: cmake_force
@@ -1320,7 +1440,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj: CMakeFiles/Su
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/ChestNormal.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ChestNormal.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ChestNormal.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\ChestNormal.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestNormal.cpp.i: cmake_force
@@ -1335,7 +1455,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj: CMakeFiles/Supe
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/ChestBoss.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ChestBoss.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ChestBoss.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\ChestBoss.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ChestBoss.cpp.i: cmake_force
@@ -1350,7 +1470,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Buff.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Buff.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Buff.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Buff.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Buff.cpp.i: cmake_force
@@ -1365,7 +1485,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj: CMakeFiles/SuperMari
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/Boom.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Boom.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\Boom.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\Boom.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/Boom.cpp.i: cmake_force
@@ -1380,7 +1500,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: CMakeFiles/Su
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/ItemFactory.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemFactory.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemFactory.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\ItemFactory.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.i: cmake_force
@@ -1395,7 +1515,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj: D:/Git/.SuperMarioPlus/src/entity/Item/ItemUsageFactory.cpp
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemUsageFactory.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\entity\Item\ItemUsageFactory.cpp.obj -c D:\Git\.SuperMarioPlus\src\entity\Item\ItemUsageFactory.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemUsageFactory.cpp.i: cmake_force
@@ -1410,7 +1530,7 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj: CMake
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj: D:/Git/.SuperMarioPlus/src/combatsystem/BruteForceDetector.cpp
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\combatsystem\BruteForceDetector.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\combatsystem\BruteForceDetector.cpp.obj -c D:\Git\.SuperMarioPlus\src\combatsystem\BruteForceDetector.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/BruteForceDetector.cpp.i: cmake_force
@@ -1425,7 +1545,7 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: D:/Git/.SuperMarioPlus/src/combatsystem/CombatSystem.cpp
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\combatsystem\CombatSystem.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\combatsystem\CombatSystem.cpp.obj -c D:\Git\.SuperMarioPlus\src\combatsystem\CombatSystem.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.i: cmake_force
@@ -1440,7 +1560,7 @@ CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj: CMakeFile
 CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj: D:/Git/.SuperMarioPlus/src/infrastructure/AssetManager.cpp
 CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\infrastructure\AssetManager.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\infrastructure\AssetManager.cpp.obj -c D:\Git\.SuperMarioPlus\src\infrastructure\AssetManager.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.i: cmake_force
@@ -1455,7 +1575,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: D:/Git/.SuperMarioPlus/src/environment/TileMap.cpp
 CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\environment\TileMap.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\environment\TileMap.cpp.obj -c D:\Git\.SuperMarioPlus\src\environment\TileMap.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.i: cmake_force
@@ -1470,7 +1590,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj: CMakeFiles/Supe
 CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj: D:/Git/.SuperMarioPlus/src/environment/MapCamera.cpp
 CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\environment\MapCamera.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\environment\MapCamera.cpp.obj -c D:\Git\.SuperMarioPlus\src\environment\MapCamera.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/environment/MapCamera.cpp.i: cmake_force
@@ -1485,7 +1605,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj: CMakeFiles/Supe
 CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj: D:/Git/.SuperMarioPlus/src/states/BaseLevelState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\BaseLevelState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\BaseLevelState.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\BaseLevelState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/BaseLevelState.cpp.i: cmake_force
@@ -1500,7 +1620,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World01State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World01State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World01State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World01State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.i: cmake_force
@@ -1515,7 +1635,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World02State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World02State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World02State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World02State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World02State.cpp.i: cmake_force
@@ -1530,7 +1650,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World03State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World03State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World03State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World03State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World03State.cpp.i: cmake_force
@@ -1545,7 +1665,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World04State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World04State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World04State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World04State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World04State.cpp.i: cmake_force
@@ -1560,7 +1680,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World05State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World05State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World05State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World05State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World05State.cpp.i: cmake_force
@@ -1575,7 +1695,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj: D:/Git/.SuperMarioPlus/src/states/World06State.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\World06State.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\World06State.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\World06State.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/World06State.cpp.i: cmake_force
@@ -1590,7 +1710,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj: CMakeFiles/Super
 CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj: D:/Git/.SuperMarioPlus/src/states/MainMenuState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\MainMenuState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\MainMenuState.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\MainMenuState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/MainMenuState.cpp.i: cmake_force
@@ -1605,7 +1725,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: CMakeFiles/S
 CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: D:/Git/.SuperMarioPlus/src/states/MapSelectionState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\MapSelectionState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\MapSelectionState.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\MapSelectionState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.i: cmake_force
@@ -1620,7 +1740,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: CMakeFiles/SuperM
 CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: D:/Git/.SuperMarioPlus/src/states/LoadingState.cpp
 CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\states\LoadingState.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\states\LoadingState.cpp.obj -c D:\Git\.SuperMarioPlus\src\states\LoadingState.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.i: cmake_force
@@ -1635,7 +1755,7 @@ CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: CMakeFiles/SuperMarioP
 CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: D:/Git/.SuperMarioPlus/src/ui/ButtonGroup.cpp
 CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\ui\ButtonGroup.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\ui\ButtonGroup.cpp.obj -c D:\Git\.SuperMarioPlus\src\ui\ButtonGroup.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.i: cmake_force
@@ -1650,7 +1770,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj: CMakeFil
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj: D:/Git/.SuperMarioPlus/src/environment/CameraFollowMode.cpp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\environment\CameraFollowMode.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\environment\CameraFollowMode.cpp.obj -c D:\Git\.SuperMarioPlus\src\environment\CameraFollowMode.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraFollowMode.cpp.i: cmake_force
@@ -1665,7 +1785,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj: D:/Git/.SuperMarioPlus/src/environment/CameraPanMode.cpp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_115) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\environment\CameraPanMode.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\environment\CameraPanMode.cpp.obj -c D:\Git\.SuperMarioPlus\src\environment\CameraPanMode.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraPanMode.cpp.i: cmake_force
@@ -1680,7 +1800,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: CMakeFiles
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: D:/Git/.SuperMarioPlus/src/environment/CameraZoomMode.cpp
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_116) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\environment\CameraZoomMode.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\environment\CameraZoomMode.cpp.obj -c D:\Git\.SuperMarioPlus\src\environment\CameraZoomMode.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.i: cmake_force
@@ -1695,7 +1815,7 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: CMakeFiles/Su
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: D:/Git/.SuperMarioPlus/src/dialogue/DialogueLoader.cpp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_117) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueLoader.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueLoader.cpp.obj -c D:\Git\.SuperMarioPlus\src\dialogue\DialogueLoader.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.i: cmake_force
@@ -1710,7 +1830,7 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: CMakeFiles/Super
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: D:/Git/.SuperMarioPlus/src/dialogue/DialogueBox.cpp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_118) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueBox.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueBox.cpp.obj -c D:\Git\.SuperMarioPlus\src\dialogue\DialogueBox.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.i: cmake_force
@@ -1725,7 +1845,7 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: CMakeFiles/
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: D:/Git/.SuperMarioPlus/src/dialogue/DialogueRegistry.cpp
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_119) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueRegistry.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\dialogue\DialogueRegistry.cpp.obj -c D:\Git\.SuperMarioPlus\src\dialogue\DialogueRegistry.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.i: cmake_force
@@ -1740,7 +1860,7 @@ CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: CMakeFiles/S
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: D:/Git/.SuperMarioPlus/src/cutscene/CutsceneManager.cpp
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_120) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\cutscene\CutsceneManager.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\cutscene\CutsceneManager.cpp.obj -c D:\Git\.SuperMarioPlus\src\cutscene\CutsceneManager.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.i: cmake_force
@@ -1755,7 +1875,7 @@ CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj: CMakeFiles/S
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj: CMakeFiles/SuperMarioPlus.dir/includes_CXX.rsp
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj: D:/Git/.SuperMarioPlus/src/cutscene/CutsceneTrigger.cpp
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj: CMakeFiles/SuperMarioPlus.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_121) "Building CXX object CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.obj -MF CMakeFiles\SuperMarioPlus.dir\src\cutscene\CutsceneTrigger.cpp.obj.d -o CMakeFiles\SuperMarioPlus.dir\src\cutscene\CutsceneTrigger.cpp.obj -c D:\Git\.SuperMarioPlus\src\cutscene\CutsceneTrigger.cpp
 
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneTrigger.cpp.i: cmake_force
@@ -1796,6 +1916,7 @@ SuperMarioPlus_OBJECTS = \
 "CMakeFiles/SuperMarioPlus.dir/src/ui/PlayerHUD.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/ui/UIAtlasAnimator.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj" \
@@ -1835,6 +1956,13 @@ SuperMarioPlus_OBJECTS = \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj" \
+"CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj" \
 "CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj" \
@@ -1913,6 +2041,7 @@ SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/Buttons.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/PlayerHUD.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/UIAtlasAnimator.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/IngameSettingsPanel.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/ui/transitions/IrisTransition.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/Animation.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/Entity.cpp.obj
@@ -1952,6 +2081,13 @@ SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/Boss.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyFactory.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIntroState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossRunState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossAttackState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossPatrolState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDieState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossHurtState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossSkillState.cpp.obj
+SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossDebugInputState.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyIdleState.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyPatrolState.cpp.obj
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyRunState.cpp.obj
@@ -2003,7 +2139,7 @@ SuperMarioPlus.exe: D:/Git/.SuperMarioPlus/third_party/raylib/lib/windows_mingw/
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/linkLibs.rsp
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/objects1.rsp
 SuperMarioPlus.exe: CMakeFiles/SuperMarioPlus.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Linking CXX executable SuperMarioPlus.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\Git\.SuperMarioPlus\build_mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_122) "Linking CXX executable SuperMarioPlus.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\SuperMarioPlus.dir\link.txt --verbose=$(VERBOSE)
 	"C:\Program Files\CMake\bin\cmake.exe" -E copy_directory D:/Git/.SuperMarioPlus/assets D:/Git/.SuperMarioPlus/build_mingw/assets
 

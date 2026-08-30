@@ -9,6 +9,7 @@
 #include "BaseItem.h"
 #include "CutsceneManager.h"
 #include "CutsceneTrigger.h"
+#include "IngameSettingsPanel.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -65,9 +66,16 @@ protected:
     CutsceneManager cutsceneManager;
     std::vector<CutsceneTrigger> cutsceneTriggers;
 
+    // === In-Game Settings ===
+    std::unique_ptr<IngameSettingsPanel> ingameSettings_;
+    bool enableIngameSettings_ = true;
+
+    // === Game Mode ===
+    bool isPvPMode_ = false;
+
 public:
     // Original LDtk constructor
-    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "");
+    BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "", bool isPvPMode = false);
     
     // [NEW] Constructor cho chế độ Test Play từ MapEditorState
     BaseLevelState(const CustomMapData& customMap, const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");

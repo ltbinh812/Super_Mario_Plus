@@ -279,4 +279,54 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapEditorState.cpp.obj: \
  D:/Git/.SuperMarioPlus/include/core/StateManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/stack \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_stack.h \
+ D:/Git/.SuperMarioPlus/include/states/BaseLevelState.h \
+ D:/Git/.SuperMarioPlus/include/environment/MapCamera.h \
+ D:/Git/.SuperMarioPlus/include/environment/ICameraMode.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/queue \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_queue.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/CombatSystem.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/ICollisionDetector.h \
+ D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
+ D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
+ D:/Git/.SuperMarioPlus/include/core/InputHandler.h \
+ D:/Git/.SuperMarioPlus/include/command/IPlayerCommand.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/Player.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
+ D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
+ D:/Git/.SuperMarioPlus/include/entity/Entity.h \
+ D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
+ D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
+ D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
+ D:/Git/.SuperMarioPlus/include/entity/Effects.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/BuffManager.h \
+ D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerStates.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerIdleState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerRunState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerJumpState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerFallState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerCrouchState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerHurtState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerDieState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSkillState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Skill/ISkill.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSwimState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerClimbState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/BaseItem.h \
+ D:/Git/.SuperMarioPlus/include/entity/Item/ItemAtlasRegistry.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneManager.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneScript.h \
+ D:/Git/.SuperMarioPlus/include/dialogue/DialogueBox.h \
+ D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/unordered_set \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_set.h \
+ D:/Git/.SuperMarioPlus/include/cutscene/CutsceneTrigger.h \
+ D:/Git/.SuperMarioPlus/include/ui/IngameSettingsPanel.h \
+ D:/Git/.SuperMarioPlus/include/ui/ButtonGroup.h \
+ D:/Git/.SuperMarioPlus/include/ui/Buttons.h \
+ D:/Git/.SuperMarioPlus/include/ui/IMenuPanel.h \
+ D:/Git/.SuperMarioPlus/include/core/SaveData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

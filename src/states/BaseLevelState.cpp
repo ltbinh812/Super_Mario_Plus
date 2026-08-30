@@ -25,8 +25,9 @@
 BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                                const std::string &initialLevel,
                                const std::string &p1Name,
-                               const std::string &p2Name)
-    : mapCamera(600.0f), currentLevel(initialLevel), mapFilePath(mapFilePath) {
+                               const std::string &p2Name,
+                               bool isPvPMode)
+    : mapCamera(600.0f), currentLevel(initialLevel), mapFilePath(mapFilePath), isPvPMode_(isPvPMode) {
 
   std::cout << "[BaseLevelState] Loading map: " << mapFilePath << " level: " << initialLevel << "\n";
   if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
@@ -99,6 +100,12 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
   }
+
+  // Initialize In-Game Settings Panel
+  ingameSettings_ = std::make_unique<IngameSettingsPanel>();
+  ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
+      this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
+  });
 }
 
 // =============================================================================
@@ -107,7 +114,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
 BaseLevelState::BaseLevelState(const CustomMapData& customMap,
                                const std::string &p1Name,
                                const std::string &p2Name)
-    : mapCamera(416.0f), currentLevel(customMap.name), mapFilePath("custom") {
+    : mapCamera(600.0f), currentLevel(customMap.name), mapFilePath("custom") {
 
   bool loaded = map.LoadCustomMap(customMap);
   if (loaded && map.GetHeight() > 0) {
@@ -189,10 +196,36 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
   } else {
     std::cerr << "[BaseLevelState] Error loading custom map data!\n";
   }
+
+  // Initialize In-Game Settings Panel for Custom Map
+  ingameSettings_ = std::make_unique<IngameSettingsPanel>();
+  ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
+      this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
+  });
 }
 
 
 void BaseLevelState::HandleInput() {
+  // In-Game Settings input check
+  if (enableIngameSettings_ && ingameSettings_) {
+    Vector2 mousePos = GetMousePosition();
+    bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
+    bool mouseReleased = IsMouseButtonReleased(MOUSE_LEFT_BUTTON);
+    if (ingameSettings_->handleInput(mousePos, mousePressed, mouseReleased)) {
+      if (ingameSettings_->isOpen()) {
+        if (player1 && player1->getRuntimeStats().isGrounded) {
+          player1->stopLeftRun();
+          player1->stopRightRun();
+        }
+        if (player2 && player2->getRuntimeStats().isGrounded) {
+          player2->stopLeftRun();
+          player2->stopRightRun();
+        }
+        return; // Pause player & AI input when settings is open
+      }
+    }
+  }
+
   // Khi cutscene active: chỉ forward input cho cutscene, BLOCK input player
   // Nhưng entity AI vẫn chạy bình thường (decideAction ở dưới)
   if (cutsceneManager.isActive()) {
@@ -232,6 +265,10 @@ void BaseLevelState::HandleInput() {
 
 void BaseLevelState::Process() {
   float dt = GetFrameTime();
+
+  if (enableIngameSettings_ && ingameSettings_) {
+    ingameSettings_->process();
+  }
 
   // Cutscene process luôn chạy (kiểm tra phase transition)
   if (cutsceneManager.isActive()) {
@@ -291,7 +328,15 @@ void BaseLevelState::Process() {
   }
 
   if (!cutsceneManager.isActive()) {
-    if (player1) {
+    if (player1 && player2) {
+      Vector2 p1Pos = player1->getWorldStats().position;
+      Vector2 p2Pos = player2->getWorldStats().position;
+      Vector2 avgVelocity = {
+          (player1->getRuntimeStats().velocity.x + player2->getRuntimeStats().velocity.x) / 2.0f,
+          (player1->getRuntimeStats().velocity.y + player2->getRuntimeStats().velocity.y) / 2.0f
+      };
+      mapCamera.Update(p1Pos, avgVelocity, map.GetWidth(), map.GetHeight(), dt, &p2Pos);
+    } else if (player1) {
       mapCamera.Update(player1->getWorldStats().position, player1->getRuntimeStats().velocity, map.GetWidth(),
                        map.GetHeight(), dt);
     }
@@ -320,7 +365,14 @@ void BaseLevelState::Process() {
 }
 
 void BaseLevelState::Update(float dt) {
-  // Cutscene update luôn chạy (camera mode, dialogue timer)
+  if (enableIngameSettings_ && ingameSettings_) {
+    ingameSettings_->update(dt);
+    if (ingameSettings_->isOpen()) {
+      return; // Pause game world updates while settings is open
+    }
+  }
+
+  // Update cutscene mode if active
   if (cutsceneManager.isActive()) {
     cutsceneManager.update(dt);
   }
@@ -421,6 +473,11 @@ void BaseLevelState::Render(float alpha) const {
   // Cutscene dialogue box vẽ trên cùng (screen space, ngoài camera)
   if (cutsceneManager.isActive()) {
     cutsceneManager.render(alpha);
+  }
+
+  // In-Game Settings overlay (cogwheel button or full Settings Panel)
+  if (enableIngameSettings_ && ingameSettings_) {
+    ingameSettings_->render(alpha);
   }
 }
 

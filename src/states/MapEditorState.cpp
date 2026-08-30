@@ -1,8 +1,11 @@
 #include "MapEditorState.h"
+#include "MainMenuState.h"
+#include "CharacterSelectionState.h"
 #include "EditorBlockRegistry.h"
 #include "EditorTextureCache.h"
 #include "CustomMapSerializer.h"
 #include "command/StateCommands.h"
+#include "BaseLevelState.h"
 #include <raylib.h>
 #include <iostream>
 #include <algorithm>
@@ -167,13 +170,13 @@ void MapEditorState::Process() {
     if (bottomPanel_.requestSave() && !showSaveLoadUI_) {
         saveLoadUI_.init();  // refresh slot status
         showSaveLoadUI_   = true;
-        saveLoadModeIsSave_ = true;
+        saveLoadMode_ = SaveLoadMode::Save;
     }
     // --- Load button ---
     if (bottomPanel_.requestLoad() && !showSaveLoadUI_) {
         saveLoadUI_.init();
         showSaveLoadUI_   = true;
-        saveLoadModeIsSave_ = false;
+        saveLoadMode_ = SaveLoadMode::Load;
     }
     // --- Exit button → quay về menu ---
     if (bottomPanel_.requestExit()) {
@@ -299,7 +302,7 @@ void MapEditorState::Render(float /*alpha*/) const {
 
     // Save/Load popup overlay
     if (showSaveLoadUI_) {
-        saveLoadUI_.render((float)GetScreenWidth(), (float)GetScreenHeight(), saveLoadModeIsSave_);
+        saveLoadUI_.render((float)GetScreenWidth(), (float)GetScreenHeight(), saveLoadMode_);
     }
 }
 
@@ -469,12 +472,12 @@ void MapEditorState::drawGhostPreview() const {
 // =============================================================================
 
 void MapEditorState::handleSaveLoadSlotAction(int slot) {
-    if (saveLoadModeIsSave_) {
+    if (saveLoadMode_ == SaveLoadMode::Save) {
         if (validateMapBeforeAction("Save")) {
             handleSave(slot);
             showSaveLoadUI_ = false;
         }
-    } else {
+    } else if (saveLoadMode_ == SaveLoadMode::Load) {
         handleLoad(slot);
         showSaveLoadUI_ = false;
     }
@@ -496,9 +499,16 @@ void MapEditorState::handleLoad(int slot) {
         bottomPanel_.setErrorMessage("Slot " + std::to_string(slot) + " is empty.");
         return;
     }
-    undoRedo_.pushUndo(mapData_);
-    mapData_  = CustomMapSerializer::load(slot);
-    mapDirty_ = true;
+    CustomMapData data = CustomMapSerializer::load(slot);
+    int spawns = data.countPlayerSpawns();
+    int players = (spawns >= 2) ? 2 : 1;
+    
+    LevelFactory factory = [data](std::string p1, std::string p2) {
+        return std::make_unique<BaseLevelState>(data, p1, p2);
+    };
+    
+    auto selectionState = std::make_unique<CharacterSelectionState>(players, factory);
+    this->PushStateCommand(std::make_unique<::PushStateCommand>(std::move(selectionState)));
 }
 
 // =============================================================================

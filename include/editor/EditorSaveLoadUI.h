@@ -5,13 +5,15 @@
 #include "raylib.h"
 
 // Giao diện (Overlay) hiển thị 10 slot để Save/Load map
+enum class SaveLoadMode { Save, Load };
+
 class EditorSaveLoadUI {
 public:
     EditorSaveLoadUI();
     void init(); // Load texture UI if needed
 
     // Draw the overlay
-    void render(float screenW, float screenH, bool isSaveMode) const;
+    void render(float screenW, float screenH, SaveLoadMode mode) const;
 
     // Handle mouse input and return action
     void handleInput(float screenW, float screenH,

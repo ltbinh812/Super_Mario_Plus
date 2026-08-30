@@ -268,4 +268,25 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/BossStates/BossIdleState.cpp.obj: \
  D:/Git/.SuperMarioPlus/include/entity/Effects.h \
  D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
  D:/Git/.SuperMarioPlus/include/entity/Skill/IEnemySkill.h \
+ D:/Git/.SuperMarioPlus/include/entity/Boss.h \
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossRunState.h \
+ D:/Git/.SuperMarioPlus/include/entity/BossStates/BossPatrolState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/Player.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/BuffManager.h \
+ D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerStates.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerIdleState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerRunState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerJumpState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerFallState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerCrouchState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerHurtState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerDieState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSkillState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Skill/ISkill.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSwimState.h \
+ D:/Git/.SuperMarioPlus/include/entity/Player/PlayerClimbState.h \
+ D:/Git/.SuperMarioPlus/third_party/raylib/include/raymath.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/math.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

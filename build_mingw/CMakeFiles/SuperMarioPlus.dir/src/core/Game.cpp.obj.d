@@ -308,10 +308,11 @@ CMakeFiles/SuperMarioPlus.dir/src/core/Game.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_set \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_set.h \
  D:/Git/.SuperMarioPlus/include/cutscene/CutsceneTrigger.h \
- D:/Git/.SuperMarioPlus/include/core/SaveData.h \
+ D:/Git/.SuperMarioPlus/include/ui/IngameSettingsPanel.h \
  D:/Git/.SuperMarioPlus/include/ui/ButtonGroup.h \
  D:/Git/.SuperMarioPlus/include/ui/Buttons.h \
  D:/Git/.SuperMarioPlus/include/ui/IMenuPanel.h \
+ D:/Git/.SuperMarioPlus/include/core/SaveData.h \
  D:/Git/.SuperMarioPlus/include/ui/CharacterInfoPanel.h \
  D:/Git/.SuperMarioPlus/include/ui/UIAtlasAnimator.h \
  D:/Git/.SuperMarioPlus/include/ui/transitions/ITransition.h \
