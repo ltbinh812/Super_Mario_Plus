@@ -1,0 +1,44 @@
+{
+  "frames": {
+    "mob_slime_idle": {
+      "frame": {"x":0,"y":0,"w":384,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":384,"h":64},
+      "sourceSize": {"w":384,"h":64}
+    },
+    "mob_slime_attack": {
+      "frame": {"x":0,"y":64,"w":512,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":512,"h":64},
+      "sourceSize": {"w":512,"h":64}
+    },
+    "mob_slime_run": {
+      "frame": {"x":0,"y":128,"w":512,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":512,"h":64},
+      "sourceSize": {"w":512,"h":64}
+    },
+    "mob_slime_hurt": {
+      "frame": {"x":0,"y":192,"w":256,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+      "sourceSize": {"w":256,"h":64}
+    },
+    "mob_slime_die": {
+      "frame": {"x":0,"y":256,"w":640,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":640,"h":64},
+      "sourceSize": {"w":640,"h":64}
+    }
+  },
+  "meta": {
+    "image": "mob_slime.png",
+    "size": {"w": 640, "h": 320},
+    "scale": "1"
+  }
+}

@@ -1,9 +1,9 @@
 CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\states\World01State.cpp \
- D:/Git/.SuperMarioPlus/include/states/World01State.h \
- D:/Git/.SuperMarioPlus/include/states/BaseLevelState.h \
- D:/Git/.SuperMarioPlus/include/states/GameState.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
+ D:\super_mario\Super_Mario_Plus\src\states\World01State.cpp \
+ D:/super_mario/Super_Mario_Plus/include/states/World01State.h \
+ D:/super_mario/Super_Mario_Plus/include/states/BaseLevelState.h \
+ D:/super_mario/Super_Mario_Plus/include/states/GameState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -115,8 +115,8 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -153,7 +153,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -255,51 +255,51 @@ CMakeFiles/SuperMarioPlus.dir/src/states/World01State.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/environment/MapCamera.h \
- D:/Git/.SuperMarioPlus/include/environment/ICameraMode.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/MapCamera.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/ICameraMode.h \
  C:/msys64/ucrt64/include/c++/14.2.0/queue \
  C:/msys64/ucrt64/include/c++/14.2.0/deque \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_deque.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/deque.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_queue.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/CombatSystem.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/ICollisionDetector.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
- D:/Git/.SuperMarioPlus/include/core/InputHandler.h \
- D:/Git/.SuperMarioPlus/include/command/IPlayerCommand.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/Player.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
- D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
- D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
- D:/Git/.SuperMarioPlus/include/entity/Effects.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/BuffManager.h \
- D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerStates.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerIdleState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerRunState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerJumpState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerFallState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerCrouchState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerHurtState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerDieState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSkillState.h \
- D:/Git/.SuperMarioPlus/include/entity/Skill/ISkill.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerSwimState.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/PlayerClimbState.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/BaseItem.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/ItemAtlasRegistry.h \
- D:/Git/.SuperMarioPlus/include/cutscene/CutsceneManager.h \
- D:/Git/.SuperMarioPlus/include/cutscene/CutsceneScript.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueBox.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/CombatSystem.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/ICollisionDetector.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/Hitbox.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/EntityFaction.h \
+ D:/super_mario/Super_Mario_Plus/include/core/InputHandler.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IPlayerCommand.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/Player.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/CharacterStats.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Animation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/FloatingText.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Entity.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/IEntityState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/CommandQueue.h \
+ D:/super_mario/Super_Mario_Plus/include/command/SpawnCommand.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Effects.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/AtlasAnimation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/BuffManager.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerStates.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerIdleState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerRunState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerJumpState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerFallState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerCrouchState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerHurtState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerDieState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerSkillState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Skill/ISkill.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerSwimState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerClimbState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/BaseItem.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/ItemAtlasRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/cutscene/CutsceneManager.h \
+ D:/super_mario/Super_Mario_Plus/include/cutscene/CutsceneScript.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueBox.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_set \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_set.h \
- D:/Git/.SuperMarioPlus/include/cutscene/CutsceneTrigger.h \
- D:/Git/.SuperMarioPlus/include/core/SaveData.h
+ D:/super_mario/Super_Mario_Plus/include/cutscene/CutsceneTrigger.h \
+ D:/super_mario/Super_Mario_Plus/include/core/SaveData.h

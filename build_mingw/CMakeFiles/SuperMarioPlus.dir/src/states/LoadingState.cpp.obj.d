@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\states\LoadingState.cpp \
- D:/Git/.SuperMarioPlus/include/states/LoadingState.h \
- D:/Git/.SuperMarioPlus/include/states/GameState.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
+ D:\super_mario\Super_Mario_Plus\src\states\LoadingState.cpp \
+ D:/super_mario/Super_Mario_Plus/include/states/LoadingState.h \
+ D:/super_mario/Super_Mario_Plus/include/states/GameState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -114,7 +114,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -155,8 +155,8 @@ CMakeFiles/SuperMarioPlus.dir/src/states/LoadingState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
  C:/msys64/ucrt64/include/c++/14.2.0/array \
  C:/msys64/ucrt64/include/c++/14.2.0/compare \
- D:/Git/.SuperMarioPlus/include/command/StateCommands.h \
- D:/Git/.SuperMarioPlus/include/core/StateManager.h \
+ D:/super_mario/Super_Mario_Plus/include/command/StateCommands.h \
+ D:/super_mario/Super_Mario_Plus/include/core/StateManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/stack \
  C:/msys64/ucrt64/include/c++/14.2.0/deque \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_deque.h \

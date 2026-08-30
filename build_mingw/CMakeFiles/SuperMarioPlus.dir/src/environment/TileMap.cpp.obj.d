@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\environment\TileMap.cpp \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\environment\TileMap.cpp \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -114,7 +114,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -253,11 +253,11 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/TileMap.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapData.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomEntityData.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockRegistry.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockDef.h \
- D:/Git/.SuperMarioPlus/include/editor/AutoTiler.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomEntityData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockDef.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/AutoTiler.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_set \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_set.h \
  C:/msys64/ucrt64/include/c++/14.2.0/optional \

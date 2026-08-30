@@ -225,11 +225,13 @@ SuperMarioPlus/
 - **`CutsceneTrigger`**: Region trên map load từ LDtk, kích hoạt Cutscene khi Player đi vào.
 - **`CutsceneManager`**: Orchestrator điều phối Camera Spanning và DialogueBox (quản lý 4 Phase: PanIn, Dialogue, PanBack, Done). Block input người chơi nhưng giữ game running.
 
-#### Items
+#### Items & Buffs
 - **`BaseItem`**: Abstract class cho các vật thể tương tác tĩnh (không có gravity) như Coin, Rương. Nó cung cấp hàm `drawAnim` hỗ trợ hiển thị Animation.
 - **`AtlasAnimation`**: Quản lý Animation cho các Item tĩnh bằng cách cắt Rectangle toán học dựa trên một Texture chung. Hỗ trợ sprite strips trên Atlas.
 - **`ItemAtlasRegistry`**: Flyweight Singleton lưu một Texture khổng lồ (`a.png`) cho mọi Item để tối ưu Draw Calls.
 - **`Coin`, `Chest`, `Spring`, ...**: Các class Item cụ thể kế thừa từ `BaseItem`.
+- **`Buff` & `BuffManager`**: `Buff` là vật phẩm rơi ra từ LuckyBlock/Chest. Khi người chơi sử dụng qua `ConsumeBuffStrategy`, nó được add vào `BuffManager`.
+- **`IBuffEffect` & `HealBuff`, `SpeedBuff`,...**: Interface và các triển khai cụ thể cho tác dụng của Buff. Mới thêm `HealBuff` (hồi máu tức thì cho Player).
 
 #### UI
 - **`HUD`**: Lớp chứa logic in thông tin lên màn hình (Máu, Điểm, Thời gian).

@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\ui\CharacterInfoPanel.cpp \
- D:/Git/.SuperMarioPlus/include/ui/CharacterInfoPanel.h \
- D:/Git/.SuperMarioPlus/include/ui/IMenuPanel.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\ui\CharacterInfoPanel.cpp \
+ D:/super_mario/Super_Mario_Plus/include/ui/CharacterInfoPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/IMenuPanel.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -79,7 +79,7 @@ CMakeFiles/SuperMarioPlus.dir/src/ui/CharacterInfoPanel.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/array \
  C:/msys64/ucrt64/include/c++/14.2.0/compare \
- D:/Git/.SuperMarioPlus/include/ui/UIAtlasAnimator.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/UIAtlasAnimator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stringfwd.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \

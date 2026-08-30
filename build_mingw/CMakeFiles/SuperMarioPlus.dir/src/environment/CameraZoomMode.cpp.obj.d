@@ -1,9 +1,9 @@
 CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\environment\CameraZoomMode.cpp \
- D:/Git/.SuperMarioPlus/include/environment/CameraZoomMode.h \
- D:/Git/.SuperMarioPlus/include/environment/ICameraMode.h \
- D:/Git/.SuperMarioPlus/include/environment/CameraPanMode.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\environment\CameraZoomMode.cpp \
+ D:/super_mario/Super_Mario_Plus/include/environment/CameraZoomMode.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/ICameraMode.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/CameraPanMode.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -11,7 +11,7 @@ CMakeFiles/SuperMarioPlus.dir/src/environment/CameraZoomMode.cpp.obj: \
  C:/msys64/ucrt64/include/_mingw_mac.h \
  C:/msys64/ucrt64/include/_mingw_secapi.h \
  C:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
- D:/Git/.SuperMarioPlus/include/environment/MapCamera.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/MapCamera.h \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algobase.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \

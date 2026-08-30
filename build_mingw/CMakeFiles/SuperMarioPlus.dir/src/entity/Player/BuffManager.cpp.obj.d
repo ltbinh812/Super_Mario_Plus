@@ -1,6 +1,6 @@
 CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\entity\Player\BuffManager.cpp \
- D:/Git/.SuperMarioPlus/include/entity/Player/BuffManager.h \
+ D:\super_mario\Super_Mario_Plus\src\entity\Player\BuffManager.cpp \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/BuffManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -112,7 +112,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Player/BuffManager.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/BuffEffects/IBuffEffect.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/localefwd.h \

@@ -1,11 +1,11 @@
 CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\entity\Item\ItemFactory.cpp \
- D:/Git/.SuperMarioPlus/include/entity/Item/ItemFactory.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/BaseItem.h \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\entity\Item\ItemFactory.cpp \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/ItemFactory.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/BaseItem.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Entity.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/CharacterStats.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Animation.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -113,7 +113,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
@@ -122,7 +122,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -258,24 +258,25 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/Item/ItemFactory.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
- D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
- D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
- D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
- D:/Git/.SuperMarioPlus/include/entity/Effects.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/ItemAtlasRegistry.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Spring.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Coin.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Key.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Door.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Flag.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/LuckyBlock.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/ChestNormal.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/ChestBoss.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Buff.h \
- D:/Git/.SuperMarioPlus/include/entity/BuffEffects/IBuffEffect.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/Boom.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/FloatingText.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/IEntityState.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/Hitbox.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/EntityFaction.h \
+ D:/super_mario/Super_Mario_Plus/include/command/CommandQueue.h \
+ D:/super_mario/Super_Mario_Plus/include/command/SpawnCommand.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Effects.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/AtlasAnimation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/ItemAtlasRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Spring.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Coin.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Key.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Door.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Flag.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/LuckyBlock.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/ChestNormal.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/ChestBoss.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Buff.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/Boom.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/PoisonFlask.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

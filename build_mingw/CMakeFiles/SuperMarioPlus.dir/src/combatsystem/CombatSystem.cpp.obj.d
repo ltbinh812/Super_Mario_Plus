@@ -1,9 +1,9 @@
 CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\combatsystem\CombatSystem.cpp \
- D:/Git/.SuperMarioPlus/include/combatsystem/CombatSystem.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/ICollisionDetector.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\combatsystem\CombatSystem.cpp \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/CombatSystem.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/ICollisionDetector.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/Hitbox.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -80,7 +80,7 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/array \
  C:/msys64/ucrt64/include/c++/14.2.0/compare \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/EntityFaction.h \
  C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  C:/msys64/ucrt64/include/stdint.h \
@@ -131,10 +131,10 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/BruteForceDetector.h \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/BruteForceDetector.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Entity.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/CharacterStats.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Animation.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/localefwd.h \
@@ -161,8 +161,8 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/cerrno \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/charconv.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_string.tcc \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -259,10 +259,26 @@ CMakeFiles/SuperMarioPlus.dir/src/combatsystem/CombatSystem.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
- D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
- D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
- D:/Git/.SuperMarioPlus/include/entity/Effects.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/FloatingText.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/IEntityState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/CommandQueue.h \
+ D:/super_mario/Super_Mario_Plus/include/command/SpawnCommand.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Effects.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/AtlasAnimation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/Player.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/BuffManager.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/BuffEffects/IBuffEffect.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerStates.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerIdleState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerRunState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerJumpState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerFallState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerCrouchState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerHurtState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerDieState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerSkillState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Skill/ISkill.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerSwimState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/PlayerClimbState.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

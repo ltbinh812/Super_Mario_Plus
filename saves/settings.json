@@ -12,7 +12,7 @@
         "Interact": 69,
         "Jump": 75,
         "LongAttack": 85,
-        "Move Left": 65,
+        "Move Left": 90,
         "Move Right": 68,
         "SpecialAttack": 73
     },

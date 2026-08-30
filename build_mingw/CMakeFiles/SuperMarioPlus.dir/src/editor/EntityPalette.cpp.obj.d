@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/editor/EntityPalette.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\editor\EntityPalette.cpp \
- D:/Git/.SuperMarioPlus/include/editor/EntityPalette.h \
- D:/Git/.SuperMarioPlus/include/editor/EntityDef.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\editor\EntityPalette.cpp \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityPalette.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityDef.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -107,7 +107,7 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EntityPalette.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/include/editor/EditorTextureCache.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorTextureCache.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \

@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/core/InputHandler.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\core\InputHandler.cpp \
- D:/Git/.SuperMarioPlus/include/core/InputHandler.h \
- D:/Git/.SuperMarioPlus/include/command/IPlayerCommand.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\core\InputHandler.cpp \
+ D:/super_mario/Super_Mario_Plus/include/core/InputHandler.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IPlayerCommand.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \

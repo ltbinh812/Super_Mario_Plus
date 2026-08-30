@@ -1807,5 +1807,22 @@
             "offsetY": 0
         },
         "assetFolder": "maps/item"
+    },
+    "PoisonFlask": {
+        "explosion": {
+            "hitboxW": 128,
+            "hitboxH": 128,
+            "offsetX": 0,
+            "offsetY": 0,
+            "frameNum": 7,
+            "frameTime": 0.05,
+            "hitboxStartFrame": 1,
+            "hitboxEndFrame": 15,
+            "lifetime": 0.75,
+            "textureName": "poison_explosion",
+            "scale": 1,
+            "damage": 5
+        },
+        "assetFolder": "maps/item"
     }
 }

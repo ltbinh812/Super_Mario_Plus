@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/core/main.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\core\main.cpp \
- D:/Git/.SuperMarioPlus/include/core/Game.h \
- D:/Git/.SuperMarioPlus/include/core/StateManager.h \
+ D:\super_mario\Super_Mario_Plus\src\core\main.cpp \
+ D:/super_mario/Super_Mario_Plus/include/core/Game.h \
+ D:/super_mario/Super_Mario_Plus/include/core/StateManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/stack \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -114,8 +114,8 @@ CMakeFiles/SuperMarioPlus.dir/src/core/main.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -132,7 +132,7 @@ CMakeFiles/SuperMarioPlus.dir/src/core/main.cpp.obj: \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/std_abs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_algorithm_defs.h \
- D:/Git/.SuperMarioPlus/include/infrastructure/AssetManager.h \
+ D:/super_mario/Super_Mario_Plus/include/infrastructure/AssetManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \

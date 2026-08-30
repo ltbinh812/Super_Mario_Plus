@@ -32,7 +32,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     }
   },
@@ -41,15 +42,15 @@
     "assetFolder": "boss/doflam",
     "maxHealth": 1000,
     "moveVelocity": 80.0,
-    "jumpVelocity": 300.0,
-    "gravityScale": 160.0,
+    "jumpVelocity": 600.0,
+    "gravityScale": 200.0,
     "physicsBox": {
-      "w": 64.0,
-      "h": 64.0
+      "w": 32.0,
+      "h": 70.0
     },
     "aiData": {
       "detectionRange": 500.0,
-      "attackRange": 80.0,
+      "attackRange": 100.0,
       "patrolSpeed": 50.0,
       "patrolTime": 3.0
     },
@@ -57,7 +58,7 @@
       "intro": {
         "texture": "intro",
         "frameNum": 28,
-        "frameTime": 0.1
+        "frameTime": 0.15
       },
       "idle": {
         "texture": "idle",
@@ -126,44 +127,48 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 14,
         "box": {
-          "offsetX": 20.0,
-          "offsetY": -10.0,
-          "w": 50.0,
-          "h": 60.0
-        }
+          "offsetX": -10.0,
+          "offsetY": -80.0,
+          "w": 60.0,
+          "h": 80.0
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
         "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 30.0,
-          "offsetY": -15.0,
+          "offsetX": -20.0,
+          "offsetY": -80.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 10.0
       },
       "attack_3": {
         "damage": 30,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 30,
         "box": {
-          "offsetX": 10.0,
-          "offsetY": -20.0,
-          "w": 40.0,
-          "h": 50.0
-        }
+          "offsetX": 0.0,
+          "offsetY": -80.0,
+          "w": 50.0,
+          "h": 80.0
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 25.0,
-          "offsetY": -5.0,
-          "w": 55.0,
-          "h": 65.0
-        }
+          "offsetX": -50.0,
+          "offsetY": -60.0,
+          "w": 100.0,
+          "h": 60.0
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -174,7 +179,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -185,7 +191,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -196,7 +203,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
     "fireball": {
@@ -211,7 +219,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 10,
@@ -223,7 +231,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_3",
       "frameNum": 8,
@@ -329,7 +337,8 @@
           "offsetY": -10.0,
           "w": 50.0,
           "h": 60.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
@@ -340,7 +349,8 @@
           "offsetY": -15.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_3": {
         "damage": 30,
@@ -351,7 +361,8 @@
           "offsetY": -20.0,
           "w": 40.0,
           "h": 50.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
@@ -362,7 +373,8 @@
           "offsetY": -5.0,
           "w": 55.0,
           "h": 65.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -373,7 +385,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -384,7 +397,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -395,7 +409,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
     "fireball": {
@@ -410,7 +425,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
@@ -422,7 +437,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 13,
@@ -524,11 +539,12 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 4,
         "box": {
-          "offsetX": 20.0,
-          "offsetY": -10.0,
+          "offsetX": 0.0,
+          "offsetY": -80.0,
           "w": 50.0,
           "h": 60.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
@@ -539,7 +555,8 @@
           "offsetY": -15.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_3": {
         "damage": 30,
@@ -550,7 +567,8 @@
           "offsetY": -20.0,
           "w": 40.0,
           "h": 50.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
@@ -561,18 +579,20 @@
           "offsetY": -5.0,
           "w": 55.0,
           "h": 65.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
-        "hitboxStartFrame": 1,
+        "hitboxStartFrame": 0,
         "hitboxEndFrame": 1,
         "box": {
           "offsetX": 20.0,
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -583,7 +603,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -594,7 +615,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
     "fireball": {
@@ -609,7 +631,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 56,
@@ -621,7 +643,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 9,
@@ -727,7 +749,8 @@
           "offsetY": -10.0,
           "w": 50.0,
           "h": 60.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
@@ -738,7 +761,8 @@
           "offsetY": -15.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_3": {
         "damage": 30,
@@ -749,7 +773,8 @@
           "offsetY": -20.0,
           "w": 40.0,
           "h": 50.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
@@ -760,7 +785,8 @@
           "offsetY": -5.0,
           "w": 55.0,
           "h": 65.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -771,7 +797,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -782,7 +809,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -793,7 +821,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
     "fireball": {
@@ -808,7 +837,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
@@ -820,7 +849,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
@@ -926,7 +955,8 @@
           "offsetY": -10.0,
           "w": 50.0,
           "h": 60.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
@@ -937,7 +967,8 @@
           "offsetY": -15.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_3": {
         "damage": 30,
@@ -948,7 +979,8 @@
           "offsetY": -20.0,
           "w": 40.0,
           "h": 50.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
@@ -959,7 +991,8 @@
           "offsetY": -5.0,
           "w": 55.0,
           "h": 65.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -970,7 +1003,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -981,7 +1015,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -992,7 +1027,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
     "fireball": {
@@ -1007,7 +1043,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 4,
@@ -1019,7 +1055,7 @@
       "speed": 500.0,
       "lifetime": 4.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
@@ -1125,7 +1161,8 @@
           "offsetY": -10.0,
           "w": 50.0,
           "h": 60.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
@@ -1136,7 +1173,8 @@
           "offsetY": -15.0,
           "w": 60.0,
           "h": 70.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_3": {
         "damage": 30,
@@ -1147,7 +1185,8 @@
           "offsetY": -20.0,
           "w": 40.0,
           "h": 50.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
@@ -1158,7 +1197,8 @@
           "offsetY": -5.0,
           "w": 55.0,
           "h": 65.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -1169,7 +1209,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "explosion_attack": {
         "damage": 50,
@@ -1180,7 +1221,8 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       },
       "long_attack": {
         "damage": 40,
@@ -1191,10 +1233,11 @@
           "offsetY": -10.0,
           "w": 64.0,
           "h": 64.0
-        }
+        },
+        "dashMultiplier": 2.0
       }
     },
-    "specialball": {
+    "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 4,
@@ -1218,7 +1261,7 @@
       "speed": 400.0,
       "lifetime": 3.0
     },
-    "exploball": {
+    "explosion": {
       "damage": 60,
       "textureName": "vfx_2",
       "frameNum": 6,

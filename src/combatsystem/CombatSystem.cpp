@@ -1,6 +1,8 @@
 #include "CombatSystem.h"
 #include "BruteForceDetector.h"
 #include "Entity.h"
+#include "Entity.h"
+#include "Player.h"
 #include "raylib.h"
 #include <algorithm>
 #include <iostream>
@@ -43,7 +45,16 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
             }
         }
 
-        int finalDamage = std::max(0, attackBox->damage - targetDefense);
+        // Calculate base damage
+        float damageMultiplier = 0.0f;
+        if (attackBox->owner) {
+            if (Player* p = dynamic_cast<Player*>(attackBox->owner)) {
+                damageMultiplier = p->getBuffManager().getTotalDamageMultiplier();
+            }
+        }
+        
+        int finalDamage = std::max(0, static_cast<int>(attackBox->damage * (1.0f + damageMultiplier)) - targetDefense);
+        
         if (finalDamage > 0) {
             float dirX = 0.0f;
             if (attackBox->owner) {

@@ -21,13 +21,18 @@ public:
     
     // Flags
     virtual bool isInvincible() const { return false; }
+    virtual bool isInvisible() const { return false; }
     virtual bool canTimeStop() const { return false; }
     virtual bool hasGoldMagnet() const { return false; }
+
+    // Visual rendering
+    virtual void render(const Player& player, float alpha) const {}
 
     // Cloning for BuffManager
     virtual std::unique_ptr<IBuffEffect> clone() const = 0;
 
-    // Optional hooks for entering/exiting buff state
+    // Optional hooks for entering/exiting/updating buff state
     virtual void onApply(Player& player) {}
     virtual void onRemove(Player& player) {}
+    virtual void update(float dt, Player& player) {}
 };

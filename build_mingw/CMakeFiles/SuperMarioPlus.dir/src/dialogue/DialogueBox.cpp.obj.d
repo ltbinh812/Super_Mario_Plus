@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\dialogue\DialogueBox.cpp \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueBox.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ D:\super_mario\Super_Mario_Plus\src\dialogue\DialogueBox.cpp \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueBox.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -103,11 +103,11 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueBox.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- D:/Git/.SuperMarioPlus/include/infrastructure/AssetManager.h \
+ D:/super_mario/Super_Mario_Plus/include/infrastructure/AssetManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \

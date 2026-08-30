@@ -8,6 +8,7 @@
 #include "GoldMagnetBuff.h"
 #include "TimeStopBuff.h"
 #include "RandomBuff.h"
+#include "HealBuff.h"
 #include "Player.h"
 #include <iostream>
 #include <cstdlib>
@@ -20,10 +21,14 @@ Buff::Buff(Vector2 worldPos, float scale, const std::string& specificType)
 {
     baseStats.gravityScale = 160.0f;
     runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
-    if (specificType == "Meat") effect_ = std::make_unique<StrengthBuff>();
-    else if (specificType == "Armor") effect_ = std::make_unique<ShieldBuff>();
-    else if (specificType == "Spell") effect_ = std::make_unique<TimeStopBuff>();
-    else if (specificType == "Vorpal_blade") effect_ = std::make_unique<SpeedBuff>();
+    if (specificType == "Item_strength") effect_ = std::make_unique<StrengthBuff>();
+    else if (specificType == "Item_shield") effect_ = std::make_unique<ShieldBuff>();
+    else if (specificType == "Item_time_stop") effect_ = std::make_unique<TimeStopBuff>();
+    else if (specificType == "Item_speed") effect_ = std::make_unique<SpeedBuff>();
+    else if (specificType == "Item_jump") effect_ = std::make_unique<JumpBuff>();
+    else if (specificType == "Item_gold_magnet") effect_ = std::make_unique<GoldMagnetBuff>();
+    else if (specificType == "Item_invisibility") effect_ = std::make_unique<InvisiBuff>();
+    else if (specificType == "Item_heal") effect_ = std::make_unique<HealBuff>();
     else {
         // Just make it a RandomBuff
         effect_ = std::make_unique<RandomBuff>();
@@ -53,11 +58,13 @@ void Buff::onInteract(Entity& other) {
         if (p->getRuntimeStats().storedItemSlot.empty()) {
             std::string buffName = effect_->getName();
             if (buffName == "Random") {
-                int r = rand() % 5;
+                int r = rand() % 6;
                 if (r == 0) buffName = "Speed";
                 else if (r == 1) buffName = "Jump";
                 else if (r == 2) buffName = "GoldMagnet";
                 else if (r == 3) buffName = "Shield";
+                else if (r == 4) buffName = "Heal";
+                else if (r == 5) buffName = "Poison";
                 else buffName = "Boom"; 
             }
             p->getRuntimeStatsMutable().storedItemSlot = buffName;
@@ -74,11 +81,13 @@ void Buff::forceInteract(Entity& other) {
     if (p) {
         std::string buffName = effect_->getName();
         if (buffName == "Random") {
-            int r = rand() % 5;
+            int r = rand() % 6;
             if (r == 0) buffName = "Speed";
             else if (r == 1) buffName = "Jump";
             else if (r == 2) buffName = "GoldMagnet";
             else if (r == 3) buffName = "Shield";
+            else if (r == 4) buffName = "Heal";
+            else if (r == 5) buffName = "Poison";
             else buffName = "Boom"; 
         }
         p->getRuntimeStatsMutable().storedItemSlot = buffName;

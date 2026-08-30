@@ -1,10 +1,10 @@
 CMakeFiles/SuperMarioPlus.dir/src/editor/EditorBottomPanel.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\editor\EditorBottomPanel.cpp \
- D:/Git/.SuperMarioPlus/include/editor/EditorBottomPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/CategoryPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockRegistry.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockDef.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\editor\EditorBottomPanel.cpp \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBottomPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CategoryPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockDef.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -12,7 +12,7 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EditorBottomPanel.cpp.obj: \
  C:/msys64/ucrt64/include/_mingw_mac.h \
  C:/msys64/ucrt64/include/_mingw_secapi.h \
  C:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -118,7 +118,7 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EditorBottomPanel.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -257,12 +257,12 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EditorBottomPanel.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/editor/BlockVariantPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/EntityPalette.h \
- D:/Git/.SuperMarioPlus/include/editor/EntityDef.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorToolManager.h \
- D:/Git/.SuperMarioPlus/include/editor/IEditorTool.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapData.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomEntityData.h \
- D:/Git/.SuperMarioPlus/include/editor/EraseTool.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorTextureCache.h
+ D:/super_mario/Super_Mario_Plus/include/editor/BlockVariantPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityPalette.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityDef.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorToolManager.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/IEditorTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomEntityData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EraseTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorTextureCache.h

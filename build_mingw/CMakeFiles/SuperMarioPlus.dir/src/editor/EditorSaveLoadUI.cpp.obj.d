@@ -1,6 +1,6 @@
 CMakeFiles/SuperMarioPlus.dir/src/editor/EditorSaveLoadUI.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\editor\EditorSaveLoadUI.cpp \
- D:/Git/.SuperMarioPlus/include/editor/EditorSaveLoadUI.h \
+ D:\super_mario\Super_Mario_Plus\src\editor\EditorSaveLoadUI.cpp \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorSaveLoadUI.h \
  C:/msys64/ucrt64/include/c++/14.2.0/functional \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
@@ -115,14 +115,14 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EditorSaveLoadUI.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/cerrno \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/charconv.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/basic_string.tcc \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapSerializer.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapData.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomEntityData.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapSerializer.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomEntityData.h \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \

@@ -1,9 +1,9 @@
 CMakeFiles/SuperMarioPlus.dir/src/editor/EraseTool.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\editor\EraseTool.cpp \
- D:/Git/.SuperMarioPlus/include/editor/EraseTool.h \
- D:/Git/.SuperMarioPlus/include/editor/IEditorTool.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapData.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomEntityData.h \
+ D:\super_mario\Super_Mario_Plus\src\editor\EraseTool.cpp \
+ D:/super_mario/Super_Mario_Plus/include/editor/EraseTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/IEditorTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomEntityData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -100,7 +100,7 @@ CMakeFiles/SuperMarioPlus.dir/src/editor/EraseTool.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator_args.h \
  C:/msys64/ucrt64/include/c++/14.2.0/tuple \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \

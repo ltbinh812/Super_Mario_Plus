@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\cutscene\CutsceneManager.cpp \
- D:/Git/.SuperMarioPlus/include/cutscene/CutsceneManager.h \
- D:/Git/.SuperMarioPlus/include/cutscene/CutsceneScript.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\cutscene\CutsceneManager.cpp \
+ D:/super_mario/Super_Mario_Plus/include/cutscene/CutsceneManager.h \
+ D:/super_mario/Super_Mario_Plus/include/cutscene/CutsceneScript.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -102,8 +102,8 @@ CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator_args.h \
  C:/msys64/ucrt64/include/c++/14.2.0/tuple \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueBox.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueBox.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_uninitialized.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
@@ -117,8 +117,8 @@ CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/include/environment/MapCamera.h \
- D:/Git/.SuperMarioPlus/include/environment/ICameraMode.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/MapCamera.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/ICameraMode.h \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -167,9 +167,9 @@ CMakeFiles/SuperMarioPlus.dir/src/cutscene/CutsceneManager.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_deque.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/deque.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_queue.h \
- D:/Git/.SuperMarioPlus/include/environment/CameraPanMode.h \
- D:/Git/.SuperMarioPlus/include/environment/CameraZoomMode.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/CameraPanMode.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/CameraZoomMode.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueRegistry.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream \

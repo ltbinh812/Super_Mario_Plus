@@ -1,0 +1,44 @@
+{
+  "frames": {
+    "mob_bat_idle": {
+      "frame": {"x":0,"y":0,"w":2880,"h":112},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":2880,"h":112},
+      "sourceSize": {"w":2880,"h":112}
+    },
+    "mob_bat_run": {
+      "frame": {"x":0,"y":224,"w":1152,"h":112},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1152,"h":112},
+      "sourceSize": {"w":1152,"h":112}
+    },
+    "mob_bat_attack": {
+      "frame": {"x":0,"y":336,"w":1344,"h":112},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1344,"h":112},
+      "sourceSize": {"w":1344,"h":112}
+    },
+    "mob_bat_hurt": {
+      "frame": {"x":0,"y":560,"w":960,"h":112},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":960,"h":112},
+      "sourceSize": {"w":960,"h":112}
+    },
+    "mob_bat_die": {
+      "frame": {"x":0,"y":672,"w":2112,"h":112},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":2112,"h":112},
+      "sourceSize": {"w":2112,"h":112}
+    }
+  },
+  "meta": {
+    "image": "mob_bat.png",
+    "size": {"w": 2880, "h": 784},
+    "scale": "1"
+  }
+}

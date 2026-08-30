@@ -1,12 +1,12 @@
 CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\entity\EnemyStates\EnemyDieState.cpp \
- D:/Git/.SuperMarioPlus/include/entity/EnemyStates/EnemyDieState.h \
- D:/Git/.SuperMarioPlus/include/entity/IMobState.h \
- D:/Git/.SuperMarioPlus/include/entity/Mob.h \
- D:/Git/.SuperMarioPlus/include/entity/Entity.h \
- D:/Git/.SuperMarioPlus/include/entity/Player/CharacterStats.h \
- D:/Git/.SuperMarioPlus/include/entity/Animation.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\entity\EnemyStates\EnemyDieState.cpp \
+ D:/super_mario/Super_Mario_Plus/include/entity/EnemyStates/EnemyDieState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/IMobState.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Mob.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Entity.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Player/CharacterStats.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Animation.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -114,7 +114,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
  C:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
@@ -123,7 +123,7 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -259,12 +259,12 @@ CMakeFiles/SuperMarioPlus.dir/src/entity/EnemyStates/EnemyDieState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/entity/FloatingText.h \
- D:/Git/.SuperMarioPlus/include/entity/IEntityState.h \
- D:/Git/.SuperMarioPlus/include/combatsystem/Hitbox.h \
- D:/Git/.SuperMarioPlus/include/entity/EntityFaction.h \
- D:/Git/.SuperMarioPlus/include/command/CommandQueue.h \
- D:/Git/.SuperMarioPlus/include/command/SpawnCommand.h \
- D:/Git/.SuperMarioPlus/include/entity/Effects.h \
- D:/Git/.SuperMarioPlus/include/entity/Item/AtlasAnimation.h \
- D:/Git/.SuperMarioPlus/include/entity/Skill/IEnemySkill.h
+ D:/super_mario/Super_Mario_Plus/include/entity/FloatingText.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/IEntityState.h \
+ D:/super_mario/Super_Mario_Plus/include/combatsystem/Hitbox.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/EntityFaction.h \
+ D:/super_mario/Super_Mario_Plus/include/command/CommandQueue.h \
+ D:/super_mario/Super_Mario_Plus/include/command/SpawnCommand.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Effects.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Item/AtlasAnimation.h \
+ D:/super_mario/Super_Mario_Plus/include/entity/Skill/IEnemySkill.h

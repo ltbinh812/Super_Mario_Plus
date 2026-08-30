@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/Git/.SuperMarioPlus/build_mingw/cmake_install.cmake"
+		"D:/super_mario/Super_Mario_Plus/build_mingw/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

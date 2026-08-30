@@ -137,7 +137,13 @@ void Entity::applyGravity(float dt) {
 void Entity::resolveCollisionX(const TileMap& map, const std::vector<Rectangle>& dynamicSolids, float dt) {
     const float EPSILON = 0.01f;
     const float SHRINK = 0.2f;
-    worldStats.position.x += runtimeStats.velocity.x * dt;
+    
+    float speedMod = 1.0f;
+    for (const auto& eff : activeEffects) {
+        speedMod *= eff->getSpeedMultiplier();
+    }
+    worldStats.position.x += runtimeStats.velocity.x * speedMod * dt;
+    
     Rectangle hitBoxX = getHitbox();
     hitBoxX.y += SHRINK;
     hitBoxX.height -= SHRINK * 2;
@@ -326,7 +332,13 @@ void Entity::updatePhysicsSimple(float groundY, float dt) {
             runtimeStats.velocity.y = 40.0f;
         }
     }
-    worldStats.position.x += runtimeStats.velocity.x * dt;
+    
+    float speedMod = 1.0f;
+    for (const auto& eff : activeEffects) {
+        speedMod *= eff->getSpeedMultiplier();
+    }
+    worldStats.position.x += runtimeStats.velocity.x * speedMod * dt;
+    
     worldStats.position.y += runtimeStats.velocity.y * dt;
     if (worldStats.position.y >= groundY) {
         worldStats.position.y = groundY;

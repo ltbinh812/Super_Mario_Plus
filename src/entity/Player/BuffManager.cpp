@@ -20,6 +20,7 @@ void BuffManager::addBuff(std::unique_ptr<IBuffEffect> buff, Player& player) {
 
 void BuffManager::update(float dt, Player& player) {
     for (auto it = activeBuffs_.begin(); it != activeBuffs_.end(); ) {
+        it->effect->update(dt, player);
         it->remainingTime -= dt;
         if (it->remainingTime <= 0.0f) {
             it->effect->onRemove(player);
@@ -66,6 +67,19 @@ bool BuffManager::isInvincible() const {
         if (active.effect->isInvincible()) return true;
     }
     return false;
+}
+
+bool BuffManager::isInvisible() const {
+    for (const auto& active : activeBuffs_) {
+        if (active.effect->isInvisible()) return true;
+    }
+    return false;
+}
+
+void BuffManager::render(const Player& player, float alpha) const {
+    for (const auto& active : activeBuffs_) {
+        active.effect->render(player, alpha);
+    }
 }
 
 bool BuffManager::canTimeStop() const {

@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\states\MapSelectionState.cpp \
- D:/Git/.SuperMarioPlus/include/states/MapSelectionState.h \
- D:/Git/.SuperMarioPlus/include/states/GameState.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
+ D:\super_mario\Super_Mario_Plus\src\states\MapSelectionState.cpp \
+ D:/super_mario/Super_Mario_Plus/include/states/MapSelectionState.h \
+ D:/super_mario/Super_Mario_Plus/include/states/GameState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -114,9 +114,9 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapSelectionState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/ui/transitions/IrisTransition.h \
- D:/Git/.SuperMarioPlus/include/ui/transitions/ITransition.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/transitions/IrisTransition.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/transitions/ITransition.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \

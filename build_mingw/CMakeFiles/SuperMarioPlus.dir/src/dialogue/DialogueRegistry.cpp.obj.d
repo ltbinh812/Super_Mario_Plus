@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\dialogue\DialogueRegistry.cpp \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueRegistry.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ D:\super_mario\Super_Mario_Plus\src\dialogue\DialogueRegistry.cpp \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -111,7 +111,7 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueRegistry.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueLoader.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueLoader.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream \
  C:/msys64/ucrt64/include/c++/14.2.0/ostream \
  C:/msys64/ucrt64/include/c++/14.2.0/ios \

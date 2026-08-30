@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/states/MapEditorState.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\states\MapEditorState.cpp \
- D:/Git/.SuperMarioPlus/include/states/MapEditorState.h \
- D:/Git/.SuperMarioPlus/include/states/GameState.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
+ D:\super_mario\Super_Mario_Plus\src\states\MapEditorState.cpp \
+ D:/super_mario/Super_Mario_Plus/include/states/MapEditorState.h \
+ D:/super_mario/Super_Mario_Plus/include/states/GameState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -114,8 +114,8 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapEditorState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/environment/TileMap.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:/super_mario/Super_Mario_Plus/include/environment/TileMap.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -152,7 +152,7 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapEditorState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/erase_if.h \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
@@ -254,29 +254,29 @@ CMakeFiles/SuperMarioPlus.dir/src/states/MapEditorState.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_numeric.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/any \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapData.h \
- D:/Git/.SuperMarioPlus/include/editor/CustomEntityData.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorCamera.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorMapResizer.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBottomPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/CategoryPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockRegistry.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorBlockDef.h \
- D:/Git/.SuperMarioPlus/include/editor/BlockVariantPanel.h \
- D:/Git/.SuperMarioPlus/include/editor/EntityPalette.h \
- D:/Git/.SuperMarioPlus/include/editor/EntityDef.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorToolManager.h \
- D:/Git/.SuperMarioPlus/include/editor/IEditorTool.h \
- D:/Git/.SuperMarioPlus/include/editor/EraseTool.h \
- D:/Git/.SuperMarioPlus/include/editor/UndoRedoStack.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomEntityData.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorCamera.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorMapResizer.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBottomPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CategoryPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockRegistry.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorBlockDef.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/BlockVariantPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityPalette.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EntityDef.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorToolManager.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/IEditorTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EraseTool.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/UndoRedoStack.h \
  C:/msys64/ucrt64/include/c++/14.2.0/deque \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_deque.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/deque.tcc \
- D:/Git/.SuperMarioPlus/include/editor/CustomMapSerializer.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorSaveLoadUI.h \
- D:/Git/.SuperMarioPlus/include/editor/EditorTextureCache.h \
- D:/Git/.SuperMarioPlus/include/command/StateCommands.h \
- D:/Git/.SuperMarioPlus/include/core/StateManager.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/CustomMapSerializer.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorSaveLoadUI.h \
+ D:/super_mario/Super_Mario_Plus/include/editor/EditorTextureCache.h \
+ D:/super_mario/Super_Mario_Plus/include/command/StateCommands.h \
+ D:/super_mario/Super_Mario_Plus/include/core/StateManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/stack \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_stack.h \
  C:/msys64/ucrt64/include/c++/14.2.0/iostream

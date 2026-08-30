@@ -1,8 +1,8 @@
 CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\ui\ButtonGroup.cpp \
- D:/Git/.SuperMarioPlus/include/ui/ButtonGroup.h \
- D:/Git/.SuperMarioPlus/include/ui/Buttons.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\ui\ButtonGroup.cpp \
+ D:/super_mario/Super_Mario_Plus/include/ui/ButtonGroup.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/Buttons.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -162,8 +162,8 @@ CMakeFiles/SuperMarioPlus.dir/src/ui/ButtonGroup.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/Git/.SuperMarioPlus/include/ui/IMenuPanel.h \
- D:/Git/.SuperMarioPlus/include/core/SettingsManager.h \
+ D:/super_mario/Super_Mario_Plus/include/ui/IMenuPanel.h \
+ D:/super_mario/Super_Mario_Plus/include/core/SettingsManager.h \
  C:/msys64/ucrt64/include/c++/14.2.0/map \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tree.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_map.h \

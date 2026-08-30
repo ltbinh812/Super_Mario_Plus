@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/infrastructure/AssetManager.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\infrastructure\AssetManager.cpp \
- D:/Git/.SuperMarioPlus/include/infrastructure/AssetManager.h \
- D:/Git/.SuperMarioPlus/third_party/raylib/include/raylib.h \
+ D:\super_mario\Super_Mario_Plus\src\infrastructure\AssetManager.cpp \
+ D:/super_mario/Super_Mario_Plus/include/infrastructure/AssetManager.h \
+ D:/super_mario/Super_Mario_Plus/third_party/raylib/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \

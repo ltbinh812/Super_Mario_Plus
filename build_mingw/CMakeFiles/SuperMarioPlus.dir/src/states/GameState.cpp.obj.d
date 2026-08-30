@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/states/GameState.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\states\GameState.cpp \
- D:/Git/.SuperMarioPlus/include/states/GameState.h \
- D:/Git/.SuperMarioPlus/include/command/IGameCommand.h \
+ D:\super_mario\Super_Mario_Plus\src\states\GameState.cpp \
+ D:/super_mario/Super_Mario_Plus/include/states/GameState.h \
+ D:/super_mario/Super_Mario_Plus/include/command/IGameCommand.h \
  C:/msys64/ucrt64/include/c++/14.2.0/vector \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \

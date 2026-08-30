@@ -9,6 +9,7 @@
 #include "ChestBoss.h"
 #include "Buff.h"
 #include "Boom.h"
+#include "PoisonFlask.h"
 #include "nlohmann/json.hpp"
 #include <iostream>
 
@@ -35,15 +36,30 @@ std::unique_ptr<BaseItem> ItemFactory::create(
         std::string itemType = "";
         if (fieldInstances.is_array()) {
             for (const auto& field : fieldInstances) {
-                if (field.value("__identifier", "") == "item_type") {
-                    itemType = field.value("__value", "");
+                if (field.value("__identifier", "") == "ItemType" || field.value("__identifier", "") == "item_type") {
+                    if (field.contains("__value")) {
+                        if (field["__value"].is_string()) {
+                            itemType = field["__value"].get<std::string>();
+                        } else if (field["__value"].is_array() && !field["__value"].empty()) {
+                            if (field["__value"][0].is_string()) {
+                                itemType = field["__value"][0].get<std::string>();
+                            }
+                        }
+                    }
                     break;
                 }
             }
         }
+        if (itemType == "Boom") {
+            return std::make_unique<Boom>(worldPos);
+        }
+        if (itemType == "Item_poison") {
+            return std::make_unique<PoisonFlask>(worldPos);
+        }
         return std::make_unique<Buff>(worldPos, 2.0f, itemType);
     }
     if (identifier == "Boom")         return std::make_unique<Boom>(worldPos);
+    if (identifier == "Poison")       return std::make_unique<PoisonFlask>(worldPos);
 
     std::cout << "[ItemFactory] Unknown identifier: " << identifier << "\n";
     return nullptr;
@@ -68,12 +84,14 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
     else if (identifier == "Boom")    item = std::make_unique<Boom>(worldPos);
     else if (identifier == "Buff")    item = std::make_unique<Buff>(worldPos, 2.0f, "");
     else if (identifier == "ThrownBoom") {
-        // Pre-activated boom thrown by player — uses Boom(pos, velocity) constructor
         item = std::make_unique<Boom>(worldPos, initialVelocity);
+    }
+    else if (identifier == "ThrownPoison") {
+        item = std::make_unique<PoisonFlask>(worldPos, initialVelocity);
     }
 
     if (item) {
-        if (identifier != "ThrownBoom") {
+        if (identifier != "ThrownBoom" && identifier != "ThrownPoison") {
             item->setPickupDelay(0.5f); // normal spawned items need delay
         }
         return item;

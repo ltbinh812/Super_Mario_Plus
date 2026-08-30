@@ -1,7 +1,7 @@
 CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: \
- D:\Git\.SuperMarioPlus\src\dialogue\DialogueLoader.cpp \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueLoader.h \
- D:/Git/.SuperMarioPlus/include/dialogue/DialogueData.h \
+ D:\super_mario\Super_Mario_Plus\src\dialogue\DialogueLoader.cpp \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueLoader.h \
+ D:/super_mario/Super_Mario_Plus/include/dialogue/DialogueData.h \
  C:/msys64/ucrt64/include/c++/14.2.0/string \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -103,7 +103,7 @@ CMakeFiles/SuperMarioPlus.dir/src/dialogue/DialogueLoader.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
- D:/Git/.SuperMarioPlus/third_party/json/include/nlohmann/json.hpp \
+ D:/super_mario/Super_Mario_Plus/third_party/json/include/nlohmann/json.hpp \
  C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
