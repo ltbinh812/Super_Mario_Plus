@@ -73,6 +73,7 @@ set(SOURCES
     src/ui/UIAtlasAnimator.cpp
     src/ui/CharacterInfoPanel.cpp
     src/ui/IngameSettingsPanel.cpp
+    src/ui/ShopUIPanel.cpp
     src/ui/transitions/IrisTransition.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
@@ -140,6 +141,7 @@ set(SOURCES
     src/entity/Item/Buff.cpp
     src/entity/Item/Boom.cpp
     src/entity/Item/PoisonFlask.cpp
+    src/entity/Item/ShopAsset.cpp
     src/entity/Item/ItemFactory.cpp
     src/entity/Item/ItemUsageFactory.cpp
     src/combatsystem/BruteForceDetector.cpp

@@ -13,6 +13,7 @@
 #include "PlayerFactory.h"
 #include "SaveManager.h"
 #include "Flag.h"
+#include "ShopAsset.h"
 #include "PlayerHUD.h"
 #include "Coin.h"
 #include "CustomMapData.h"
@@ -122,6 +123,10 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
       this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
   });
+
+  // Initialize Shop UI
+  shopUI_ = std::make_unique<ShopUIPanel>();
+  shopUI_->init((float)GetScreenWidth(), (float)GetScreenHeight());
 }
 
 // =============================================================================
@@ -234,6 +239,10 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
   ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
       this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
   });
+
+  // Initialize Shop UI
+  shopUI_ = std::make_unique<ShopUIPanel>();
+  shopUI_->init((float)GetScreenWidth(), (float)GetScreenHeight());
 }
 
 
@@ -404,6 +413,22 @@ void BaseLevelState::Update(float dt) {
     }
   }
 
+  if (shopUI_ && shopUI_->isOpen()) {
+    shopUI_->update(dt, GetMousePosition(), IsMouseButtonPressed(MOUSE_LEFT_BUTTON));
+    return; // Đóng băng logic game khi shop mở
+  }
+
+  // Quét các activeItems xem có ShopAsset nào yêu cầu mở shop không
+  for (auto& item : activeItems) {
+      if (item && item->getIsActive()) {
+          ShopAsset* shop = dynamic_cast<ShopAsset*>(item.get());
+          if (shop && shop->wantsToOpenShop()) {
+              shopUI_->open(player1.get());
+              shop->resetOpenShop();
+          }
+      }
+  }
+
   // Update cutscene mode if active
   if (cutsceneManager.isActive()) {
     cutsceneManager.update(dt);
@@ -515,6 +540,11 @@ void BaseLevelState::Render(float alpha) const {
   // In-Game Settings overlay (cogwheel button or full Settings Panel)
   if (enableIngameSettings_ && ingameSettings_) {
     ingameSettings_->render(alpha);
+  }
+
+  // Shop UI overlay
+  if (shopUI_ && shopUI_->isOpen()) {
+    shopUI_->render(alpha);
   }
 }
 

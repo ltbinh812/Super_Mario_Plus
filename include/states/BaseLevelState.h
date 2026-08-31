@@ -10,6 +10,7 @@
 #include "CutsceneManager.h"
 #include "CutsceneTrigger.h"
 #include "IngameSettingsPanel.h"
+#include "ShopUIPanel.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -69,6 +70,9 @@ protected:
     // === In-Game Settings ===
     std::unique_ptr<IngameSettingsPanel> ingameSettings_;
     bool enableIngameSettings_ = true;
+
+    // === Shop UI ===
+    std::unique_ptr<ShopUIPanel> shopUI_;
 
     // === Game Mode ===
     bool isPvPMode_ = false;
