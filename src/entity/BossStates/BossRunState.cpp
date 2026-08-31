@@ -26,9 +26,9 @@ void BossRunState::decideAction(Mob& mob) {
     }
 
     // Khoảng cách attackRange thông thường
-    if (minDistance <= mob.getConfig().aiData.attackRange) {
+    if (minDistance <= mob.getConfig().aiData.attackRange && mob.getAttackCooldown() <= 0.0f) {
         mob.changeState(std::make_unique<BossAttackState>());
-    } else if (minDistance <= 250.0f) { 
+    } else if (minDistance <= 250.0f && mob.getAttackCooldown() <= 0.0f) { 
         // Cơ chế dùng skill đánh xa ngẫu nhiên nếu khoảng cách xa hơn attackRange một chút
         if (rand() % 100 < 2) { // Tỉ lệ thấp để không spam liên tục
             mob.changeState(std::make_unique<BossAttackState>());

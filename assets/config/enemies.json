@@ -10,7 +10,7 @@
       "h": 32.0
     },
     "aiData": {
-      "detectionRange": 250.0,
+      "detectionRange": 100.0,
       "attackRange": 40.0,
       "patrolSpeed": 50.0,
       "patrolTime": 3.0

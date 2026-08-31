@@ -11,6 +11,7 @@ void EnemyPatrolState::enter(Mob& mob) {
     auto& aiData = mob.getConfig().aiData;
     patrolSpeed = aiData.patrolSpeed;
     patrolTime = aiData.patrolTime;
+    mob.resetStateTimer();
 }
 
 #include "EnemyRunState.h"

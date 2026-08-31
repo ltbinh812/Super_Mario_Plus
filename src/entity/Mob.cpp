@@ -30,6 +30,9 @@ void Mob::update(float dt) {
     if (aggroCooldown > 0.0f) {
         aggroCooldown -= dt;
     }
+    if (attackCooldown > 0.0f) {
+        attackCooldown -= dt;
+    }
 
     if (isDead) {
         bool animFinished = false;

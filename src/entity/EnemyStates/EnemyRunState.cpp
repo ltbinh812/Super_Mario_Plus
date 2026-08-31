@@ -32,7 +32,7 @@ void EnemyRunState::decideAction(Mob& mob) {
         return;
     }
     
-    if (dist <= attackRange) {
+    if (dist <= attackRange && mob.getAttackCooldown() <= 0.0f) {
         if (!mob.getEnemySkills().empty()) {
             int skillIndex = GetRandomValue(0, mob.getEnemySkills().size() - 1);
             mob.changeState(std::make_unique<EnemySkillState>(mob.getEnemySkills()[skillIndex].get()));

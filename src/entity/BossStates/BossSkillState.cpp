@@ -15,9 +15,12 @@ void BossSkillState::enter(Mob& mob) {
         Player* p = mob.getClosestPlayer();
         float moveDir = 0.0f;
         if (p) {
-            bool faceRight = p->getPosition().x > mob.getPosition().x;
-            mob.setFacingRight(faceRight);
-            moveDir = faceRight ? 1.0f : -1.0f;
+            float dirX = p->getPosition().x - mob.getPosition().x;
+            if (std::abs(dirX) > 5.0f) {
+                bool faceRight = dirX > 0;
+                mob.setFacingRight(faceRight);
+            }
+            moveDir = mob.getIsFacingRight() ? 1.0f : -1.0f;
         }
         
         // Cấp 1 lực lao tới người chơi tùy theo config của skill
@@ -31,6 +34,7 @@ void BossSkillState::decideAction(Mob& mob) {
     
     // Nếu skill đã thi triển xong
     if (mob.getStateTimer() >= currentSkill->getDuration()) {
+        mob.setAttackCooldown(1.0f); // Boss cooldown
         if (returnToDebugMode) {
             mob.changeState(std::make_unique<BossDebugInputState>());
             return;

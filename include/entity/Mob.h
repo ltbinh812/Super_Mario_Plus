@@ -49,6 +49,7 @@ protected:
     // AI Variables
     float stateTimer;
     float aggroCooldown = 0.0f;
+    float attackCooldown = 0.0f;
     Vector2 spawnPoint;
     bool isFacingRight;
     bool isDead;
@@ -114,6 +115,9 @@ public:
     
     float getAggroCooldown() const { return aggroCooldown; }
     void setAggroCooldown(float t) { aggroCooldown = t; }
+    
+    float getAttackCooldown() const { return attackCooldown; }
+    void setAttackCooldown(float t) { attackCooldown = t; }
     
     Vector2 getPosition() const { return worldStats.position; }
     void setVelocity(Vector2 v) { runtimeStats.velocity = v; }

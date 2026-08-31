@@ -7,6 +7,7 @@ void EnemySkillState::enter(Mob& mob) {
     if (currentSkill) {
         // Play animation
         mob.setAnimation(currentSkill->getAnimName());
+        mob.resetStateTimer();
         
         timer = currentSkill->getDuration();
         hasExecuted = false;
@@ -14,9 +15,12 @@ void EnemySkillState::enter(Mob& mob) {
         Player* p = mob.getClosestPlayer();
         float moveDir = 0.0f;
         if (p) {
-            bool faceRight = p->getPosition().x > mob.getPosition().x;
-            mob.setFacingRight(faceRight);
-            moveDir = faceRight ? 1.0f : -1.0f;
+            float dirX = p->getPosition().x - mob.getPosition().x;
+            if (std::abs(dirX) > 5.0f) {
+                bool faceRight = dirX > 0;
+                mob.setFacingRight(faceRight);
+            }
+            moveDir = mob.getIsFacingRight() ? 1.0f : -1.0f;
         }
         
         // Cấp lực lao tới theo config của skill (giống boss)
@@ -62,6 +66,7 @@ void EnemySkillState::process(Mob& mob) {
 
     if (elapsedTime >= currentSkill->getDuration()) {
         // Skill finished, transition back to Chase State
+        mob.setAttackCooldown(1.5f); // Prevent spamming attacks
         mob.changeState(std::make_unique<EnemyRunState>());
     }
 }
