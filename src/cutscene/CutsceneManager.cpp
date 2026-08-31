@@ -5,7 +5,7 @@
 #include "DialogueRegistry.h"
 #include <iostream>
 
-void CutsceneManager::startCutscene(const CutsceneScript& script, MapCamera& cam, Vector2 playerPos) {
+void CutsceneManager::startCutscene(const CutsceneScript& script, MapCamera& cam, Vector2 playerPos, int mapW, int mapH) {
     // Kiểm tra oneShot: nếu đã trigger rồi thì skip
     if (script.oneShot && !script.triggerId.empty()) {
         if (triggeredIds.find(script.triggerId) != triggeredIds.end()) {
@@ -25,6 +25,8 @@ void CutsceneManager::startCutscene(const CutsceneScript& script, MapCamera& cam
     camera = &cam;
     playerReturnPos = playerPos;
     normalZoom = cam.GetZoom(); // Capture lại mức zoom hiện tại của camera
+    currentMapW = mapW;
+    currentMapH = mapH;
 
     // Đánh dấu oneShot đã trigger
     if (script.oneShot && !script.triggerId.empty()) {
@@ -43,13 +45,13 @@ void CutsceneManager::startCutscene(const CutsceneScript& script, MapCamera& cam
             // Zoom + Pan đồng thời
             cam.pushMode(std::make_unique<CameraZoomMode>(
                 script.cameraZoomTarget, script.cameraPanTarget,
-                script.panDuration, EaseType::EaseInOut
+                script.panDuration, EaseType::EaseInOut, currentMapW, currentMapH
             ));
         } else {
             // Chỉ Pan
             cam.pushMode(std::make_unique<CameraPanMode>(
                 script.cameraPanTarget, script.panDuration, EaseType::EaseInOut,
-                0, 0 // mapW/mapH sẽ được xử lý bởi CameraPanMode nếu cần
+                currentMapW, currentMapH // mapW/mapH sẽ được xử lý bởi CameraPanMode nếu cần
             ));
         }
     } else {
@@ -96,12 +98,12 @@ void CutsceneManager::process() {
                         if (currentScript.hasCameraZoom()) {
                             camera->pushMode(std::make_unique<CameraZoomMode>(
                                 normalZoom, playerReturnPos, currentScript.panDuration * 0.7f,
-                                EaseType::EaseOut
+                                EaseType::EaseOut, currentMapW, currentMapH
                             ));
                         } else {
                             camera->pushMode(std::make_unique<CameraPanMode>(
                                 playerReturnPos, currentScript.panDuration * 0.7f,
-                                EaseType::EaseOut, 0, 0
+                                EaseType::EaseOut, currentMapW, currentMapH
                             ));
                         }
                     }

@@ -764,7 +764,7 @@ void BaseLevelState::processCutsceneTriggers() {
       if (trigger.checkTrigger(hitbox)) {
         // Lấy vị trí Player hiện tại để camera quay về sau
         Vector2 playerPos = p->getWorldStats().position;
-        cutsceneManager.startCutscene(trigger.getScript(), mapCamera, playerPos);
+        cutsceneManager.startCutscene(trigger.getScript(), mapCamera, playerPos, map.GetWidth(), map.GetHeight());
         trigger.markTriggered();
         
         // Notify entities

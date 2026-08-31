@@ -4,19 +4,19 @@
 #include <algorithm>
 
 // Constructor chỉ zoom (không pan)
-CameraZoomMode::CameraZoomMode(float targetZoom, float duration, EaseType easeType)
+CameraZoomMode::CameraZoomMode(float targetZoom, float duration, EaseType easeType, int mapW, int mapH)
     : startZoom(1.0f), targetZoom(targetZoom),
       panStart{0, 0}, panTarget{0, 0}, hasPan(false),
       duration(duration), elapsed(0.0f),
-      easeType(easeType), started(false) {}
+      easeType(easeType), started(false), mapWidth(mapW), mapHeight(mapH) {}
 
 // Constructor zoom + pan đồng thời
 CameraZoomMode::CameraZoomMode(float targetZoom, Vector2 panTarget, float duration,
-                               EaseType easeType)
+                               EaseType easeType, int mapW, int mapH)
     : startZoom(1.0f), targetZoom(targetZoom),
       panStart{0, 0}, panTarget(panTarget), hasPan(true),
       duration(duration), elapsed(0.0f),
-      easeType(easeType), started(false) {}
+      easeType(easeType), started(false), mapWidth(mapW), mapHeight(mapH) {}
 
 float CameraZoomMode::ease(float t) const {
     t = std::clamp(t, 0.0f, 1.0f);
@@ -47,13 +47,30 @@ void CameraZoomMode::update(MapCamera& cam, float dt) {
     float newZoom = startZoom + (targetZoom - startZoom) * easedT;
     cam.setCameraZoom(newZoom);
 
-    // Nội suy position (nếu có pan)
+    // Tính toán target mới (dù có pan hay không, target vẫn cần clamp theo zoom mới)
+    Vector2 newTarget = hasPan ? panStart : cam.GetTarget();
     if (hasPan) {
-        Vector2 newTarget;
         newTarget.x = panStart.x + (panTarget.x - panStart.x) * easedT;
         newTarget.y = panStart.y + (panTarget.y - panStart.y) * easedT;
-        cam.setCameraTarget(newTarget);
     }
+
+    // Luôn luôn clamp target theo zoom mới (giống CameraPanMode)
+    if (newZoom > 0.0f) {
+        float viewW = (float)GetScreenWidth() / newZoom;
+        float viewH = (float)GetScreenHeight() / newZoom;
+
+        if (mapWidth > 0) {
+            float minX = viewW / 2.0f;
+            float maxX = std::max(minX, (float)mapWidth - viewW / 2.0f);
+            newTarget.x = std::clamp(newTarget.x, minX, maxX);
+        }
+        if (mapHeight > 0) {
+            float minY = viewH / 2.0f;
+            float maxY = std::max(minY, (float)mapHeight - viewH / 2.0f);
+            newTarget.y = std::clamp(newTarget.y, minY, maxY);
+        }
+    }
+    cam.setCameraTarget(newTarget);
 }
 
 bool CameraZoomMode::isFinished() const {

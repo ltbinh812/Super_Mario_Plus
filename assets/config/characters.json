@@ -1804,7 +1804,7 @@
             "scale": 1,
             "damage": 30,
             "hitboxH": 96,
-            "offsetY": 0
+            "offsetY": 32
         },
         "assetFolder": "maps/item"
     },
@@ -1813,7 +1813,7 @@
             "hitboxW": 128,
             "hitboxH": 128,
             "offsetX": 0,
-            "offsetY": 0,
+            "offsetY": 48,
             "frameNum": 7,
             "frameTime": 0.05,
             "hitboxStartFrame": 1,

@@ -23,6 +23,8 @@ private:
     float elapsed;
     EaseType easeType;
     bool started;          // Đánh dấu đã capture startZoom chưa
+    int mapWidth;
+    int mapHeight;
 
     float ease(float t) const;
 
@@ -31,8 +33,10 @@ public:
      * @param targetZoom  Zoom level đích
      * @param duration    Thời gian zoom (giây)
      * @param easeType    Kiểu nội suy
+     * @param mapW        Chiều rộng map (0 = no clamp)
+     * @param mapH        Chiều cao map (0 = no clamp)
      */
-    CameraZoomMode(float targetZoom, float duration, EaseType easeType = EaseType::EaseInOut);
+    CameraZoomMode(float targetZoom, float duration, EaseType easeType = EaseType::EaseInOut, int mapW = 0, int mapH = 0);
 
     /**
      * Kết hợp zoom + pan đồng thời (cinematic wide shot).
@@ -40,9 +44,11 @@ public:
      * @param panTarget   Vị trí pan đến
      * @param duration    Thời gian (giây)
      * @param easeType    Kiểu nội suy
+     * @param mapW        Chiều rộng map (0 = no clamp)
+     * @param mapH        Chiều cao map (0 = no clamp)
      */
     CameraZoomMode(float targetZoom, Vector2 panTarget, float duration,
-                   EaseType easeType = EaseType::EaseInOut);
+                   EaseType easeType = EaseType::EaseInOut, int mapW = 0, int mapH = 0);
 
     void update(MapCamera& cam, float dt) override;
     bool isFinished() const override;

@@ -5,7 +5,7 @@
     },
     "levelData": {
         "levelId": "",
-        "mapFilePath": "assets/maps/map05/world05.ldtk",
+        "mapFilePath": "assets/maps/map01/world01.ldtk",
         "persistedDeadEntities": [],
         "persistedItemStates": {},
         "worldId": ""
@@ -15,7 +15,7 @@
         "health": 300,
         "isFacingRight": true,
         "maxHealth": 300,
-        "posX": 1971.0,
-        "posY": 799.989990234375
+        "posX": 881.010009765625,
+        "posY": 620.185546875
     }
 }
