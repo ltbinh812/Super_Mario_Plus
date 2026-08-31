@@ -14,11 +14,13 @@ void BossIdleState::enter(Mob& mob) {
     std::transform(lowerType.begin(), lowerType.end(), lowerType.begin(), ::tolower);
     mob.setAnimation(lowerType + "_idle");
     mob.setVelocity({0, 0});
+    mob.resetStateTimer();
 }
 
 void BossIdleState::decideAction(Mob& mob) {
     Boss* boss = dynamic_cast<Boss*>(&mob);
     if (boss && boss->getIsWaitingForCutscene()) return;
+    if (mob.getAggroCooldown() > 0.0f) return;
 
     Player* target = mob.getClosestPlayer();
     if (target) {

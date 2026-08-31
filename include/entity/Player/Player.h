@@ -119,6 +119,7 @@ public:
 
 private:
   void changeState(PlayerState &state);
+  void processBreath(float dt);
 
   PlayerState *currentState;
   std::unordered_map<std::string, Animation> animationList;

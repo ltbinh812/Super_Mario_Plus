@@ -1,16 +1,16 @@
 {
-    "id": "test",
+    "id": "map1_intro",
     "lines": [
         {
             "speaker": "Old Man",
             "portrait": "",
-            "text": "Welcome to the world of Super Mario Plus!",
+            "text": "Welcome to the world of The Awakening Plains!",
             "textSpeed": 30
         },
         {
-            "speaker": "Goku",
+            "speaker": "Player",
             "portrait": "",
-            "text": "I will protect everyone! Let's go!",
+            "text": "What's a big world! Let's go!",
             "textSpeed": 40
         },
         {

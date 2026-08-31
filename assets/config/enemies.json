@@ -10,7 +10,7 @@
       "h": 32.0
     },
     "aiData": {
-      "detectionRange": 250.0,
+      "detectionRange": 100.0,
       "attackRange": 40.0,
       "patrolSpeed": 50.0,
       "patrolTime": 3.0
@@ -33,7 +33,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     }
   },
@@ -132,7 +132,7 @@
           "w": 50.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -144,7 +144,7 @@
           "w": 60.0,
           "h": 70.0
         },
-        "dashMultiplier": 10.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -156,7 +156,7 @@
           "w": 40.0,
           "h": 50.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -168,7 +168,7 @@
           "w": 55.0,
           "h": 65.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -180,7 +180,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -192,7 +192,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -204,7 +204,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -338,7 +338,7 @@
           "w": 70.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -350,7 +350,7 @@
           "w": 120.0,
           "h": 22.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -362,7 +362,7 @@
           "w": 120.0,
           "h": 30.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -374,7 +374,7 @@
           "w": 60.0,
           "h": 30.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -386,7 +386,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -398,7 +398,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -410,7 +410,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -544,7 +544,7 @@
           "w": 50.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -556,7 +556,7 @@
           "w": 60.0,
           "h": 50.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -568,7 +568,7 @@
           "w": 60.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -580,7 +580,7 @@
           "w": 30.0,
           "h": 20.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -592,7 +592,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -604,7 +604,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -616,7 +616,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -750,7 +750,7 @@
           "w": 50.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -762,7 +762,7 @@
           "w": 60.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -774,7 +774,7 @@
           "w": 20.0,
           "h": 50.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -786,7 +786,7 @@
           "w": 20.0,
           "h": 10.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -798,7 +798,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -810,7 +810,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -822,7 +822,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -956,7 +956,7 @@
           "w": 70.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -968,7 +968,7 @@
           "w": 60.0,
           "h": 45.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -980,7 +980,7 @@
           "w": 100.0,
           "h": 65.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -992,7 +992,7 @@
           "w": 60.0,
           "h": 75.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -1004,7 +1004,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -1016,7 +1016,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -1028,7 +1028,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -1162,7 +1162,7 @@
           "w": 30.0,
           "h": 40.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -1174,7 +1174,7 @@
           "w": 90.0,
           "h": 25.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -1186,7 +1186,7 @@
           "w": 35.0,
           "h": 8.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -1198,7 +1198,7 @@
           "w": 20.0,
           "h": 20.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -1210,7 +1210,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -1222,7 +1222,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -1234,7 +1234,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "special_ball": {
@@ -1307,7 +1307,7 @@
           "w": 35.0,
           "h": 35.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     }
   },
@@ -1346,7 +1346,7 @@
           "w": 30.0,
           "h": 45.0
         },
-        "dashMultiplier": 1.5
+        "dashMultiplier": 0
       },
       "mob_soldier_projectile": {
         "damage": 15,
@@ -1358,7 +1358,7 @@
           "w": 10.0,
           "h": 10.0
         },
-        "dashMultiplier": 0.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -1408,7 +1408,7 @@
           "w": 40.0,
           "h": 40.0
         },
-        "dashMultiplier": 2.5
+        "dashMultiplier": 0
       }
     }
   },
@@ -1446,7 +1446,7 @@
           "w": 60.0,
           "h": 80.0
         },
-        "dashMultiplier": 1.5
+        "dashMultiplier": 0
       }
     }
   },
@@ -1484,7 +1484,7 @@
           "w": 30.0,
           "h": 40.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     }
   },
@@ -1522,7 +1522,7 @@
           "w": 40.0,
           "h": 50.0
         },
-        "dashMultiplier": 1.5
+        "dashMultiplier": 0
       }
     }
   },
@@ -1560,7 +1560,7 @@
           "w": 40.0,
           "h": 60.0
         },
-        "dashMultiplier": 1.0
+        "dashMultiplier": 0
       }
     }
   },
@@ -1598,7 +1598,7 @@
           "w": 32.0,
           "h": 32.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     }
   }

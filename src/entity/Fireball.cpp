@@ -108,7 +108,7 @@ void Fireball::render(float alpha) {
     DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
 }
 
-void Fireball::onHitWall(bool isRightWall) {
+void Fireball::onHitWall(bool isRightWall, bool isCliff) {
     std::cout << "[Fireball] Hit wall! Deactivating. pos=(" << worldStats.position.x << ", " << worldStats.position.y << ")" << std::endl;
     isActive = false;
 }

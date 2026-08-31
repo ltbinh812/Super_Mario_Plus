@@ -21,6 +21,7 @@ struct CharacterBaseStats {
     
     Vector2 physicsBox = {0.0f, 0.0f}; 
     Vector2 crouchBox = {0.0f, 0.0f};
+    bool avoidCliffsAndWater = false;
 };
 
 
@@ -29,6 +30,8 @@ struct CharacterRuntimeStats {
     int mana   = 0;
     int breath = 100;
     float manaAccumulator = 0.0f;
+    float breathAccumulator = 0.0f;
+    float drownDamageTimer = 0.0f;
 
     Vector2 physicsBox = {0.0f, 0.0f};
     Vector2 velocity = {0.0f, 0.0f}; 

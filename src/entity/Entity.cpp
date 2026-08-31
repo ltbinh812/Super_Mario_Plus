@@ -117,6 +117,36 @@ void Entity::handleTriggers(const TileMap& map, float dt) {
     }
 }
 
+void Entity::checkEdgeAndWater(const TileMap& map) {
+    if (!runtimeStats.isGrounded || runtimeStats.velocity.x == 0.0f) return;
+
+    // Check a tile slightly ahead and below feet
+    float lookAheadX = worldStats.position.x + (runtimeStats.velocity.x > 0 ? runtimeStats.physicsBox.x / 2.0f + 4.0f : -runtimeStats.physicsBox.x / 2.0f - 4.0f);
+    float lookAheadY = worldStats.position.y + 4.0f; // 4 pixels below the feet
+
+    Rectangle sensor = { lookAheadX - 2.0f, lookAheadY, 4.0f, 4.0f };
+    std::vector<CollisionTile> tiles = map.GetCollidingTiles(sensor);
+
+    bool hasSolid = false;
+    bool hasWater = false;
+    for (const auto& tile : tiles) {
+        if (tile.type == CollisionType::Solid || tile.type == CollisionType::OneWay || 
+            tile.type == CollisionType::Slop || tile.type == CollisionType::Cloud || 
+            tile.type == CollisionType::Lotus) {
+            hasSolid = true;
+        }
+        if (tile.type == CollisionType::Water || tile.type == CollisionType::Lava || tile.type == CollisionType::Poison) {
+            hasWater = true;
+        }
+    }
+
+    if (!hasSolid || hasWater) {
+        bool wasMovingRight = (runtimeStats.velocity.x > 0);
+        runtimeStats.velocity.x = 0.0f;
+        onHitWall(wasMovingRight, true);
+    }
+}
+
 void Entity::applyGravity(float dt) {
     float mod = 1.0f;
     if (runtimeStats.currentLiquid == CollisionType::Water ||
@@ -157,8 +187,12 @@ void Entity::resolveCollisionX(const TileMap& map, const std::vector<Rectangle>&
     if (!collidersX.empty()) {
         for (const auto& tile : collidersX) {
             if ((runtimeStats.collisionMask & (1 << (int)tile.type)) == 0) continue;
-            // X-axis only stops on Solid and Cloud
-            if (tile.type != CollisionType::Solid && tile.type != CollisionType::Cloud) continue;
+            
+            bool isWall = (tile.type == CollisionType::Solid || tile.type == CollisionType::Cloud);
+            if (baseStats.avoidCliffsAndWater && (tile.type == CollisionType::Water || tile.type == CollisionType::Lava || tile.type == CollisionType::Poison)) {
+                isWall = true;
+            }
+            if (!isWall) continue;
 
             const Rectangle& rect = tile.rect;
             Rectangle currentHitBoxX = getHitbox();
@@ -167,7 +201,7 @@ void Entity::resolveCollisionX(const TileMap& map, const std::vector<Rectangle>&
             
             if (!CheckCollisionRecs(currentHitBoxX, rect)) continue;
 
-            if (tile.type == CollisionType::Solid || tile.type == CollisionType::Cloud) {
+            if (isWall) {
                 if (runtimeStats.velocity.x > 0) { 
                     worldStats.position.x = rect.x - (runtimeStats.physicsBox.x / 2.0f) - EPSILON;
                     if (tile.type == CollisionType::Cloud && std::abs(runtimeStats.velocity.x) > 350.0f) {
@@ -312,6 +346,11 @@ void Entity::updatePhysicsWithMap(const TileMap& map, const std::vector<Rectangl
     }
 
     handleTriggers(map, dt);
+    
+    if (baseStats.avoidCliffsAndWater) {
+        checkEdgeAndWater(map);
+    }
+
     applyGravity(dt);
     resolveCollisionX(map, dynamicSolids, dt);
     resolveCollisionY(map, dynamicSolids, dt);

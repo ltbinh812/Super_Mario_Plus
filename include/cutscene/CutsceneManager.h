@@ -44,6 +44,8 @@ private:
     MapCamera* camera = nullptr;       // Tham chiếu (không sở hữu), set lúc startCutscene
     Vector2 playerReturnPos = {0, 0};  // Vị trí Player để camera quay về
     float normalZoom = 1.0f;           // Zoom level ban đầu trước khi cutscene bắt đầu
+    int currentMapW = 0;               // Chiều rộng map hiện tại để clamp camera
+    int currentMapH = 0;               // Chiều cao map hiện tại để clamp camera
 
     std::string finishedCutsceneId = "";
     bool justFinishedFlag = false;
@@ -59,8 +61,10 @@ public:
      * @param script  Cấu hình cutscene
      * @param cam     Reference đến MapCamera của level
      * @param playerPos Vị trí Player hiện tại (để camera quay về sau)
+     * @param mapW    Chiều rộng map
+     * @param mapH    Chiều cao map
      */
-    void startCutscene(const CutsceneScript& script, MapCamera& cam, Vector2 playerPos);
+    void startCutscene(const CutsceneScript& script, MapCamera& cam, Vector2 playerPos, int mapW = 0, int mapH = 0);
 
     // === 4 giai đoạn game loop ===
     void handleInput();

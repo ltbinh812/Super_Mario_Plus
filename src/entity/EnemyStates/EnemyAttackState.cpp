@@ -19,6 +19,7 @@ void EnemyAttackState::enter(Mob& mob) {
 
 void EnemyAttackState::decideAction(Mob& mob) {
     if (timer >= windupTime + activeTime + recoveryTime) {
+        mob.setAttackCooldown(1.5f);
         mob.changeState(std::make_unique<EnemyIdleState>());
     }
 }

@@ -118,7 +118,7 @@ MainMenuState::MainMenuState()
     mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "EXIT",
         [this]() {
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(
-                std::make_unique<World05State>()
+                std::make_unique<World01State>()
             ));
         }, baseDelay + 4 * delayIncrement);
 

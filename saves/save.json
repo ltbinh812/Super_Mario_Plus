@@ -1,11 +1,11 @@
 {
     "inventory": {
-        "coins": 1,
+        "coins": 0,
         "keys": 0
     },
     "levelData": {
         "levelId": "",
-        "mapFilePath": "assets/maps/map05/world05.ldtk",
+        "mapFilePath": "assets/maps/map01/world01.ldtk",
         "persistedDeadEntities": [],
         "persistedItemStates": {},
         "worldId": ""
@@ -13,9 +13,9 @@
     "p1": {
         "exists": true,
         "health": 300,
-        "isFacingRight": false,
+        "isFacingRight": true,
         "maxHealth": 300,
-        "posX": 1643.989990234375,
-        "posY": 799.989990234375
+        "posX": 881.010009765625,
+        "posY": 620.185546875
     }
 }

@@ -187,12 +187,13 @@ SuperMarioPlus/
 - **`CharacterState` / `PlayerStates`**: Base interface và các lớp triển khai cho State Pattern của nhân vật (Idle, Running, Jumping).
 
 #### Characters
-- **`Character` / `Player`**: Base class đại diện cho nhân vật. Player kế thừa Character, chứa input và xử lý logic riêng.
+- **`Character` / `Player`**: Base class đại diện cho nhân vật. Player kế thừa Character, chứa input và xử lý logic riêng. (Đã tích hợp hệ thống Oxygen/Thở dưới nước bằng Accumulator trong `update`).
+- **`CharacterStats`**: Chứa các Struct phân định rạch ròi Data-Driven (Base, Runtime, World). `CharacterRuntimeStats` quản lý các biến tích lũy (Accumulator Timer) cho hệ thống tiêu hao Oxy.
 - **`CharacterFactory`**: Factory Pattern để tự động sinh ra các nhân vật dựa trên chuỗi định danh (Tên).
 - **`Mario, Luigi, Peach, Toad, Wario`**: Các lớp cụ thể đại diện cho người chơi, được override các kỹ năng tương ứng.
 - **`Goomba`**: Kẻ thù cơ bản, kế thừa từ `Character`.
 - **`Boss`**: Kế thừa `Mob`, hỗ trợ cơ chế Cutscene ID (Observer pattern) thông qua hàm `onCutsceneStart` và `onCutsceneEnd` để đồng bộ Boss Intro.
-- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`, `EnemySkillState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, xử lý đẩy lùi (knockback), và đặc biệt `EnemySkillState` hỗ trợ random xuất chiêu dựa trên `IEnemySkill`.
+- **Enemy States (`EnemyIdleState`, `EnemyRunState`, `EnemyAttackState`, `EnemyHurtState`, `EnemyDieState`, `EnemySkillState`)**: Các state AI của kẻ địch (Mob), hỗ trợ tự động tìm Player (distance check), tạo hitbox qua `CombatSystem`, xử lý đẩy lùi (knockback). Quái (Mob/Boss) được trang bị hệ thống `Edge/Water Detection` trong `Entity::checkEdgeAndWater` giúp chúng tự động quay đầu khi gặp mép vực hoặc mép nước (tránh rơi xuống nước). Đặc biệt `EnemySkillState` hỗ trợ random xuất chiêu dựa trên `IEnemySkill`.
 - **Boss States (`BossIdleState`, `BossIntroState`, `BossPatrolState`, `BossRunState`, `BossHurtState`, `BossAttackState`, `BossDieState`, `BossSkillState`, `BossDebugInputState`)**: Các state chuyên biệt dành cho Boss. Trong đó `Idle/Intro` xử lý logic chờ Cutscene, còn lại dùng để quản lý AI (tìm đường, chọn skill ngẫu nhiên khi tấn công) cho toàn bộ các Boss trong game (Data-Driven qua file cấu hình). `BossSkillState` hỗ trợ tự động load hitbox và animation của từng chiêu riêng biệt tương tự như `EnemySkillState`. `BossDebugInputState` cho phép tắt AI để người chơi tự tay điều khiển boss thủ công.
 
 #### Abilities & Skills (Strategy Pattern)

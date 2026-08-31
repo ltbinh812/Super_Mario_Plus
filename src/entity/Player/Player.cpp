@@ -33,6 +33,7 @@ void Player::update(float dt) {
   if (currentState) {
     currentState->update(dt);
   }
+  processBreath(dt);
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
@@ -113,6 +114,7 @@ void Player::respawn(Vector2 startPos) {
   worldStats.position = startPos;
   runtimeStats.velocity = {0.0f, 0.0f};
   runtimeStats.health = baseStats.maxHealth;
+  runtimeStats.breath = baseStats.maxBreath;
   clearEffects();
   forceState(idleState);
 }
@@ -453,6 +455,7 @@ void Player::onDie() {
     runtimeStats.velocity = {0.0f, 0.0f};
     runtimeStats.health = baseStats.maxHealth;
     runtimeStats.mana = baseStats.maxMana;
+    runtimeStats.breath = baseStats.maxBreath;
     clearEffects();
     buffManager_.clear(*this);
     requestState(idleState); 
@@ -573,4 +576,44 @@ void Player::onCutsceneStart(const std::string& triggerId) {
     // We do nothing here immediately. 
     // BaseLevelState will gently stop the player only when they are on the ground,
     // allowing them to complete their jump arcs if triggered mid-air.
+}
+
+void Player::processBreath(float dt) {
+    if (runtimeStats.currentLiquid == CollisionType::Water && !runtimeStats.isPartiallyOutsideLiquid) {
+        // Lose 100 breath over 10 seconds -> 10 breath per second -> 1 breath per 0.1s
+        runtimeStats.breathAccumulator += dt;
+        if (runtimeStats.breathAccumulator >= 0.1f) {
+            int ticks = static_cast<int>(runtimeStats.breathAccumulator / 0.1f);
+            runtimeStats.breath -= ticks;
+            runtimeStats.breathAccumulator -= ticks * 0.1f;
+            if (runtimeStats.breath < 0) {
+                runtimeStats.breath = 0;
+            }
+        }
+
+        // Drowning damage: 10 damage every 1 second when breath is 0
+        if (runtimeStats.breath == 0) {
+            runtimeStats.drownDamageTimer += dt;
+            if (runtimeStats.drownDamageTimer >= 1.0f) {
+                takeDamage(10, 0.0f, false);
+                runtimeStats.drownDamageTimer -= 1.0f;
+            }
+        }
+    } else {
+        // Recover breath: 100 breath over 2.5 seconds -> 40 breath per second -> 1 breath per 0.025s
+        if (runtimeStats.breath < baseStats.maxBreath) {
+            runtimeStats.breathAccumulator += dt;
+            if (runtimeStats.breathAccumulator >= 0.025f) {
+                int ticks = static_cast<int>(runtimeStats.breathAccumulator / 0.025f);
+                runtimeStats.breath += ticks;
+                runtimeStats.breathAccumulator -= ticks * 0.025f;
+                if (runtimeStats.breath > baseStats.maxBreath) {
+                    runtimeStats.breath = baseStats.maxBreath;
+                }
+            }
+        } else {
+            runtimeStats.breathAccumulator = 0.0f;
+        }
+        runtimeStats.drownDamageTimer = 0.0f;
+    }
 }

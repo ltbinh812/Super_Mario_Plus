@@ -11,5 +11,5 @@ public:
     void decideAction(Mob& mob) override;
     void process(Mob& mob) override;
     void exit(Mob& mob) override;
-    void onHitWall(Mob& mob, bool rightWall) override;
+    void onHitWall(Mob& mob, bool rightWall, bool isCliff = false) override;
 };

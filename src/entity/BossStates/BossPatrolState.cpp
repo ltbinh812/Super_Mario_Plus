@@ -16,6 +16,7 @@ void BossPatrolState::enter(Mob& mob) {
 }
 
 void BossPatrolState::decideAction(Mob& mob) {
+    if (mob.getAggroCooldown() > 0.0f) return;
     Player* closestPlayer = mob.getClosestPlayer();
     if (!closestPlayer || closestPlayer->isDead()) return;
 
@@ -40,6 +41,6 @@ void BossPatrolState::process(Mob& mob) {
 void BossPatrolState::exit(Mob& mob) {
 }
 
-void BossPatrolState::onHitWall(Mob& mob, bool rightWall) {
+void BossPatrolState::onHitWall(Mob& mob, bool rightWall, bool isCliff) {
     mob.setFacingRight(!mob.getIsFacingRight());
 }

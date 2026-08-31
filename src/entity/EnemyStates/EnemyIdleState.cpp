@@ -8,6 +8,7 @@ EnemyIdleState::EnemyIdleState(float idleTime) : duration(idleTime) {}
 void EnemyIdleState::enter(Mob& mob) {
     mob.setAnimation(mob.getMobType() + "_idle");
     mob.setVelocity({0.0f, mob.getVelocity().y});
+    mob.resetStateTimer();
 }
 
 #include "EnemyRunState.h"
@@ -15,10 +16,11 @@ void EnemyIdleState::enter(Mob& mob) {
 #include <raymath.h>
 
 void EnemyIdleState::decideAction(Mob& mob) {
+    if (mob.getAggroCooldown() > 0.0f) return;
     Player* target = mob.getClosestPlayer();
     if (target) {
         float dist = Vector2Distance(mob.getPosition(), target->getPosition());
-        if (dist <= 250.0f) {
+        if (dist <= mob.getConfig().aiData.detectionRange) {
             mob.changeState(std::make_unique<EnemyRunState>());
             return;
         }

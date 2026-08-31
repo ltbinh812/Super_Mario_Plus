@@ -32,7 +32,7 @@ void EnemyRunState::decideAction(Mob& mob) {
         return;
     }
     
-    if (dist <= attackRange) {
+    if (dist <= attackRange && mob.getAttackCooldown() <= 0.0f) {
         if (!mob.getEnemySkills().empty()) {
             int skillIndex = GetRandomValue(0, mob.getEnemySkills().size() - 1);
             mob.changeState(std::make_unique<EnemySkillState>(mob.getEnemySkills()[skillIndex].get()));
@@ -47,7 +47,9 @@ void EnemyRunState::process(Mob& mob) {
     Player* target = mob.getClosestPlayer();
     if (target) {
         float dirX = target->getPosition().x - mob.getPosition().x;
-        if (dirX > 0) {
+        if (std::abs(dirX) < 5.0f) {
+            mob.setVelocity({0.0f, mob.getVelocity().y});
+        } else if (dirX > 0) {
             mob.setVelocity({speed, mob.getVelocity().y});
             mob.setFacingRight(true);
         } else {
@@ -60,7 +62,12 @@ void EnemyRunState::process(Mob& mob) {
 void EnemyRunState::exit(Mob& mob) {
 }
 
-void EnemyRunState::onHitWall(Mob& mob, bool rightWall) {
+void EnemyRunState::onHitWall(Mob& mob, bool rightWall, bool isCliff) {
+    if (isCliff) {
+        mob.setAggroCooldown(2.0f);
+        mob.changeState(std::make_unique<EnemyIdleState>());
+        return;
+    }
     if (mob.getRuntimeStats().isGrounded) {
         mob.setVelocity({mob.getVelocity().x, -mob.getBaseStats().jumpVelocity});
     }

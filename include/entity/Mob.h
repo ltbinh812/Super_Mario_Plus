@@ -48,6 +48,8 @@ protected:
     
     // AI Variables
     float stateTimer;
+    float aggroCooldown = 0.0f;
+    float attackCooldown = 0.0f;
     Vector2 spawnPoint;
     bool isFacingRight;
     bool isDead;
@@ -81,7 +83,7 @@ public:
     void setHitboxActive(bool active, Hitbox hb = {}) { isHitboxActive = active; currentHitbox = hb; }
     
     // Map collisions
-    void onHitWall(bool rightWall) override;
+    void onHitWall(bool rightWall, bool isCliff = false) override;
     void onLand(float floorY) override;
 
     // Mob-specific methods
@@ -110,6 +112,12 @@ public:
     float getStateTimer() const { return stateTimer; }
     void addStateTimer(float dt) { stateTimer += dt; }
     void resetStateTimer() { stateTimer = 0.0f; }
+    
+    float getAggroCooldown() const { return aggroCooldown; }
+    void setAggroCooldown(float t) { aggroCooldown = t; }
+    
+    float getAttackCooldown() const { return attackCooldown; }
+    void setAttackCooldown(float t) { attackCooldown = t; }
     
     Vector2 getPosition() const { return worldStats.position; }
     void setVelocity(Vector2 v) { runtimeStats.velocity = v; }

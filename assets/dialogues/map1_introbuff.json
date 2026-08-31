@@ -1,0 +1,29 @@
+{
+    "id": "map1_introbuff",
+    "lines": [
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "That is Potion of Strength. It will help you become stronger.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "",
+            "text": "Really sensei, that's amazing!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "Collecting potions will helps you a lot, young man.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "",
+            "text": "Okay, I got it.",
+            "textSpeed": 40
+        }
+    ]
+}
