@@ -1,0 +1,26 @@
+{
+  "frames": {
+    "boss_chest_1_idle": {
+      "frame": {"x": 0, "y": 0, "w": 192, "h": 64}
+    },
+    "boss_chest_1_active": {
+      "frame": {"x": 192, "y": 0, "w": 288, "h": 64}
+    },
+    "boss_chest_2_idle": {
+      "frame": {"x": 0, "y": 64, "w": 192, "h": 64}
+    },
+    "boss_chest_2_active": {
+      "frame": {"x": 192, "y": 64, "w": 288, "h": 64}
+    },
+    "boss_chest_3_idle": {
+      "frame": {"x": 0, "y": 128, "w": 192, "h": 64}
+    },
+    "boss_chest_3_active": {
+      "frame": {"x": 192, "y": 128, "w": 288, "h": 64}
+    }
+  },
+  "meta": {
+    "image": "chest_boss.png",
+    "size": {"w": 480, "h": 192}
+  }
+}

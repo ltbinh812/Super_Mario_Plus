@@ -1,0 +1,21 @@
+{
+    "inventory": {
+        "coins": 0,
+        "keys": 0
+    },
+    "levelData": {
+        "levelId": "",
+        "mapFilePath": "assets/maps/map01/world01.ldtk",
+        "persistedDeadEntities": [],
+        "persistedItemStates": {},
+        "worldId": ""
+    },
+    "p1": {
+        "exists": true,
+        "health": 300,
+        "isFacingRight": true,
+        "maxHealth": 300,
+        "posX": 881.010009765625,
+        "posY": 620.185546875
+    }
+}

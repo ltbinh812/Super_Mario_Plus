@@ -2,6 +2,13 @@
 #include "Entity.h"
 #include "GameState.h"
 #include "IntroState.h"
+#include "World01State.h"
+#include "World02State.h"
+#include "World03State.h"
+#include "World04State.h"
+#include "World05State.h"
+#include "World06State.h"
+#include "MainMenuState.h"
 #include <iostream>
 
 void StateManager::PushState(std::unique_ptr<GameState> state) {
@@ -21,21 +28,11 @@ void StateManager::ChangeState(std::unique_ptr<GameState> state) {
 }
 
 StateManager::StateManager() {
-  std::unique_ptr<GameState> introState = std::make_unique<IntroState>();
-  stateStack.push(std::move(introState));
+  std::unique_ptr<GameState> initialState = std::make_unique<MainMenuState>();
+  stateStack.push(std::move(initialState));
 }
 
 StateManager::~StateManager() = default;
-
-
-
-
-
-
-
-
-
-
 
 void StateManager::HandleInput() {
   if (stateStack.empty())

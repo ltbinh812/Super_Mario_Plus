@@ -2,7 +2,7 @@
     "players": [
         {
             "id": 1,
-            "character": "Mario",
+            "character": "Goku",
             "controls": {
                 "jump": 87,
                 "left": 65,
@@ -17,7 +17,7 @@
         },
         {
             "id": 2,
-            "character": "Wario",
+            "character": "Goku",
             "controls": {
                 "jump": 265,
                 "left": 263,

@@ -1,0 +1,29 @@
+{
+    "id": "map1_intromob",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "",
+            "text": "What's that!!! A moving mushroom?",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "That's Mushrot! Be careful, it can kill you!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "",
+            "text": "I'm not afraid sensei, I can defeat it",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "Good luck young man!",
+            "textSpeed": 25
+        }
+    ]
+}

@@ -1,19 +1,21 @@
 #include "Game.h"
 #include "AssetManager.h"
 #include "raylib.h"
+#include <ctime>
+#include <cstdlib>
 
 int main() {
+    srand(time(nullptr));
     // Khởi tạo các cờ cửa sổ (có thể điều chỉnh kích thước, VSync)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     
     // Mở cửa sổ
     InitWindow(1280, 720, "Super Mario Plus");
+    MaximizeWindow(); // Phóng to cửa sổ tối đa (vừa toàn màn hình nhưng không ngập lấp Taskbar)
     SetTargetFPS(60);
 
-    //load các Asset
-    AssetManager::getInstance().loadTexture("mario_run", "assets/Run.png");
-    AssetManager::getInstance().loadTexture("mario_idle", "assets/Idle.png");
-    AssetManager::getInstance().loadTexture("mario_jump", "assets/Jump.png");
+
+
     
 
     // Chạy logic game chính 

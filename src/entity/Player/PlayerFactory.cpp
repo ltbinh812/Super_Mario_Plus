@@ -1,19 +1,41 @@
 #include "PlayerFactory.h"
 #include "AssetManager.h"
+#include "BlockSkill.h"
+#include "DashSkill.h"
+#include "Attack1Skill.h"
+#include "Attack2Skill.h"
+#include "Attack3Skill.h"
+#include "Attack4Skill.h"
+#include "LongAttackSkill.h"
+#include "JumpAttackSkill.h"
+#include "LowAttackSkill.h"
+#include "SpecialSkillAttack.h"
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-#include "DashSkill.h"
-
 using json = nlohmann::json;
+
+// ── Skill Registry (OCP-compliant: add new skills here, never touch the factory loop) ──
+static const std::unordered_map<std::string, std::function<std::unique_ptr<ISkill>()>> kSkillRegistry = {
+    { "Dash",       []{ return std::make_unique<DashSkill>(); } },
+    { "Block",      []{ return std::make_unique<BlockSkill>(); } },
+    { "Attack1",    []{ return std::make_unique<Attack1Skill>(); } },
+    { "Attack2",    []{ return std::make_unique<Attack2Skill>(); } },
+    { "Attack3",    []{ return std::make_unique<Attack3Skill>(); } },
+    { "Attack4",    []{ return std::make_unique<Attack4Skill>(); } },
+    { "LongAttack", []{ return std::make_unique<LongAttackSkill>(); } },
+    { "JumpAttack", []{ return std::make_unique<JumpAttackSkill>(); } },
+    { "LowAttack",  []{ return std::make_unique<LowAttackSkill>(); } },
+    { "SpecialAttack", []{ return std::make_unique<SpecialSkillAttack>(); } },
+};
 
 std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
                                                     Vector2 pos) {
   std::ifstream file("assets/config/characters.json");
   if (!file.is_open()) {
-    std::cerr << "Khong the mo file JSON: assets/config/characters.json"
-              << std::endl;
+    std::cerr << "Khong the mo file JSON: assets/config/characters.json" << std::endl;
     return nullptr;
   }
 
@@ -21,52 +43,125 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
   file >> jsonData;
 
   if (!jsonData.contains(charName)) {
-    std::cerr << "Khong tim thay thong tin cho nhan vat: " << charName
-              << std::endl;
+    std::cerr << "Khong tim thay thong tin cho nhan vat: " << charName << std::endl;
     return nullptr;
   }
 
   auto &charData = jsonData[charName];
 
-  std::vector<std::string> skillList;
-  for (auto &s : charData["skills"]) {
-    skillList.push_back(s.get<std::string>());
+  // Collect skill names from JSON
+  std::vector<std::string> skillNames;
+  for (auto& [key, value] : charData["skills"].items()) {
+    skillNames.push_back(key);
   }
 
-  CharacterStats stats{
-      charData["name"].get<std::string>(),
-      charData["maxHealth"].get<int>(),
-      charData["maxMana"].get<int>(),
-      charData["moveSpeed"].get<float>(),
-      charData["maxSpeed"].get<float>(),
-      charData["acceleration"].get<float>(),
-      charData["jumpForce"].get<float>(),
-      charData["gravityScale"].get<float>(),
-      skillList,
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["idle"]["texture"].get<std::string>()),
-          charData["animations"]["idle"]["frameNum"].get<int>(),
-          charData["animations"]["idle"]["frameTime"].get<float>()),
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["run"]["texture"].get<std::string>()),
-          charData["animations"]["run"]["frameNum"].get<int>(),
-          charData["animations"]["run"]["frameTime"].get<float>()),
-      Animation(
-          AssetManager::getInstance().getTexture(
-              charData["animations"]["jump"]["texture"].get<std::string>()),
-          charData["animations"]["jump"]["frameNum"].get<int>(),
-          charData["animations"]["jump"]["frameTime"].get<float>())};
+  // Build base stats from JSON
+  CharacterBaseStats bS;
+  bS.name         = charData["name"].get<std::string>();
+  bS.maxHealth    = charData["maxHealth"].get<int>();
+  bS.maxMana      = charData["maxMana"].get<int>();
+  bS.moveVelocity = charData["moveVelocity"].get<float>();
+  bS.jumpVelocity = charData["jumpVelocity"].get<float>();
+  bS.gravityScale = charData["gravityScale"].get<float>();
+  bS.physicsBox   = { charData["physicsBox"]["w"].get<float>(),
+                      charData["physicsBox"]["h"].get<float>() };
+  bS.crouchBox    = { charData["crouchBox"]["w"].get<float>(),
+                      charData["crouchBox"]["h"].get<float>() };
 
-  Vector2 boxsize = {16.0f, 16.0f};
-  auto player = std::make_unique<Player>(stats, pos, boxsize, true);
-  for (const std::string &skillName : skillList) {
-    if (skillName == "Dash") {
-        player->addSkill("Dash", std::make_unique<DashSkill>());
-    } 
-    else if (skillName == "Fireball") {
+  // Build runtime stats
+  CharacterRuntimeStats rS;
+  rS.health     = bS.maxHealth;
+  rS.mana       = bS.maxMana;
+  rS.physicsBox = bS.physicsBox;  // Start with standing hitbox
+  rS.velocity   = {0.0f, 0.0f};
+  rS.isGrounded = false;
+
+  // Build world stats
+  CharacterWorldStats wS;
+  wS.position      = pos;
+  wS.isFacingRight = true;
+  wS.animation     = nullptr;
+
+  // Resolve asset folder for auto-loading textures
+  std::string assetFolder = charData["assetFolder"].get<std::string>();
+  std::string charDisplayName = charData["name"].get<std::string>();
+
+  // Load all animations from JSON (auto-load textures from assetFolder)
+  std::unordered_map<std::string, Animation> animations;
+  for (auto& [animName, animData] : charData["animations"].items()) {
+    std::string texBase = animData["texture"].get<std::string>();
+    std::string texKey  = charDisplayName + "_" + texBase;
+    std::string texPath = "assets/" + assetFolder + "/" + texBase + ".png";
+
+    // Load texture if not already loaded
+    AssetManager::getInstance().loadTexture(texKey, texPath);
+
+    float scale = animData.value("scale", 1.0f);
+
+    animations.emplace(animName, Animation(
+        AssetManager::getInstance().getTexture(texKey),
+        animData["frameNum"].get<int>(),
+        animData["frameTime"].get<float>(),
+        scale
+    ));
+  }
+
+  auto player = std::make_unique<Player>(bS, rS, wS, std::move(animations));
+
+  // Create and configure skills via registry (OCP — no if-else chain)
+  for (const std::string &skillName : skillNames) {
+    auto it = kSkillRegistry.find(skillName);
+    if (it == kSkillRegistry.end()) {
+      std::cerr << "[PlayerFactory] Unknown skill: " << skillName << std::endl;
+      continue;
     }
+
+    std::unique_ptr<ISkill> skill = it->second();
+
+    // Inject combat data from JSON into skill
+    auto& skillJson = charData["skills"][skillName];
+    int atk = skillJson.value("attack", 0);
+    int def = skillJson.value("defense", 0);
+    float manaCost = skillJson.value("manaCost", skill->getManaCost()); // fallback to default cost if not in JSON
+    skill->setManaCost(manaCost);
+    Rectangle box = {
+        skillJson["box"].value("offsetX", 0.0f),
+        skillJson["box"].value("offsetY", 0.0f),
+        skillJson["box"]["w"].get<float>(),
+        skillJson["box"]["h"].get<float>()
+    };
+    skill->setCombatData(atk, def, box);
+
+    // Calculate timing from animation data
+    float duration = 0.0f, hitStart = 0.0f, hitEnd = 0.0f;
+    std::string animName = skill->getAnimationName();
+    if (charData["animations"].contains(animName)) {
+      int frameNum    = charData["animations"][animName]["frameNum"].get<int>();
+      float frameTime = charData["animations"][animName]["frameTime"].get<float>();
+      duration = frameNum * frameTime;
+
+      int startFrame = skillJson.value("hitboxStartFrame", 0);
+      int endFrame   = skillJson.value("hitboxEndFrame", frameNum);
+      hitStart = startFrame * frameTime;
+      hitEnd   = endFrame * frameTime;
+    }
+     skill->setDurationAndHitbox(duration, hitStart, hitEnd);
+    
+    // Inject pacing data from JSON into skill
+    float recovery = skillJson.value("recoveryDuration", 0.1f);
+    float hitstop = skillJson.value("hitStopDuration", 0.05f);
+    float anticipation = skillJson.value("anticipationDuration", 0.0f);
+    skill->setPacingData(recovery, hitstop, anticipation);
+
+    float moveControl = skillJson.value("moveControl", 0.0f);
+    skill->setMoveControl(moveControl);
+
+    float dashMultiplier = skillJson.value("dashMultiplier", 2.0f);
+    skill->setDashMultiplier(dashMultiplier);
+
+    player->addSkill(skillName, std::move(skill));
   }
+
   return player;
 }
+

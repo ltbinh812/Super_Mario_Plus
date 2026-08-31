@@ -1,0 +1,44 @@
+{
+  "frames": {
+    "mob_rat_attack": {
+      "frame": {"x":0,"y":0,"w":192,"h":32},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":192,"h":32},
+      "sourceSize": {"w":192,"h":32}
+    },
+    "mob_rat_run": {
+      "frame": {"x":0,"y":32,"w":192,"h":32},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":192,"h":32},
+      "sourceSize": {"w":192,"h":32}
+    },
+    "mob_rat_idle": {
+      "frame": {"x":0,"y":64,"w":192,"h":32},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":192,"h":32},
+      "sourceSize": {"w":192,"h":32}
+    },
+    "mob_rat_hurt": {
+      "frame": {"x":0,"y":96,"w":32,"h":32},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+      "sourceSize": {"w":32,"h":32}
+    },
+    "mob_rat_die": {
+      "frame": {"x":0,"y":128,"w":192,"h":32},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":192,"h":32},
+      "sourceSize": {"w":192,"h":32}
+    }
+  },
+  "meta": {
+    "image": "mob_rat.png",
+    "size": {"w": 192, "h": 160},
+    "scale": "1"
+  }
+}

@@ -10,6 +10,7 @@ class Game {
     StateManager stateManager;
 
     public: 
+    Game();
     void runGame();
      
 };

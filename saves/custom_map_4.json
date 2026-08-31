@@ -1,0 +1,157 @@
+{
+  "entities": [
+    {
+      "fields": {},
+      "gridX": 7,
+      "gridY": 11,
+      "type": "PlayerSpawn"
+    },
+    {
+      "fields": {},
+      "gridX": 11,
+      "gridY": 11,
+      "type": "PlayerSpawn"
+    },
+    {
+      "fields": {},
+      "gridX": 16,
+      "gridY": 11,
+      "type": "PlayerSpawn"
+    }
+  ],
+  "height": 20,
+  "name": "New Map",
+  "tileSize": 16,
+  "tiles": [
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 716
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 715
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 714
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 697
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 600
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 700
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 694
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 648
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 707
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 701
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 703
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 508
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 711
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 702
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 692
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 693
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 696
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 649
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 708
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 695
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 704
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 698
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 706
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 647
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 646
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 705
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 699
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 554
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 709
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 710
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 712
+    },
+    {
+      "blockId": "WORLD01_DIRT",
+      "key": 713
+    }
+  ],
+  "version": 1,
+  "width": 46
+}

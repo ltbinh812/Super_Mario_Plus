@@ -1,0 +1,31 @@
+{
+  "frames": {
+    "fire_effect": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 64
+      }
+    }
+  },
+  "meta": {
+    "image": "fire_effect.png",
+    "size": {
+      "w": 512,
+      "h": 64
+    }
+  }
+}

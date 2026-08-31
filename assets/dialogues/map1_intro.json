@@ -1,0 +1,23 @@
+{
+    "id": "map1_intro",
+    "lines": [
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "Welcome to the world of The Awakening Plains!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "",
+            "text": "What's a big world! Let's go!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "",
+            "text": "Be careful, there are many dangers ahead...",
+            "textSpeed": 25
+        }
+    ]
+}

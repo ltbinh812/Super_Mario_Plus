@@ -1,0 +1,44 @@
+{
+  "frames": {
+    "mob_tree_attack": {
+      "frame": {"x":0,"y":0,"w":1200,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1200,"h":64},
+      "sourceSize": {"w":1200,"h":64}
+    },
+    "mob_tree_run": {
+      "frame": {"x":0,"y":64,"w":1200,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":1200,"h":64},
+      "sourceSize": {"w":1200,"h":64}
+    },
+    "mob_tree_idle": {
+      "frame": {"x":0,"y":128,"w":600,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":600,"h":64},
+      "sourceSize": {"w":600,"h":64}
+    },
+    "mob_tree_hurt": {
+      "frame": {"x":0,"y":192,"w":600,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":600,"h":64},
+      "sourceSize": {"w":600,"h":64}
+    },
+    "mob_tree_die": {
+      "frame": {"x":0,"y":256,"w":600,"h":64},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":600,"h":64},
+      "sourceSize": {"w":600,"h":64}
+    }
+  },
+  "meta": {
+    "image": "mob_tree.png",
+    "size": {"w": 1200, "h": 320},
+    "scale": "1"
+  }
+}

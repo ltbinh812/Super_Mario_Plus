@@ -1,175 +1,675 @@
 #include "Player.h"
 #include "AssetManager.h"
-#include "EntityCommands.h"
+#include "ISkill.h"
+#include "PlayerCommands.h"
+#include "SpawnCommand.h"
 #include "raylib.h"
+#include "BaseItem.h"
+#include "ItemUsageFactory.h"
+#include "Effects.h"
+#include <cmath>
+#include <iostream>
 
-Player::Player(const CharacterStats &charStats, Vector2 pos, Vector2 boxsize,
-               bool isRight)
-    : Entity(pos, boxsize), isFacingRight(isRight), isGrounded(true),
-      airSpeed(1.0f), stats(charStats), currentState(nullptr) {
-  changeState(&idleState);
-}
-
-
-void Player::handleInput() {
-}
-
-void Player::process() {
-  if (!isMovingLeft && !isMovingRight) {
-    stopMove();
-  }
-  isMovingLeft = false;
-  isMovingRight = false;
-}
-
-void Player::jump() { currentState->onJump(*this); }
-
-void Player::moveRight() {
-  isMovingRight = true;
-  currentState->onMoveRight(*this);
-}
-
-void Player::moveLeft() {
-  isMovingLeft = true;
-  currentState->onMoveLeft(*this);
-}
-
-void Player::stopMove() { currentState->onStopMove(*this); }
-
-std::string Player::getSkill1Name() {
-  if (stats.skills.size() > 0) {
-    return stats.skills[0];
-  }
-  return "";
-}
-
-std::string Player::getSkill2Name() {
-  if (stats.skills.size() > 1) {
-    return stats.skills[1];
-  }
-  return "";
-}
-
-void Player::addSkill(const std::string &name, std::unique_ptr<ISkill> skill) {
-  skillManager.addSkill(name, std::move(skill));
-}
-
-void Player::useSkill(const std::string &skillName) {
-  skillManager.useSkill(skillName, *this);
+Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
+               CharacterWorldStats &wS,
+               std::unordered_map<std::string, Animation> animations)
+    : Entity(bS, rS, wS), idleState(*this), runState(*this), jumpState(*this),
+      fallState(*this), crouchState(*this), hurtState(*this), dieState(*this),
+      skillState(*this), swimState(*this), climbState(*this),
+      animationList(std::move(animations)) {
+  currentState = &idleState;
+  currentState->onEnter();
+  faction = EntityFaction::Player;
 }
 
 void Player::update(float dt) {
-  currentState->update(*this, dt);
-  processRequest();
-  currentAnimation->update(dt);
-  skillManager.update(dt);
-
-  // --- HORIZONTAL PHYSICS ---
-  float accX = stats.acceleration;
-  float friction =
-      1500.0f; // sau này ma sát sẽ được đọc từ file json của thông số từng map
-
-  if (isMovingRight) {
-    if (velocity.x < 0) {
-      velocity.x += friction * 2.0f * dt; // Phanh mượt mà nhưng rất nhanh
-      if (velocity.x > 0) velocity.x = 0; // Tránh vọt lố
-    } else if (velocity.x < stats.maxSpeed) {
-      velocity.x += accX * dt;
-      if (velocity.x > stats.maxSpeed) velocity.x = stats.maxSpeed;
-    } else if (velocity.x > stats.maxSpeed) {
-      velocity.x -= friction * dt;
-      if (velocity.x < stats.maxSpeed) velocity.x = stats.maxSpeed;
-    }
-    setFaceDirection(true);
-  } else if (isMovingLeft) {
-    if (velocity.x > 0) {
-      velocity.x -= friction * 2.0f * dt; // Phanh mượt mà nhưng rất nhanh
-      if (velocity.x < 0) velocity.x = 0; // Tránh vọt lố
-    } else if (velocity.x > -stats.maxSpeed) {
-      velocity.x -= accX * dt;
-      if (velocity.x < -stats.maxSpeed) velocity.x = -stats.maxSpeed;
-    } else if (velocity.x < -stats.maxSpeed) {
-      velocity.x += friction * dt;
-      if (velocity.x > -stats.maxSpeed) velocity.x = -stats.maxSpeed;
-    }
-    setFaceDirection(false);
-  } else {
-    // Giảm ma sát
-    if (velocity.x > 0) {
-      velocity.x -= friction * dt;
-      if (velocity.x < 0)
-        velocity.x = 0;
-    } else if (velocity.x < 0) {
-      velocity.x += friction * dt;
-      if (velocity.x > 0)
-        velocity.x = 0;
-    }
+  if (runtimeStats.iframeTimer > 0.0f) {
+    runtimeStats.iframeTimer -= dt;
   }
-
-  velocity.y += stats.gravityScale * 1000.0f * dt;
-
-  prevPosition = position;
-  position.x += dt * velocity.x;
-  position.y += dt * velocity.y;
-
-  if (position.y > 500) {
-    isGrounded = true;
-    position.y = 500;
-    velocity.y = 0;
-  } else {
-    isGrounded = false;
+  
+  updateEffects(dt);
+  overlappingItem_ = nullptr; // Reset each frame; collision loop in GameState will set it if still overlapping
+  
+  if (currentState) {
+    currentState->update(dt);
   }
+  processBreath(dt);
+  if (worldStats.animation) {
+    worldStats.animation->update(dt);
+  }
+  buffManager_.update(dt, *this);
+  updateFloatingTexts(dt);
 }
 
-void Player::render(float alpha) const {
-  Rectangle rec = currentAnimation->getCurrentFrame();
-
-  if (!isFacingRight) {
-    rec.x += rec.width;
-    rec.width = -rec.width;
-  }
-
-  Vector2 renderPos = {prevPosition.x + (position.x - prevPosition.x) * alpha,
-                       prevPosition.y + (position.y - prevPosition.y) * alpha};
-
-  DrawTextureRec(currentAnimation->getTexture(), rec, renderPos, WHITE);
-}
-
-void Player::setRequest(IEntityState<Player> *state) { requestState = state; }
-
-void Player::processRequest() {
-  if (requestState != nullptr) {
-    changeState(requestState);
-    requestState = nullptr;
-  }
-}
-
-void Player::changeState(IEntityState<Player> *state) {
-  if (state == nullptr) {
-    std::cerr << "Bad request - State None" << '\n';
+void Player::render(float alpha) {
+  if (!worldStats.animation)
     return;
+
+  // Blink effect during invincibility: skip rendering on alternating intervals
+  if (runtimeStats.iframeTimer > 0.0f) {
+    // Blink at ~10 Hz: hidden when sin > 0, visible when sin < 0
+    float blinkPhase = std::sin(runtimeStats.iframeTimer * 20.0f * 3.14159f);
+    if (blinkPhase > 0.0f)
+      return;
   }
 
-  currentState = state;
-  currentState->onEnter(*this);
+  Rectangle source = worldStats.animation->getCurrentFrame();
+  if (!worldStats.isFacingRight) {
+    source.width = -source.width;
+  }
+
+  float scale = worldStats.animation->getScale();
+  float absW = (source.width < 0 ? -source.width : source.width) * scale;
+  float absH = source.height * scale;
+
+  // Neo hình ảnh bottom-center theo vị trí physics
+  Rectangle dest = {worldStats.position.x - (absW / 2.0f),
+                    worldStats.position.y - absH, absW, absH};
+
+  Color tint = (runtimeStats.iframeTimer > 0.0f) ? RED : WHITE;
+
+  DrawTexturePro(worldStats.animation->getTexture(), source, dest, {0, 0},
+                 0.0f, tint);
+
+  // Debug hitbox
+  DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+  for (auto& eff : activeEffects) {
+      eff->render(*this, alpha);
+  }
+  
+  buffManager_.render(*this, alpha);
+  
+  renderFloatingTexts();
 }
 
-void Player::setAnimation(Animation *anim) {
-  if (anim == nullptr) {
-    std::cerr << "Bad request - Anim None" << '\n';
+void Player::changeState(PlayerState &state) {
+  if (currentState == &state)
     return;
+  if (currentState) {
+    currentState->onExit();
   }
-
-  currentAnimation = anim;
-  currentAnimation->resetAnimation();
+  currentState = &state;
+  currentState->onEnter();
 }
 
-void Player::setFaceDirection(bool isRight) { isFacingRight = isRight; }
+void Player::requestState(PlayerState &state) {
+  if (currentState && !currentState->canExit())
+    return;
+  changeState(state);
+}
 
-bool Player::checkIsGrounded() { return isGrounded; }
+void Player::forceState(PlayerState &state) {
+  changeState(state);
+}
 
-void Player::setVelocityX(float vel) { velocity.x = vel; }
+bool Player::isDead() const {
+  return runtimeStats.health <= 0;
+}
 
-void Player::setVelocityY(float vel) { velocity.y = vel; }
+bool Player::isOutOfBounds(float limitY) const {
+  return worldStats.position.y > limitY;
+}
 
-void Player::setIsGrounded(bool grounded) { isGrounded = grounded; }
+void Player::respawn(Vector2 startPos) {
+  worldStats.position = startPos;
+  runtimeStats.velocity = {0.0f, 0.0f};
+  runtimeStats.health = baseStats.maxHealth;
+  runtimeStats.breath = baseStats.maxBreath;
+  clearEffects();
+  forceState(idleState);
+}
+
+// =============================================================================
+// SERIALIZATION — Player tự đóng gói và tự khôi phục chính mình.
+//
+// NGUYÊN TẮC "Tell, Don't Ask": trước đây BaseLevelState phải thò tay vào
+// getRuntimeStatsMutable() / getBaseStatsMutable() để moi ra rồi nhét lại từng
+// trường một. Đó là phá vỡ đóng gói: mỗi lần Player thêm một thuộc tính là
+// BaseLevelState phải sửa theo. Nay Player là nơi duy nhất biết mình gồm những
+// gì, còn BaseLevelState chỉ việc uỷ quyền.
+// =============================================================================
+
+PlayerSaveData Player::createSaveData() const {
+  PlayerSaveData data;
+  data.exists = true;
+
+  // baseStats.name chính là nhân vật đã chọn ở màn Character Selection
+  // ("Goku"/"Naruto"/...). Không có nó thì khi Load Game không dựng lại nổi
+  // đúng Player — PlayerFactory tra tên này trong assets/config/characters.json.
+  data.characterName = baseStats.name;
+
+  data.posX = worldStats.position.x;
+  data.posY = worldStats.position.y;
+  data.isFacingRight = worldStats.isFacingRight;
+
+  data.health    = runtimeStats.health;
+  data.maxHealth = baseStats.maxHealth;
+  data.mana      = runtimeStats.mana;
+  data.maxMana   = baseStats.maxMana;
+  data.breath    = runtimeStats.breath;
+
+  data.storedItemSlot = runtimeStats.storedItemSlot;
+  return data;
+}
+
+void Player::restoreFromSaveData(const PlayerSaveData &data) {
+  if (!data.exists) return;
+
+  setPosition({data.posX, data.posY});
+  worldStats.isFacingRight = data.isFacingRight;
+
+  // maxHealth/maxMana đến từ characters.json khi dựng Player, nhưng vẫn khôi
+  // phục từ save để phòng trường hợp file config được chỉnh sau khi lưu — máu
+  // hiện tại phải luôn nằm trong khoảng hợp lệ của bản lưu đó.
+  if (data.maxHealth > 0) baseStats.maxHealth = data.maxHealth;
+  if (data.maxMana   > 0) baseStats.maxMana   = data.maxMana;
+
+  runtimeStats.health = data.health;
+  runtimeStats.mana   = data.mana;
+  if (data.breath > 0) runtimeStats.breath = data.breath;
+
+  runtimeStats.storedItemSlot = data.storedItemSlot;
+
+  // Vận tốc không được lưu: người chơi luôn xuất hiện lại ở trạng thái đứng yên
+  // thay vì đang bay giữa chừng như lúc bấm lưu.
+  runtimeStats.velocity = {0.0f, 0.0f};
+}
+
+// =============================================================================
+// SKILL SYSTEM
+// =============================================================================
+
+void Player::useSkill(const std::string &skillname) {
+  auto it = skillList.find(skillname);
+  if (it != skillList.end() && it->second) {
+    ISkill *skill = it->second.get();
+    if (runtimeStats.mana < skill->getManaCost()) {
+      addFloatingText("Not enough mana", BLUE, {0, 0}, 0.3);
+      return;
+    }
+    
+    // Prevent interrupting a skill with another skill (or the same one)
+    if (currentState == &skillState) {
+        if (skillState.getCurrentSkill() == skill && skillname == "Block") {
+            skillState.resetTimer();
+        }
+        return;
+    }
+
+    skillState.setSkill(skill);
+    changeState(skillState);
+  }
+}
+
+void Player::addSkill(const std::string &name, std::unique_ptr<ISkill> skill) {
+  skillList[name] = std::move(skill);
+}
+
+ISkill *Player::findSkill(const std::string &skillName) {
+  auto it = skillList.find(skillName);
+  if (it != skillList.end())
+    return it->second.get();
+  return nullptr;
+}
+
+bool Player::hasEnoughMana(float cost) const {
+  return runtimeStats.mana >= static_cast<int>(cost);
+}
+
+// =============================================================================
+// INPUT DISPATCHERS
+// =============================================================================
+
+void Player::onMoveRight() {
+  if (currentState) currentState->onMoveRight();
+}
+
+void Player::onMoveLeft() {
+  if (currentState) currentState->onMoveLeft();
+}
+
+void Player::onJump() {
+  if (currentState) currentState->onJump();
+}
+
+void Player::onStopLeft() {
+  if (currentState) currentState->onStopLeft();
+}
+
+void Player::onStopRight() {
+  if (currentState) currentState->onStopRight();
+}
+
+void Player::onCrouch() {
+  // OneWay drop-through: triggered first, independent of state
+  dropThrough();
+
+  // Ladder climb-down: if overlapping ladder and not already climbing, enter ClimbState
+  if (runtimeStats.isOverlappingLadder && currentState != &climbState) {
+    requestState(climbState);
+  }
+
+  if (currentState) currentState->onCrouch();
+}
+
+void Player::onStopCrouch() {
+  if (currentState) currentState->onStopCrouch();
+}
+
+void Player::onAttack() {
+  if (currentState) currentState->onAttack();
+}
+
+void Player::onClimb() {
+  // Enter climb state if on ladder
+  if (runtimeStats.isOverlappingLadder && currentState != &climbState) {
+    requestState(climbState);
+  }
+  if (currentState) currentState->onClimb();
+}
+
+// =============================================================================
+// MOVEMENT HELPERS (called by States — Tell, Don't Ask)
+// =============================================================================
+
+void Player::playAnimation(const std::string &name, bool loop) {
+// std::cout << name << '\n';
+  auto it = animationList.find(name);
+  if (it != animationList.end()) {
+    worldStats.animation = &it->second;
+    worldStats.animation->resetAnimation();
+    worldStats.animation->setLoop(loop);
+  }
+}
+
+void Player::moveRight() {
+  worldStats.isFacingRight = true;
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.7f;
+  runtimeStats.velocity.x = baseStats.moveVelocity * (1.0f + buffManager_.getTotalSpeedMultiplier()) * mod;
+}
+
+void Player::moveLeft() {
+  worldStats.isFacingRight = false;
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.7f;
+  runtimeStats.velocity.x = -baseStats.moveVelocity * (1.0f + buffManager_.getTotalSpeedMultiplier()) * mod;
+}
+
+void Player::stopLeftRun() {
+  if (runtimeStats.velocity.x < 0.0f)
+    runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::stopRightRun() {
+  if (runtimeStats.velocity.x > 0.0f)
+    runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::jump() { 
+  float mod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.6f;
+  else if (runtimeStats.currentLiquid == CollisionType::Water) mod = 0.8f;
+  runtimeStats.velocity.y = baseStats.jumpVelocity * (1.0f + buffManager_.getTotalJumpMultiplier()) * mod; 
+}
+
+void Player::crouch() {
+  // Resize hitbox to crouch dimensions; stop horizontal movement
+  runtimeStats.physicsBox = baseStats.crouchBox;
+  runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::standUp() {
+  // Restore original physics hitbox
+  runtimeStats.physicsBox = baseStats.physicsBox;
+}
+
+void Player::speedUpX(float speedX) {
+  runtimeStats.velocity.x = worldStats.isFacingRight ? speedX : -speedX;
+}
+
+void Player::speedUpY(float speedY) {
+  runtimeStats.velocity.y = speedY;
+}
+
+void Player::idle() {
+  runtimeStats.physicsBox = baseStats.physicsBox;
+  runtimeStats.velocity = {0.0f, 0.0f};
+}
+
+void Player::reduceMana(float cost) {
+  runtimeStats.mana -= static_cast<int>(cost);
+  if (runtimeStats.mana < 0)
+    runtimeStats.mana = 0;
+}
+
+void Player::increaseMana(float cost) {
+  runtimeStats.manaAccumulator += cost;
+  if (runtimeStats.manaAccumulator >= 1.0f) {
+    int manaToAdd = static_cast<int>(runtimeStats.manaAccumulator);
+    runtimeStats.mana += manaToAdd;
+    runtimeStats.manaAccumulator -= manaToAdd;
+    if (runtimeStats.mana > baseStats.maxMana)
+      runtimeStats.mana = baseStats.maxMana;
+  }
+}
+
+// --- Swim & Climb helpers ---
+
+void Player::swim(float dirX) {
+  float speedMod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Water) speedMod = 0.7f;
+  else if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) speedMod = 0.4f;
+
+  const float swimSpeed = baseStats.moveVelocity * speedMod;
+  if (dirX > 0.0f) {
+    worldStats.isFacingRight = true;
+    runtimeStats.velocity.x = swimSpeed;
+  } else if (dirX < 0.0f) {
+    worldStats.isFacingRight = false;
+    runtimeStats.velocity.x = -swimSpeed;
+  } else {
+    runtimeStats.velocity.x = 0.0f;
+  }
+}
+
+void Player::swimY(float dirY) {
+  float speedMod = 1.0f;
+  if (runtimeStats.currentLiquid == CollisionType::Water) speedMod = 0.7f;
+  else if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) speedMod = 0.4f;
+
+  const float swimSpeed = baseStats.moveVelocity * speedMod;
+  if (dirY > 0.0f) {
+    runtimeStats.velocity.y = swimSpeed;
+  } else if (dirY < 0.0f) {
+    runtimeStats.velocity.y = -swimSpeed;
+  } else {
+    runtimeStats.velocity.y = 0.0f;
+  }
+}
+
+void Player::climbUp() {
+  runtimeStats.velocity.y = -baseStats.moveVelocity * 0.5f;
+  runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::climbDown() {
+  runtimeStats.velocity.y = baseStats.moveVelocity * 0.5f;
+  runtimeStats.velocity.x = 0.0f;
+}
+
+void Player::stopClimb() {
+  runtimeStats.velocity.y = 0.0f;
+  runtimeStats.velocity.x = 0.0f;
+}
+
+// =============================================================================
+// COMBAT
+// =============================================================================
+
+bool Player::hasActiveHitbox() const {
+  return currentState == &skillState && skillState.isHitboxActive();
+}
+
+Hitbox Player::getActiveHitbox() {
+  const ISkill *skill = skillState.getCurrentSkill();
+  Rectangle box = skill->getHitboxConfig();
+  float offsetX = worldStats.isFacingRight ? box.x : -box.x;
+  Rectangle worldRect = {
+      worldStats.position.x + offsetX - box.width / 2.0f,
+      worldStats.position.y - runtimeStats.physicsBox.y + box.y, box.width,
+      box.height};
+  // Clean: no const_cast — getActiveHitbox() is non-const
+  Hitbox hb = {worldRect, skill->getAttackPower(), skill->getDefensePower(), this};
+  hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+  if (isPvPMode_) {
+      hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+  }
+  return hb;
+}
+
+void Player::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
+  if (currentState == &dieState || buffManager_.isInvincible())
+    return;
+
+  if (forceInterrupt) {
+    if (currentState == &hurtState || runtimeStats.iframeTimer > 0.0f)
+      return;
+      
+    runtimeStats.health -= damage;
+    runtimeStats.iframeTimer = 1.0f; // 1 second of invincibility
+    
+    addFloatingText(std::to_string(damage), RED, {0, 0}, 0.5f);
+    
+    // Apply a small knockback upwards to break free from continuous ground hazards
+    runtimeStats.velocity.y = -200.0f;
+    if (knockbackDirX != 0.0f) {
+        runtimeStats.velocity.x = 250.0f * knockbackDirX;
+    } else {
+        // Default to pushing backwards if no direction provided
+        runtimeStats.velocity.x = worldStats.isFacingRight ? -250.0f : 250.0f;
+    }
+
+    if (runtimeStats.health <= 0) {
+      changeState(dieState);
+    } else {
+      changeState(hurtState);
+    }
+  } else {
+    // DOT damage ignores iframeTimer and hurtState invincibility, but still deals damage
+    runtimeStats.health -= damage;
+    addFloatingText(std::to_string(damage), RED, {0, 0}, 0.5f);
+
+    if (runtimeStats.health <= 0) {
+      changeState(dieState);
+    } else {
+      if (currentState != &hurtState) {
+        changeState(hurtState);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// PHYSICS HOOKS
+// =============================================================================
+
+void Player::onLand(float floorY) {
+  // isGrounded is already set true by updatePhysicsWithMap
+}
+
+void Player::onHitCeiling(float ceilY) {
+  // Reserved for brick-breaking or sound effects
+}
+
+void Player::onEnterWater() { 
+  if (currentState == &swimState) return;
+  // Don't interrupt a jump out of the water if the player's head is still above water
+  if (runtimeStats.isPartiallyOutsideLiquid && currentState == &jumpState) {
+      return;
+  }
+  requestState(swimState); 
+}
+void Player::onExitLiquid() { 
+  if (currentState == &swimState) {
+      requestState(fallState);
+  }
+}
+
+void Player::onOverlapLadder() {
+  // Auto-enter climb only if player explicitly presses climb key (onClimb),
+  // not auto. Leave this hook for audio/visual feedback only.
+}
+
+void Player::onHazard() { requestState(dieState); }
+
+void Player::onDie() { 
+    Entity::onDie();
+    worldStats.position = worldStats.startPosition;
+    runtimeStats.velocity = {0.0f, 0.0f};
+    runtimeStats.health = baseStats.maxHealth;
+    runtimeStats.mana = baseStats.maxMana;
+    runtimeStats.breath = baseStats.maxBreath;
+    clearEffects();
+    buffManager_.clear(*this);
+    requestState(idleState); 
+}
+
+void Player::updateStateFromPhysics() {
+  // Do NOT interfere with self-managing states
+  if (currentState == &skillState || currentState == &swimState ||
+      currentState == &climbState || currentState == &hurtState ||
+      currentState == &dieState)
+    return;
+
+  // Auto-snap to ladder if falling (or at apex) onto it
+  if (runtimeStats.isOverlappingLadder && runtimeStats.ignoreLadderTimer <= 0.0f) {
+    if (runtimeStats.velocity.y >= 0.0f) {
+      requestState(climbState);
+      return;
+    }
+  }
+
+  if (!runtimeStats.isGrounded) {
+    if (runtimeStats.velocity.y > 0) {
+      requestState(fallState);
+    } else {
+      requestState(jumpState);
+    }
+  } else {
+    if (runtimeStats.velocity.x == 0.0f) {
+      requestState(idleState);
+    } else {
+      requestState(runState);
+    }
+  }
+}
+
+// =============================================================================
+// FIREBALL / SPAWN
+// =============================================================================
+
+void Player::spawnFireball() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::Fireball;
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnSpecialBall() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.type = EntityType::SpecialBall;
+  cmd.position = worldStats.position;
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+
+  commandQueue->push(cmd);
+}
+
+void Player::spawnExplosion() {
+  if (!commandQueue) return;
+
+  SpawnCommand cmd;
+  cmd.category = SpawnCategory::Entity;
+  cmd.type = EntityType::Explosion;
+  cmd.position = worldStats.position; // Centered on the player
+  cmd.isFacingRight = worldStats.isFacingRight;
+  cmd.ownerName = baseStats.name;
+  cmd.spawner = this;
+  
+  cmd.onHitEffect = [](Entity* target) {
+      if (target) {
+          auto burn = std::make_unique<LavaEffect>();
+          burn->setInLava(false);
+          target->addEffect(std::move(burn));
+          std::cout << "[Explosion] Damage and Burn applied to " << target->getBaseStats().name << "!\n";
+      }
+  };
+
+  commandQueue->push(cmd);
+}
+
+void Player::interactWithOverlapping() {
+    if (overlappingItem_) {
+        // Standing on/near an item → swap/pickup
+        overlappingItem_->forceInteract(*this);
+        overlappingItem_ = nullptr;
+    } else {
+        // Nothing nearby → use stored item
+        useStoredItem();
+    }
+}
+
+void Player::useStoredItem() {
+    auto& slot = runtimeStats.storedItemSlot;
+    if (slot.empty()) return;
+
+    auto strategy = ItemUsageFactory::create(slot);
+    if (strategy) {
+        strategy->use(*this);
+        slot = ""; // Clear inventory after use
+    } else {
+        std::cerr << "[Player] Unrecognized item in slot: " << slot << "\n";
+    }
+}
+
+void Player::dropThrough() {
+    runtimeStats.ignoreOneWayTimer = 0.2f;
+}
+
+void Player::onCutsceneStart(const std::string& triggerId) {
+    // We do nothing here immediately. 
+    // BaseLevelState will gently stop the player only when they are on the ground,
+    // allowing them to complete their jump arcs if triggered mid-air.
+}
+
+void Player::processBreath(float dt) {
+    if (runtimeStats.currentLiquid == CollisionType::Water && !runtimeStats.isPartiallyOutsideLiquid) {
+        // Lose 100 breath over 10 seconds -> 10 breath per second -> 1 breath per 0.1s
+        runtimeStats.breathAccumulator += dt;
+        if (runtimeStats.breathAccumulator >= 0.1f) {
+            int ticks = static_cast<int>(runtimeStats.breathAccumulator / 0.1f);
+            runtimeStats.breath -= ticks;
+            runtimeStats.breathAccumulator -= ticks * 0.1f;
+            if (runtimeStats.breath < 0) {
+                runtimeStats.breath = 0;
+            }
+        }
+
+        // Drowning damage: 10 damage every 1 second when breath is 0
+        if (runtimeStats.breath == 0) {
+            runtimeStats.drownDamageTimer += dt;
+            if (runtimeStats.drownDamageTimer >= 1.0f) {
+                takeDamage(10, 0.0f, false);
+                runtimeStats.drownDamageTimer -= 1.0f;
+            }
+        }
+    } else {
+        // Recover breath: 100 breath over 2.5 seconds -> 40 breath per second -> 1 breath per 0.025s
+        if (runtimeStats.breath < baseStats.maxBreath) {
+            runtimeStats.breathAccumulator += dt;
+            if (runtimeStats.breathAccumulator >= 0.025f) {
+                int ticks = static_cast<int>(runtimeStats.breathAccumulator / 0.025f);
+                runtimeStats.breath += ticks;
+                runtimeStats.breathAccumulator -= ticks * 0.025f;
+                if (runtimeStats.breath > baseStats.maxBreath) {
+                    runtimeStats.breath = baseStats.maxBreath;
+                }
+            }
+        } else {
+            runtimeStats.breathAccumulator = 0.0f;
+        }
+        runtimeStats.drownDamageTimer = 0.0f;
+    }
+}

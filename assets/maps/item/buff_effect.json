@@ -1,0 +1,164 @@
+{
+    "frames": {
+        "aura_heal": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 64
+            }
+        },
+        "aura_invisible": {
+            "frame": {
+                "x": 0,
+                "y": 64,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_jump": {
+            "frame": {
+                "x": 0,
+                "y": 96,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_timestop": {
+            "frame": {
+                "x": 0,
+                "y": 128,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_shield": {
+            "frame": {
+                "x": 0,
+                "y": 160,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_magnet": {
+            "frame": {
+                "x": 0,
+                "y": 192,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_strength": {
+            "frame": {
+                "x": 0,
+                "y": 224,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        },
+        "aura_speed": {
+            "frame": {
+                "x": 0,
+                "y": 256,
+                "w": 768,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 768,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 768,
+                "h": 32
+            }
+        }
+    }
+}

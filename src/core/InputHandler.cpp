@@ -1,23 +1,30 @@
 #include "InputHandler.h"
 
-void InputHandler::clearBindings() {
-  keyBindings_.clear();
+void InputHandler::clearBindings() { keyBindings_.clear(); }
+
+void InputHandler::bindKey(int key, std::unique_ptr<IPlayerCommand> command,
+                           InputType type) {
+  keyBindings_[key].push_back({std::move(command), type});
 }
 
-void InputHandler::bindKey(int key, std::unique_ptr<IEntityCommand> command, bool isContinuous) {
-  keyBindings_[key] = {std::move(command), isContinuous};
-}
-
-std::vector<IEntityCommand *> InputHandler::handleInput() {
-  std::vector<IEntityCommand *> activeCommands;
+std::vector<IPlayerCommand *> InputHandler::handleInput() {
+  std::vector<IPlayerCommand *> activeCommands;
 
   for (auto &pair : keyBindings_) {
     int key = pair.first;
-    bool isContinuous = pair.second.isContinuous;
 
-    bool active = isContinuous ? IsKeyDown(key) : IsKeyPressed(key);
-    if (active) {
-      activeCommands.push_back(pair.second.command.get());
+    for (auto &binding : pair.second) {
+      bool active = false;
+      if (binding.type == InputType::PRESSED) {
+        active = IsKeyPressed(key);
+      } else if (binding.type == InputType::DOWN) {
+        active = IsKeyDown(key);
+      } else if (binding.type == InputType::RELEASED) {
+        active = IsKeyReleased(key);
+      }
+      if (active) {
+        activeCommands.push_back(binding.command.get());
+      }
     }
   }
 
