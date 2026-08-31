@@ -16,6 +16,7 @@ Mob::Mob(Vector2 worldPos, const std::string& type, const CharacterBaseStats& bS
     worldStats.position = worldPos;
     runtimeStats.health = bStats.maxHealth;
     runtimeStats.physicsBox = bStats.physicsBox;
+    baseStats.avoidCliffsAndWater = true; // Mob/Boss avoids falling off cliffs and entering water
     TraceLog(LOG_INFO, "[Mob] Created %s at (%f,%f) with health: %d", mobType.c_str(), worldPos.x, worldPos.y, runtimeStats.health);
 }
 
@@ -26,6 +27,10 @@ Mob::~Mob() {
 }
 
 void Mob::update(float dt) {
+    if (aggroCooldown > 0.0f) {
+        aggroCooldown -= dt;
+    }
+
     if (isDead) {
         bool animFinished = false;
         if (hasStandardAnimations() && currentStandardAnim) {
@@ -233,9 +238,9 @@ void Mob::setAnimation(const std::string& animName) {
     }
 }
 
-void Mob::onHitWall(bool rightWall) {
+void Mob::onHitWall(bool rightWall, bool isCliff) {
     if (currentState) {
-        currentState->onHitWall(*this, rightWall);
+        currentState->onHitWall(*this, rightWall, isCliff);
     }
 }
 

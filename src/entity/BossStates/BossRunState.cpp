@@ -41,7 +41,10 @@ void BossRunState::process(Mob& mob) {
 
     if (closestPlayer && !closestPlayer->isDead()) {
         float speed = mob.getConfig().aiData.patrolSpeed * 1.5f; // Run speed is usually faster than patrol
-        if (closestPlayer->getPosition().x < mob.getPosition().x) {
+        float dirX = closestPlayer->getPosition().x - mob.getPosition().x;
+        if (std::abs(dirX) < 5.0f) {
+            mob.setVelocity({0.0f, mob.getVelocity().y});
+        } else if (dirX < 0) {
             mob.setVelocity({-speed, mob.getVelocity().y});
             mob.setFacingRight(false);
         } else {
@@ -54,7 +57,12 @@ void BossRunState::process(Mob& mob) {
 void BossRunState::exit(Mob& mob) {
 }
 
-void BossRunState::onHitWall(Mob& mob, bool rightWall) {
+void BossRunState::onHitWall(Mob& mob, bool rightWall, bool isCliff) {
+    if (isCliff) {
+        mob.setAggroCooldown(2.0f);
+        mob.changeState(std::make_unique<BossPatrolState>());
+        return;
+    }
     if (mob.getRuntimeStats().isGrounded) {
         mob.setVelocity({mob.getVelocity().x, -mob.getBaseStats().jumpVelocity});
     }

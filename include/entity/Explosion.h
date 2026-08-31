@@ -26,7 +26,7 @@ public:
     bool hasActiveHitbox() const override;
     Hitbox getActiveHitbox() override;
 
-    void onHitWall(bool isRightWall) override {}
+    void onHitWall(bool isRightWall, bool isCliff = false) override {}
     void onCollide(Entity& other) override {}
     void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override {}
 

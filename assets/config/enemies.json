@@ -132,7 +132,7 @@
           "w": 50.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -156,7 +156,7 @@
           "w": 40.0,
           "h": 50.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -168,7 +168,7 @@
           "w": 55.0,
           "h": 65.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -180,7 +180,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -192,7 +192,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -204,7 +204,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {
@@ -338,7 +338,7 @@
           "w": 70.0,
           "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
@@ -350,7 +350,7 @@
           "w": 120.0,
           "h": 22.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
@@ -362,7 +362,7 @@
           "w": 120.0,
           "h": 30.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -374,7 +374,7 @@
           "w": 60.0,
           "h": 30.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -386,7 +386,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "explosion_attack": {
         "damage": 50,
@@ -398,7 +398,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "long_attack": {
         "damage": 40,
@@ -410,7 +410,7 @@
           "w": 64.0,
           "h": 64.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       }
     },
     "fireball": {

@@ -157,7 +157,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -172,7 +172,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 2,
@@ -187,7 +187,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 2,
@@ -202,7 +202,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 1,
@@ -217,7 +217,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 4,
@@ -232,7 +232,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -247,7 +247,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -262,7 +262,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 4,
@@ -277,7 +277,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 5,
@@ -292,7 +292,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         }
     },
@@ -437,7 +437,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -452,7 +452,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 0,
@@ -467,7 +467,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 0,
@@ -482,7 +482,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 0,
@@ -497,7 +497,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 2,
@@ -512,7 +512,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -527,7 +527,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -542,7 +542,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 6,
@@ -557,7 +557,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 0,
@@ -572,7 +572,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         },
         "special_ball": {
@@ -732,7 +732,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -747,7 +747,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 0,
@@ -762,7 +762,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 0,
@@ -777,7 +777,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 0,
@@ -792,7 +792,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 6,
@@ -807,7 +807,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -822,7 +822,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -837,7 +837,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 16,
@@ -852,7 +852,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 0,
@@ -867,7 +867,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         },
         "special_ball": {
@@ -1027,7 +1027,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -1042,7 +1042,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 0,
@@ -1057,7 +1057,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 0,
@@ -1072,7 +1072,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 0,
@@ -1087,7 +1087,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 3,
@@ -1102,7 +1102,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -1117,7 +1117,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -1132,7 +1132,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 2,
@@ -1147,7 +1147,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 0,
@@ -1162,7 +1162,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         },
         "special_ball": {
@@ -1342,7 +1342,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -1357,7 +1357,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 0,
@@ -1372,7 +1372,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 0,
@@ -1387,7 +1387,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 0,
@@ -1402,7 +1402,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 4,
@@ -1417,7 +1417,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -1432,7 +1432,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -1447,7 +1447,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 9,
@@ -1462,7 +1462,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 0,
@@ -1477,7 +1477,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         },
         "special_ball": {
@@ -1637,7 +1637,7 @@
                 "recoveryDuration": 0.1,
                 "moveControl": 0.5,
                 "manaCost": 20.0,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Block": {
                 "hitboxStartFrame": 0,
@@ -1652,7 +1652,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack1": {
                 "hitboxStartFrame": 0,
@@ -1667,7 +1667,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack2": {
                 "hitboxStartFrame": 0,
@@ -1682,7 +1682,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack3": {
                 "hitboxStartFrame": 0,
@@ -1697,7 +1697,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "Attack4": {
                 "hitboxStartFrame": 4,
@@ -1712,7 +1712,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "JumpAttack": {
                 "hitboxStartFrame": 0,
@@ -1727,7 +1727,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LowAttack": {
                 "hitboxStartFrame": 0,
@@ -1742,7 +1742,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "LongAttack": {
                 "hitboxStartFrame": 6,
@@ -1757,7 +1757,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             },
             "SpecialAttack": {
                 "hitboxStartFrame": 0,
@@ -1772,7 +1772,7 @@
                 "recoveryDuration": 0.1,
                 "manaCost": 20.0,
                 "moveControl": 0.5,
-                "dashMultiplier": 1.5
+                "dashMultiplier": 0
             }
         },
         "special_ball": {

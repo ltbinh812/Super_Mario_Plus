@@ -24,6 +24,7 @@ protected:
 
   // Internal physics helpers
   void handleTriggers(const TileMap& map, float dt);
+  void checkEdgeAndWater(const TileMap& map);
   void applyGravity(float dt);
   void resolveCollisionX(const TileMap& map, const std::vector<Rectangle>& dynamicSolids, float dt);
   void resolveCollisionY(const TileMap& map, const std::vector<Rectangle>& dynamicSolids, float dt);
@@ -56,7 +57,7 @@ public:
   virtual void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) {}
 
   // Polymorphic Hook Methods (Extension Points for subclasses)
-  virtual void onHitWall(bool isRightWall) {}
+  virtual void onHitWall(bool isRightWall, bool isCliff = false) {}
   virtual void onLand(float floorY) {}
   virtual void onHitCeiling(float ceilY) {}
   virtual void onCollide(Entity& other) {}

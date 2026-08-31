@@ -23,7 +23,7 @@ public:
     void update(float dt) override;
     void render(float alpha) override;
 
-    void onHitWall(bool isRightWall) override;
+    void onHitWall(bool isRightWall, bool isCliff = false) override;
     void onCollide(Entity& other) override;
 
     // Combat interface

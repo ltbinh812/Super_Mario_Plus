@@ -19,6 +19,7 @@ void BossIdleState::enter(Mob& mob) {
 void BossIdleState::decideAction(Mob& mob) {
     Boss* boss = dynamic_cast<Boss*>(&mob);
     if (boss && boss->getIsWaitingForCutscene()) return;
+    if (mob.getAggroCooldown() > 0.0f) return;
 
     Player* target = mob.getClosestPlayer();
     if (target) {

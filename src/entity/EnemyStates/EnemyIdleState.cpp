@@ -15,6 +15,7 @@ void EnemyIdleState::enter(Mob& mob) {
 #include <raymath.h>
 
 void EnemyIdleState::decideAction(Mob& mob) {
+    if (mob.getAggroCooldown() > 0.0f) return;
     Player* target = mob.getClosestPlayer();
     if (target) {
         float dist = Vector2Distance(mob.getPosition(), target->getPosition());
