@@ -3,12 +3,8 @@
 #include "MainMenuState.h"
 #include "LoadingState.h"
 #include "CharacterSelectionState.h"
-#include "World01State.h"
-#include "World02State.h"
-#include "World03State.h"
-#include "World04State.h"
-#include "World05State.h"
-#include "World06State.h"
+#include "WorldCatalog.h"
+#include "SaveManager.h"
 #include "BaseLevelState.h"
 #include <iostream>
 #include <cmath>
@@ -39,8 +35,89 @@ MapSelectionState::MapSelectionState(MapSelectionMode mode) : currentMode(mode) 
     isTransitioningOut = false;
     
     targetWorldIndex = -1;
-    
+
     InitNodes();
+
+    // Panel NEW GAME/LOAD GAME chỉ có nghĩa ở chế độ một người chơi — chế độ
+    // PvP không có hệ thống lưu, bấm world là vào thẳng như cũ.
+    if (currentMode == MapSelectionMode::SinglePlayer) {
+        InitSavePanels();
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Dựng hai panel overlay và nối dây các callback giữa chúng.
+//
+// Chuỗi sự kiện được thiết kế theo hướng "panel không biết gì về GameState":
+// panel chỉ báo "người dùng vừa bấm X", còn quyết định chuyển cảnh là của
+// MapSelectionState. Nhờ vậy hai panel này tái dùng được ở màn hình khác.
+// -----------------------------------------------------------------------------
+void MapSelectionState::InitSavePanels() {
+    float sw = (float)GetScreenWidth();
+    float sh = (float)GetScreenHeight();
+
+    worldActionPanel_ = std::make_unique<WorldActionPanel>();
+    worldActionPanel_->Init(sw, sh, customFont);   // customFont là tài nguyên MƯỢN
+
+    saveVersionPanel_ = std::make_unique<SaveVersionPanel>();
+    saveVersionPanel_->Init(sw, sh, customFont);
+
+    // --- NEW GAME: đóng panel, bắt đầu hiệu ứng chuyển cảnh ---
+    worldActionPanel_->SetOnNewGame([this]() {
+        this->worldActionPanel_->Close();
+        this->pendingAction_ = MapSelectionAction::NewGame;
+        this->isReturningToMenu = false;
+        this->isTransitioningOut = true;
+        this->transitionOut->Start(true);
+    });
+
+    // --- LOAD GAME: đổi sang panel danh sách bản lưu (không chuyển cảnh) ---
+    worldActionPanel_->SetOnLoadGame([this]() {
+        int idx = this->targetWorldIndex;
+        this->worldActionPanel_->Close();
+        this->saveVersionPanel_->Open(idx,
+                                      WorldCatalog::getInstance().displayName(idx),
+                                      SaveManager::getInstance().listVersions(idx));
+    });
+
+    // --- Đóng panel action: quay lại màn chọn map bình thường ---
+    worldActionPanel_->SetOnCloseCallback([this]() {
+        this->targetWorldIndex = -1;
+    });
+
+    // --- Chọn một bản lưu rồi bấm LOAD ---
+    saveVersionPanel_->SetOnLoad([this](const SaveSlotInfo& slot) {
+        GameSaveData data;
+        if (!SaveManager::getInstance().loadVersion(slot, data)) {
+            std::cerr << "[MapSelectionState] Khong nap duoc ban luu: " << slot.filePath << "\n";
+            return;   // giữ panel mở để người chơi chọn bản khác
+        }
+        this->pendingSave_ = data;
+        this->saveVersionPanel_->Close();
+        this->pendingAction_ = MapSelectionAction::LoadGame;
+        this->isReturningToMenu = false;
+        this->isTransitioningOut = true;
+        this->transitionOut->Start(true);
+    });
+
+    // --- Chọn một bản lưu rồi bấm DELETE ---
+    saveVersionPanel_->SetOnDelete([this](const SaveSlotInfo& slot) {
+        SaveManager::getInstance().deleteVersion(slot);
+        // Nạp lại danh sách từ đĩa thay vì tự xoá phần tử trong vector: nếu
+        // việc xoá file thất bại (file đang bị khoá) thì dòng đó phải còn lại,
+        // đĩa mới là nguồn chân lý.
+        int idx = this->saveVersionPanel_->GetWorldIndex();
+        this->saveVersionPanel_->Refresh(SaveManager::getInstance().listVersions(idx));
+    });
+
+    saveVersionPanel_->SetOnCloseCallback([this]() {
+        this->targetWorldIndex = -1;
+    });
+}
+
+bool MapSelectionState::IsAnyPanelOpen() const {
+    return (worldActionPanel_ && worldActionPanel_->IsOpen()) ||
+           (saveVersionPanel_ && saveVersionPanel_->IsOpen());
 }
 
 MapSelectionState::~MapSelectionState() {
@@ -108,6 +185,21 @@ void MapSelectionState::HandleInput() {
     bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
     bool mouseReleased = IsMouseButtonReleased(MOUSE_LEFT_BUTTON);
 
+    // Panel overlay NUỐT TOÀN BỘ input: nếu không chặn ở đây, cú click vào nút
+    // NEW GAME sẽ đồng thời rơi trúng building nằm ngay dưới panel và mở lại
+    // panel cho world khác.
+    if (IsAnyPanelOpen()) {
+        if (worldActionPanel_ && worldActionPanel_->IsOpen())
+            worldActionPanel_->HandleInput(mousePos, mousePressed, mouseReleased);
+        if (saveVersionPanel_ && saveVersionPanel_->IsOpen())
+            saveVersionPanel_->HandleInput(mousePos, mousePressed, mouseReleased);
+
+        // Xoá trạng thái hover của các node để chúng không "sáng" xuyên qua panel
+        isBackHovered = false;
+        for (auto& node : mapNodes) node.isHovered = false;
+        return;
+    }
+
     // Back button logic
     float baseSize = 48.0f;
     float hoverSize = 56.0f;
@@ -144,22 +236,35 @@ void MapSelectionState::HandleInput() {
 
 void MapSelectionState::Process() {
     if (isTransitioningIn || isTransitioningOut) return;
-    
+
+    // Panel đang mở -> mọi click đã được nó tiêu thụ, không xử lý node.
+    if (IsAnyPanelOpen()) return;
+
     if (isBackClicked) {
         isBackClicked = false;
         isReturningToMenu = true;
+        pendingAction_ = MapSelectionAction::BackToMenu;
         isTransitioningOut = true;
         transitionOut->Start(true); // shrinking
         return;
     }
-    
+
     for (auto& node : mapNodes) {
         if (node.isClicked) {
             node.isClicked = false;
             targetWorldIndex = node.worldIndex;
             isReturningToMenu = false;
-            isTransitioningOut = true;
-            transitionOut->Start(true); // shrinking
+
+            if (currentMode == MapSelectionMode::SinglePlayer && worldActionPanel_) {
+                // 1-Player: hỏi NEW GAME hay LOAD GAME trước, CHƯA chuyển cảnh.
+                worldActionPanel_->Open(node.worldIndex,
+                                        WorldCatalog::getInstance().displayName(node.worldIndex));
+            } else {
+                // PvP: giữ nguyên hành vi cũ, vào thẳng màn chọn nhân vật.
+                pendingAction_ = MapSelectionAction::NewGame;
+                isTransitioningOut = true;
+                transitionOut->Start(true); // shrinking
+            }
             break; // only process one click
         }
     }
@@ -173,38 +278,64 @@ void MapSelectionState::Update(float dt) {
         }
     }
 
+    // Panel tự cập nhật animation và phát callback ở đây (giai đoạn Update).
+    if (worldActionPanel_ && worldActionPanel_->IsOpen()) worldActionPanel_->Update(dt);
+    if (saveVersionPanel_ && saveVersionPanel_->IsOpen()) saveVersionPanel_->Update(dt);
+
     if (isTransitioningOut) {
         transitionOut->Update(dt);
         if (transitionOut->IsFinished()) {
             std::function<std::unique_ptr<GameState>()> factory;
-            
-            if (isReturningToMenu) {
+            int idx = targetWorldIndex;
+            MapSelectionMode curMode = currentMode;
+
+            switch (pendingAction_) {
+            case MapSelectionAction::BackToMenu:
                 factory = []() { return std::make_unique<MainMenuState>(); };
-            } else {
-                int idx = targetWorldIndex;
-                if (currentMode == MapSelectionMode::SinglePlayer) {
-                    LevelFactory levelFact = [idx](std::string p1, std::string p2) -> std::unique_ptr<GameState> {
-                        switch(idx) {
-                            case 1: return std::make_unique<World01State>(p1);
-                            case 2: return std::make_unique<World02State>(p1);
-                            case 3: return std::make_unique<World03State>(p1);
-                            case 4: return std::make_unique<World04State>(p1);
-                            case 5: return std::make_unique<World05State>(p1);
-                            case 6: return std::make_unique<World06State>(p1);
-                            default: return std::make_unique<World01State>(p1);
-                        }
+                break;
+
+            case MapSelectionAction::LoadGame: {
+                // Vào THẲNG màn chơi, bỏ qua Character Selection: nhân vật đã
+                // nằm sẵn trong bản lưu. WorldCatalog dựng đúng World0XState.
+                GameSaveData save = pendingSave_;
+                factory = [idx, save]() -> std::unique_ptr<GameState> {
+                    auto state = WorldCatalog::getInstance().createLoaded(idx, save);
+                    // Bản lưu hỏng/world lạ -> quay về menu thay vì trả nullptr
+                    // cho StateManager (sẽ làm rỗng stack và thoát game).
+                    if (!state) return std::make_unique<MainMenuState>();
+                    return state;
+                };
+                break;
+            }
+
+            case MapSelectionAction::NewGame:
+            default:
+                if (curMode == MapSelectionMode::SinglePlayer) {
+                    // WorldCatalog thay cho khối switch(idx) 6 nhánh trước đây.
+                    LevelFactory levelFact = [idx](std::string p1, std::string /*p2*/) -> std::unique_ptr<GameState> {
+                        auto state = WorldCatalog::getInstance().createNew(idx, p1);
+                        if (!state) return WorldCatalog::getInstance().createNew(1, p1);
+                        return state;
                     };
-                    MapSelectionMode curMode = currentMode;
-                    factory = [levelFact, curMode]() { return std::make_unique<CharacterSelectionState>(1, levelFact, [curMode]() { return std::make_unique<MapSelectionState>(curMode); }); };
-                } else if (currentMode == MapSelectionMode::PvP) {
+                    factory = [levelFact, curMode]() {
+                        return std::make_unique<CharacterSelectionState>(
+                            1, levelFact,
+                            [curMode]() { return std::make_unique<MapSelectionState>(curMode); });
+                    };
+                } else {
                     LevelFactory levelFact = [idx](std::string p1, std::string p2) -> std::unique_ptr<GameState> {
                         std::string mapPath = "assets/maps/pvp_map0" + std::to_string(idx) + "/world0" + std::to_string(idx) + ".ldtk";
                         return std::make_unique<BaseLevelState>(mapPath, "", p1, p2, true);
                     };
-                    MapSelectionMode curMode = currentMode;
-                    factory = [levelFact, curMode]() { return std::make_unique<CharacterSelectionState>(2, levelFact, [curMode]() { return std::make_unique<MapSelectionState>(curMode); }); };
+                    factory = [levelFact, curMode]() {
+                        return std::make_unique<CharacterSelectionState>(
+                            2, levelFact,
+                            [curMode]() { return std::make_unique<MapSelectionState>(curMode); });
+                    };
                 }
+                break;
             }
+
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(std::make_unique<LoadingState>(factory, 1.0f)));
             return;
         }
@@ -267,10 +398,15 @@ void MapSelectionState::Render(float alpha) const {
         DrawTexturePro(tex, src, backBtnRect, {0,0}, 0.0f, WHITE);
     }
 
+    // Panel overlay vẽ SAU các node/nút back (để đè lên) nhưng TRƯỚC hiệu ứng
+    // chuyển cảnh (để iris vẫn phủ được lên tất cả).
+    if (worldActionPanel_ && worldActionPanel_->IsOpen()) worldActionPanel_->Render();
+    if (saveVersionPanel_ && saveVersionPanel_->IsOpen()) saveVersionPanel_->Render();
+
     if (isTransitioningIn) {
         transitionIn->Render();
     }
-    
+
     if (isTransitioningOut) {
         transitionOut->Render();
     }

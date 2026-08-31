@@ -3,6 +3,7 @@
 #include "ButtonGroup.h"
 #include "CharacterInfoPanel.h"
 #include "Buttons.h"
+#include "UIScaler.h"
 #include "raylib.h"
 #include <vector>
 #include <map>
@@ -26,8 +27,13 @@ private:
     Texture2D line1Tex;
     
     Font customFont;
-    
-    // UI Layout state
+
+    // Bộ quy đổi từ khung thiết kế ảo 1280x720 sang màn hình thật. Mọi hằng số
+    // pixel bên dưới đều là toạ độ TRONG KHUNG THIẾT KẾ, phải đi qua ui_ trước
+    // khi dùng để vẽ. Nhờ vậy bố cục giữ nguyên tỉ lệ trên mọi độ phân giải.
+    UIScaler ui_;
+
+    // UI Layout state (giá trị ĐÃ quy đổi sang pixel màn hình thật)
     Vector2 panelPos;
     float panelScale;
     float titleScale;

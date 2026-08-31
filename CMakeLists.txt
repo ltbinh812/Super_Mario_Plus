@@ -19,6 +19,7 @@ include_directories(
     include/ui
     include/ui/transitions
     include/core
+    include/save
     include/entity
     include/entity/Player
     include/entity/Skill
@@ -50,6 +51,8 @@ set(SOURCES
     src/core/StateManager.cpp
     src/core/InputHandler.cpp
     src/core/SaveManager.cpp
+    src/save/JsonSaveSerializer.cpp
+    src/save/FileSaveRepository.cpp
     src/states/GameState.cpp
     src/editor/EditorBlockRegistry.cpp
     src/editor/AutoTiler.cpp
@@ -74,6 +77,11 @@ set(SOURCES
     src/ui/CharacterInfoPanel.cpp
     src/ui/IngameSettingsPanel.cpp
     src/ui/ShopUIPanel.cpp
+    src/ui/PanelButton.cpp
+    src/ui/WorldActionPanel.cpp
+    src/ui/SaveVersionPanel.cpp
+    src/ui/UIScaler.cpp
+    src/infrastructure/GifAnimation.cpp
     src/ui/transitions/IrisTransition.cpp
     src/entity/Animation.cpp
     src/entity/Entity.cpp
@@ -142,6 +150,7 @@ set(SOURCES
     src/entity/Item/Boom.cpp
     src/entity/Item/PoisonFlask.cpp
     src/entity/Item/ShopAsset.cpp
+    src/entity/Item/EndgameAsset.cpp
     src/entity/Item/ItemFactory.cpp
     src/entity/Item/ItemUsageFactory.cpp
     src/combatsystem/BruteForceDetector.cpp
@@ -150,6 +159,7 @@ set(SOURCES
     src/environment/TileMap.cpp
     src/environment/MapCamera.cpp
     src/states/BaseLevelState.cpp
+    src/states/WorldCatalog.cpp
     src/states/World01State.cpp
     src/states/World02State.cpp
     src/states/World03State.cpp
@@ -160,6 +170,7 @@ set(SOURCES
     src/states/MapSelectionState.cpp
     src/states/CharacterSelectionState.cpp
     src/states/LoadingState.cpp
+    src/states/EndgameState.cpp
     src/ui/ButtonGroup.cpp
     src/environment/CameraFollowMode.cpp
     src/environment/CameraPanMode.cpp

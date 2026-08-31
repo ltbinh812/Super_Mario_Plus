@@ -120,6 +120,62 @@ void Player::respawn(Vector2 startPos) {
 }
 
 // =============================================================================
+// SERIALIZATION — Player tự đóng gói và tự khôi phục chính mình.
+//
+// NGUYÊN TẮC "Tell, Don't Ask": trước đây BaseLevelState phải thò tay vào
+// getRuntimeStatsMutable() / getBaseStatsMutable() để moi ra rồi nhét lại từng
+// trường một. Đó là phá vỡ đóng gói: mỗi lần Player thêm một thuộc tính là
+// BaseLevelState phải sửa theo. Nay Player là nơi duy nhất biết mình gồm những
+// gì, còn BaseLevelState chỉ việc uỷ quyền.
+// =============================================================================
+
+PlayerSaveData Player::createSaveData() const {
+  PlayerSaveData data;
+  data.exists = true;
+
+  // baseStats.name chính là nhân vật đã chọn ở màn Character Selection
+  // ("Goku"/"Naruto"/...). Không có nó thì khi Load Game không dựng lại nổi
+  // đúng Player — PlayerFactory tra tên này trong assets/config/characters.json.
+  data.characterName = baseStats.name;
+
+  data.posX = worldStats.position.x;
+  data.posY = worldStats.position.y;
+  data.isFacingRight = worldStats.isFacingRight;
+
+  data.health    = runtimeStats.health;
+  data.maxHealth = baseStats.maxHealth;
+  data.mana      = runtimeStats.mana;
+  data.maxMana   = baseStats.maxMana;
+  data.breath    = runtimeStats.breath;
+
+  data.storedItemSlot = runtimeStats.storedItemSlot;
+  return data;
+}
+
+void Player::restoreFromSaveData(const PlayerSaveData &data) {
+  if (!data.exists) return;
+
+  setPosition({data.posX, data.posY});
+  worldStats.isFacingRight = data.isFacingRight;
+
+  // maxHealth/maxMana đến từ characters.json khi dựng Player, nhưng vẫn khôi
+  // phục từ save để phòng trường hợp file config được chỉnh sau khi lưu — máu
+  // hiện tại phải luôn nằm trong khoảng hợp lệ của bản lưu đó.
+  if (data.maxHealth > 0) baseStats.maxHealth = data.maxHealth;
+  if (data.maxMana   > 0) baseStats.maxMana   = data.maxMana;
+
+  runtimeStats.health = data.health;
+  runtimeStats.mana   = data.mana;
+  if (data.breath > 0) runtimeStats.breath = data.breath;
+
+  runtimeStats.storedItemSlot = data.storedItemSlot;
+
+  // Vận tốc không được lưu: người chơi luôn xuất hiện lại ở trạng thái đứng yên
+  // thay vì đang bay giữa chừng như lúc bấm lưu.
+  runtimeStats.velocity = {0.0f, 0.0f};
+}
+
+// =============================================================================
 // SKILL SYSTEM
 // =============================================================================
 

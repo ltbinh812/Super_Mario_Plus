@@ -18,7 +18,9 @@ CharacterSelectionState::CharacterSelectionState(int numPlayers, LevelFactory fa
     transitionIn = std::make_unique<IrisTransition>();
     transitionOut = std::make_unique<IrisTransition>();
 
-    backgroundTex = LoadTexture("assets/UI_screens/map_selection.png"); // Re-use background
+    backgroundTex = LoadTexture("assets/UI_screens/map_selection.png"); // ảnh nền tĩnh dự phòng
+    // Ảnh nền động: 14 khung, mỗi khung 150ms trong file gốc -> ~6.7 fps.
+    backgroundGif.Load("assets/UI_screens/character_selection.gif", 6.7f);
     islandTex = LoadTexture("assets/UI_screens/flying_island.png");
     customFont = LoadFont("assets/config/kenney-pixel-hu.otf");
 
@@ -284,6 +286,9 @@ void CharacterSelectionState::UpdateIslandLogic(float dt) {
 }
 
 void CharacterSelectionState::Update(float dt) {
+    // Nền động chạy liên tục, kể cả trong lúc chuyển cảnh, để không bị khựng.
+    backgroundGif.Update(dt);
+
     if (isTransitioningIn) {
         transitionIn->Update(dt);
         if (transitionIn->IsFinished()) isTransitioningIn = false;
@@ -364,11 +369,19 @@ void CharacterSelectionState::Update(float dt) {
 void CharacterSelectionState::Render(float alpha) const {
     ClearBackground(BLACK);
 
-    // if (backgroundTex.id != 0) {
-    //     Rectangle src = { 0, 0, (float)backgroundTex.width, (float)backgroundTex.height };
-    //     Rectangle dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
-    //     DrawTexturePro(backgroundTex, src, dest, {0, 0}, 0.0f, WHITE);
-    // }
+    // Ảnh nền động; nếu GIF không nạp được thì rơi về ảnh tĩnh cũ.
+    if (backgroundGif.IsLoaded()) {
+        backgroundGif.DrawFullscreen();
+    } else if (backgroundTex.id != 0) {
+        Rectangle src = { 0, 0, (float)backgroundTex.width, (float)backgroundTex.height };
+        Rectangle dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+        DrawTexturePro(backgroundTex, src, dest, {0, 0}, 0.0f, WHITE);
+    }
+
+    // Lớp phủ đen 50% làm dịu ảnh nền, để tiêu đề và các thẻ nhân vật nổi lên.
+    // Alpha 128/255 ≈ 50%. Vẽ ngay sau nền và TRƯỚC mọi thứ khác nên chỉ ảnh
+    // nền bị tối, còn đảo bay + thẻ nhân vật vẫn giữ nguyên độ tương phản.
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Color{0, 0, 0, 128});
 
     // Draw Title
     std::string titleStr = (currentPlayerSelecting == 1) ? "PLAYER 1: SELECT CHARACTER" : "PLAYER 2: SELECT CHARACTER";

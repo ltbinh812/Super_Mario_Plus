@@ -1,37 +1,23 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include "BaseItem.h"
 
-struct PlayerSaveData {
-    bool exists = false;
-    float posX = 0.0f;
-    float posY = 0.0f;
-    int health = 0;
-    int maxHealth = 0;
-    int mana = 0;
-    std::string storedItemSlot = "";
-    bool isFacingRight = true;
-};
+// =============================================================================
+// SaveData.h — AGGREGATOR HEADER (giữ để tương thích ngược).
+//
+// Trước đây file này chứa thẳng 4 struct PlayerSaveData / InventorySaveData /
+// LevelSaveData / GameSaveData. Theo quy tắc "1 Class / 1 File" của dự án
+// (.agents/rules/oop-enforcer), mỗi struct đã được tách ra file riêng trong
+// include/save/.
+//
+// File này KHÔNG bị xoá: mọi chỗ đang `#include "SaveData.h"` (BaseLevelState.h,
+// SaveManager.h, ...) vẫn biên dịch bình thường, không phải sửa một dòng nào.
+//
+// Code mới nên include trực tiếp header cụ thể mình cần, ví dụ:
+//     #include "GameSaveData.h"      thay vì  #include "SaveData.h"
+// =============================================================================
 
-struct InventorySaveData {
-    int keys = 0;
-    int coins = 0;
-};
-
-struct LevelSaveData {
-    std::string worldId;
-    std::string levelId;
-    std::string mapFilePath;
-    std::unordered_map<std::string, ItemState> persistedItemStates;
-    std::unordered_set<std::string> persistedDeadEntities;
-};
-
-struct GameSaveData {
-    bool isValid = false;
-    PlayerSaveData p1;
-    InventorySaveData inventory;
-    LevelSaveData levelData;
-};
+#include "PlayerSaveData.h"
+#include "InventorySaveData.h"
+#include "LevelSaveData.h"
+#include "SaveMetaData.h"
+#include "GameSaveData.h"
+#include "SaveSlotInfo.h"

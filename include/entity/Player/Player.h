@@ -5,6 +5,7 @@
 #include "BuffManager.h"
 #include "PlayerStates.h"
 #include "ISkill.h"
+#include "PlayerSaveData.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -38,6 +39,11 @@ public:
   bool isDead() const;
   bool isOutOfBounds(float limitY) const;
   void respawn(Vector2 startPos);
+
+  // Serialization — Player tự đóng gói / khôi phục trạng thái của chính mình
+  // (xem giải thích chi tiết trong Player.cpp).
+  PlayerSaveData createSaveData() const;
+  void restoreFromSaveData(const PlayerSaveData &data);
 
   // Skill system
   void useSkill(const std::string &skillname);

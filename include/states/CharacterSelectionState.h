@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "IrisTransition.h"
 #include "Animation.h"
+#include "GifAnimation.h"
 #include <raylib.h>
 #include <memory>
 #include <vector>
@@ -39,6 +40,9 @@ private:
     std::function<std::unique_ptr<GameState>()> backStateFactory;
 
     Texture2D backgroundTex;
+    // Ảnh nền động (character_selection.gif). GifAnimation tự quản lý Image +
+    // Texture và tự đổi khung hình trong Update(dt).
+    GifAnimation backgroundGif;
     Texture2D islandTex;
     Font customFont;
 

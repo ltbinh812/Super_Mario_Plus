@@ -1,6 +1,8 @@
 #include "BaseLevelState.h"
 #include "MainMenuState.h"
 #include "StateCommands.h"
+#include "EndgameState.h"
+#include "EndgameAsset.h"
 #include "core/SettingsManager.h"
 #include "Effects.h"
 #include "EntityFactory.h"
@@ -12,6 +14,7 @@
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
 #include "SaveManager.h"
+#include "WorldCatalog.h"
 #include "Flag.h"
 #include "ShopAsset.h"
 #include "PlayerHUD.h"
@@ -127,6 +130,32 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   // Initialize Shop UI
   shopUI_ = std::make_unique<ShopUIPanel>();
   shopUI_->init((float)GetScreenWidth(), (float)GetScreenHeight());
+}
+
+// =============================================================================
+// [NEW] Constructor khôi phục từ bản lưu (luồng LOAD GAME).
+//
+// Dùng DELEGATING CONSTRUCTOR (C++11): thay vì chép lại toàn bộ 100 dòng khởi
+// tạo map/player/input/UI, ta gọi thẳng constructor LDtk ở trên với hai thông
+// tin rút ra từ save:
+//     - level nào  -> save.levelData.levelId
+//     - nhân vật nào -> save.p1.characterName
+// Constructor gốc chạy xong sẽ có một màn chơi "sạch" đúng level đó; phần thân
+// dưới đây mới phủ lên trạng thái đã lưu (máu, coin, quái đã chết, item đã mở).
+//
+// Fallback "Goku" phòng khi đọc phải bản lưu đời cũ chưa có characterName —
+// còn hơn là dựng Player rỗng rồi crash.
+// =============================================================================
+BaseLevelState::BaseLevelState(const std::string &mapFilePath, const GameSaveData &save)
+    : BaseLevelState(mapFilePath,
+                     save.levelData.levelId,
+                     save.p1.characterName.empty() ? std::string("Goku")
+                                                   : save.p1.characterName) {
+  restoreFromSaveData(save);
+
+  // Khôi phục xong thì bản lưu này cũng chính là checkpoint hiện hành: chết
+  // trong màn sẽ hồi sinh về đúng đây thay vì về đầu map.
+  SaveManager::getInstance().setCheckpoint(save);
 }
 
 // =============================================================================
@@ -418,13 +447,24 @@ void BaseLevelState::Update(float dt) {
     return; // Đóng băng logic game khi shop mở
   }
 
-  // Quét các activeItems xem có ShopAsset nào yêu cầu mở shop không
+  // Đếm giờ chơi. Đặt SAU hai lần return ở trên để thời gian đứng trong menu
+  // Settings và trong Shop không bị tính — con số hiển thị ở panel LOAD GAME
+  // phản ánh đúng thời gian chơi thật.
+  playTimeSeconds_ += dt;
+
+  // Quét các activeItems xem có ShopAsset nào yêu cầu mở shop không, hoặc EndgameAsset nào được chạm chưa
   for (auto& item : activeItems) {
       if (item && item->getIsActive()) {
           ShopAsset* shop = dynamic_cast<ShopAsset*>(item.get());
           if (shop && shop->wantsToOpenShop()) {
               shopUI_->open(player1.get());
               shop->resetOpenShop();
+          }
+
+          EndgameAsset* endgame = dynamic_cast<EndgameAsset*>(item.get());
+          if (endgame && endgame->isReached_) {
+              this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<EndgameState>(isPvPMode_)));
+              return;
           }
       }
   }
@@ -481,8 +521,7 @@ void BaseLevelState::Update(float dt) {
             
             // Check if it's a flag that just got activated
             if (oldState != ItemState::Active && item->getItemState() == ItemState::Active && dynamic_cast<Flag*>(item.get()) != nullptr) {
-                SaveManager::getInstance().setCheckpoint(createSaveData());
-                SaveManager::getInstance().saveToFile("saves/save.json");
+                onCheckpointReached();
             }
         }
     };
@@ -589,34 +628,53 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
   }
 }
 
+// =============================================================================
+// SAVE / LOAD
+// =============================================================================
+
 GameSaveData BaseLevelState::createSaveData() const {
   GameSaveData data;
   data.isValid = true;
-  data.levelData.worldId = "";
+
+  // --- Trạng thái map: chỉ ghi phần SAI KHÁC so với file .ldtk gốc ---------
+  int worldIndex = WorldCatalog::getInstance().indexFromMapPath(mapFilePath);
+  data.levelData.worldIndex = worldIndex;
+  data.levelData.worldId = worldIndex > 0
+                               ? ("world0" + std::to_string(worldIndex))
+                               : std::string("");
   data.levelData.levelId = currentLevel;
   data.levelData.mapFilePath = mapFilePath;
   data.levelData.persistedItemStates = persistedItemStates;
   data.levelData.persistedDeadEntities = persistedDeadEntities;
+
+  // Ảnh chụp trạng thái item PHẢI lấy từ các item đang sống trên màn, không chỉ
+  // từ map persisted: những item vừa bị đổi trạng thái ở level hiện tại chưa
+  // được đẩy vào persistedItemStates (việc đó chỉ xảy ra lúc TransitionToLevel).
+  for (const auto& item : activeItems) {
+    if (item && !item->getIid().empty()) {
+      data.levelData.persistedItemStates[item->getIid()] = item->getItemState();
+    }
+  }
 
   if (partyInventory) {
     data.inventory.coins = partyInventory->coins;
     data.inventory.keys = partyInventory->keys;
   }
 
-  auto populatePlayer = [](Player* p, PlayerSaveData& pd) {
-    if (p) {
-      pd.exists = true;
-      pd.posX = p->getWorldStats().position.x;
-      pd.posY = p->getWorldStats().position.y;
-      pd.health = p->getRuntimeStats().health;
-      pd.maxHealth = p->getBaseStats().maxHealth;
-      pd.mana = p->getRuntimeStats().mana;
-      pd.storedItemSlot = p->getRuntimeStats().storedItemSlot;
-      pd.isFacingRight = p->getWorldStats().isFacingRight;
-    }
-  };
+  // --- Trạng thái người chơi: uỷ quyền, không thò tay vào nội bộ Player ----
+  if (player1) {
+    data.p1 = player1->createSaveData();
+  }
 
-  populatePlayer(player1.get(), data.p1);
+  // --- Bìa sách cho panel LOAD GAME ---------------------------------------
+  // (versionIndex + thời điểm lưu do FileSaveRepository điền nốt khi ghi file)
+  data.meta.worldIndex      = worldIndex;
+  data.meta.levelId         = currentLevel;
+  data.meta.characterName   = data.p1.characterName;
+  data.meta.playTimeSeconds = playTimeSeconds_;
+  data.meta.coins           = data.inventory.coins;
+  data.meta.health          = data.p1.health;
+  data.meta.maxHealth       = data.p1.maxHealth;
 
   return data;
 }
@@ -629,21 +687,13 @@ void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
     partyInventory->keys = data.inventory.keys;
   }
 
-  auto applyPlayer = [](Player* p, const PlayerSaveData& pd) {
-    if (p && pd.exists) {
-      p->setPosition({pd.posX, pd.posY});
-      p->getWorldStatsMutable().isFacingRight = pd.isFacingRight;
-      p->getRuntimeStatsMutable().health = pd.health;
-      p->getBaseStatsMutable().maxHealth = pd.maxHealth;
-      p->getRuntimeStatsMutable().mana = pd.mana;
-      p->getRuntimeStatsMutable().storedItemSlot = pd.storedItemSlot;
-    }
-  };
-
-  applyPlayer(player1.get(), data.p1);
+  if (player1) {
+    player1->restoreFromSaveData(data.p1);
+  }
 
   persistedItemStates = data.levelData.persistedItemStates;
   persistedDeadEntities = data.levelData.persistedDeadEntities;
+  playTimeSeconds_ = data.meta.playTimeSeconds;
 
   activeEntities.clear();
   activeItems.clear();
@@ -653,6 +703,37 @@ void BaseLevelState::restoreFromSaveData(const GameSaveData& data) {
   currentLevel = data.levelData.levelId;
 
   spawnEntitiesFromMap();
+  // Trước đây thiếu dòng này: sau mỗi lần hồi sinh từ checkpoint, toàn bộ vùng
+  // kích hoạt cutscene của level biến mất vì chỉ entity/item được spawn lại.
+  spawnCutsceneTriggersFromMap();
+}
+
+// -----------------------------------------------------------------------------
+// Chạm Flag = một mốc tiến trình -> vừa đặt checkpoint trong RAM (để hồi sinh),
+// vừa ghi HẲN một bản lưu mới xuống saves/world0X/versionN.json.
+//
+// HAI LỚP BẢO VỆ để tính năng này không rò sang chế độ khác:
+//   1. worldIndex < 0  : đường dẫn map không thuộc 6 world 1-player nào —
+//                        loại luôn menu.ldtk, pvp_map0N/ và custom map.
+//   2. isPvPMode_ || player2 : chắc chắn đang ở chế độ một người chơi.
+// Nhờ WorldCatalog trả lời câu hỏi số 1, ta không phải rải if/else kiểm tra
+// chế độ khắp BaseLevelState.
+// -----------------------------------------------------------------------------
+void BaseLevelState::onCheckpointReached() {
+  int worldIndex = WorldCatalog::getInstance().indexFromMapPath(mapFilePath);
+  if (worldIndex < 0) return;
+  if (isPvPMode_ || player2) return;
+
+  GameSaveData data = createSaveData();
+
+  // Checkpoint trong RAM: giữ nguyên hành vi hồi sinh cũ.
+  SaveManager::getInstance().setCheckpoint(data);
+
+  // Bản lưu trên đĩa: mỗi lần chạm Flag sinh thêm một version mới.
+  SaveSlotInfo created;
+  if (SaveManager::getInstance().createVersion(worldIndex, data, created)) {
+    std::cout << "[BaseLevelState] Checkpoint -> " << created.filePath << "\n";
+  }
 }
 
 void BaseLevelState::spawnEntitiesFromMap() {
@@ -708,6 +789,51 @@ void BaseLevelState::bindPlayerInputs() {
 }
 
 void BaseLevelState::processDeathCondition(float dt) {
+  // === Chế độ đối kháng: ai gục trước thì người còn lại thắng ===============
+  // Khác hẳn 1-Player: KHÔNG hồi sinh, ván đấu kết thúc ngay và chuyển sang
+  // màn hình trao giải kèm tên nhân vật thắng để EndgameState dựng hoạt ảnh.
+  // Đặt trước toàn bộ logic respawn bên dưới vì hai luồng loại trừ nhau.
+  if (isPvPMode_ && player1 && player2) {
+    // Đã có người gục -> đang đếm ngược, chỉ chờ hết giờ rồi chuyển màn.
+    if (pvpEndTimer_ > 0.0f) {
+      pvpEndTimer_ -= dt;
+      if (pvpEndTimer_ <= 0.0f) {
+        pvpEndTimer_ = -1.0f;
+        this->PushStateCommand(std::make_unique<ChangeStateCommand>(
+            std::make_unique<EndgameState>(true, pvpWinnerName_)));
+      }
+      return;
+    }
+
+    auto isDown = [&](Player *p) {
+      return p && (p->isDead() || p->isOutOfBounds(map.GetHeight() + 32.0f));
+    };
+
+    bool p1Down = isDown(player1.get());
+    bool p2Down = isDown(player2.get());
+
+    if (p1Down || p2Down) {
+      if (p1Down && p2Down) {
+        pvpWinnerName_ = "";   // cùng gục trong một frame -> hoà
+      } else if (p1Down) {
+        pvpWinnerName_ = player2->getBaseStats().name;
+      } else {
+        pvpWinnerName_ = player1->getBaseStats().name;
+      }
+
+      // Rơi ra ngoài map nhưng máu vẫn còn -> kết liễu để animation chết chạy,
+      // giống hệt cách luồng 1-Player xử lý.
+      if (p1Down && !player1->isDead()) player1->takeDamage(9999);
+      if (p2Down && !player2->isDead()) player2->takeDamage(9999);
+
+      std::cout << "[BaseLevelState] PvP ket thuc. Nguoi thang: "
+                << (pvpWinnerName_.empty() ? "HOA" : pvpWinnerName_) << "\n";
+
+      pvpEndTimer_ = 1.5f;   // chờ animation chết rồi mới sang màn trao giải
+    }
+    return;
+  }
+
   if (respawnTimer > 0.0f) {
     respawnTimer -= dt;
     if (respawnTimer <= 0.0f) {
@@ -750,12 +876,11 @@ void BaseLevelState::processItemInteractions() {
             item->onInteract(*p);
             
             if (oldState != ItemState::Active && item->getItemState() == ItemState::Active && dynamic_cast<Flag*>(item.get()) != nullptr) {
-                SaveManager::getInstance().setCheckpoint(createSaveData());
-                SaveManager::getInstance().saveToFile("save.json");
+                onCheckpointReached();
             }
         }
     };
-    
+
     handleInteract(player1.get());
   }
 }
