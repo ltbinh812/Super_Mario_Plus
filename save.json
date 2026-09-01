@@ -1,6 +1,6 @@
 {
     "inventory": {
-        "coins": 0,
+        "coins": 1,
         "keys": 0
     },
     "levelData": {
@@ -15,7 +15,12 @@
         "health": 300,
         "isFacingRight": true,
         "maxHealth": 300,
+<<<<<<< HEAD
+        "posX": 1968.989990234375,
+        "posY": 799.989990234375
+=======
         "posX": 881.010009765625,
         "posY": 620.185546875
+>>>>>>> origin/minh1
     }
 }

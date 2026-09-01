@@ -6,6 +6,7 @@
 - **Kiến trúc:** Dự án đã được refactor toàn diện theo nguyên tắc OOP (1 file/class) và phân chia thành các module rõ ràng (`abilities`, `characters`, `core`, `environment`, `states`, `ui`, `editor`).
 - **Design Patterns:** Đã áp dụng **State Pattern** cho quản lý vòng lặp game (`GameState`, `CharacterState`), **Strategy Pattern** cho hệ thống kỹ năng (`AbilityStrategy`) và công cụ editor (`IEditorTool`), cùng với **Factory Pattern** cho khởi tạo nhân vật (`CharacterFactory`) và vật phẩm (`ItemFactory`).
 - **Hoàn thiện:** Hệ thống quản lý màn hình (Menu, World), vẽ map (LDtk parser, TileMap), entity (Player, Quái, Items), combat system cơ bản và hệ thống state nhân vật. Gần đây nhất đã hoàn thành tính năng **In-game Map Editor (Level Editor)** cho phép người chơi tự thiết kế map (đặt block, entity, thay đổi kích thước map) và Test Play trực tiếp. Hệ thống Save/Load Custom Map dưới dạng JSON cũng đã được tích hợp.
+- **Mới nhất — Hệ thống Save/Load nhiều version (1-Player):** Đã hoàn thành module `include/save/` + `src/save/` theo kiến trúc 4 tầng (Strategy `ISaveSerializer`, Repository `ISaveRepository`, Facade `SaveManager`, Registry `WorldCatalog`). Mỗi lần chạm `Flag` sinh một file `saves/world0X/versionN.json` lưu đầy đủ trạng thái người chơi (máu/mana/coin/key/item đang cầm/nhân vật) và trạng thái map (IID quái đã chết, IID item đã đổi trạng thái, level hiện tại). Ở Map Selection, bấm một world sẽ hiện popup `NEW GAME` / `LOAD GAME`; `LOAD GAME` mở panel danh sách bản lưu, chọn một dòng thì hiện `DELETE` và `LOAD`. Xem mục **Save System** bên dưới.
 - **Đang dở dang (WIP):** Tối ưu thêm về hiệu năng và bổ sung các màn chơi mới, sửa lỗi phát sinh. Logic chi tiết của vài tính năng UI Settings mở rộng.
 ```text
 SuperMarioPlus/
@@ -73,6 +74,17 @@ SuperMarioPlus/
 │   │   ├── MapCamera.h
 │   │   ├── Platform.h
 │   │   └── TileMap.h
+│   ├── save/                          # [MỚI] Hệ thống Save/Load nhiều version
+│   │   ├── PlayerSaveData.h           #   DTO: trạng thái 1 người chơi
+│   │   ├── InventorySaveData.h        #   DTO: coin + key dùng chung
+│   │   ├── LevelSaveData.h            #   DTO: quái đã chết + item đã đổi trạng thái
+│   │   ├── SaveMetaData.h             #   DTO: "bìa sách" cho panel liệt kê
+│   │   ├── GameSaveData.h             #   Aggregate Root gom 4 DTO trên
+│   │   ├── SaveSlotInfo.h             #   Mô tả 1 file save trên đĩa
+│   │   ├── ISaveSerializer.h          #   Strategy: định dạng lưu trữ
+│   │   ├── JsonSaveSerializer.h       #   Strategy impl: nlohmann/json
+│   │   ├── ISaveRepository.h          #   Repository: kho chứa bản lưu
+│   │   └── FileSaveRepository.h       #   Repository impl: std::filesystem
 │   ├── states/
 │   │   ├── CharacterSelectionState.h
 │   │   ├── CharacterState.h
@@ -83,7 +95,9 @@ SuperMarioPlus/
 │   │   ├── Menu.h
 │   │   ├── PlayerStates.h
 │   │   ├── SettingState.h
-│   │   └── World.h
+│   │   ├── World.h
+│   │   ├── WorldDescriptor.h          # [MỚI] Hồ sơ 1 world (path + 2 factory)
+│   │   └── WorldCatalog.h             # [MỚI] Registry 6 world (thay switch(idx))
 │   └── ui/
 │       ├── transitions/
 │       │   ├── ITransition.h
@@ -94,7 +108,11 @@ SuperMarioPlus/
 │       ├── IngameSettingsPanel.h
 │       ├── OverlayUI.h
 │       ├── SettingsOverlay.h
-│       └── UIComponent.h
+│       ├── UIComponent.h
+│       ├── PanelButton.h              # [MỚI] Nút bấm dùng chung cho panel overlay
+│       ├── WorldActionPanel.h         # [MỚI] Popup NEW GAME / LOAD GAME
+│       ├── SaveVersionPanel.h         # [MỚI] Danh sách bản lưu + DELETE/LOAD
+│       └── UIScaler.h                 # [MỚI] Quy đổi khung thiết kế ảo -> màn hình thật
 ├── src/
 │   ├── abilities/
 │   ├── characters/
@@ -129,6 +147,9 @@ SuperMarioPlus/
 │   │   ├── MapCamera.cpp
 │   │   ├── Platform.cpp
 │   │   └── TileMap.cpp
+│   ├── save/                          # [MỚI]
+│   │   ├── JsonSaveSerializer.cpp
+│   │   └── FileSaveRepository.cpp
 │   ├── states/
 │   │   ├── CharacterSelectionState.cpp
 │   │   ├── GameState.cpp
@@ -138,7 +159,8 @@ SuperMarioPlus/
 │   │   ├── Menu.cpp
 │   │   ├── PlayerStates.cpp
 │   │   ├── SettingState.cpp
-│   │   └── World.cpp
+│   │   ├── World.cpp
+│   │   └── WorldCatalog.cpp           # [MỚI]
 │   └── ui/
 │       ├── transitions/
 │       │   └── IrisTransition.cpp
@@ -146,7 +168,11 @@ SuperMarioPlus/
 │       ├── HUD.cpp
 │       ├── PlayerHUD.cpp
 │       ├── SettingsOverlay.cpp
-│       └── UIComponent.cpp
+│       ├── UIComponent.cpp
+│       ├── PanelButton.cpp            # [MỚI]
+│       ├── WorldActionPanel.cpp       # [MỚI]
+│       ├── SaveVersionPanel.cpp       # [MỚI]
+│       └── UIScaler.cpp               # [MỚI]
 ├── third_party/
 │   └── raylib/
 ├── workflow/
@@ -166,6 +192,127 @@ SuperMarioPlus/
 ```
 
 ### Detailed File / Class Information
+
+#### Save System (`include/save/`, `src/save/`) — Lưu game nhiều version cho chế độ 1-Player
+
+**Mục tiêu:** mỗi lần người chơi chạm `Flag` (checkpoint) sẽ sinh thêm một file
+`saves/world0X/versionN.json` ghi lại đầy đủ trạng thái người chơi và trạng thái map.
+Ở màn Map Selection, bấm một world sẽ hiện popup `NEW GAME` / `LOAD GAME`.
+
+**Kiến trúc 4 tầng** (mỗi tầng một trách nhiệm, ghép với nhau bằng Dependency Injection):
+
+```
+BaseLevelState ──createSaveData()──> GameSaveData
+       │                                  │
+       v                                  v
+  SaveManager  ───────────────>  ISaveRepository  ──uses──>  ISaveSerializer
+   (Facade,                     (FileSaveRepository)         (JsonSaveSerializer)
+    Singleton)                   quản lý thư mục               struct <-> JSON
+                                 + đánh số version
+```
+
+| File / Class | Tác dụng | Được dùng bởi | Cần gì bổ trợ |
+|---|---|---|---|
+| `PlayerSaveData` | DTO: nhân vật, máu, mana, breath, vị trí, hướng nhìn, item đang cầm | `Player::createSaveData()` | — |
+| `InventorySaveData` | DTO: coin + key (ánh xạ `PartyInventory`) | `BaseLevelState` | — |
+| `LevelSaveData` | DTO: tập IID quái đã chết + map IID→`ItemState` + level hiện tại | `BaseLevelState`, `spawnEntitiesFromMap()` | `ItemState.h` |
+| `SaveMetaData` | DTO "bìa sách": nhân vật, level, coin, máu, giờ chơi, thời điểm lưu | `SaveVersionPanel` để vẽ danh sách mà không phải parse cả file | — |
+| `GameSaveData` | Aggregate Root gom 4 DTO trên | Toàn hệ thống save | — |
+| `SaveSlotInfo` | Mô tả **một file trên đĩa** (đường dẫn + meta), chưa nạp nội dung | `SaveVersionPanel`, `MapSelectionState` | — |
+| `ISaveSerializer` | **Strategy**: định dạng lưu trữ | `FileSaveRepository`, `SaveManager` | — |
+| `JsonSaveSerializer` | Cài đặt bằng nlohmann/json; dùng `NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT` để sinh **cả** `to_json` lẫn `from_json` từ một danh sách trường → không thể lệch ghi/đọc | `SaveManager` | `third_party/json` |
+| `ISaveRepository` | **Repository**: liệt kê / tạo / nạp / xoá bản lưu của một world | `SaveManager` | — |
+| `FileSaveRepository` | Cài đặt trên `std::filesystem`; bố cục `saves/world0X/versionN.json`; tự tạo thư mục; số version luôn tăng, không tái dùng; bỏ qua file hỏng | `SaveManager` | `ISaveSerializer` (tiêm qua ctor) |
+| `SaveManager` *(mở rộng)* | **Facade + Singleton**. Hai vai trò: (1) checkpoint trong RAM để hồi sinh — API cũ giữ nguyên; (2) bản lưu trên đĩa qua `listVersions/createVersion/loadVersion/deleteVersion` | `BaseLevelState`, `MapSelectionState` | `ISaveRepository` |
+| `include/core/SaveData.h` | Nay chỉ là **aggregator header** include 6 file trên — mọi call site cũ vẫn biên dịch được, không xoá gì | tương thích ngược | — |
+
+**Registry ánh xạ world:**
+
+| File / Class | Tác dụng | Được dùng bởi |
+|---|---|---|
+| `WorldDescriptor` | Hồ sơ 1 world: số hiệu, tên hiển thị, đường dẫn `.ldtk`, và 2 factory (`makeNew`, `makeLoaded`) | `WorldCatalog` |
+| `WorldCatalog` | **Registry + Factory**, nơi DUY NHẤT ánh xạ `worldIndex ↔ World0XState` — thay cho khối `switch(idx)` 6 nhánh trước đây trong `MapSelectionState`. `indexFromMapPath()` trả `-1` cho `menu.ldtk`/`pvp_map0N`/custom map, nhờ đó auto-save tự động tắt ở mọi ngữ cảnh không phải world 1-player | `MapSelectionState`, `BaseLevelState::onCheckpointReached()` |
+
+**UI overlay:**
+
+| File / Class | Tác dụng | Được dùng bởi |
+|---|---|---|
+| `PanelButton` | Nút bấm có texture + font riêng + hiệu ứng hover. `ConsumeClick()` trả sự kiện ra ngoài thay vì tự gọi callback → giữ đúng phân tách 4 giai đoạn | `WorldActionPanel`, `SaveVersionPanel` |
+| `WorldActionPanel` (`IMenuPanel`) | Popup hiện đè lên Map Selection sau khi bấm một world: `NEW GAME` / `LOAD GAME` / `BACK` | `MapSelectionState` |
+| `SaveVersionPanel` (`IMenuPanel`) | Danh sách bản lưu (cuộn được, mới nhất trên đầu). Chọn một dòng thì mới hiện `DELETE` và `LOAD`. Danh sách rỗng → hiện `NO SAVED GAME` | `MapSelectionState` |
+
+**Luồng người dùng:**
+```
+MapSelectionState
+  └─ bấm world N ──> WorldActionPanel (overlay)
+       ├─ NEW GAME  ──> LoadingState ─> CharacterSelectionState ─> WorldCatalog::createNew(N, p1)
+       └─ LOAD GAME ──> SaveVersionPanel (overlay)
+              └─ chọn version ─> [DELETE] xoá file rồi nạp lại danh sách
+                              └─ [LOAD]  ─> LoadingState ─> WorldCatalog::createLoaded(N, save)
+```
+
+#### Ảnh động GIF (`include/infrastructure/GifAnimation.h`)
+
+`LoadTexture("x.gif")` của raylib chỉ nạp khung hình ĐẦU TIÊN nên ảnh đứng im.
+`GifAnimation` bọc lại cặp API đúng (`LoadImageAnim` + `UpdateTexture` theo offset
+`width*height*4*frameIndex`) thành một object tự chạy hoạt ảnh.
+
+| Thành phần | Ghi chú |
+|---|---|
+| `GifAnimation` | Sở hữu cả `Image` (RAM) lẫn `Texture2D` (VRAM); cấm copy, cho phép move. `Update(dt)` tiến khung, `DrawFullscreen()` / `DrawPro()` chỉ vẽ |
+| Dùng ở `CharacterSelectionState` | Nền động `assets/UI_screens/character_selection.gif` (1400x787, 14 khung, ~6.7 fps). Không nạp được thì tự rơi về ảnh tĩnh `map_selection.png`. Phủ thêm lớp đen `alpha=128` (50%) ngay sau khi vẽ nền để tiêu đề và thẻ nhân vật nổi lên |
+| Dùng ở `EndgameAsset` | Cổng kết thúc `assets/maps/item/gate.gif` (320x320, 9 khung, 10 fps). Đồng thời sửa đường dẫn tuyệt đối `d:/Git/...` thành tương đối, và chuyển việc tiến khung hình từ `render()` sang `update(dt)` cho đúng quy tắc 4 giai đoạn |
+
+> ⚠ **stb_image trong raylib 5.0 có thể SẬP (segfault) với một số file GIF.**
+> `gate.gif` bản gốc làm crash `stbi_load_gif_from_memory`, phải mã hoá lại bằng
+> Pillow. Bản gốc giữ ở `assets/maps/item/gate.gif.original`. Đây là lỗi trong
+> thư viện, không bắt được bằng try/catch — nếu thêm GIF mới mà game tắt ngay
+> khi vào màn, hãy mã hoá lại file đó qua Pillow trước.
+>
+> **KHI MÃ HOÁ LẠI GIF PHẢI GIỮ KÊNH TRONG SUỐT.** GIF không có kênh alpha thật;
+> nó đánh dấu trong suốt bằng cách dành riêng MỘT ô trong bảng màu
+> (`transparency=<index>`). Nếu chỉ làm `convert('RGB')` rồi `quantize()` thì ô
+> đó biến mất và toàn bộ vùng trong suốt thành **màu đen đục**. Quy trình đúng:
+> dựng bảng màu 255 ô chỉ từ pixel ĐỤC, dành index 255 cho trong suốt, `paste()`
+> index đó vào vùng `alpha < 128`, rồi lưu kèm `transparency=255, disposal=2`.
+> Bản `gate.gif` hiện tại đã kiểm chứng: sai lệch màu 0/255, sai lệch alpha 0/255,
+> đúng 75268/102400 pixel trong suốt như bản gốc; raylib giải mã ra 0 pixel
+> đen-đục. Còn 9 khung vì khung 10 của bản gốc trùng hệt khung 9.
+
+#### Bố cục độc lập độ phân giải (`include/ui/UIScaler.h`)
+
+`MainMenuState` trước đây viết thẳng hằng số pixel (`panelScale = 3.3f`,
+`paddingLeft = 220.0f`, toggle ở `{30, 90}`) canh mắt trên một màn hình cụ thể;
+sang máy khác là lệch. `UIScaler` áp dụng mô hình **khung thiết kế ảo**:
+
+```
+factor  = min(screenW / 2560, screenH / 1440)     // min -> không bóp méo ảnh
+offsetX = (screenW - 2560*factor) / 2             // canh giữa phần dư
+```
+
+- `S(len)` đổi **độ dài / hệ số phóng**; `X()`, `Y()`, `Pos()`, `Rect()` đổi **toạ độ** (có cộng offset). Nhầm hai nhóm này là lỗi bố cục hay gặp nhất.
+- Khung thiết kế là **2560x1440**, KHÔNG phải `InitWindow(1280, 720)` trong `main.cpp`: cửa sổ được `MaximizeWindow()` ngay sau đó, và raylib đếm **pixel vật lý** (màn 2560x1600 ở DPI 200% -> raylib báo 2560x1459, trong khi Windows báo 1280x800 logic).
+- Ở 2560x1459 thì `factor = 1.0` -> giao diện giữ nguyên từng pixel như trước khi sửa; các độ phân giải khác scale theo đúng tỉ lệ.
+- **Giới hạn đã biết:** bố cục được tính một lần trong constructor. Cửa sổ có cờ `FLAG_WINDOW_RESIZABLE`, nên nếu người chơi kéo giãn cửa sổ giữa chừng thì menu không tự dàn lại (phải gọi `ui_.Refresh()` rồi dựng lại layout).
+
+#### Màn hình kết thúc (`include/states/EndgameState.h`)
+
+| Chế độ | Ảnh nền | Nội dung |
+|---|---|---|
+| 1-Player | `level_completed_background.png` | Nút quay về Menu ở góc dưới phải |
+| 2-Player | `winner_background.png` | Nút quay về Menu + **hoạt ảnh nhân vật thắng đứng trên bục podium** |
+
+- **Lỗi đã sửa:** toàn bộ phần nạp tài nguyên nằm trong `Init()`, nhưng `GameState` không có `Init()` trong interface và `StateManager` không bao giờ gọi nó → `bgTex_` rỗng, `screenW_/screenH_` bằng 0, nút quay về co thành hình 0x0 không bấm được, màn hình chỉ hiện chữ `"Game Ended!"`. Nay `Init()` được gọi trong constructor như mọi state khác, và tự `Cleanup()` trước nên gọi lại vẫn an toàn.
+- **Nút quay về:** kích thước `10%` chiều cao khung hình, lề `5%` mỗi cạnh → đúng góc dưới phải ở mọi độ phân giải. Vùng bấm giữ nguyên kích thước lúc hover còn vùng vẽ mới co lại, tránh nút rung ở mép (mẹo lấy từ `MapSelectionState`).
+- **Hoạt ảnh người thắng:** tái dùng khuôn mẫu island của `CharacterSelectionState` — đọc `characters.json`, nạp `idle` + `attack_1` qua `AssetManager` (Flyweight, không tốn thêm VRAM), idle lặp vô hạn, cứ 3 giây có 50% cơ hội chen một lượt kỹ năng. Neo **giữa-đáy** tại `(0.50, 0.672)` của khung hình = mặt bục podium, cao `26%` chiều cao khung hình, rộng suy ra theo tỉ lệ ảnh nên không bóp méo. Vì ảnh nền được kéo giãn phủ kín màn hình, toạ độ theo tỉ lệ này đúng ở mọi khung hình.
+- **Điều kiện thắng PvP (mới):** trước đây PvP **không có điều kiện kết thúc nào** — `EndgameState` chỉ được tạo từ cổng `EndgameAsset` của luồng 1-Player, còn `processDeathCondition()` chỉ kiểm tra player1. Nay `BaseLevelState::processDeathCondition()` có nhánh PvP riêng: ai gục trước thì bên kia thắng, không hồi sinh; nếu rơi ra ngoài map mà máu còn thì `takeDamage(9999)` để animation chết chạy; đợi `pvpEndTimer_` = 1.5s rồi mới chuyển sang màn trao giải kèm tên người thắng. Hai bên cùng gục trong một frame → hoà, không hiện nhân vật nào.
+
+**Thay đổi kèm theo ở các class có sẵn:**
+- `Player::createSaveData()` / `restoreFromSaveData()` — Player tự đóng gói mình, `BaseLevelState` hết phải thò tay vào `getRuntimeStatsMutable()`.
+- `BaseLevelState::onCheckpointReached()` — gom logic lưu về một chỗ (trước đây trùng lặp ở 2 nơi với 2 đường dẫn khác nhau).
+- `BaseLevelState(mapFilePath, GameSaveData)` — constructor uỷ quyền cho ctor LDtk rồi khôi phục trạng thái.
+- `World01State`..`World06State` — thêm ctor `explicit World0XState(const GameSaveData&)`.
+- `ItemState` tách khỏi `BaseItem.h` ra `include/entity/Item/ItemState.h` để tầng save không phải kéo theo `Entity.h`/`raylib.h`.
 
 #### Core
 - **`main.cpp`**: Entry point. Mở cửa sổ, thiết lập Raylib và chạy vòng lặp chính.

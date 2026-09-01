@@ -2,12 +2,10 @@
 #include "Entity.h"
 #include "ItemAtlasRegistry.h"
 #include "AtlasAnimation.h"
+#include "ItemState.h"
 #include "raylib.h"
 #include <string>
 #include <unordered_map>
-
-// State Pattern: item lifecycle
-enum class ItemState { Idle, Active, Used };
 
 // Abstract base for all static interactive items.
 // - No gravity applied (static physics)

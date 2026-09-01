@@ -38,33 +38,41 @@ MainMenuState::MainMenuState()
     
     customFont = LoadFont("assets/config/kenney-pixel-hu.otf");
     
-    // Setup Title Animation (Slide from top)
-    float screenWidth = 800.0f; 
-    float screenHeight = 600.0f;
-    if (GetScreenWidth() > 0) {
-        screenWidth = (float)GetScreenWidth();
-        screenHeight = (float)GetScreenHeight();
-    }
-    
-    panelScale = 3.3f;
-    titleScale = 1.35f;
-    btnScale = 2.45f;
-    
-    // Push the panel to the right to avoid the square pots on HUD frame
-    float paddingLeft = 220.0f; 
-    
+    // =========================================================================
+    // BỐ CỤC ĐỘC LẬP ĐỘ PHÂN GIẢI
+    //
+    // Toàn bộ menu được canh trong khung thiết kế ảo 1280x720 (xem UIScaler.h).
+    // ui_ đã tự đọc kích thước màn hình thật trong constructor của nó; ở đây
+    // gọi Refresh() một lần nữa cho chắc, vì MainMenuState được dựng sau khi
+    // main.cpp gọi MaximizeWindow() nên kích thước có thể vừa mới đổi.
+    //
+    // QUY TẮC: mọi con số pixel viết trong file này là toạ độ TRONG KHUNG
+    // THIẾT KẾ. Dùng ui_.S() cho độ dài/hệ số phóng, ui_.X()/Y()/Pos() cho
+    // toạ độ. Không được viết thẳng pixel vào biến layout.
+    // =========================================================================
+    ui_.Refresh();
+
+    // Ba hệ số phóng ảnh gốc — con số canh mắt ở 1280x720, nhân thêm ui_.Factor()
+    // để ra đúng tỉ lệ đó trên mọi màn hình.
+    panelScale = ui_.S(3.3f);
+    titleScale = ui_.S(1.35f);
+    btnScale   = ui_.S(2.45f);
+
+    // Đẩy panel sang phải để tránh mấy cái chậu vuông trên khung HUD
+    const float paddingLeftDesign = 220.0f;
+
     // Calculate base metrics from actual texture size
     float panelW = menuPanelTex.width * panelScale;
     float panelH = menuPanelTex.height * panelScale;
     float titleW = titleTexture.width * titleScale;
     float titleH = titleTexture.height * titleScale;
-    
-    // Center panel vertically
-    panelPos = { paddingLeft, screenHeight / 2.0f - panelH / 2.0f };
-    
+
+    // X lấy theo khung thiết kế (có cộng lề letterbox), Y căn giữa khung thiết kế.
+    panelPos = { ui_.X(paddingLeftDesign), ui_.CenterY() - panelH / 2.0f };
+
     // Title is aligned center inside the top part of the panel
     titleTargetPos = { panelPos.x + panelW / 2.0f - titleW / 2.0f, panelPos.y + 20.0f * panelScale };
-    titleStartPos = { titleTargetPos.x, -400.0f }; // Start way above screen
+    titleStartPos = { titleTargetPos.x, ui_.S(-400.0f) }; // Start way above screen
     titleAnimTime = 0.0f;
     titleCurrentY = titleStartPos.y;
 
@@ -117,13 +125,14 @@ MainMenuState::MainMenuState()
         
     mainGroup->AddButton("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "EXIT",
         [this]() {
+            auto factory = []() { return std::make_unique<World01State>(); };
             this->PushStateCommand(std::make_unique<::ChangeStateCommand>(
-                std::make_unique<World01State>()
+                std::make_unique<LoadingState>(factory, 1.0f)
             ));
         }, baseDelay + 4 * delayIncrement);
 
     // Calculate available space for buttons inside panel
-    float remainingSpace = panelH - (titleTargetPos.y - panelPos.y + titleH) - 20.0f;
+    float remainingSpace = panelH - (titleTargetPos.y - panelPos.y + titleH) - ui_.S(20.0f);
     float btnHeight = 32.0f * btnScale;
     float totalBtnH = 5 * btnHeight;
     float gap = (remainingSpace - totalBtnH) / 6;
@@ -150,13 +159,15 @@ MainMenuState::MainMenuState()
     auto settingsGroup = std::make_shared<ButtonGroup>();
     settingsGroup->SetGroupName("SETTINGS");
     
-    // Offset Settings panel from main panel and make it 40% wider than original
-    float sWidth = screenWidth > 0 ? screenWidth : 800.0f;
-    float sHeight = screenHeight > 0 ? screenHeight : 600.0f;
-    Vector2 panelPos = { (sWidth - menuPanelTex.width * panelScale) / 2.0f, (sHeight - menuPanelTex.height * panelScale) / 2.0f };
-    
+    // Offset Settings panel from main panel and make it 40% wider than original.
+    // Căn giữa theo KHUNG THIẾT KẾ (ui_.CenterX/CenterY) chứ không phải giữa màn
+    // hình thật — trên màn siêu rộng hai cách này khác nhau, và căn theo khung
+    // mới giữ đúng tương quan với panel chính.
+    Vector2 panelPos = { ui_.CenterX() - menuPanelTex.width * panelScale / 2.0f,
+                         ui_.CenterY() - menuPanelTex.height * panelScale / 2.0f };
+
     float settingsPanelW = panelTex2.width * panelScale * 1.4f; // 40% wider
-    Vector2 settingsPos = { panelPos.x + 30.0f, panelPos.y + 30.0f };
+    Vector2 settingsPos = { panelPos.x + ui_.S(30.0f), panelPos.y + ui_.S(30.0f) };
     settingsGroup->SetPanel(panelTex2, settingsPos, panelScale, settingsPanelW);
     settingsGroup->SetArrows(arrowLeft, arrowRight, arrowLeftPress, arrowRightPress);
     settingsGroup->SetButtonScale(btnScale);
@@ -233,9 +244,11 @@ MainMenuState::MainMenuState()
     p1BotTimer = 0.5f;
     p2BotTimer = 1.0f;
     
-    // Generate Vignette Texture
-    int vW = screenWidth > 0 ? (int)screenWidth : 1280;
-    int vH = screenHeight > 0 ? (int)screenHeight : 720;
+    // Generate Vignette Texture.
+    // Vignette được kéo giãn phủ kín màn hình khi vẽ, nên sinh đúng bằng kích
+    // thước màn hình thật (không đi qua ui_) để không bị mờ do phóng lại.
+    int vW = GetScreenWidth()  > 0 ? GetScreenWidth()  : (int)UIScaler::kDesignWidth;
+    int vH = GetScreenHeight() > 0 ? GetScreenHeight() : (int)UIScaler::kDesignHeight;
     Image vignetteImg = GenImageColor(vW, vH, BLANK);
     
     float radius = (float)vH / 3.0f;
@@ -268,7 +281,8 @@ MainMenuState::MainMenuState()
     // Initialize Standalone Game Mode Toggle
     float toggleWidth = 30.0f * panelScale; // smaller
     float shiftX = 4.0f * toggleWidth; // Shift left a bit from previous 5x
-    modeToggle.bound = { 30.0f + shiftX, 90.0f, toggleWidth, 14.0f * panelScale }; // shifted down to 90, height reduced
+    // {30, 90} là toạ độ trong khung thiết kế -> phải đi qua ui_.X()/Y().
+    modeToggle.bound = { ui_.X(30.0f) + shiftX, ui_.Y(90.0f), toggleWidth, 14.0f * panelScale };
     modeToggle.animT = SettingsManager::GetInstance().IsCreativeMode() ? 1.0f : 0.0f;
 }
 
@@ -455,14 +469,14 @@ void MainMenuState::Render(float alpha) const {
             textSize.y = fontSize;
         }
         
-        float textX = track.x + track.width + 12.0f;
+        float textX = track.x + track.width + ui_.S(12.0f);
         float totalContentWidth = (textX - track.x) + textSize.x;
-        
+
         // Draw decorative outer border/plate behind the toggle and text
-        Rectangle plate = { track.x - 12.0f, track.y - 12.0f * panelScale, 
-                            totalContentWidth + 24.0f, track.height + 18.0f * panelScale };
+        Rectangle plate = { track.x - ui_.S(12.0f), track.y - 12.0f * panelScale,
+                            totalContentWidth + ui_.S(24.0f), track.height + 18.0f * panelScale };
         DrawRectangleRounded(plate, 0.4f, 16, {15, 15, 15, 220}); // Dark transparent background
-        DrawRectangleRoundedLines(plate, 0.4f, 16, 2.0f, {255, 215, 0, 180}); // Soft Gold border decoration
+        DrawRectangleRoundedLines(plate, 0.4f, 16, ui_.S(2.0f), {255, 215, 0, 180}); // Soft Gold border decoration
         
         // Colors
         Color cOff = { 80, 80, 80, 255 }; // GRAY
@@ -480,25 +494,26 @@ void MainMenuState::Render(float alpha) const {
         DrawRectangleRounded(track, 1.0f, 16, fillColor);
         
         // Glossy highlight (glass effect on top half of track)
-        Rectangle gloss = { track.x + 2.0f, track.y + 2.0f, track.width - 4.0f, track.height / 2.0f - 1.0f };
+        Rectangle gloss = { track.x + ui_.S(2.0f), track.y + ui_.S(2.0f),
+                            track.width - ui_.S(4.0f), track.height / 2.0f - ui_.S(1.0f) };
         DrawRectangleRounded(gloss, 1.0f, 16, {255, 255, 255, 40});
-        
+
         // Inner shadow effect
-        DrawRectangleRoundedLines(track, 1.0f, 16, 2.0f, {0,0,0,150});
+        DrawRectangleRoundedLines(track, 1.0f, 16, ui_.S(2.0f), {0,0,0,150});
 
         if (modeToggle.isHovered) {
-            DrawRectangleRoundedLines(track, 1.0f, 16, 2.0f, WHITE);
+            DrawRectangleRoundedLines(track, 1.0f, 16, ui_.S(2.0f), WHITE);
         }
-        
+
         // Draw Knob
-        float knobRadius = track.height * 0.5f - 2.0f;
+        float knobRadius = track.height * 0.5f - ui_.S(2.0f);
         float knobMinX = track.x + track.height * 0.5f;
         float knobMaxX = track.x + track.width - track.height * 0.5f;
         float knobX = knobMinX + (knobMaxX - knobMinX) * modeToggle.animT;
         float knobY = track.y + track.height / 2.0f;
         
         // Knob Drop Shadow
-        DrawCircle(knobX, knobY + 2.0f, knobRadius, {0,0,0,120});
+        DrawCircle(knobX, knobY + ui_.S(2.0f), knobRadius, {0,0,0,120});
         
         // Knob Body (Gradient for 3D sphere look)
         DrawCircleGradient(knobX, knobY, knobRadius, WHITE, {200, 200, 200, 255});
@@ -509,10 +524,10 @@ void MainMenuState::Render(float alpha) const {
         // Use custom font
         if (customFont.texture.id != 0) {
             DrawTextEx(customFont, modeText.c_str(), {textX, track.y + (track.height - fontSize) / 2.0f}, fontSize, 1.0f, textColor);
-            DrawTextEx(customFont, "GAME MODE", {track.x, track.y - fontSize + 3.0f}, fontSize * 0.8f, 1.0f, GRAY);
+            DrawTextEx(customFont, "GAME MODE", {track.x, track.y - fontSize + ui_.S(3.0f)}, fontSize * 0.8f, 1.0f, GRAY);
         } else {
             DrawText(modeText.c_str(), (int)textX, (int)(track.y + (track.height - fontSize) / 2.0f), (int)fontSize, textColor);
-            DrawText("GAME MODE", (int)track.x, (int)(track.y - fontSize + 3.0f), (int)(fontSize * 0.8f), GRAY);
+            DrawText("GAME MODE", (int)track.x, (int)(track.y - fontSize + ui_.S(3.0f)), (int)(fontSize * 0.8f), GRAY);
         }
     }
     

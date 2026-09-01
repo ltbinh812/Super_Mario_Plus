@@ -10,6 +10,8 @@
 #include "Buff.h"
 #include "Boom.h"
 #include "PoisonFlask.h"
+#include "ShopAsset.h"
+#include "EndgameAsset.h"
 #include "nlohmann/json.hpp"
 #include <iostream>
 
@@ -32,6 +34,9 @@ std::unique_ptr<BaseItem> ItemFactory::create(
                                       return std::make_unique<LuckyBlock>(worldPos);
     if (identifier == "Chest_normal") return std::make_unique<ChestNormal>(worldPos);
     if (identifier == "Chest_boss")   return std::make_unique<ChestBoss>(worldPos);
+    if (identifier == "Shop_asset")   return std::make_unique<ShopAsset>(worldPos);
+    if (identifier == "Endgame")      return std::make_unique<EndgameAsset>(worldPos);
+    
     if (identifier == "Buff" || identifier == "Item") {
         std::string itemType = "";
         if (fieldInstances.is_array()) {
