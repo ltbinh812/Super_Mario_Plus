@@ -57,5 +57,9 @@ void PlayerSwimState::onJump() {
 }
 
 void PlayerSwimState::onAttack() {
-    player.useSkill("Punch1");
+    // "Punch1" KHÔNG tồn tại trong skillList — PlayerFactory chỉ đăng ký
+    // Attack1..Attack4, JumpAttack, LowAttack, LongAttack, SpecialAttack, Dash,
+    // Block. useSkill() tra không thấy thì lặng lẽ return, nên đánh thường dưới
+    // nước trước giờ không ra đòn nào cả.
+    player.useSkill("Attack1");
 }

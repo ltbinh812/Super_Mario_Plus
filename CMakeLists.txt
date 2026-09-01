@@ -190,6 +190,27 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # Link raylib
 target_link_libraries(${PROJECT_NAME} ${RAYLIB_LIB} ${PLATFORM_LIBS})
 
+# -----------------------------------------------------------------------------
+# Loại bỏ section không dùng khi liên kết (GCC/MinGW).
+#
+# BẮT BUỘC, không phải tối ưu cho vui: dự án đã chạm trần tầm với của
+# relocation 32-bit trên Windows x86-64. Thiếu cờ này, ld dừng với:
+#
+#   relocation truncated to fit: IMAGE_REL_AMD64_REL32 against `.text$_ZN8nlohmann...'
+#
+# Nguyên nhân là nlohmann/json sinh ra rất nhiều hàm template với tên cực dài;
+# mỗi .cpp có #include <nlohmann/json.hpp> lại tạo một bản COMDAT riêng, khiến
+# ảnh chạy phình quá ±2GB mà lệnh nhảy 32-bit với tới được.
+#
+# -ffunction-sections/-fdata-sections đặt mỗi hàm và mỗi biến vào section
+# riêng, --gc-sections vứt bỏ những section không ai gọi tới. Bản Debug từ
+# ~180MB object rút còn ~100MB exe và liên kết trót lọt.
+# -----------------------------------------------------------------------------
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
+    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--gc-sections)
+endif()
+
 # Add Include Directories
 target_include_directories(${PROJECT_NAME} PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include 

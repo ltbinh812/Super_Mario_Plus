@@ -45,8 +45,8 @@ MapEditorState::MapEditorState() {
     EditorTextureCache::getInstance().loadAll(texturePaths);
 
     // 4. Default map: 20x15 tiles
-    mapData_.width  = 20;
-    mapData_.height = 15;
+    mapData_.width  = 50;
+    mapData_.height = 30;
     mapData_.name   = "New Map";
 
     // 5. Center camera vào giữa map

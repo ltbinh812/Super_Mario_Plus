@@ -33,6 +33,12 @@ public:
     const std::map<std::string, int>& GetAllP1Keys() const { return p1Keys_; }
     const std::map<std::string, int>& GetAllP2Keys() const { return p2Keys_; }
 
+    // Số lần bảng phím bị thay đổi kể từ lúc chạy chương trình.
+    // BaseLevelState nhớ lại giá trị này và so mỗi frame; khác nhau nghĩa là
+    // người chơi vừa đổi phím trong Settings (ngoài menu HOẶC trong lúc chơi)
+    // -> nạp lại binding cho InputHandler ngay, không phải thoát ra vào lại màn.
+    unsigned int GetBindingsRevision() const { return bindingsRevision_; }
+
 private:
     SettingsManager();
     ~SettingsManager() = default;
@@ -42,6 +48,8 @@ private:
     
     std::map<std::string, int> p1DefaultKeys_;
     std::map<std::string, int> p2DefaultKeys_;
+
+    unsigned int bindingsRevision_ = 0;
     
     float masterVolume_ = 1.0f;
     float musicVolume_ = 1.0f;

@@ -34,6 +34,11 @@ protected:
     InputHandler player1Handler;
     InputHandler player2Handler;
 
+    // Số hiệu bảng phím mà player1Handler/player2Handler đang mang. So với
+    // SettingsManager::GetBindingsRevision() mỗi frame để biết người chơi vừa
+    // đổi phím và phải nạp lại — xem BaseLevelState::Process().
+    unsigned int boundBindingsRevision_ = 0;
+
     CommandQueue spawnQueue;
     std::vector<std::unique_ptr<Entity>> activeEntities;
 

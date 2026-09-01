@@ -26,6 +26,8 @@ void PlayerSkillState::onEnter() {
         // Set timer for skill duration plus recovery pause
         timer = currentSkill->getDuration() + currentSkill->getRecoveryDuration();
         hasExecuted = false; // Reset the flag for the new skill
+        hasLeftGround = !player.getRuntimeStats().isGrounded;
+        hasCutOnLanding = false;
     }
 }
 
@@ -42,6 +44,26 @@ void PlayerSkillState::onExit() {
 void PlayerSkillState::update(float dt) {
     timer -= dt;
     timer = std::max(timer, 0.0f);
+
+    // --- Chiêu trên không: tiếp đất rồi mới đếm ngược cắt ----------------
+    // KHÔNG cắt ngay lúc chạm đất. Lúc tiếp đất, phần thời gian còn lại của
+    // chiêu bị ghìm xuống tối đa landingCutDelay giây:
+    //
+    //   - animation còn dài hơn khoảng đó  -> cắt sau đúng landingCutDelay
+    //   - animation vốn đã sắp hết         -> min() không đổi gì, kết thúc
+    //                                         tự nhiên như bình thường
+    //
+    // Chỉ ghìm MỘT LẦN (hasCutOnLanding) để những frame sau không liên tục
+    // đặt lại timer về đúng landingCutDelay, khiến chiêu không bao giờ hết.
+    if (currentSkill && currentSkill->getEndOnLanding()) {
+        if (!player.getRuntimeStats().isGrounded) {
+            hasLeftGround = true;
+        } else if (hasLeftGround && !hasCutOnLanding) {
+            hasCutOnLanding = true;
+            timer = std::min(timer, currentSkill->getLandingCutDelay());
+            nextSkill = nullptr;
+        }
+    }
 
     float elapsedTime = getElapsedTime();
 
@@ -117,6 +139,11 @@ void PlayerSkillState::onStopRight() {
 
 bool PlayerSkillState::isHitboxActive() const {
     if (!currentSkill) return false;
+
+    // Không có ngoại lệ cho chiêu trên không nữa: hitbox chạy theo đúng cửa sổ
+    // hitboxStartFrame..hitboxEndFrame trong characters.json. Với Luffy nhảy+J,
+    // hitboxEndFrame đặt bằng số khung của animation nên hitbox sống tới hết
+    // animation, kể cả sau khi đã tiếp đất.
     float elapsedTime = getElapsedTime();
     return elapsedTime >= currentSkill->getHitboxStartTime() && 
            elapsedTime <= currentSkill->getHitboxEndTime();

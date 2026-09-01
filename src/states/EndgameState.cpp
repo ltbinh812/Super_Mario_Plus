@@ -254,6 +254,35 @@ void EndgameState::Render(float alpha) const {
                                    destW, destH };
                 Vector2 origin = { destW / 2.0f, destH };  // neo GIỮA-ĐÁY: chân chạm mặt bục
                 DrawTexturePro(current->getTexture(), src, dest, origin, 0.0f, WHITE);
+
+                // Tên nhân vật thắng: màu XANH LÁ, đặt TRÊN ĐẦU người chơi.
+                // dest.y là mặt bục (chân), origin neo giữa-đáy nên đỉnh đầu
+                // nằm ở dest.y - destH. Chữ đặt cao hơn đỉnh đầu một khoảng.
+                if (!winnerName_.empty()) {
+                    float nameFont = screenH_ * 0.06f;
+                    Vector2 nameSize = {0, 0};
+                    if (customFont_.texture.id != 0) {
+                        nameSize = MeasureTextEx(customFont_, winnerName_.c_str(), nameFont, 1.0f);
+                    } else {
+                        nameSize.x = (float)MeasureText(winnerName_.c_str(), (int)nameFont);
+                        nameSize.y = nameFont;
+                    }
+                    float headTopY = dest.y - destH;
+                    float nameX = screenW_ * kPodiumCenterX - nameSize.x / 2.0f;
+                    float nameY = headTopY - nameSize.y - screenH_ * 0.015f;
+                    if (nameY < 0.0f) nameY = 0.0f;   // không đẩy chữ ra ngoài màn
+
+                    const Color kWinnerGreen = {0, 230, 60, 255};
+                    if (customFont_.texture.id != 0) {
+                        DrawTextEx(customFont_, winnerName_.c_str(),
+                                   {nameX + 4.0f, nameY + 4.0f}, nameFont, 1.0f, Color{0, 0, 0, 190});
+                        DrawTextEx(customFont_, winnerName_.c_str(),
+                                   {nameX, nameY}, nameFont, 1.0f, kWinnerGreen);
+                    } else {
+                        DrawText(winnerName_.c_str(), (int)nameX + 4, (int)nameY + 4, (int)nameFont, Color{0, 0, 0, 190});
+                        DrawText(winnerName_.c_str(), (int)nameX, (int)nameY, (int)nameFont, kWinnerGreen);
+                    }
+                }
             }
         }
     } else {

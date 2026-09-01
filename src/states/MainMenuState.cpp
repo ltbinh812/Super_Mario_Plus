@@ -293,12 +293,6 @@ MainMenuState::MainMenuState()
     vignetteTex = LoadTextureFromImage(vignetteImg);
     UnloadImage(vignetteImg);
     
-    // Initialize Standalone Game Mode Toggle
-    float toggleWidth = 30.0f * panelScale; // smaller
-    float shiftX = 4.0f * toggleWidth; // Shift left a bit from previous 5x
-    // {30, 90} là toạ độ trong khung thiết kế -> phải đi qua ui_.X()/Y().
-    modeToggle.bound = { ui_.X(30.0f) + shiftX, ui_.Y(90.0f), toggleWidth, 14.0f * panelScale };
-    modeToggle.animT = SettingsManager::GetInstance().IsCreativeMode() ? 1.0f : 0.0f;
 }
 
 MainMenuState::~MainMenuState() {
@@ -326,13 +320,6 @@ void MainMenuState::HandleInput() {
     Vector2 mousePos = GetMousePosition();
     bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
     bool mouseReleased = IsMouseButtonReleased(MOUSE_LEFT_BUTTON);
-    
-    // Handle Standalone Game Mode Toggle
-    modeToggle.isHovered = CheckCollisionPointRec(mousePos, modeToggle.bound);
-    if (mousePressed && modeToggle.isHovered) {
-        bool currentMode = SettingsManager::GetInstance().IsCreativeMode();
-        SettingsManager::GetInstance().SetCreativeMode(!currentMode);
-    }
     
     if (menuPanels.count("Main")) {
         menuPanels["Main"]->HandleInput(mousePos, mousePressed, mouseReleased);
@@ -393,16 +380,6 @@ void MainMenuState::Update(float dt) {
     
     // Call base physics/logic update
     BaseLevelState::Update(dt);
-    
-    // Update Toggle Animation
-    float targetAnim = SettingsManager::GetInstance().IsCreativeMode() ? 1.0f : 0.0f;
-    if (modeToggle.animT < targetAnim) {
-        modeToggle.animT += dt * 8.0f;
-        if (modeToggle.animT > targetAnim) modeToggle.animT = targetAnim;
-    } else if (modeToggle.animT > targetAnim) {
-        modeToggle.animT -= dt * 8.0f;
-        if (modeToggle.animT < targetAnim) modeToggle.animT = targetAnim;
-    }
     
     // Update Menu Panels
     if (menuPanels.count("Main")) {
@@ -467,85 +444,7 @@ void MainMenuState::Render(float alpha) const {
         // Draw active subgroup
         if (menuPanels.count(activeGroup)) menuPanels.at(activeGroup)->Render();
     }
-    
-        // Draw Standalone Game Mode Toggle (always on top)
-    {
-        Rectangle track = modeToggle.bound;
-        
-        // Measure text for dynamic plate width
-        float fontSize = 11.0f * panelScale;
-        std::string modeText = SettingsManager::GetInstance().IsCreativeMode() ? "CREATIVE" : "SURVIVAL";
-        
-        Vector2 textSize = {0, 0};
-        if (customFont.texture.id != 0) {
-            textSize = MeasureTextEx(customFont, modeText.c_str(), fontSize, 1.0f);
-        } else {
-            textSize.x = (float)MeasureText(modeText.c_str(), (int)fontSize);
-            textSize.y = fontSize;
-        }
-        
-        float textX = track.x + track.width + ui_.S(12.0f);
-        float totalContentWidth = (textX - track.x) + textSize.x;
 
-        // Draw decorative outer border/plate behind the toggle and text
-        Rectangle plate = { track.x - ui_.S(12.0f), track.y - 12.0f * panelScale,
-                            totalContentWidth + ui_.S(24.0f), track.height + 18.0f * panelScale };
-        DrawRectangleRounded(plate, 0.4f, 16, {15, 15, 15, 220}); // Dark transparent background
-        DrawRectangleRoundedLines(plate, 0.4f, 16, ui_.S(2.0f), {255, 215, 0, 180}); // Soft Gold border decoration
-        
-        // Colors
-        Color cOff = { 80, 80, 80, 255 }; // GRAY
-        Color cOn = { 255, 203, 0, 255 }; // GOLD
-        
-        // Lerp color
-        Color fillColor = {
-            (unsigned char)(cOff.r + (cOn.r - cOff.r) * modeToggle.animT),
-            (unsigned char)(cOff.g + (cOn.g - cOff.g) * modeToggle.animT),
-            (unsigned char)(cOff.b + (cOn.b - cOff.b) * modeToggle.animT),
-            255
-        };
-        
-        // Draw track base
-        DrawRectangleRounded(track, 1.0f, 16, fillColor);
-        
-        // Glossy highlight (glass effect on top half of track)
-        Rectangle gloss = { track.x + ui_.S(2.0f), track.y + ui_.S(2.0f),
-                            track.width - ui_.S(4.0f), track.height / 2.0f - ui_.S(1.0f) };
-        DrawRectangleRounded(gloss, 1.0f, 16, {255, 255, 255, 40});
-
-        // Inner shadow effect
-        DrawRectangleRoundedLines(track, 1.0f, 16, ui_.S(2.0f), {0,0,0,150});
-
-        if (modeToggle.isHovered) {
-            DrawRectangleRoundedLines(track, 1.0f, 16, ui_.S(2.0f), WHITE);
-        }
-
-        // Draw Knob
-        float knobRadius = track.height * 0.5f - ui_.S(2.0f);
-        float knobMinX = track.x + track.height * 0.5f;
-        float knobMaxX = track.x + track.width - track.height * 0.5f;
-        float knobX = knobMinX + (knobMaxX - knobMinX) * modeToggle.animT;
-        float knobY = track.y + track.height / 2.0f;
-        
-        // Knob Drop Shadow
-        DrawCircle(knobX, knobY + ui_.S(2.0f), knobRadius, {0,0,0,120});
-        
-        // Knob Body (Gradient for 3D sphere look)
-        DrawCircleGradient(knobX, knobY, knobRadius, WHITE, {200, 200, 200, 255});
-        
-        // Text Color matches mode
-        Color textColor = SettingsManager::GetInstance().IsCreativeMode() ? GOLD : LIGHTGRAY;
-        
-        // Use custom font
-        if (customFont.texture.id != 0) {
-            DrawTextEx(customFont, modeText.c_str(), {textX, track.y + (track.height - fontSize) / 2.0f}, fontSize, 1.0f, textColor);
-            DrawTextEx(customFont, "GAME MODE", {track.x, track.y - fontSize + ui_.S(3.0f)}, fontSize * 0.8f, 1.0f, GRAY);
-        } else {
-            DrawText(modeText.c_str(), (int)textX, (int)(track.y + (track.height - fontSize) / 2.0f), (int)fontSize, textColor);
-            DrawText("GAME MODE", (int)track.x, (int)(track.y - fontSize + ui_.S(3.0f)), (int)(fontSize * 0.8f), GRAY);
-        }
-    }
-    
     if (isTransitioningIn) {
         transitionIn->Render();
     }

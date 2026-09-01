@@ -4,6 +4,87 @@
 #include "AssetManager.h"
 #include <string>
 #include <algorithm>
+#include <unordered_map>
+
+// =============================================================================
+// Ảnh đại diện trên HUD — dựng từ KHUNG ĐẦU TIÊN của animation "idle" của chính
+// nhân vật đang chơi.
+//
+// Bản cũ nạp cứng "assets/Goku_animation/avatar.png" vào một static Texture2D
+// duy nhất, nên chọn Naruto hay Zoro thì HUD vẫn hiện mặt Goku, và ở chế độ hai
+// người thì cả hai ô đều là Goku.
+//
+// Cách làm: đọc ngược sprite sheet của "idle" từ GPU, cắt khung 0, xén hết viền
+// trong suốt để tìm đúng thân nhân vật, lấy một ô vuông ở PHẦN TRÊN (đầu +
+// vai), phóng về 168x168 rồi bo tròn bằng mặt nạ — giống hệt xử lý của ảnh
+// avatar.png cũ nên khung chân dung không phải chỉnh gì.
+//
+// Kết quả được nhớ theo tên nhân vật: mỗi nhân vật chỉ đọc ngược GPU một lần.
+// =============================================================================
+static Texture2D BuildAvatarFromIdle(const Player* p) {
+    Texture2D out = {0};
+    if (!p) return out;
+
+    const Animation* idle = p->findAnimation("idle");
+    if (!idle || idle->getFrameNum() <= 0) return out;
+
+    const Texture2D& sheet = idle->getTexture();
+    if (sheet.id == 0 || sheet.width <= 0 || sheet.height <= 0) return out;
+
+    Image sheetImg = LoadImageFromTexture(sheet);
+    if (sheetImg.data == nullptr) return out;
+
+    // Khung 0: sprite sheet xếp ngang, mỗi khung rộng width/frameNum.
+    int frameW = sheet.width / idle->getFrameNum();
+    if (frameW <= 0) { UnloadImage(sheetImg); return out; }
+
+    Image frame = ImageFromImage(sheetImg, Rectangle{0.0f, 0.0f, (float)frameW, (float)sheet.height});
+    UnloadImage(sheetImg);
+    if (frame.data == nullptr) return out;
+
+    ImageFormat(&frame, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+
+    // Xén viền trong suốt: sprite thường có nhiều khoảng trống quanh nhân vật,
+    // không xén thì chân dung bị thu nhỏ tít trong khung tròn.
+    ImageAlphaCrop(&frame, 0.0f);
+    if (frame.width <= 0 || frame.height <= 0) { UnloadImage(frame); return out; }
+
+    // Ô vuông ở phần trên thân: cạnh = bề rộng nhân vật (hoặc chiều cao nếu
+    // thấp hơn), canh giữa theo chiều ngang, bắt đầu từ đỉnh -> lấy đầu và vai.
+    int side = std::min(frame.width, frame.height);
+    int srcX = (frame.width - side) / 2;
+    Image portrait = ImageFromImage(frame, Rectangle{(float)srcX, 0.0f, (float)side, (float)side});
+    UnloadImage(frame);
+    if (portrait.data == nullptr) return out;
+
+    ImageResize(&portrait, 168, 168);
+    ImageFormat(&portrait, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+
+    Image mask = GenImageColor(168, 168, BLANK);
+    ImageDrawCircle(&mask, 84, 84, 84, WHITE);
+    ImageAlphaMask(&portrait, mask);
+    UnloadImage(mask);
+
+    out = LoadTextureFromImage(portrait);
+    UnloadImage(portrait);
+    return out;
+}
+
+// Trả về ảnh đại diện của nhân vật, dựng lần đầu rồi nhớ lại.
+// Texture rỗng (id == 0) nghĩa là nhân vật không có animation "idle" — người
+// gọi tự bỏ qua việc vẽ.
+static Texture2D GetAvatarFor(const Player* p) {
+    static std::unordered_map<std::string, Texture2D> cache;
+    if (!p) return Texture2D{0};
+
+    const std::string& key = p->getBaseStats().name;
+    auto it = cache.find(key);
+    if (it != cache.end()) return it->second;
+
+    Texture2D tex = BuildAvatarFromIdle(p);
+    cache.emplace(key, tex);
+    return tex;
+}
 
 static std::string getFrameName(const std::string& itemIdentifier) {
     if (itemIdentifier == "Boom") return "bomb.png";
@@ -24,7 +105,6 @@ void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory*
     int screenHeight = GetScreenHeight();
 
     static bool initHUD = false;
-    static Texture2D avatarTex = {0};
     static Texture2D frameTex = {0};
     static Font customFont = {0};
     
@@ -32,23 +112,10 @@ void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory*
         AssetManager::getInstance().loadTexture("hud_item_empty", "assets/maps/item/item_empty.png");
         AssetManager::getInstance().loadTexture("partyhud", "assets/maps/item/partyhud.png");
         AssetManager::getInstance().loadTexture("boom_item", "assets/maps/item/boom_item.png");
-        
-        // Mask avatar as circle
-        Image img = LoadImage("assets/Goku_animation/avatar.png");
-        ImageResize(&img, 168, 168);
-        
-        Image mask = GenImageColor(168, 168, BLANK);
-        ImageDrawCircle(&mask, 84, 84, 84, WHITE);
-        
-        // Ensure image format has alpha channel
-        ImageFormat(&img, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
-        ImageAlphaMask(&img, mask);
-        
-        avatarTex = LoadTextureFromImage(img);
-        
-        UnloadImage(img);
-        UnloadImage(mask);
-        
+
+        // Ảnh đại diện KHÔNG nạp ở đây nữa: nó phụ thuộc vào nhân vật nào đang
+        // chơi, nên do GetAvatarFor(p) dựng riêng cho từng người — xem đầu file.
+
         // Load portrait frame
         frameTex = LoadTexture("assets/maps/item/dfgui_portraitframe_player.png");
 
@@ -153,7 +220,10 @@ void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory*
         if (isLeft) {
             // P1 layout: Avatar -> Bars
             DrawTextureEx(frameTex, {startX, avatarY}, 0.0f, 2.0f, WHITE);
-            DrawTexture(avatarTex, startX + 32, avatarY + 32, WHITE);
+            Texture2D avatarTex = GetAvatarFor(p);
+            if (avatarTex.id != 0) {
+                DrawTexture(avatarTex, startX + 32, avatarY + 32, WHITE);
+            }
             
             float p1TextSize = 40.0f;
             DrawTextEx(customFont, "Player 1", {startX, avatarY - 105}, p1TextSize, 1.0f, WHITE);
@@ -190,7 +260,10 @@ void PlayerHUD::render(const Player* p1, const Player* p2, const PartyInventory*
 
             int frameX = barX + 465; // Bars width (145*3=435) + 30px spacing
             DrawTextureEx(frameTex, {(float)frameX, avatarY}, 0.0f, 2.0f, WHITE);
-            DrawTexture(avatarTex, frameX + 32, avatarY + 32, WHITE);
+            Texture2D avatarTex = GetAvatarFor(p);
+            if (avatarTex.id != 0) {
+                DrawTexture(avatarTex, frameX + 32, avatarY + 32, WHITE);
+            }
             
             float p2TextSize = 40.0f;
             float p2W = MeasureTextEx(customFont, "Player 2", p2TextSize, 1.0f).x;

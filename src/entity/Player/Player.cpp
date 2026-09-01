@@ -30,7 +30,14 @@ void Player::update(float dt) {
   
   updateEffects(dt);
   overlappingItem_ = nullptr; // Reset each frame; collision loop in GameState will set it if still overlapping
-  
+
+  // Hồi mana ở MỌI trạng thái (chạy, nhảy, bơi, leo, đang ra chiêu...).
+  // Trước đây lời gọi này nằm trong PlayerIdleState::update nên chỉ đứng yên
+  // mới hồi. Chết thì thôi — hồi sinh sẽ nạp đầy lại trong onDie().
+  if (currentState != &dieState) {
+    increaseMana(kManaRegenPerSecond * dt);
+  }
+
   if (currentState) {
     currentState->update(dt);
   }
@@ -371,6 +378,11 @@ void Player::updateSound() {
     }
 }
 
+const Animation *Player::findAnimation(const std::string &name) const {
+  auto it = animationList.find(name);
+  return (it != animationList.end()) ? &it->second : nullptr;
+}
+
 void Player::playAnimation(const std::string &name, bool loop) {
   auto it = animationList.find(name);
   if (it != animationList.end()) {
@@ -621,7 +633,14 @@ void Player::onOverlapLadder() {
   // not auto. Leave this hook for audio/visual feedback only.
 }
 
-void Player::onHazard() { requestState(dieState); }
+// Ô gạch giết ngay (Die/Hazard). Phải dùng forceState chứ KHÔNG phải
+// requestState: crouchState, hurtState và skillState đều trả canExit()==false,
+// nên requestState bị nuốt lặng lẽ — ngồi xổm hoặc đang ra chiêu mà rơi vào ô
+// chết thì không chết, đứng nguyên đó bất tử.
+void Player::onHazard() {
+  if (currentState == &dieState) return;
+  forceState(dieState);
+}
 
 void Player::onDie() { 
     Entity::onDie();
@@ -632,7 +651,9 @@ void Player::onDie() {
     runtimeStats.breath = baseStats.maxBreath;
     clearEffects();
     buffManager_.clear(*this);
-    requestState(idleState); 
+    // dieState.canExit() == false, nên requestState ở đây không bao giờ thành
+    // công: người chơi hồi sinh xong vẫn kẹt trong trạng thái chết.
+    forceState(idleState);
 }
 
 void Player::updateStateFromPhysics() {

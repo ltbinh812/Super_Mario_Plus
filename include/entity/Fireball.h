@@ -3,6 +3,8 @@
 #include "FireballConfig.h"
 #include "Animation.h"
 #include <memory>
+#include <string>
+#include <vector>
 
 class Fireball : public Entity {
 private:
@@ -13,6 +15,12 @@ private:
     float curveFrequency;
     float elapsedTime = 0.0f;
     float originY;
+    bool  beamFromOwner = false;         // xem FireballConfig
+    bool  alignFramesByContent = false;
+    std::string textureName;             // khoá cache canh khung theo nội dung
+    // Tâm nội dung từng khung, tính SẴN lúc dựng đạn (xem Fireball.cpp).
+    // nullptr khi không bật alignFramesByContent.
+    const std::vector<Vector2>* frameCenters_ = nullptr;
     std::unique_ptr<Animation> animation;
     Entity* spawner;
     float hitboxOffsetX = 0.0f;
@@ -24,6 +32,9 @@ public:
 
     void update(float dt) override;
     void render(float alpha) override;
+
+    // Vẽ tia sáng nối từ người bắn tới quả đạn (chưởng kamehameha).
+    void renderOwnerBeam() const;
 
     void onHitWall(bool isRightWall, bool isCliff = false) override;
     void onCollide(Entity& other) override;

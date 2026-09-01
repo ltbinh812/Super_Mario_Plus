@@ -167,6 +167,9 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     float dashMultiplier = skillJson.value("dashMultiplier", 2.0f);
     skill->setDashMultiplier(dashMultiplier);
 
+    skill->setEndOnLanding(skillJson.value("endOnLanding", false));
+    skill->setLandingCutDelay(skillJson.value("landingCutDelay", 2.0f));
+
     player->addSkill(skillName, std::move(skill));
   }
 

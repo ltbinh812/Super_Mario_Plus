@@ -54,6 +54,8 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.frameNum       = fb.value("frameNum", 1);
                 cfg.frameTime      = fb.value("frameTime", 0.1f);
                 cfg.scale          = fb.value("scale", 1.0f);
+                cfg.beamFromOwner         = fb.value("beamFromOwner", false);
+                cfg.alignFramesByContent  = fb.value("alignFramesByContent", false);
 
                 // Auto-load fireball texture from assetFolder
                 std::string texBase = fb.value("textureName", std::string(""));
@@ -117,6 +119,8 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                 cfg.frameNum       = fb.value("frameNum", 1);
                 cfg.frameTime      = fb.value("frameTime", 0.1f);
                 cfg.scale          = fb.value("scale", 1.0f);
+                cfg.beamFromOwner         = fb.value("beamFromOwner", false);
+                cfg.alignFramesByContent  = fb.value("alignFramesByContent", false);
 
                 // Auto-load texture from assetFolder
                 std::string texBase = fb.value("textureName", std::string(""));

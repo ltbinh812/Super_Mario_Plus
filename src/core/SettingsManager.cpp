@@ -1,6 +1,7 @@
 #include "SettingsManager.h"
 #include "infrastructure/AudioManager.h"
 #include <unordered_map>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -41,6 +42,7 @@ void SettingsManager::ResetP1ToDefault() {
     p1DefaultKeys_["Interact"] = KEY_E;
     
     p1Keys_ = p1DefaultKeys_;
+    ++bindingsRevision_;
 }
 
 void SettingsManager::ResetP2ToDefault() {
@@ -57,6 +59,7 @@ void SettingsManager::ResetP2ToDefault() {
     p2DefaultKeys_["Interact"] = KEY_ENTER;
     
     p2Keys_ = p2DefaultKeys_;
+    ++bindingsRevision_;
 }
 
 int SettingsManager::GetP1Key(const std::string& action) const {
@@ -85,11 +88,13 @@ int SettingsManager::GetP2DefaultKey(const std::string& action) const {
 
 void SettingsManager::SetP1Key(const std::string& action, int key) {
     p1Keys_[action] = key;
+    ++bindingsRevision_;
     SaveToFile();
 }
 
 void SettingsManager::SetP2Key(const std::string& action, int key) {
     p2Keys_[action] = key;
+    ++bindingsRevision_;
     SaveToFile();
 }
 
@@ -139,6 +144,23 @@ std::string SettingsManager::GetKeyName(int key) const {
     }
 }
 
+// =============================================================================
+// Ghi cấu hình xuống đĩa.
+//
+// LỖI ĐÃ SỬA — phím đổi trong Settings không được nhớ qua các lần mở game.
+//
+// Đường dẫn mặc định là "saves/settings.json", tương đối so với thư mục làm
+// việc. Game chạy từ build/, mà build/saves/ chưa từng được tạo: ofstream mở
+// một file trong thư mục không tồn tại thì THẤT BẠI, is_open() trả false, và
+// hàm này lặng lẽ không làm gì. Không có lấy một dòng báo lỗi, nên nhìn bên
+// ngoài thì cứ như cài đặt được lưu bình thường cho tới lần mở game sau.
+//
+// (Hệ save màn chơi không dính lỗi này vì FileSaveRepository tự gọi
+// create_directories trước khi ghi.)
+//
+// Nay: tạo thư mục cha trước khi mở, và nếu vẫn không mở được thì BÁO RA —
+// im lặng nuốt lỗi ghi file chính là thứ đã giấu con bug này.
+// =============================================================================
 void SettingsManager::SaveToFile(const std::string& filepath) {
     json j;
     j["p1Keys"] = p1Keys_;
@@ -150,11 +172,20 @@ void SettingsManager::SaveToFile(const std::string& filepath) {
     j["enemySfxVolume"] = enemySfxVolume_;
     j["creativeMode"] = isCreativeMode_;
 
-    std::ofstream file(filepath);
-    if (file.is_open()) {
-        file << j.dump(4);
-        file.close();
+    std::error_code ec;
+    std::filesystem::path path(filepath);
+    if (path.has_parent_path()) {
+        std::filesystem::create_directories(path.parent_path(), ec);
     }
+
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "[SettingsManager] Khong ghi duoc cai dat vao \"" << filepath
+                  << "\" — cai dat se mat khi thoat game." << std::endl;
+        return;
+    }
+    file << j.dump(4);
+    file.close();
 }
 
 void SettingsManager::LoadFromFile(const std::string& filepath) {

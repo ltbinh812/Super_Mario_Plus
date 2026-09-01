@@ -143,7 +143,8 @@
       "textureName": "vfx_2",
       "frameNum": 14,
       "frameTime": 0.1,
-      "scale": 0.4
+      "scale": 0.4,
+      "beamFromOwner": true
     },
     "skills": {
       "Dash": {
@@ -418,7 +419,8 @@
       "offsetY": -10.0,
       "textureName": "vfx_1",
       "frameNum": 16,
-      "frameTime": 0.1
+      "frameTime": 0.1,
+      "alignFramesByContent": true
     },
     "explosion": {
       "lifetime": 0.5,
@@ -824,7 +826,7 @@
       },
       "JumpAttack": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 19,
         "attack": 10,
         "box": {
           "w": 64,
@@ -835,11 +837,13 @@
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
         "moveControl": 0.5,
-        "dashMultiplier": 0
+        "dashMultiplier": 0,
+        "endOnLanding": true,
+        "landingCutDelay": 2.0
       },
       "LowAttack": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 22,
         "attack": 10,
         "box": {
           "w": 64,
@@ -869,7 +873,7 @@
       },
       "SpecialAttack": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 34,
         "attack": 10,
         "box": {
           "w": 64,
@@ -879,8 +883,8 @@
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
-        "moveControl": 0.5,
-        "dashMultiplier": 0
+        "moveControl": 0.0,
+        "dashMultiplier": 0.0
       }
     },
     "special_ball": {
