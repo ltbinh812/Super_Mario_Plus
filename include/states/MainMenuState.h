@@ -10,12 +10,6 @@
 #include <memory>
 #include "ITransition.h"
 
-struct GameModeToggle {
-    Rectangle bound;
-    float animT = 0.0f;
-    bool isHovered = false;
-};
-
 class MainMenuState : public BaseLevelState {
 private:
     Texture2D titleTexture;
@@ -58,7 +52,6 @@ private:
     float p2BotTimer;
     
     // Top-left standalone Game Mode Toggle
-    GameModeToggle modeToggle;
     
     // Lerp helper
     float EaseOutBack(float t) const;

@@ -47,5 +47,7 @@ void PlayerClimbState::onCrouch() {
 }
 
 void PlayerClimbState::onAttack() {
-  player.useSkill("Punch1");
+  // Xem chú thích ở PlayerSwimState::onAttack — "Punch1" không có trong
+  // skillList nên bám thang đánh thường trước giờ không ra đòn.
+  player.useSkill("Attack1");
 }

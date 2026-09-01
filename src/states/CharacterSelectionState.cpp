@@ -420,6 +420,22 @@ void CharacterSelectionState::Render(float alpha) const {
             Rectangle dest = { islandPos.x, islandPos.y + islandAnimOffsetY - (45.0f * islandScale), src.width * scale, src.height * scale };
             Vector2 origin = { dest.width / 2.0f, dest.height / 2.0f };
             DrawTexturePro(currentAnim->getTexture(), src, dest, origin, 0.0f, WHITE);
+
+            // Tên nhân vật đặt NGAY DƯỚI CHÂN người đứng trên đảo.
+            // Chân = tâm đảo + nửa chiều cao khung vẽ (origin đang là tâm).
+            float feetY = dest.y + dest.height / 2.0f;
+            float islandNameFont = 52.0f * islandScale;
+            Vector2 islandNameSize = MeasureTextEx(customFont, card.charName.c_str(), islandNameFont, 1.0f);
+            Vector2 islandNamePos = { islandPos.x - islandNameSize.x / 2.0f,
+                                      feetY + 6.0f * islandScale };
+            // Viền tối phía sau để chữ nổi trên nền động
+            DrawTextEx(customFont, card.charName.c_str(),
+                       {islandNamePos.x + 3.0f, islandNamePos.y + 3.0f},
+                       islandNameFont, 1.0f, Color{0, 0, 0, 200});
+            DrawTextEx(customFont, card.charName.c_str(), islandNamePos,
+                       islandNameFont, 1.0f,
+                       (currentPlayerSelecting == 1 ? Color{0, 255, 0, 255}
+                                                    : Color{255, 102, 0, 255}));
         }
     }
 
@@ -434,19 +450,37 @@ void CharacterSelectionState::Render(float alpha) const {
 
 
             // Draw character idle on top of card
+            // charFeetY = mép DƯỚI của nhân vật; tên sẽ nằm ngay dưới đó.
+            float cardBottomY = card.position.y + card.animOffsetY + dest.height / 2.0f;
+            float charFeetY = cardBottomY;
             if (card.idleAnim) {
                 Rectangle animSrc = card.idleAnim->getCurrentFrame();
                 float animScale = (card.hitBox.width * 0.85f) / (float)animSrc.width;
-                Rectangle animDest = { card.position.x, card.position.y + card.animOffsetY, 
+                Rectangle animDest = { card.position.x, card.position.y + card.animOffsetY,
                                        animSrc.width * animScale, animSrc.height * animScale };
                 Vector2 animOrigin = { animDest.width / 2.0f, animDest.height / 2.0f };
                 DrawTexturePro(card.idleAnim->getTexture(), animSrc, animDest, animOrigin, 0.0f, WHITE);
+                charFeetY = animDest.y + animDest.height / 2.0f;
             }
 
-            // Draw character name
-            int nameFontSize = 30 * card.currentScale;
+            // Tên nhân vật: đặt NGAY DƯỚI CHÂN nhân vật, và ghìm lại để không
+            // tràn khỏi mép dưới của thẻ.
+            //
+            // Cỡ chữ tính theo BỀ RỘNG THẺ đang vẽ, không phải một con số cố
+            // định nhân với currentScale. Công thức cũ `30 * currentScale` cho
+            // ra khoảng 6px trên màn 1440p (thẻ rộng 350px, scale ~0.21) — nhỏ
+            // tới mức không đọc nổi. Lấy theo tỉ lệ thẻ thì chữ luôn cân đối
+            // với khung, và tự to lên khi rê chuột vì currentScale tăng.
+            float nameFontSize = dest.width * 0.13f;
             Vector2 nameSize = MeasureTextEx(customFont, card.charName.c_str(), nameFontSize, 1.0f);
-            Vector2 namePos = { card.position.x - nameSize.x / 2.0f, card.position.y + card.animOffsetY + dest.height / 2.0f - nameSize.y - 10.0f * card.currentScale };
+            float nameY = charFeetY + 4.0f * card.currentScale;
+            float maxNameY = cardBottomY - nameSize.y - 8.0f * card.currentScale;
+            if (nameY > maxNameY) nameY = maxNameY;
+            Vector2 namePos = { card.position.x - nameSize.x / 2.0f, nameY };
+            // Viền sáng mỏng phía sau để chữ đen vẫn đọc được trên phần tối của thẻ.
+            DrawTextEx(customFont, card.charName.c_str(),
+                       {namePos.x + 2.0f, namePos.y + 2.0f}, nameFontSize, 1.0f,
+                       Color{255, 255, 255, 160});
             DrawTextEx(customFont, card.charName.c_str(), namePos, nameFontSize, 1.0f, BLACK);
         }
     }

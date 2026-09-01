@@ -114,6 +114,14 @@ public:
   // --- Animation ---
   void playAnimation(const std::string &name, bool loop = true);
 
+  // Tra cứu một animation theo tên. Trả về nullptr nếu nhân vật không có.
+  // PlayerHUD dùng để lấy khung đầu của "idle" làm ảnh đại diện, thay vì
+  // hard-code một file avatar duy nhất cho cả sáu nhân vật.
+  const Animation* findAnimation(const std::string &name) const;
+
+  // Tốc độ hồi mana (mana/giây), áp dụng ở mọi trạng thái — xem Player::update.
+  static constexpr float kManaRegenPerSecond = 20.0f;
+
   // --- State instances (public so States can reference siblings) ---
   PlayerIdleState idleState;
   PlayerRunState runState;

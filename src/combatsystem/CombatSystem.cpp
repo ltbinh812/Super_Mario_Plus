@@ -68,7 +68,7 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
                 dirX = (targetX > spawnerX) ? 1.0f : -1.0f;
             }
             target->takeDamage(finalDamage, dirX);
-            
+
             if (attackBox->onHitEffect) {
                 attackBox->onHitEffect(target);
             }

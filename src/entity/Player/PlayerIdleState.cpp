@@ -12,7 +12,9 @@ void PlayerIdleState::onExit() {
 }
 
 void PlayerIdleState::update(float dt) {
-    player.increaseMana(20.0f * dt); // Regenerate 5 mana per second
+    // Hồi mana đã chuyển lên Player::update() để CHẠY Ở MỌI TRẠNG THÁI.
+    // Để ở đây thì đứng yên mới hồi, còn đang chạy/nhảy/bơi/leo thì không —
+    // người chơi buộc phải đứng im giữa trận mới có mana dùng chiêu.
 }
 
 void PlayerIdleState::onMoveLeft() {

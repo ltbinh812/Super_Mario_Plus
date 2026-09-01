@@ -8,6 +8,11 @@ class PlayerSkillState : public PlayerState {
     ISkill* nextSkill = nullptr;  // Queued combo skill
     float timer = 0.0f;
     bool hasExecuted = false;
+    // Chiêu endOnLanding phải cất cánh trước đã: nếu người chơi bấm ngay lúc
+    // còn chạm đất, không được kết thúc chiêu ở chính khung hình đầu tiên.
+    bool hasLeftGround = false;
+    // Đã ghìm thời gian còn lại khi tiếp đất chưa (chỉ làm một lần mỗi chiêu).
+    bool hasCutOnLanding = false;
 
     public:
 

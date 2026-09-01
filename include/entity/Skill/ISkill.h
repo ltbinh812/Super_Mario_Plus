@@ -26,6 +26,17 @@ protected:
     // Movement multiplier during skill execution
     float moveControl = 0.0f;
     float dashMultiplier = 2.0f;
+
+    // Chiêu trên không: hitbox sống suốt lúc còn lơ lửng — cú đá rơi phải ăn
+    // được mục tiêu ở bất kỳ độ cao nào chứ không chỉ trong vài khung đầu.
+    //
+    // Khi tiếp đất, chiêu KHÔNG ngắt ngay. Nó còn chạy thêm tối đa
+    // landingCutDelay giây nữa rồi mới cắt; nếu animation vốn đã sắp hết (phần
+    // còn lại ngắn hơn khoảng đó) thì cứ để nó kết thúc tự nhiên.
+    // Bật bằng "endOnLanding": true trong assets/config/characters.json,
+    // chỉnh thời gian bằng "landingCutDelay".
+    bool  endOnLanding = false;
+    float landingCutDelay = 2.0f;
 public: 
     ISkill(float mn = 0.0f, float dr = 0.0f) : manaCost(mn), duration(dr) {}
     virtual ~ISkill() = default;
@@ -72,5 +83,11 @@ public:
     
     float getDashMultiplier() const { return dashMultiplier; }
     void setDashMultiplier(float dm) { dashMultiplier = dm; }
+
+    bool getEndOnLanding() const { return endOnLanding; }
+    void setEndOnLanding(bool v) { endOnLanding = v; }
+
+    float getLandingCutDelay() const { return landingCutDelay; }
+    void setLandingCutDelay(float d) { landingCutDelay = d; }
 };
     

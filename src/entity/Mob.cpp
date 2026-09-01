@@ -3,6 +3,7 @@
 #include "EnemyStates/EnemyHurtState.h"
 #include "EnemyStates/EnemyDieState.h"
 #include "Player.h"
+#include "TileMap.h"
 #include "SettingsManager.h"
 #include "infrastructure/AssetManager.h"
 #include <iostream>
@@ -150,9 +151,7 @@ void Mob::render(float alpha) {
 
 void Mob::decideAction() {
     if (isDead || hurtTimer > 0.0f) return;
-    if (currentState) {
-        currentState->decideAction(*this);
-    }
+    runStateCallback(&IMobState::decideAction);
 }
 
 void Mob::process() {
@@ -160,9 +159,68 @@ void Mob::process() {
         // If dead animation finished, we could mark for deletion
         return;
     }
-    if (currentState) {
-        currentState->process(*this);
+    runStateCallback(&IMobState::process);
+}
+
+// =============================================================================
+// Dịch chuyển tới một ô trống cạnh người chơi.
+//
+// Chỉ Boss gọi (Boss::update), khi lần đầu phát hiện người chơi trong bán kính
+// 5 block. Hàm này chỉ lo phần "tìm chỗ đứng hợp lệ" — điều kiện kích hoạt do
+// bên gọi quyết định.
+// =============================================================================
+bool Mob::tryRepositionNear(const Player& target) {
+    const Vector2 targetPos = target.getPosition();
+    const Rectangle myBox = getHitbox();
+    const float w = myBox.width;
+    const float h = myBox.height;
+
+    // Ưu tiên xuất hiện ở phía quái đang đứng (đỡ giật hình), sau đó thử phía
+    // đối diện, rồi lùi dần ra xa. Mỗi ứng viên còn được nhấc lên vài nấc để
+    // tránh trường hợp chỗ ngang chân người chơi bị đặc.
+    const float sideFirst = (getPosition().x <= targetPos.x) ? -1.0f : 1.0f;
+    const float offsets[] = {60.0f, 90.0f, 130.0f};
+    const float lifts[]   = {0.0f, -32.0f, -64.0f};
+
+    for (float dx : offsets) {
+        for (float side : {sideFirst, -sideFirst}) {
+            for (float lift : lifts) {
+                Vector2 candidate = { targetPos.x + side * dx, targetPos.y + lift };
+
+                // getHitbox() neo bottom-center theo position, nên dựng khung
+                // thử nghiệm y hệt cách đó để phép kiểm tra khớp với lúc chạy.
+                Rectangle probe = { candidate.x - w / 2.0f, candidate.y - h, w, h };
+
+                bool blocked = false;
+                if (map_) {
+                    for (const auto& tile : map_->GetCollidingTiles(probe)) {
+                        // Chỉ né ô đặc và ô giết ngay. Ô nước/thang/mây thì
+                        // đứng được, không cần loại.
+                        if (tile.type == CollisionType::Solid ||
+                            tile.type == CollisionType::Die ||
+                            tile.type == CollisionType::Hazard ||
+                            tile.type == CollisionType::Lava) {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // Không có map thì không dám dịch chuyển: thà để quái đứng
+                    // yên còn hơn nhét nó vào trong tường.
+                    return false;
+                }
+
+                if (!blocked) {
+                    setPosition(candidate);
+                    runtimeStats.velocity = {0.0f, 0.0f};
+                    setFacingRight(side < 0.0f);
+                    addFloatingText("!", ORANGE, {0, -10}, 0.6f);
+                    return true;
+                }
+            }
+        }
     }
+    return false;
 }
 
 Player* Mob::getClosestPlayer() const {
@@ -208,14 +266,61 @@ bool Mob::getIsActive() const {
 }
 
 void Mob::changeState(std::unique_ptr<IMobState> newState) {
-    if (currentState) {
-        currentState->exit(*this);
+    // Đang chạy trong enter/exit/decideAction/process của một trạng thái thì
+    // KHÔNG được huỷ trạng thái đó ngay — chỉ ghi nhận, để runStateCallback()
+    // áp dụng sau khi hàm kia đã trở về.
+    if (inStateCallback_) {
+        pendingState_ = std::move(newState);
+        return;
     }
-    currentState = std::move(newState);
-    stateTimer = 0.0f;
-    if (currentState) {
-        currentState->enter(*this);
+    applyStateNow(std::move(newState));
+}
+
+void Mob::applyStateNow(std::unique_ptr<IMobState> next) {
+    // Vòng lặp vì enter() của trạng thái mới có quyền yêu cầu chuyển tiếp ngay
+    // (BossAttackState::enter chọn ngẫu nhiên một skill rồi vào BossSkillState).
+    // Chặn ở 8 nấc để hai trạng thái trỏ qua lại nhau không treo cả game.
+    int guard = 0;
+    while (next && guard++ < 8) {
+        if (currentState) {
+            inStateCallback_ = true;
+            currentState->exit(*this);
+            inStateCallback_ = false;
+        }
+
+        // Giữ trạng thái cũ SỐNG trong biến cục bộ tới hết vòng lặp: nếu huỷ
+        // ngay tại đây thì phần code còn lại của hàm đang gọi (nằm trong chính
+        // trạng thái đó) sẽ chạy trên bộ nhớ đã giải phóng.
+        std::unique_ptr<IMobState> previous = std::move(currentState);
+
+        currentState = std::move(next);
+        stateTimer = 0.0f;
+
+        if (currentState) {
+            inStateCallback_ = true;
+            currentState->enter(*this);
+            inStateCallback_ = false;
+        }
+
+        next = std::move(pendingState_);
+        pendingState_ = nullptr;
+        // previous được huỷ ở đây — sau khi mọi hàm của nó đã trở về.
     }
+}
+
+void Mob::flushPendingState() {
+    if (!pendingState_) return;
+    std::unique_ptr<IMobState> next = std::move(pendingState_);
+    pendingState_ = nullptr;
+    applyStateNow(std::move(next));
+}
+
+void Mob::runStateCallback(void (IMobState::*fn)(Mob&)) {
+    if (!currentState) return;
+    inStateCallback_ = true;
+    (currentState.get()->*fn)(*this);
+    inStateCallback_ = false;
+    flushPendingState();
 }
 
 void Mob::setAnimation(const std::string& animName) {
@@ -287,9 +392,13 @@ void Mob::setAnimation(const std::string& animName) {
 }
 
 void Mob::onHitWall(bool rightWall, bool isCliff) {
-    if (currentState) {
-        currentState->onHitWall(*this, rightWall, isCliff);
-    }
+    if (!currentState) return;
+    // Cùng lý do như decideAction/process: EnemyRunState::onHitWall gọi
+    // changeState(EnemyIdleState) ngay trong thân hàm này.
+    inStateCallback_ = true;
+    currentState->onHitWall(*this, rightWall, isCliff);
+    inStateCallback_ = false;
+    flushPendingState();
 }
 
 void Mob::onLand(float floorY) {
