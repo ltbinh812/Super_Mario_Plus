@@ -5173,20 +5173,6 @@
 							"fieldInstances": [{ "__identifier": "isActive", "__type": "Bool", "__value": false, "__tile": null, "defUid": 236, "realEditorValues": [] }]
 						},
 						{
-							"__identifier": "Starting_position",
-							"__grid": [29,15],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FFFFFF",
-							"iid": "5ea5e1d0-96d0-11f1-b103-df5369554cf1",
-							"width": 16,
-							"height": 16,
-							"defUid": 241,
-							"px": [472,256],
-							"fieldInstances": []
-						},
-						{
 							"__identifier": "CutsceneTrigger",
 							"__grid": [28,14],
 							"__pivot": [0,0],
@@ -5212,20 +5198,6 @@
 									"params": [ true ]
 								}] }
 							]
-						},
-						{
-							"__identifier": "Starting_position",
-							"__grid": [29,15],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FFFFFF",
-							"iid": "6fa9f610-96d0-11f1-b103-d32111dcb0a5",
-							"width": 16,
-							"height": 16,
-							"defUid": 241,
-							"px": [472,256],
-							"fieldInstances": []
 						},
 						{
 							"__identifier": "Mob_mushroom",
@@ -5768,6 +5740,20 @@
 							"defUid": 268,
 							"px": [832,288],
 							"fieldInstances": [{ "__identifier": "isActive", "__type": "Bool", "__value": false, "__tile": null, "defUid": 269, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "Starting_position",
+							"__grid": [193,24],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"iid": "366f6ee0-96d0-11f1-86fe-3d3d6302600c",
+							"width": 16,
+							"height": 16,
+							"defUid": 241,
+							"px": [3096,400],
+							"fieldInstances": []
 						}
 					]
 				},

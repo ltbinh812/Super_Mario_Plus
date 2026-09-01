@@ -89,9 +89,13 @@ void IngameSettingsPanel::init(float screenWidth, float screenHeight, std::funct
         []() { return SettingsManager::GetInstance().GetMasterVolume(); },
         [](float v) { SettingsManager::GetInstance().SetMasterVolume(v); }
     );
-    settingsGroup_->AddSlider("Background Music", 
-        []() { return SettingsManager::GetInstance().GetBGMVolume(); },
-        [](float v) { SettingsManager::GetInstance().SetBGMVolume(v); }
+    settingsGroup_->AddSlider("Music Volume", 
+        []() { return SettingsManager::GetInstance().GetMusicVolume(); },
+        [](float v) { SettingsManager::GetInstance().SetMusicVolume(v); }
+    );
+    settingsGroup_->AddSlider("Map Background Sound", 
+        []() { return SettingsManager::GetInstance().GetBackgroundSoundVolume(); },
+        [](float v) { SettingsManager::GetInstance().SetBackgroundSoundVolume(v); }
     );
     settingsGroup_->AddSlider("Player Sounds", 
         []() { return SettingsManager::GetInstance().GetPlayerSFXVolume(); },

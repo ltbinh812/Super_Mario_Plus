@@ -155,7 +155,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -293,6 +293,12 @@
                 "manaCost": 20.0,
                 "moveControl": 0.5,
                 "dashMultiplier": 0
+            }
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "2": "step2"
             }
         }
     },
@@ -435,7 +441,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -589,6 +595,13 @@
             "textureName": "vfx_special",
             "frameNum": 1,
             "frameTime": 0.1
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "3": "step2",
+                "6": "step3"
+            }
         }
     },
     "Luffy": {
@@ -730,7 +743,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -884,6 +897,13 @@
             "textureName": "vfx_special",
             "frameNum": 1,
             "frameTime": 0.1
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "3": "step2",
+                "7": "step3"
+            }
         }
     },
     "Kakashi": {
@@ -1025,7 +1045,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -1179,6 +1199,13 @@
             "textureName": "vfx_special",
             "frameNum": 1,
             "frameTime": 0.1
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "2": "step2",
+                "5": "step3"
+            }
         }
     },
     "Sasuke": {
@@ -1340,7 +1367,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -1494,6 +1521,13 @@
             "textureName": "vfx_special",
             "frameNum": 1,
             "frameTime": 0.1
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "3": "step2",
+                "6": "step3"
+            }
         }
     },
     "Zoro": {
@@ -1635,7 +1669,7 @@
                     "h": 64
                 },
                 "recoveryDuration": 0.1,
-                "moveControl": 0.5,
+                "moveControl": 3,
                 "manaCost": 20.0,
                 "dashMultiplier": 0
             },
@@ -1789,6 +1823,13 @@
             "textureName": "vfx_special",
             "frameNum": 1,
             "frameTime": 0.1
+        },
+        "soundFrames": {
+            "run": {
+                "0": "step1",
+                "2": "step2",
+                "6": "step3"
+            }
         }
     },
     "Boom": {

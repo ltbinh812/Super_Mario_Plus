@@ -128,4 +128,20 @@ public:
     
     AtlasAnimation* getCurrentAnim() { return currentAnim; }
     Animation* getCurrentStandardAnim() { return currentStandardAnim; }
+    
+    // Sound Management
+    void playSound(const std::string& soundKey, bool loop = true);
+    void updateSound();
+    
+    void setSoundFrames(std::unordered_map<std::string, std::unordered_map<int, std::string>> frames) { soundFrames = std::move(frames); }
+    const std::unordered_map<std::string, std::unordered_map<int, std::string>>& getSoundFrames() const { return soundFrames; }
+
+protected:
+    std::string currentBaseAnimName = "";
+    bool currentAnimLooping = false;
+    float maxHearingDistance = 800.0f; // Distance at which sound fades to 0
+    float idleSoundTimer = 0.0f;
+    
+    std::unordered_map<std::string, std::unordered_map<int, std::string>> soundFrames;
+    int lastSoundFrameIndex = -1;
 };

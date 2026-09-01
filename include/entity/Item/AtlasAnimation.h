@@ -21,6 +21,7 @@ public:
     bool isValid() const { return frameCount_ > 0 && !baseFrameName_.empty(); }
     bool isFinished() const { return !loop_ && curFrame_ >= frameCount_ - 1; }
     bool isLooping() const { return loop_; }
+    int getCurrentFrameIndex() const { return curFrame_; }
 
 private:
     std::string baseFrameName_;

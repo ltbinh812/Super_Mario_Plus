@@ -9,6 +9,7 @@
 #include "IrisTransition.h"
 #include "MapSelectionState.h"
 #include "LoadingState.h"
+#include "infrastructure/AudioManager.h"
 
 #include "raylib.h"
 #include <iostream>
@@ -24,6 +25,16 @@ MainMenuState::MainMenuState()
     transitionIn = std::make_unique<IrisTransition>();
     transitionIn->Start(false); // Start Iris In (opening)
     isTransitioningIn = true;
+      
+    // Danh sách nhạc nền Menu (bạn có thể thêm nhiều bài ở đây)
+    std::vector<std::string> menuPlaylist = {
+        "assets/audio/see_you_in_heaven.mp3",
+        // "assets/audio/menu_music_2.mp3", // Ví dụ bài thứ 2
+        // "assets/audio/menu_music_3.mp3"  // Ví dụ bài thứ 3
+    };
+    
+    // Kích hoạt chế độ Playlist
+    AudioManager::getInstance().PlayMusicPlaylist(menuPlaylist);
       
     // Disable items parsing for Menu (user said "không quan tâm item")
     activeItems.clear();
@@ -213,9 +224,13 @@ MainMenuState::MainMenuState()
         []() { return SettingsManager::GetInstance().GetMasterVolume(); },
         [](float v) { SettingsManager::GetInstance().SetMasterVolume(v); }
     );
-    settingsGroup->AddSlider("Background Music", 
-        []() { return SettingsManager::GetInstance().GetBGMVolume(); },
-        [](float v) { SettingsManager::GetInstance().SetBGMVolume(v); }
+    settingsGroup->AddSlider("Music Volume", 
+        []() { return SettingsManager::GetInstance().GetMusicVolume(); },
+        [](float v) { SettingsManager::GetInstance().SetMusicVolume(v); }
+    );
+    settingsGroup->AddSlider("Map Background Sound", 
+        []() { return SettingsManager::GetInstance().GetBackgroundSoundVolume(); },
+        [](float v) { SettingsManager::GetInstance().SetBackgroundSoundVolume(v); }
     );
     settingsGroup->AddSlider("Player Sounds", 
         []() { return SettingsManager::GetInstance().GetPlayerSFXVolume(); },

@@ -134,4 +134,17 @@ private:
   std::shared_ptr<PartyInventory> partyInventory_;
   BuffManager buffManager_;
   bool isPvPMode_ = false;
+
+  std::string currentBaseAnimName = "";
+  bool currentAnimLooping = false;
+  float idleSoundTimer = 0.0f;
+  
+  std::unordered_map<std::string, std::unordered_map<int, std::string>> soundFrames;
+  int lastSoundFrameIndex = -1;
+
+  void playSound(const std::string& soundKey, bool loop);
+  void updateSound();
+  
+public:
+  void setSoundFrames(std::unordered_map<std::string, std::unordered_map<int, std::string>> frames) { soundFrames = std::move(frames); }
 };

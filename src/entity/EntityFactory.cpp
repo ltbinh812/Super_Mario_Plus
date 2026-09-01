@@ -3,7 +3,9 @@
 #include "Fireball.h"
 #include "Explosion.h"
 #include "FireballConfig.h"
+#include "SettingsManager.h"
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -60,6 +62,19 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                         std::string texPath = "assets/" + folder + "/" + texBase + ".png";
                         AssetManager::getInstance().loadTexture(texKey, texPath);
                         cfg.textureName = texKey;
+                        
+                        std::string soundPath = "assets/" + folder + "/sounds/" + texBase + ".wav";
+                        std::string soundKey = cmd.ownerName + "_" + texBase + "_sound";
+                        if (std::filesystem::exists(soundPath)) {
+                            AssetManager::getInstance().loadSound(soundKey, soundPath);
+                            Sound s = AssetManager::getInstance().getSound(soundKey);
+                            float volume = SettingsManager::GetInstance().GetEnemySFXVolume();
+                            if (cmd.spawner && cmd.spawner->getFaction() == EntityFaction::Player) {
+                                volume = SettingsManager::GetInstance().GetPlayerSFXVolume();
+                            }
+                            SetSoundVolume(s, volume);
+                            PlaySound(s);
+                        }
                     } else {
                         cfg.textureName = texBase;
                     }
@@ -107,6 +122,19 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                     std::string texPath = "assets/" + folder + "/" + texBase + ".png";
                     AssetManager::getInstance().loadTexture(texKey, texPath);
                     cfg.textureName = texKey;
+                    
+                    std::string soundPath = "assets/" + folder + "/sounds/" + texBase + ".wav";
+                    std::string soundKey = cmd.ownerName + "_" + texBase + "_sound";
+                    if (std::filesystem::exists(soundPath)) {
+                        AssetManager::getInstance().loadSound(soundKey, soundPath);
+                        Sound s = AssetManager::getInstance().getSound(soundKey);
+                        float volume = SettingsManager::GetInstance().GetEnemySFXVolume();
+                        if (cmd.spawner && cmd.spawner->getFaction() == EntityFaction::Player) {
+                            volume = SettingsManager::GetInstance().GetPlayerSFXVolume();
+                        }
+                        SetSoundVolume(s, volume);
+                        PlaySound(s);
+                    }
                 }
             }
 
@@ -148,6 +176,19 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                     std::string texPath = "assets/" + folder + "/" + texBase + ".png";
                     AssetManager::getInstance().loadTexture(texKey, texPath);
                     cfg.textureName = texKey;
+                    
+                    std::string soundPath = "assets/" + folder + "/sounds/" + texBase + ".wav";
+                    std::string soundKey = cmd.ownerName + "_" + texBase + "_sound";
+                    if (std::filesystem::exists(soundPath)) {
+                        AssetManager::getInstance().loadSound(soundKey, soundPath);
+                        Sound s = AssetManager::getInstance().getSound(soundKey);
+                        float volume = SettingsManager::GetInstance().GetEnemySFXVolume();
+                        if (cmd.spawner && cmd.spawner->getFaction() == EntityFaction::Player) {
+                            volume = SettingsManager::GetInstance().GetPlayerSFXVolume();
+                        }
+                        SetSoundVolume(s, volume);
+                        PlaySound(s);
+                    }
                 }
             }
             

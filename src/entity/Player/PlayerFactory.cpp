@@ -12,6 +12,7 @@
 #include "SpecialSkillAttack.h"
 #include <fstream>
 #include <functional>
+#include <filesystem>
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -95,6 +96,13 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
 
     // Load texture if not already loaded
     AssetManager::getInstance().loadTexture(texKey, texPath);
+    
+    // Load sound for this animation if exists
+    std::string soundPath = "assets/" + assetFolder + "/sounds/" + animName + ".wav";
+    std::string soundKey  = charDisplayName + "_" + animName + "_sound";
+    if (std::filesystem::exists(soundPath)) {
+        AssetManager::getInstance().loadSound(soundKey, soundPath);
+    }
 
     float scale = animData.value("scale", 1.0f);
 
@@ -160,6 +168,31 @@ std::unique_ptr<Player> PlayerFactory::createPlayer(const std::string &charName,
     skill->setDashMultiplier(dashMultiplier);
 
     player->addSkill(skillName, std::move(skill));
+  }
+
+  // NEW: Parse soundFrames for Animation Events
+  if (charData.contains("soundFrames")) {
+      std::unordered_map<std::string, std::unordered_map<int, std::string>> soundFrames;
+      for (auto& [animName, frameData] : charData["soundFrames"].items()) {
+          for (auto& [frameIdxStr, soundSuffix] : frameData.items()) {
+              int frameIdx = std::stoi(frameIdxStr);
+              std::string suffix = soundSuffix.get<std::string>();
+              
+              soundFrames[animName][frameIdx] = suffix;
+              
+              std::string assetFolder = charData.value("assetFolder", "goku");
+              std::string soundPath = "assets/" + assetFolder + "/sounds/" + suffix + ".wav";
+              std::string soundKey = charName + "_" + suffix + "_sound";
+              std::cout << "[DEBUG-FACTORY] Attempting to load sound: " << soundKey << " from " << soundPath << std::endl;
+              if (std::filesystem::exists(soundPath)) {
+                  std::cout << "[DEBUG-FACTORY] Path exists! Loading..." << std::endl;
+                  AssetManager::getInstance().loadSound(soundKey, soundPath);
+              } else {
+                  std::cout << "[ERROR-FACTORY] Path does NOT exist: " << soundPath << std::endl;
+              }
+          }
+      }
+      player->setSoundFrames(std::move(soundFrames));
   }
 
   return player;

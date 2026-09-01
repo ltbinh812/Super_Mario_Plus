@@ -75,6 +75,18 @@
         }
         return it->second;
     }
+
+    bool AssetManager::hasSound(const std::string& name) const {
+        return sounds.find(name) != sounds.end();
+    }
+    
+    void AssetManager::printAllSoundKeys() const {
+        std::cout << "--- ASSET MANAGER SOUND KEYS ---" << std::endl;
+        for (const auto& pair : sounds) {
+            std::cout << pair.first << std::endl;
+        }
+        std::cout << "--------------------------------" << std::endl;
+    }
     
     // --- Dọn dẹp tài nguyên ---
     // BẮT BUỘC phải gọi hàm này trước khi CloseWindow()

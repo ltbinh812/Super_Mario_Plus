@@ -36,6 +36,8 @@ public:
     void loadSound(const std::string& name, const std::string& filepath);
 
     const Sound& getSound(const std::string& name);
+    bool hasSound(const std::string& name) const;
+    void printAllSoundKeys() const;
     
     // --- Dọn dẹp tài nguyên ---
     // BẮT BUỘC phải gọi hàm này trước khi CloseWindow()

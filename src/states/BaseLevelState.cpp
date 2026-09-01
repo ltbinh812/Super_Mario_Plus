@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "ItemAtlasRegistry.h"
 #include "infrastructure/AssetManager.h"
+#include "infrastructure/AudioManager.h"
 #include "ItemFactory.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
@@ -37,6 +38,14 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   std::cout << "[BaseLevelState] Loading map: " << mapFilePath << " level: " << initialLevel << "\n";
   if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
     std::cout << "[BaseLevelState] Map loaded successfully!\n";
+    
+    std::string bgSound = map.GetBackgroundSound();
+    if (!bgSound.empty()) {
+        AudioManager::getInstance().PlayBackgroundSound(bgSound);
+    } else {
+        // Dừng nhạc Menu nếu map không có nhạc nền
+        AudioManager::getInstance().StopAll(); 
+    }
 
     auto spawns = map.GetPlayerSpawns();
     Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 150.0f};
@@ -601,6 +610,14 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
 
   if (map.LoadLDtkMap(mapFilePath, nextLevel)) {
     currentLevel = nextLevel;
+    
+    std::string bgSound = map.GetBackgroundSound();
+    if (!bgSound.empty()) {
+        AudioManager::getInstance().PlayBackgroundSound(bgSound);
+    } else {
+        AudioManager::getInstance().StopAll();
+    }
+    
     activeEntities.clear();
     activeItems.clear();
 

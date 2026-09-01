@@ -15,6 +15,7 @@ static CharacterRuntimeStats getExplosionRuntimeStats(const ExplosionConfig& con
     CharacterRuntimeStats rs;
     rs.velocity = {0.0f, 0.0f};
     rs.physicsBox = {config.hitboxW, config.hitboxH};
+    rs.collisionMask = 0; // Explosions should not collide with the map geometry
     return rs;
 }
 

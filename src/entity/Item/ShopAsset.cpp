@@ -16,8 +16,8 @@ ShopAsset::ShopAsset(Vector2 worldPos)
     worldStats.position.y = worldPos.y;
     worldStats.startPosition = worldStats.position;
 
-    // Cố gắng load texture nếu có, dùng đường dẫn tuyệt đối cho an toàn theo yêu cầu
-    std::string texPath = "d:/Git/.SuperMarioPlus/assets/maps/item/shop_asset.png";
+    // Cố gắng load texture nếu có, dùng đường dẫn tương đối
+    std::string texPath = "assets/maps/item/shop_asset.png";
     if (FileExists(texPath.c_str())) {
         shopTex_ = LoadTexture(texPath.c_str());
     } else {

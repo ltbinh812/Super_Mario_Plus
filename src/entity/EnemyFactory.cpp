@@ -10,6 +10,7 @@
 #include <fstream>
 #include <algorithm>
 #include <raylib.h>
+#include <filesystem>
 
 // Include states here once implemented
 #include "EnemyStates/EnemyIdleState.h"
@@ -123,39 +124,49 @@ std::unique_ptr<Entity> EnemyFactory::create(
         mob->changeState(std::make_unique<EnemyPatrolState>());
     }
 
-    // NEW: Check for Standard Animations
+    // NEW: Check for Standard Animations vs Atlas Animations
+    std::string assetFolder = "";
     if (mobData.contains("assetFolder")) {
-        std::string assetFolder = mobData["assetFolder"].get<std::string>();
+        assetFolder = mobData["assetFolder"].get<std::string>();
+    }
+
+    if (mobData.contains("animations")) {
         std::unordered_map<std::string, Animation> standardAnims;
         
-        if (mobData.contains("animations")) {
-            for (auto& [animName, animData] : mobData["animations"].items()) {
-                std::string texBase = animData["texture"].get<std::string>();
-                std::string texKey  = lowerKey + "_" + texBase;
-                std::string texPath = "assets/" + assetFolder + "/" + texBase + ".png";
-                
-                AssetManager::getInstance().loadTexture(texKey, texPath);
-                
-                float scale = animData.value("scale", 1.0f);
-                Animation anim(
-                    AssetManager::getInstance().getTexture(texKey),
-                    animData["frameNum"].get<int>(),
-                    animData["frameTime"].get<float>(),
-                    scale
-                );
-                
-                if (animData.contains("loop")) {
-                    anim.setLoop(animData["loop"].get<bool>());
-                } else {
-                    anim.setLoop(animName == "idle" || animName == "patrol" || animName == "run");
+        for (auto& [animName, animData] : mobData["animations"].items()) {
+            std::string texBase = animData["texture"].get<std::string>();
+            std::string texKey  = lowerKey + "_" + texBase;
+            std::string texPath = "assets/" + assetFolder + "/" + texBase + ".png";
+            
+            AssetManager::getInstance().loadTexture(texKey, texPath);
+            
+            if (!assetFolder.empty()) {
+                std::string soundPath = "assets/" + assetFolder + "/sounds/" + animName + ".wav";
+                std::string soundKey  = lowerKey + "_" + animName + "_sound";
+                if (std::filesystem::exists(soundPath)) {
+                    AssetManager::getInstance().loadSound(soundKey, soundPath);
                 }
-                
-                standardAnims.emplace(animName, anim);
             }
+            
+            float scale = animData.value("scale", 1.0f);
+            Animation anim(
+                AssetManager::getInstance().getTexture(texKey),
+                animData["frameNum"].get<int>(),
+                animData["frameTime"].get<float>(),
+                scale
+            );
+            
+            if (animData.contains("loop")) {
+                anim.setLoop(animData["loop"].get<bool>());
+            } else {
+                anim.setLoop(animName == "idle" || animName == "patrol" || animName == "run");
+            }
+            
+            standardAnims.emplace(animName, anim);
         }
         mob->setStandardAnimations(std::move(standardAnims));
         mob->setAnimation("idle");
-    } else {
+    } else if (mobData.contains("animationFrames")) {
         // FALLBACK: Atlas Animation
         auto& anims = mobData["animationFrames"];
         if (auto* boss = dynamic_cast<Boss*>(mob.get())) {
@@ -177,6 +188,46 @@ std::unique_ptr<Entity> EnemyFactory::create(
                 anims["die"].get<int>()
             );
         }
+        
+        // Load sounds for Atlas Animations
+        if (!assetFolder.empty()) {
+            std::vector<std::string> baseAnims = {"attack", "run", "idle", "hurt", "die", "intro", "patrol"};
+            for (const std::string& animName : baseAnims) {
+                if (anims.contains(animName) || animName == "intro" || animName == "patrol") {
+                    std::string soundPath = "assets/" + assetFolder + "/sounds/" + animName + ".wav";
+                    std::string soundKey = lowerKey + "_" + animName + "_sound";
+                    if (std::filesystem::exists(soundPath)) {
+                        AssetManager::getInstance().loadSound(soundKey, soundPath);
+                    }
+                }
+            }
+        }
+    }
+
+    // NEW: Parse soundFrames for Animation Events
+    if (mobData.contains("soundFrames") && !assetFolder.empty()) {
+        std::unordered_map<std::string, std::unordered_map<int, std::string>> soundFrames;
+        for (auto& [animName, frameData] : mobData["soundFrames"].items()) {
+            for (auto& [frameIdxStr, soundSuffix] : frameData.items()) {
+                int frameIdx = std::stoi(frameIdxStr);
+                std::string suffix = soundSuffix.get<std::string>();
+                
+                soundFrames[animName][frameIdx] = suffix;
+                
+                // Load the sound file into AssetManager
+                std::string soundPath = "assets/" + assetFolder + "/sounds/" + suffix + ".wav";
+                // The soundKey for frame-based sounds will be specific to the mob and suffix
+                std::string soundKey = lowerKey + "_" + suffix + "_sound";
+                std::cout << "[DEBUG-FACTORY] Attempting to load mob sound: " << soundKey << " from " << soundPath << std::endl;
+                if (std::filesystem::exists(soundPath)) {
+                    std::cout << "[DEBUG-FACTORY] Mob Path exists! Loading..." << std::endl;
+                    AssetManager::getInstance().loadSound(soundKey, soundPath);
+                } else {
+                    std::cout << "[ERROR-FACTORY] Mob Path does NOT exist: " << soundPath << std::endl;
+                }
+            }
+        }
+        mob->setSoundFrames(std::move(soundFrames));
     }
 
     // NEW: Check for Skills
