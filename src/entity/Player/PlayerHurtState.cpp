@@ -24,7 +24,15 @@ void PlayerHurtState::update(float dt) {
     }
 
     if (invicibleTimer <= 0.0f) {
-        changePlayerState(player.idleState);
+        if (player.getRuntimeStats().currentLiquid != CollisionType::None) {
+            changePlayerState(player.swimState);
+        } else if (player.getRuntimeStats().isOverlappingLadder) {
+            changePlayerState(player.climbState);
+        } else if (!player.getRuntimeStats().isGrounded) {
+            changePlayerState(player.fallState);
+        } else {
+            changePlayerState(player.idleState);
+        }
     }
 }
 

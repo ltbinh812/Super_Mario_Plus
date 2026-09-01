@@ -35,7 +35,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/mushroom"
   },
   "boss_doflam": {
     "name": "Boss_doflam",
@@ -127,48 +128,48 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 14,
         "box": {
-          "offsetX": -10.0,
-          "offsetY": -80.0,
-          "w": 60.0,
-          "h": 80.0
+          "offsetX": 20.0,
+          "offsetY": -30.0,
+          "w": 50.0,
+          "h": 60.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_2": {
         "damage": 25,
         "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": -20.0,
-          "offsetY": -80.0,
+          "offsetX": 30.0,
+          "offsetY": -30.0,
           "w": 60.0,
           "h": 70.0
         },
-        "dashMultiplier": 20.0
+        "dashMultiplier": 0
       },
       "attack_3": {
         "damage": 30,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 30,
         "box": {
-          "offsetX": 0.0,
-          "offsetY": -80.0,
-          "w": 50.0,
-          "h": 80.0
+          "offsetX": 10.0,
+          "offsetY": -30.0,
+          "w": 40.0,
+          "h": 50.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": -50.0,
-          "offsetY": -60.0,
-          "w": 100.0,
-          "h": 60.0
+          "offsetX": 25.0,
+          "offsetY": -30.0,
+          "w": 55.0,
+          "h": 65.0
         },
-        "dashMultiplier": 2.0
+        "dashMultiplier": 0
       },
       "special_attack": {
         "damage": 50,
@@ -199,8 +200,8 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 4,
         "box": {
-          "offsetX": 10.0,
-          "offsetY": -15.0,
+          "offsetX": 20.0,
+          "offsetY": -30.0,
           "w": 64.0,
           "h": 64.0
         },
@@ -212,41 +213,42 @@
       "textureName": "vfx_2",
       "frameNum": 7,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 64.0,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": -5.0
+      "lifetime": 3.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 10,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 245.0,
-      "offsetX": 10.0,
-      "offsetY": 0.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": 0.0
+      "lifetime": 4.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_3",
       "frameNum": 8,
       "frameTime": 0.05,
-      "hitboxW": 128.0,
-      "hitboxH": 64.0,
-      "offsetX": 80.0,
-      "offsetY": 0.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": 10.0,
-      "hitboxOffsetY": -30.0
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "2": "step2",
+        "6": "step3"
+      }
     }
   },
   "boss_franky": {
@@ -424,41 +426,42 @@
       "textureName": "vfx_2",
       "frameNum": 5,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
+      "hitboxW": 32.0,
       "hitboxH": 32.0,
-      "offsetX": 20.0,
+      "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": -10.0
+      "lifetime": 3.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 164.0,
-      "offsetX": 20.0,
-      "offsetY": 0.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": -40.0
+      "lifetime": 4.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 13,
       "frameTime": 0.05,
-      "hitboxW": 100.0,
-      "hitboxH": 64.0,
-      "offsetX": 60.0,
-      "offsetY": 0.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": 0.0
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "3": "step2",
+        "7": "step3"
+      }
     }
   },
   "boss_itachi": {
@@ -589,7 +592,7 @@
         "box": {
           "offsetX": 5.0,
           "offsetY": -65.0,
-          "w": 45.0,
+          "w": 30.0,
           "h": 20.0
         },
         "dashMultiplier": 0
@@ -636,41 +639,42 @@
       "textureName": "vfx_2",
       "frameNum": 3,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 64.0,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": -10.0
+      "lifetime": 3.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 56,
       "frameTime": 0.1,
-      "hitboxW": 180.0,
-      "hitboxH": 180.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
       "offsetX": 50.0,
-      "offsetY": 0.0,
+      "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": -10.0
+      "lifetime": 4.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 9,
       "frameTime": 0.05,
-      "hitboxW": 100.0,
-      "hitboxH": 64.0,
-      "offsetX": 36.0,
-      "offsetY": 0.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": 10.0,
-      "hitboxOffsetY": -30.0
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "2": "step2",
+        "5": "step3"
+      }
     }
   },
   "boss_sasukeboss": {
@@ -784,7 +788,7 @@
       },
       "attack_3": {
         "damage": 30,
-        "hitboxStartFrame": 2,
+        "hitboxStartFrame": 0,
         "hitboxEndFrame": 9,
         "box": {
           "offsetX": 0.0,
@@ -792,7 +796,7 @@
           "w": 20.0,
           "h": 50.0
         },
-        "dashMultiplier": 10
+        "dashMultiplier": 0
       },
       "attack_4": {
         "damage": 35,
@@ -848,41 +852,41 @@
       "textureName": "vfx_2",
       "frameNum": 6,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 64.0,
-      "offsetX": 0.0,
-      "offsetY": 0.0,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": 0.0
+      "lifetime": 3.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 32.0,
-      "offsetX": 10.0,
-      "offsetY": -20.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 10.0,
-      "hitboxOffsetY": -20.0
+      "lifetime": 4.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
       "frameTime": 0.05,
-      "hitboxW": 80.0,
-      "hitboxH": 64.0,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
       "offsetX": 0.0,
-      "offsetY": -10.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": 10.0,
-      "hitboxOffsetY": 0.0
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "2": "step2"
+      }
     }
   },
   "boss_shank": {
@@ -1060,41 +1064,42 @@
       "textureName": "vfx_2",
       "frameNum": 5,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 64.0,
-      "offsetX": 20.0,
-      "offsetY": 0.0,
+      "hitboxW": 32.0,
+      "hitboxH": 32.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": -20.0
+      "lifetime": 3.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 4,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 64.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": -30.0
+      "lifetime": 4.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
       "frameTime": 0.05,
-      "hitboxW": 100.0,
-      "hitboxH": 64.0,
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
       "offsetX": 0.0,
-      "offsetY": 0.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": 0.0,
-      "hitboxOffsetY": 0.0
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "4": "step2",
+        "7": "step3"
+      }
     }
   },
   "boss_narutoboss": {
@@ -1272,14 +1277,12 @@
       "textureName": "vfx_1",
       "frameNum": 4,
       "frameTime": 0.1,
-      "hitboxW": 64.0,
-      "hitboxH": 80.0,
-      "offsetX": 20.0,
-      "offsetY": -20.0,
+      "hitboxW": 48.0,
+      "hitboxH": 48.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": -10.0
+      "lifetime": 4.0
     },
     "fireball": {
       "damage": 30,
@@ -1288,25 +1291,28 @@
       "frameTime": 0.1,
       "hitboxW": 32.0,
       "hitboxH": 32.0,
-      "offsetX": 0.0,
-      "offsetY": -20.0,
+      "offsetX": 50.0,
+      "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0,
-      "hitboxOffsetX": 20.0,
-      "hitboxOffsetY": -20.0
+      "lifetime": 3.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_2",
       "frameNum": 6,
       "frameTime": 0.05,
-      "hitboxW": 164.0,
-      "hitboxH": 64.0,
-      "offsetX": 130.0,
-      "offsetY": 0.0,
-      "lifetime": 0.6,
-      "hitboxOffsetX": -40.0,
-      "hitboxOffsetY": 0.0
+      "hitboxW": 150.0,
+      "hitboxH": 150.0,
+      "offsetX": 0.0,
+      "offsetY": -50.0,
+      "lifetime": 0.6
+    },
+    "soundFrames": {
+      "run": {
+        "0": "step1",
+        "3": "step2",
+        "6": "step3"
+      }
     }
   },
   "mob_slime": {
@@ -1345,7 +1351,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/slime"
   },
   "mob_soldier": {
     "name": "mob_soldier",
@@ -1408,7 +1415,8 @@
       "offsetY": -30.0,
       "speed": 400.0,
       "lifetime": 2.0
-    }
+    },
+    "assetFolder": "mobs/soldier"
   },
   "mob_bat": {
     "name": "mob_bat",
@@ -1446,7 +1454,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/bat"
   },
   "mob_guardian": {
     "name": "mob_guardian",
@@ -1484,7 +1493,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/guardian"
   },
   "mob_goblin": {
     "name": "mob_goblin",
@@ -1522,7 +1532,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/goblin"
   },
   "mob_skeleton": {
     "name": "mob_skeleton",
@@ -1560,7 +1571,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/skeleton"
   },
   "mob_tree": {
     "name": "mob_tree",
@@ -1598,7 +1610,8 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/tree"
   },
   "mob_rat": {
     "name": "mob_rat",
@@ -1636,6 +1649,7 @@
         },
         "dashMultiplier": 0
       }
-    }
+    },
+    "assetFolder": "mobs/rat"
   }
 }

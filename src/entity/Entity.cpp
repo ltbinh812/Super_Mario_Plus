@@ -1,11 +1,19 @@
 #include "Entity.h"
 #include "TileMap.h"
+#include "AssetManager.h"
+#include <raylib.h>
 #include <cmath>
 #include <algorithm>
 
 Entity::Entity(const CharacterBaseStats &bS, const CharacterRuntimeStats &rS,
                const CharacterWorldStats &wS)
     : baseStats(bS), runtimeStats(rS), worldStats(wS) {}
+
+Entity::~Entity() {
+    if (!currentSoundKey.empty() && AssetManager::getInstance().hasSound(currentSoundKey)) {
+        StopSound(AssetManager::getInstance().getSound(currentSoundKey));
+    }
+}
 
 Rectangle Entity::getHitbox() const {
     return { worldStats.position.x - runtimeStats.physicsBox.x/ 2.0f, worldStats.position.y - runtimeStats.physicsBox.y, runtimeStats.physicsBox.x, runtimeStats.physicsBox.y };

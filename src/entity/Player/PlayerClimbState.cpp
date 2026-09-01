@@ -45,3 +45,7 @@ void PlayerClimbState::onCrouch() {
   // KEY_DOWN or S: climb down the ladder
   player.climbDown();
 }
+
+void PlayerClimbState::onAttack() {
+  player.useSkill("Punch1");
+}

@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "ItemAtlasRegistry.h"
 #include "infrastructure/AssetManager.h"
+#include "infrastructure/AudioManager.h"
 #include "ItemFactory.h"
 #include "PlayerCommands.h"
 #include "PlayerFactory.h"
@@ -65,6 +66,7 @@ void BaseLevelState::initWorldFromLoadedMap(const std::string &p1Name,
     player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
     player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
     player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<StopSkillCommand>("Block"), InputType::RELEASED);
     player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
   }
 
@@ -93,6 +95,7 @@ void BaseLevelState::initWorldFromLoadedMap(const std::string &p1Name,
       player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
       player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
       player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<StopSkillCommand>("Block"), InputType::RELEASED);
       player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
     }
   }
@@ -134,6 +137,96 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
     std::cout << "[BaseLevelState] Map loaded successfully!\n";
     initWorldFromLoadedMap(p1Name, p2Name);
+    
+    std::string bgSound = map.GetBackgroundSound();
+    if (!bgSound.empty()) {
+        AudioManager::getInstance().PlayBackgroundSound(bgSound);
+    } else {
+        // Dừng nhạc Menu nếu map không có nhạc nền
+        AudioManager::getInstance().StopAll(); 
+    }
+
+    auto spawns = map.GetPlayerSpawns();
+    Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 150.0f};
+
+    partyInventory = std::make_shared<PartyInventory>();
+
+    player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
+    if (player1) {
+      player1->setPosition(spawn1);
+      player1->setStartPosition(spawn1);
+      player1->setCommandQueue(&spawnQueue);
+      player1->setPartyInventory(partyInventory);
+      auto& sm = SettingsManager::GetInstance();
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+      
+      player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<StopSkillCommand>("Block"), InputType::RELEASED);
+      player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+
+    if (!p2Name.empty()) {
+      player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
+      if (player2) {
+        Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 150.0f};
+        player2->setPosition(spawn2);
+        player2->setStartPosition(spawn2);
+        player2->setCommandQueue(&spawnQueue);
+        player2->setPartyInventory(partyInventory);
+        
+        auto& sm = SettingsManager::GetInstance();
+        player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+        player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+        player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+        player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+        player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+        player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+        player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+        
+        player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+        player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<StopSkillCommand>("Block"), InputType::RELEASED);
+        player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+      }
+    }
+    
+    if (player1 && player2 && isPvPMode_) {
+        player1->setPvPMode(true);
+        player2->setPvPMode(true);
+    }
+    
+    bindPlayerInputs();
+
+    ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_rat", "assets/mobs/mob_rat.json", "assets/mobs/mob_rat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_tree", "assets/mobs/mob_tree.json", "assets/mobs/mob_tree.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_skeleton", "assets/mobs/mob_skeleton.json", "assets/mobs/mob_skeleton.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_goblin", "assets/mobs/mob_goblin.json", "assets/mobs/mob_goblin.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_guardian", "assets/mobs/mob_guardian.json", "assets/mobs/mob_guardian.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_bat", "assets/mobs/mob_bat.json", "assets/mobs/mob_bat.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_soldier", "assets/mobs/mob_soldier.json", "assets/mobs/mob_soldier.png");
+    ItemAtlasRegistry::getInstance().loadAtlas("mob_slime", "assets/mobs/mob_slime.json", "assets/mobs/mob_slime.png");
+    AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
+
+    spawnEntitiesFromMap();
+    spawnCutsceneTriggersFromMap();
+    TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.", activeItems.size(), activeEntities.size());
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
   }
@@ -215,7 +308,7 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
 
 void BaseLevelState::HandleInput() {
   // In-Game Settings input check
-  if (enableIngameSettings_ && ingameSettings_) {
+  if (enableIngameSettings_ && ingameSettings_ && (!shopUI_ || !shopUI_->isOpen())) {
     Vector2 mousePos = GetMousePosition();
     bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
     bool mouseReleased = IsMouseButtonReleased(MOUSE_LEFT_BUTTON);
@@ -274,7 +367,7 @@ void BaseLevelState::HandleInput() {
 void BaseLevelState::Process() {
   float dt = GetFrameTime();
 
-  if (enableIngameSettings_ && ingameSettings_) {
+  if (enableIngameSettings_ && ingameSettings_ && (!shopUI_ || !shopUI_->isOpen())) {
     ingameSettings_->process();
   }
 
@@ -373,7 +466,7 @@ void BaseLevelState::Process() {
 }
 
 void BaseLevelState::Update(float dt) {
-  if (enableIngameSettings_ && ingameSettings_) {
+  if (enableIngameSettings_ && ingameSettings_ && (!shopUI_ || !shopUI_->isOpen())) {
     ingameSettings_->update(dt);
     if (ingameSettings_->isOpen()) {
       return; // Pause game world updates while settings is open
@@ -515,7 +608,7 @@ void BaseLevelState::Render(float alpha) const {
   }
 
   // In-Game Settings overlay (cogwheel button or full Settings Panel)
-  if (enableIngameSettings_ && ingameSettings_) {
+  if (enableIngameSettings_ && ingameSettings_ && (!shopUI_ || !shopUI_->isOpen())) {
     ingameSettings_->render(alpha);
   }
 
@@ -539,6 +632,14 @@ void BaseLevelState::TransitionToLevel(const std::string &nextLevel,
 
   if (map.LoadLDtkMap(mapFilePath, nextLevel)) {
     currentLevel = nextLevel;
+    
+    std::string bgSound = map.GetBackgroundSound();
+    if (!bgSound.empty()) {
+        AudioManager::getInstance().PlayBackgroundSound(bgSound);
+    } else {
+        AudioManager::getInstance().StopAll();
+    }
+    
     activeEntities.clear();
     activeItems.clear();
 
@@ -721,6 +822,7 @@ void BaseLevelState::bindPlayerInputs() {
       player1Handler.bindKey(KEY_U, std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
       player1Handler.bindKey(KEY_I, std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
       player1Handler.bindKey(KEY_Q, std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player1Handler.bindKey(KEY_Q, std::make_unique<StopSkillCommand>("Block"), InputType::RELEASED);
       player1Handler.bindKey(KEY_E, std::make_unique<InteractCommand>(), InputType::PRESSED);
     }
 

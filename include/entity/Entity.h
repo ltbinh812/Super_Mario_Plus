@@ -19,7 +19,12 @@ protected:
   CharacterWorldStats worldStats;
   CommandQueue* commandQueue = nullptr;
   std::string iid_; // Unique identifier from LDtk map
+  
+protected:
+  std::string currentSoundKey = "";
+  
   std::vector<std::unique_ptr<IEffect>> activeEffects;
+  std::vector<class Player*> targetPlayers; // References to players in the levelrs
   EntityFaction faction = EntityFaction::None;
 
   // Internal physics helpers
@@ -32,11 +37,13 @@ protected:
 public:
   Entity(const CharacterBaseStats &bS, const CharacterRuntimeStats &rS,
          const CharacterWorldStats &wS);
-  virtual ~Entity() = default;
+  virtual ~Entity();
   virtual void update(float dt) = 0;
   virtual void render(float alpha) = 0;
   virtual void decideAction() {}
   virtual void process() {}
+
+  void setCurrentSoundKey(const std::string& key) { currentSoundKey = key; }
 
   void addFloatingText(const std::string& text, Color color, Vector2 offset = {0, -20}, float lifetime = 1.0f);
 
@@ -107,4 +114,6 @@ public:
   
   EntityFaction getFaction() const { return faction; }
   void setFaction(EntityFaction f) { faction = f; }
+
+  virtual bool isPvPEnabled() const { return false; }
 };

@@ -5173,6 +5173,33 @@
 							"fieldInstances": [{ "__identifier": "isActive", "__type": "Bool", "__value": false, "__tile": null, "defUid": 236, "realEditorValues": [] }]
 						},
 						{
+							"__identifier": "CutsceneTrigger",
+							"__grid": [28,14],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#8B9BB4",
+							"iid": "62c2e420-96d0-11f1-b103-2393db3fae8a",
+							"width": 48,
+							"height": 32,
+							"defUid": 244,
+							"px": [448,224],
+							"fieldInstances": [
+								{ "__identifier": "dialogueId", "__type": "String", "__value": "map1_intro", "__tile": null, "defUid": 245, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["map1_intro"]
+								}] },
+								{ "__identifier": "cameraPanX", "__type": "Float", "__value": 480, "__tile": null, "defUid": 246, "realEditorValues": [{ "id": "V_Float", "params": [480] }] },
+								{ "__identifier": "cameraPanY", "__type": "Float", "__value": 220, "__tile": null, "defUid": 247, "realEditorValues": [{ "id": "V_Float", "params": [220] }] },
+								{ "__identifier": "cameraZoom", "__type": "Float", "__value": 3, "__tile": null, "defUid": 248, "realEditorValues": [{ "id": "V_Float", "params": [3] }] },
+								{ "__identifier": "panDuration", "__type": "Float", "__value": 3, "__tile": null, "defUid": 249, "realEditorValues": [{ "id": "V_Float", "params": [3] }] },
+								{ "__identifier": "oneShot", "__type": "Bool", "__value": true, "__tile": null, "defUid": 250, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] }
+							]
+						},
+						{
 							"__identifier": "Mob_mushroom",
 							"__grid": [47,20],
 							"__pivot": [0.5,1],
@@ -5688,44 +5715,16 @@
 						},
 						{
 							"__identifier": "Starting_position",
-							"__grid": [2,23],
+							"__grid": [193,24],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#FFFFFF",
-							"iid": "388aa460-96d0-11f1-b5ac-cd55c86252e6",
+							"iid": "366f6ee0-96d0-11f1-86fe-3d3d6302600c",
 							"width": 16,
 							"height": 16,
 							"defUid": 241,
-							"px": [40,384],
-							"fieldInstances": []
-						},
-						{
-							"__identifier": "Boss_franky",
-							"__grid": [9,24],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#F77622",
-							"iid": "aa652f70-96d0-11f1-b5ac-2bb059eb45ef",
-							"width": 32,
-							"height": 32,
-							"defUid": 265,
-							"px": [152,400],
-							"fieldInstances": [{ "__identifier": "cutSceneId", "__type": "String", "__value": null, "__tile": null, "defUid": 266, "realEditorValues": [] }]
-						},
-						{
-							"__identifier": "Endgame",
-							"__grid": [29,20],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "19a66dd0-96d0-11f1-8526-5d18b7aa5873",
-							"width": 16,
-							"height": 16,
-							"defUid": 271,
-							"px": [472,336],
+							"px": [3096,400],
 							"fieldInstances": []
 						}
 					]

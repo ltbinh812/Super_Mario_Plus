@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "AssetManager.h"
+#include "SettingsManager.h"
+#include "infrastructure/AudioManager.h"
 #include "raylib.h"
 #include <ctime>
 #include <cstdlib>
@@ -15,8 +17,13 @@ int main() {
     SetTargetFPS(60);
 
 
-
+    // Khởi tạo audio device
+    InitAudioDevice();
     
+    // Set initial volumes
+    ::SetMasterVolume(SettingsManager::GetInstance().GetMasterVolume());
+    AudioManager::getInstance().SetMusicVolume(SettingsManager::GetInstance().GetMusicVolume());
+    AudioManager::getInstance().SetBackgroundSoundVolume(SettingsManager::GetInstance().GetBackgroundSoundVolume());
 
     // Chạy logic game chính 
     Game game;
@@ -24,6 +31,8 @@ int main() {
 
     // Đóng cửa sổ và giải phóng bộ nhớ
     AssetManager::getInstance().clearAll();
+    AudioManager::getInstance().clearAll();
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }

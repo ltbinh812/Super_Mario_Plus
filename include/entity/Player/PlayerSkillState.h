@@ -28,6 +28,8 @@ class PlayerSkillState : public PlayerState {
     void onStopLeft() override;
     void onStopRight() override;
 
+    void forceStop() { timer = 0.0f; }
+
     const ISkill* getCurrentSkill() const { return currentSkill; }
     float getElapsedTime() const;
     bool isHitboxActive() const;

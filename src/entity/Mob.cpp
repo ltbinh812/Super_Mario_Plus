@@ -3,6 +3,8 @@
 #include "EnemyStates/EnemyHurtState.h"
 #include "EnemyStates/EnemyDieState.h"
 #include "Player.h"
+#include "SettingsManager.h"
+#include "infrastructure/AssetManager.h"
 #include <iostream>
 #include <cmath>
 #include <raymath.h>
@@ -59,6 +61,8 @@ void Mob::update(float dt) {
     } else if (currentAnim) {
         currentAnim->update(dt);
     }
+    
+    updateSound();
     
     // Debug pos periodically
     static float logT = 0.0f;
@@ -239,6 +243,47 @@ void Mob::setAnimation(const std::string& animName) {
             }
         }
     }
+    // Extract base animation name for sound key
+    std::string baseAnimName = animName;
+    std::string prefix = mobType + "_";
+    if (animName.find(prefix) == 0) {
+        baseAnimName = animName.substr(prefix.length());
+    }
+    
+    currentBaseAnimName = baseAnimName;
+
+    // Play sound based on the requested animation name
+    bool loop = true;
+    if (currentStandardAnim) {
+        loop = currentStandardAnim->isLooping();
+    } else if (currentAnim) {
+        loop = currentAnim->isLooping();
+    }
+    
+    // Reset frame-based sound tracker
+    lastSoundFrameIndex = -1;
+
+    // Explicitly override looping for certain actions that should strictly be one-shots
+    if (baseAnimName.find("attack") != std::string::npos ||
+        baseAnimName.find("hurt") != std::string::npos ||
+        baseAnimName.find("die") != std::string::npos ||
+        baseAnimName.find("special") != std::string::npos ||
+        baseAnimName.find("explosion") != std::string::npos ||
+        baseAnimName.find("intro") != std::string::npos ||
+        baseAnimName.find("idle") != std::string::npos) {
+        loop = false;
+    }
+    
+    // Disable generic looping if this animation uses frame-based sounds
+    if (soundFrames.find(baseAnimName) != soundFrames.end()) {
+        loop = false;
+        // Don't play generic sound if frame-based mapping exists
+        currentSoundKey = mobType + "_" + baseAnimName;
+        currentAnimLooping = false;
+        return;
+    }
+    
+    playSound(mobType + "_" + baseAnimName + "_sound", loop);
 }
 
 void Mob::onHitWall(bool rightWall, bool isCliff) {
@@ -249,4 +294,115 @@ void Mob::onHitWall(bool rightWall, bool isCliff) {
 
 void Mob::onLand(float floorY) {
     runtimeStats.velocity.y = 0.0f;
+}
+
+void Mob::playSound(const std::string& soundKey, bool loop) {
+    if (currentAnimLooping && !currentSoundKey.empty() && AssetManager::getInstance().hasSound(currentSoundKey)) {
+        StopSound(AssetManager::getInstance().getSound(currentSoundKey));
+    }
+    
+    currentSoundKey = soundKey;
+    currentAnimLooping = loop;
+    
+    if (AssetManager::getInstance().hasSound(currentSoundKey)) {
+        Sound s = AssetManager::getInstance().getSound(currentSoundKey);
+        
+        float volumeModifier = 0.0f;
+        Player* closest = getClosestPlayer();
+        if (closest) {
+            float dist = Vector2Distance(getPosition(), closest->getPosition());
+            if (dist <= maxHearingDistance) {
+                volumeModifier = 1.0f - (dist / maxHearingDistance);
+                if (volumeModifier < 0.0f) volumeModifier = 0.0f;
+            }
+        }
+        
+        float finalVolume = SettingsManager::GetInstance().GetEnemySFXVolume() * volumeModifier;
+        SetSoundVolume(s, finalVolume);
+        
+        if (currentSoundKey.find("idle") != std::string::npos) {
+            if (idleSoundTimer >= 300.0f) {
+                PlaySound(s);
+                idleSoundTimer = 0.0f;
+            }
+        } else {
+            PlaySound(s);
+        }
+    }
+}
+
+void Mob::updateSound() {
+    float volumeModifier = 0.0f;
+    Player* closest = getClosestPlayer();
+    if (closest) {
+        float dist = Vector2Distance(getPosition(), closest->getPosition());
+        if (dist <= maxHearingDistance) {
+            volumeModifier = 1.0f - (dist / maxHearingDistance);
+            if (volumeModifier < 0.0f) volumeModifier = 0.0f;
+        }
+    }
+    
+    float finalVolume = SettingsManager::GetInstance().GetEnemySFXVolume() * volumeModifier;
+
+    // Handle frame-based sound events
+    if (soundFrames.find(currentBaseAnimName) != soundFrames.end()) {
+        int currentFrameIndex = -1;
+        if (currentStandardAnim) {
+            currentFrameIndex = currentStandardAnim->getCurrentFrameIndex();
+        } else if (currentAnim) {
+            currentFrameIndex = currentAnim->getCurrentFrameIndex();
+        }
+        
+        if (currentFrameIndex != lastSoundFrameIndex && currentFrameIndex != -1) {
+            std::cout << "[DEBUG-MOB] Frame-based Sound Triggered - Anim: " << currentBaseAnimName 
+                      << ", Frame: " << currentFrameIndex << std::endl;
+            
+            lastSoundFrameIndex = currentFrameIndex;
+            auto& framesMap = soundFrames[currentBaseAnimName];
+            if (framesMap.find(currentFrameIndex) != framesMap.end()) {
+                std::string soundSuffix = framesMap[currentFrameIndex];
+                std::string soundKey = mobType + "_" + soundSuffix + "_sound";
+                std::cout << "[DEBUG-MOB] Try playing: " << soundKey << std::endl;
+                
+                if (AssetManager::getInstance().hasSound(soundKey)) {
+                    std::cout << "[DEBUG-MOB] Sound " << soundKey << " IS loaded! Playing..." << std::endl;
+                    Sound s = AssetManager::getInstance().getSound(soundKey);
+                    SetSoundVolume(s, finalVolume);
+                    PlaySound(s);
+                } else {
+                    std::cout << "[ERROR-MOB] Sound " << soundKey << " is NOT loaded in AssetManager!" << std::endl;
+                }
+            }
+        }
+        return; // Skip generic logic if this animation uses frame-based sounds
+    }
+
+    idleSoundTimer += GetFrameTime();
+
+    // Handle generic sounds
+    if (!currentSoundKey.empty() && AssetManager::getInstance().hasSound(currentSoundKey)) {
+        Sound s = AssetManager::getInstance().getSound(currentSoundKey);
+        
+        if (currentSoundKey.find("idle") != std::string::npos) {
+            if (idleSoundTimer >= 300.0f) {
+                idleSoundTimer = 0.0f;
+                SetSoundVolume(s, finalVolume);
+                PlaySound(s);
+            } else if (IsSoundPlaying(s)) {
+                SetSoundVolume(s, finalVolume);
+            }
+        } else {
+            if (currentAnimLooping) {
+                if (!IsSoundPlaying(s)) {
+                    SetSoundVolume(s, finalVolume);
+                    PlaySound(s);
+                } else {
+                    SetSoundVolume(s, finalVolume);
+                }
+            } else if (IsSoundPlaying(s)) {
+                // Update volume dynamically for one-shot sounds while they are playing
+                SetSoundVolume(s, finalVolume);
+            }
+        }
+    }
 }

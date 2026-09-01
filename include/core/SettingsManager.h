@@ -44,7 +44,8 @@ private:
     std::map<std::string, int> p2DefaultKeys_;
     
     float masterVolume_ = 1.0f;
-    float bgmVolume_ = 1.0f;
+    float musicVolume_ = 1.0f;
+    float backgroundSoundVolume_ = 1.0f;
     float playerSfxVolume_ = 1.0f;
     float enemySfxVolume_ = 1.0f;
     
@@ -56,10 +57,17 @@ public:
     void LoadFromFile(const std::string& filepath = "saves/settings.json");
 
     float GetMasterVolume() const { return masterVolume_; }
-    void SetMasterVolume(float v) { masterVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); SaveToFile(); }
+    void SetMasterVolume(float v) { 
+        masterVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); 
+        ::SetMasterVolume(masterVolume_);
+        SaveToFile(); 
+    }
     
-    float GetBGMVolume() const { return bgmVolume_; }
-    void SetBGMVolume(float v) { bgmVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); SaveToFile(); }
+    float GetMusicVolume() const { return musicVolume_; }
+    void SetMusicVolume(float v);
+    
+    float GetBackgroundSoundVolume() const { return backgroundSoundVolume_; }
+    void SetBackgroundSoundVolume(float v);
     
     float GetPlayerSFXVolume() const { return playerSfxVolume_; }
     void SetPlayerSFXVolume(float v) { playerSfxVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); SaveToFile(); }

@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "AssetManager.h"
+#include "SettingsManager.h"
 #include "ISkill.h"
 #include "PlayerCommands.h"
 #include "SpawnCommand.h"
@@ -37,6 +38,7 @@ void Player::update(float dt) {
   if (worldStats.animation) {
     worldStats.animation->update(dt);
   }
+  updateSound();
   buffManager_.update(dt, *this);
   updateFloatingTexts(dt);
 }
@@ -201,6 +203,15 @@ void Player::useSkill(const std::string &skillname) {
   }
 }
 
+void Player::stopSkill(const std::string &skillname) {
+  if (currentState == &skillState) {
+    const ISkill *current = skillState.getCurrentSkill();
+    if (current && current == findSkill(skillname)) {
+        skillState.forceStop();
+    }
+  }
+}
+
 void Player::addSkill(const std::string &name, std::unique_ptr<ISkill> skill) {
   skillList[name] = std::move(skill);
 }
@@ -272,13 +283,120 @@ void Player::onClimb() {
 // MOVEMENT HELPERS (called by States — Tell, Don't Ask)
 // =============================================================================
 
+void Player::playSound(const std::string& soundKey, bool loop) {
+    if (currentAnimLooping && !currentSoundKey.empty() && AssetManager::getInstance().hasSound(currentSoundKey)) {
+        StopSound(AssetManager::getInstance().getSound(currentSoundKey));
+    }
+    
+    currentSoundKey = soundKey;
+    currentAnimLooping = loop;
+    
+    if (AssetManager::getInstance().hasSound(currentSoundKey)) {
+        Sound s = AssetManager::getInstance().getSound(currentSoundKey);
+        SetSoundVolume(s, SettingsManager::GetInstance().GetPlayerSFXVolume());
+        
+        if (currentSoundKey.find("idle") != std::string::npos) {
+            if (idleSoundTimer >= 300.0f) {
+                PlaySound(s);
+                idleSoundTimer = 0.0f;
+            }
+        } else {
+            PlaySound(s);
+        }
+    }
+}
+
+void Player::updateSound() {
+    float finalVolume = SettingsManager::GetInstance().GetPlayerSFXVolume();
+
+    // Handle frame-based sound events
+    if (soundFrames.find(currentBaseAnimName) != soundFrames.end()) {
+        int currentFrameIndex = -1;
+        if (worldStats.animation) {
+            currentFrameIndex = worldStats.animation->getCurrentFrameIndex();
+        }
+        
+        if (currentFrameIndex != lastSoundFrameIndex && currentFrameIndex != -1) {
+            std::cout << "[DEBUG] Frame-based Sound Triggered - Anim: " << currentBaseAnimName 
+                      << ", Frame: " << currentFrameIndex << std::endl;
+            
+            lastSoundFrameIndex = currentFrameIndex;
+            auto& framesMap = soundFrames[currentBaseAnimName];
+            if (framesMap.find(currentFrameIndex) != framesMap.end()) {
+                std::string soundSuffix = framesMap[currentFrameIndex];
+                std::string soundKey = baseStats.name + "_" + soundSuffix + "_sound";
+                
+                std::cout << "[DEBUG] Try playing: " << soundKey << std::endl;
+                
+                if (AssetManager::getInstance().hasSound(soundKey)) {
+                    std::cout << "[DEBUG] Sound " << soundKey << " IS loaded! Playing..." << std::endl;
+                    Sound s = AssetManager::getInstance().getSound(soundKey);
+                    SetSoundVolume(s, finalVolume);
+                    PlaySound(s);
+                } else {
+                    std::cout << "[ERROR] Sound " << soundKey << " is NOT loaded in AssetManager!" << std::endl;
+                }
+            }
+        }
+        return; // Skip generic logic if this animation uses frame-based sounds
+    }
+
+
+    idleSoundTimer += GetFrameTime();
+
+    if (!currentSoundKey.empty() && AssetManager::getInstance().hasSound(currentSoundKey)) {
+        Sound s = AssetManager::getInstance().getSound(currentSoundKey);
+        
+        if (currentSoundKey.find("idle") != std::string::npos) {
+            if (idleSoundTimer >= 300.0f) {
+                idleSoundTimer = 0.0f;
+                SetSoundVolume(s, finalVolume);
+                PlaySound(s);
+            } else if (IsSoundPlaying(s)) {
+                SetSoundVolume(s, finalVolume);
+            }
+        } else {
+            if (currentAnimLooping) {
+                if (!IsSoundPlaying(s)) {
+                    SetSoundVolume(s, finalVolume);
+                    PlaySound(s);
+                } else {
+                    SetSoundVolume(s, finalVolume);
+                }
+            } else if (IsSoundPlaying(s)) {
+                // Update volume dynamically for one-shot sounds while they are playing
+                SetSoundVolume(s, finalVolume);
+            }
+        }
+    }
+}
+
 void Player::playAnimation(const std::string &name, bool loop) {
-// std::cout << name << '\n';
   auto it = animationList.find(name);
   if (it != animationList.end()) {
     worldStats.animation = &it->second;
     worldStats.animation->resetAnimation();
     worldStats.animation->setLoop(loop);
+    
+    currentBaseAnimName = name;
+    lastSoundFrameIndex = -1;
+    
+    bool soundLoop = loop;
+    if (name.find("attack") != std::string::npos ||
+        name.find("hurt") != std::string::npos ||
+        name.find("die") != std::string::npos ||
+        name.find("special") != std::string::npos ||
+        name.find("idle") != std::string::npos) {
+        soundLoop = false;
+    }
+    
+    if (soundFrames.find(name) != soundFrames.end()) {
+        currentSoundKey = baseStats.name + "_" + name;
+        currentAnimLooping = false;
+        return;
+    }
+    
+    playSound(baseStats.name + "_" + name + "_sound", soundLoop);
   }
 }
 

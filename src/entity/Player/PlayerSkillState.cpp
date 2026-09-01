@@ -64,7 +64,11 @@ void PlayerSkillState::update(float dt) {
             currentSkill = next;
             onEnter();  // Re-enter with the new skill
         } else {
-            if (!player.getRuntimeStats().isGrounded) {
+            if (player.getRuntimeStats().currentLiquid != CollisionType::None) {
+                player.requestState(player.swimState);
+            } else if (player.getRuntimeStats().isOverlappingLadder) {
+                player.requestState(player.climbState);
+            } else if (!player.getRuntimeStats().isGrounded) {
                 if (player.getRuntimeStats().velocity.y > 0) {
                     player.requestState(player.fallState);
                 } else {

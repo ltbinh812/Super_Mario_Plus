@@ -1,4 +1,5 @@
 #include "SettingsManager.h"
+#include "infrastructure/AudioManager.h"
 #include <unordered_map>
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,8 @@ void SettingsManager::LoadDefaults() {
     ResetP1ToDefault();
     ResetP2ToDefault();
     masterVolume_ = 1.0f;
-    bgmVolume_ = 1.0f;
+    musicVolume_ = 1.0f;
+    backgroundSoundVolume_ = 1.0f;
     playerSfxVolume_ = 1.0f;
     enemySfxVolume_ = 1.0f;
     isCreativeMode_ = false;
@@ -142,7 +144,8 @@ void SettingsManager::SaveToFile(const std::string& filepath) {
     j["p1Keys"] = p1Keys_;
     j["p2Keys"] = p2Keys_;
     j["masterVolume"] = masterVolume_;
-    j["bgmVolume"] = bgmVolume_;
+    j["musicVolume"] = musicVolume_;
+    j["backgroundSoundVolume"] = backgroundSoundVolume_;
     j["playerSfxVolume"] = playerSfxVolume_;
     j["enemySfxVolume"] = enemySfxVolume_;
     j["creativeMode"] = isCreativeMode_;
@@ -171,7 +174,15 @@ void SettingsManager::LoadFromFile(const std::string& filepath) {
                 }
             }
             if (j.contains("masterVolume")) masterVolume_ = j["masterVolume"];
-            if (j.contains("bgmVolume")) bgmVolume_ = j["bgmVolume"];
+            if (j.contains("musicVolume")) musicVolume_ = j["musicVolume"];
+            if (j.contains("backgroundSoundVolume")) backgroundSoundVolume_ = j["backgroundSoundVolume"];
+            
+            // Hỗ trợ đọc lại file cũ chưa tách Volume
+            if (j.contains("bgmVolume") && !j.contains("musicVolume")) {
+                musicVolume_ = j["bgmVolume"];
+                backgroundSoundVolume_ = j["bgmVolume"];
+            }
+            
             if (j.contains("playerSfxVolume")) playerSfxVolume_ = j["playerSfxVolume"];
             if (j.contains("enemySfxVolume")) enemySfxVolume_ = j["enemySfxVolume"];
             if (j.contains("creativeMode")) isCreativeMode_ = j["creativeMode"];
@@ -180,4 +191,16 @@ void SettingsManager::LoadFromFile(const std::string& filepath) {
         }
         file.close();
     }
+}
+
+void SettingsManager::SetMusicVolume(float v) { 
+    musicVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); 
+    AudioManager::getInstance().SetMusicVolume(musicVolume_);
+    SaveToFile(); 
+}
+
+void SettingsManager::SetBackgroundSoundVolume(float v) { 
+    backgroundSoundVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); 
+    AudioManager::getInstance().SetBackgroundSoundVolume(backgroundSoundVolume_);
+    SaveToFile(); 
 }

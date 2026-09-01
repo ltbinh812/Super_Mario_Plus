@@ -1,0 +1,58 @@
+{
+    "inventory": {
+        "coins": 0,
+        "keys": 0
+    },
+    "levelData": {
+        "levelId": "",
+        "mapFilePath": "assets/maps/map01/world01.ldtk",
+        "persistedDeadEntities": [],
+        "persistedItemStates": {
+            "10017830-96d0-11f1-af2a-3b6a1e67a2fb": 0,
+            "118224c0-96d0-11f1-af2a-d50e2662fb1a": 0,
+            "17a24e30-96d0-11f1-b103-1b4d8f0b75af": 0,
+            "19265200-96d0-11f1-af2a-0d7933dfa021": 0,
+            "3360d060-96d0-11f1-b103-f14c503b541d": 0,
+            "4472ee60-96d0-11f1-b103-fd9e7b59ef98": 0,
+            "68492b10-96d0-11f1-9f54-4dc544e90a5c": 0,
+            "6fcd7fa0-96d0-11f1-9220-abf0b8a2bdb9": 0,
+            "88a07aa0-96d0-11f1-9220-b96eca348b0f": 0,
+            "96306070-96d0-11f1-b103-7d9e340d1de7": 0,
+            "9acea0b0-96d0-11f1-b103-ab028cd08d6d": 0,
+            "9d9c1cf0-96d0-11f1-9220-fdb489cd86df": 0,
+            "a14375b0-96d0-11f1-b103-11c62d0b4bcb": 0,
+            "a6ef6ee0-96d0-11f1-9220-634fe13b26f8": 0,
+            "d1a641e0-96d0-11f1-bb1e-6d126877973e": 0,
+            "d33715e0-96d0-11f1-822e-db336cf5970f": 1,
+            "eaa85410-96d0-11f1-b103-bd5942b2ab05": 0
+        },
+        "worldId": "world01",
+        "worldIndex": 1
+    },
+    "meta": {
+        "characterName": "Goku",
+        "coins": 0,
+        "health": 290,
+        "levelId": "",
+        "maxHealth": 300,
+        "playTimeSeconds": 15.63326644897461,
+        "savedAtText": "2026-09-01 12:13",
+        "savedAtUnix": 1788239616,
+        "schemaVersion": 2,
+        "versionIndex": 4,
+        "worldIndex": 1
+    },
+    "p1": {
+        "breath": 100,
+        "characterName": "Goku",
+        "exists": true,
+        "health": 290,
+        "isFacingRight": true,
+        "mana": 95,
+        "maxHealth": 300,
+        "maxMana": 100,
+        "posX": 1650.37890625,
+        "posY": 571.4566650390625,
+        "storedItemSlot": ""
+    }
+}

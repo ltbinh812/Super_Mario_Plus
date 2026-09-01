@@ -16,7 +16,7 @@ bool CustomMapSerializer::isValidSlot(int slot) {
 }
 
 std::string CustomMapSerializer::slotPath(int slot) {
-    return "saves/custom_map_" + std::to_string(slot) + ".json";
+    return "saves/custom_map/custom_map_" + std::to_string(slot) + ".json";
 }
 
 bool CustomMapSerializer::slotExists(int slot) {
@@ -67,7 +67,7 @@ bool CustomMapSerializer::save(const CustomMapData& data, int slot) {
     }
 
     try {
-        fs::create_directories("saves");
+        fs::create_directories("saves/custom_map");
 
         json j;
         j["version"]  = data.version;

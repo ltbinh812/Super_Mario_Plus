@@ -46,10 +46,13 @@ public:
   void restoreFromSaveData(const PlayerSaveData &data);
 
   // Skill system
-  void useSkill(const std::string &skillname);
+  void useSkill(const std::string& skillName);
+  void stopSkill(const std::string& skillName);
   void addSkill(const std::string &name, std::unique_ptr<ISkill> skill);
   ISkill* findSkill(const std::string& skillName);
   bool hasEnoughMana(float cost) const;
+
+  bool isPvPEnabled() const override { return isPvPMode_; }
 
   // --- Input action dispatchers (called by Command Pattern) ---
   void onMoveRight();
@@ -134,4 +137,17 @@ private:
   std::shared_ptr<PartyInventory> partyInventory_;
   BuffManager buffManager_;
   bool isPvPMode_ = false;
+
+  std::string currentBaseAnimName = "";
+  bool currentAnimLooping = false;
+  float idleSoundTimer = 0.0f;
+  
+  std::unordered_map<std::string, std::unordered_map<int, std::string>> soundFrames;
+  int lastSoundFrameIndex = -1;
+
+  void playSound(const std::string& soundKey, bool loop);
+  void updateSound();
+  
+public:
+  void setSoundFrames(std::unordered_map<std::string, std::unordered_map<int, std::string>> frames) { soundFrames = std::move(frames); }
 };

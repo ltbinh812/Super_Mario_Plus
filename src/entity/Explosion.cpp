@@ -15,6 +15,7 @@ static CharacterRuntimeStats getExplosionRuntimeStats(const ExplosionConfig& con
     CharacterRuntimeStats rs;
     rs.velocity = {0.0f, 0.0f};
     rs.physicsBox = {config.hitboxW, config.hitboxH};
+    rs.collisionMask = 0; // Explosions should not collide with the map geometry
     return rs;
 }
 
@@ -121,6 +122,9 @@ Hitbox Explosion::getActiveHitbox() {
     Hitbox hb = { rect, attackPower, 0, this, spawner, onHitEffect };
     if (faction == EntityFaction::Player) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+        if (spawner && spawner->isPvPEnabled()) {
+            hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+        }
     } else if (faction == EntityFaction::Enemy) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
     }

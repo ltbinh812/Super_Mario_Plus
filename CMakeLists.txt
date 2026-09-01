@@ -157,6 +157,7 @@ set(SOURCES
     src/combatsystem/BruteForceDetector.cpp
     src/combatsystem/CombatSystem.cpp
     src/infrastructure/AssetManager.cpp
+    src/infrastructure/AudioManager.cpp
     src/environment/TileMap.cpp
     src/environment/MapCamera.cpp
     src/states/BaseLevelState.cpp

@@ -151,6 +151,9 @@ Hitbox Fireball::getActiveHitbox() {
     Hitbox hb = { rect, attackPower, 0, this, spawner };
     if (faction == EntityFaction::Player) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+        if (spawner && spawner->isPvPEnabled()) {
+            hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+        }
     } else if (faction == EntityFaction::Enemy) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
     }

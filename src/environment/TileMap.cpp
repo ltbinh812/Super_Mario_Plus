@@ -230,6 +230,20 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
     currentLevelName = actualLevelName;
     std::cout << "[LDtk] Da chon Level: " << actualLevelName << "\n";
 
+    // Trích xuất custom field bg_sound (nếu có)
+    bgSound = "";
+    if (targetLevel.contains("fieldInstances") && !targetLevel["fieldInstances"].is_null()) {
+        for (const auto& field : targetLevel["fieldInstances"]) {
+            if (field.contains("__identifier") && field["__identifier"] == "bg_sound") {
+                if (field.contains("__value") && !field["__value"].is_null()) {
+                    bgSound = field["__value"];
+                    // If it doesn't start with assets, append it (depends on how users type it, but we assume they type the full path like assets/audio/map_bg.mp3)
+                }
+                break;
+            }
+        }
+    }
+
     if (hasBackgroundTexture) {
         UnloadTexture(backgroundTexture);
         hasBackgroundTexture = false;

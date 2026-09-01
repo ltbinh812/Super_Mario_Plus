@@ -64,6 +64,7 @@ private:
     std::vector<Vector2> playerSpawns;
     std::vector<LDtkEntityData> entityData_;
     std::string currentLevelName;
+    std::string bgSound; // [NEW] Đường dẫn nhạc nền Map
 
 
 
@@ -84,6 +85,7 @@ public:
     std::vector<Vector2> GetPlayerSpawns() const;
     std::vector<LDtkEntityData> GetEntityData() const;
     std::string GetCurrentLevelName() const { return currentLevelName; }
+    std::string GetBackgroundSound() const { return bgSound; }
 
 
     float GetWorldScale() const { return (tileSize > 0 && tileSize < 32) ? (32.0f / (float)tileSize) : 1.0f; }

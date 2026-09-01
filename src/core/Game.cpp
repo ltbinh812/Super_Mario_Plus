@@ -2,6 +2,7 @@
 #include "AssetManager.h"
 #include "MainMenuState.h"
 #include "LoadingState.h"
+#include "infrastructure/AudioManager.h"
 
 Game::Game() {
     auto factory = []() { return std::make_unique<MainMenuState>(); };
@@ -17,6 +18,7 @@ void Game::runGame() {
 
         stateManager.HandleInput();
         stateManager.Process();
+        AudioManager::getInstance().Update();
 
         if (stateManager.isEmpty()) {
             break;

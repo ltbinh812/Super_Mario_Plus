@@ -128,8 +128,12 @@ SuperMarioPlus/
 │   ├── core/
 │   │   ├── CameraManager.cpp
 │   │   ├── Game.cpp
+│   │   ├── SettingsManager.cpp
 │   │   ├── StateManager.cpp
 │   │   └── main.cpp
+│   ├── infrastructure/
+│   │   ├── AssetManager.cpp
+│   │   └── AudioManager.cpp
 │   ├── cutscene/
 │   │   ├── CutsceneManager.cpp
 │   │   └── CutsceneTrigger.cpp
@@ -368,13 +372,15 @@ Luồng **không** đi ngược ra file `.ldtk`. Hàm `CustomMapSerializer::expo
 - `World01State`..`World06State` — thêm ctor `explicit World0XState(const GameSaveData&)`.
 - `ItemState` tách khỏi `BaseItem.h` ra `include/entity/Item/ItemState.h` để tầng save không phải kéo theo `Entity.h`/`raylib.h`.
 
-#### Core
+#### Core & Infrastructure
 - **`main.cpp`**: Entry point. Mở cửa sổ, thiết lập Raylib và chạy vòng lặp chính.
 - **`Game`**: Lớp chính quản lý vòng lặp game (Game Loop) với cơ chế Fixed-Timestep (tích lũy `accumulator`) giúp logic vật lý chạy ổn định trên mọi FPS.
 - **`StateManager`**: Cốt lõi của State Pattern kết hợp Command Pattern (PushCommand), quản lý các state hiện tại bằng stack (Ngăn xếp).
 - **`Command`**: Định nghĩa cấu trúc lệnh (Push, Pop, Change, Clear) để chuyển đổi State an toàn mà không bị tight-coupling.
 - **`CameraManager`**: Theo dõi Player, tính toán offset để vẽ màn hình cuộn.
 - **`Entity`**: Base class cho mọi vật thể trong game (tọa độ, tốc độ).
+- **`AudioManager`**: Lớp Singleton (nằm trong `infrastructure`) chịu trách nhiệm nạp, phát và quản lý luồng âm thanh Music và Background Sound, cập nhật độc lập qua `Update()`. Được dùng bởi `Game`, `MainMenuState`, `BaseLevelState`. Cần có `SettingsManager` bổ trợ để lấy giá trị âm lượng.
+- **`SettingsManager`**: Lớp Singleton quản lý cài đặt âm lượng, phím tắt (đọc/ghi file JSON), chia riêng `MusicVolume` và `BackgroundSoundVolume`.
 
 #### States
 - **`GameState`**: Abstract class quy định các hàm `HandleInput()`, `Update(float dt)`, `Render(float alpha) const` cho màn chơi, và hỗ trợ gửi `Command` ngược lên `StateManager`.

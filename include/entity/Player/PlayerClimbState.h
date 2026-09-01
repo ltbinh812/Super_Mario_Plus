@@ -12,7 +12,8 @@ public:
     void onMoveRight() override;
     void onJump() override;
     void onClimb() override;
-    void onCrouch() override; // Leo xuống
+    void onCrouch() override;
+    void onAttack() override; // Leo xuống
 
     void onStopLeft() override;
     void onStopRight() override;
