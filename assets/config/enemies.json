@@ -127,48 +127,48 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 14,
         "box": {
-          "offsetX": 20.0,
-          "offsetY": -30.0,
-          "w": 50.0,
-          "h": 60.0
+          "offsetX": -10.0,
+          "offsetY": -80.0,
+          "w": 60.0,
+          "h": 80.0
         },
-        "dashMultiplier": 0
+        "dashMultiplier": 2.0
       },
       "attack_2": {
         "damage": 25,
         "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 30.0,
-          "offsetY": -30.0,
+          "offsetX": -20.0,
+          "offsetY": -80.0,
           "w": 60.0,
           "h": 70.0
         },
-        "dashMultiplier": 0
+        "dashMultiplier": 20.0
       },
       "attack_3": {
         "damage": 30,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 30,
         "box": {
-          "offsetX": 10.0,
-          "offsetY": -30.0,
-          "w": 40.0,
-          "h": 50.0
+          "offsetX": 0.0,
+          "offsetY": -80.0,
+          "w": 50.0,
+          "h": 80.0
         },
-        "dashMultiplier": 0
+        "dashMultiplier": 2.0
       },
       "attack_4": {
         "damage": 35,
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 25.0,
-          "offsetY": -30.0,
-          "w": 55.0,
-          "h": 65.0
+          "offsetX": -50.0,
+          "offsetY": -60.0,
+          "w": 100.0,
+          "h": 60.0
         },
-        "dashMultiplier": 0
+        "dashMultiplier": 2.0
       },
       "special_attack": {
         "damage": 50,
@@ -199,8 +199,8 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 4,
         "box": {
-          "offsetX": 20.0,
-          "offsetY": -30.0,
+          "offsetX": 10.0,
+          "offsetY": -15.0,
           "w": 64.0,
           "h": 64.0
         },
@@ -212,35 +212,41 @@
       "textureName": "vfx_2",
       "frameNum": 7,
       "frameTime": 0.1,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
+      "hitboxW": 64.0,
+      "hitboxH": 64.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": -5.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_1",
       "frameNum": 10,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 245.0,
+      "offsetX": 10.0,
+      "offsetY": 0.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": 0.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_3",
       "frameNum": 8,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
-      "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "hitboxW": 128.0,
+      "hitboxH": 64.0,
+      "offsetX": 80.0,
+      "offsetY": 0.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": 10.0,
+      "hitboxOffsetY": -30.0
     }
   },
   "boss_franky": {
@@ -418,35 +424,41 @@
       "textureName": "vfx_2",
       "frameNum": 5,
       "frameTime": 0.1,
-      "hitboxW": 32.0,
+      "hitboxW": 64.0,
       "hitboxH": 32.0,
-      "offsetX": 50.0,
+      "offsetX": 20.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": -10.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 164.0,
+      "offsetX": 20.0,
+      "offsetY": 0.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": -40.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 13,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
-      "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "hitboxW": 100.0,
+      "hitboxH": 64.0,
+      "offsetX": 60.0,
+      "offsetY": 0.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": 0.0
     }
   },
   "boss_itachi": {
@@ -577,7 +589,7 @@
         "box": {
           "offsetX": 5.0,
           "offsetY": -65.0,
-          "w": 30.0,
+          "w": 45.0,
           "h": 20.0
         },
         "dashMultiplier": 0
@@ -624,35 +636,41 @@
       "textureName": "vfx_2",
       "frameNum": 3,
       "frameTime": 0.1,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
+      "hitboxW": 64.0,
+      "hitboxH": 64.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": -10.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 56,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
+      "hitboxW": 180.0,
+      "hitboxH": 180.0,
       "offsetX": 50.0,
-      "offsetY": -30.0,
+      "offsetY": 0.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": -10.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 9,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
-      "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "hitboxW": 100.0,
+      "hitboxH": 64.0,
+      "offsetX": 36.0,
+      "offsetY": 0.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": 10.0,
+      "hitboxOffsetY": -30.0
     }
   },
   "boss_sasukeboss": {
@@ -766,7 +784,7 @@
       },
       "attack_3": {
         "damage": 30,
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 9,
         "box": {
           "offsetX": 0.0,
@@ -774,7 +792,7 @@
           "w": 20.0,
           "h": 50.0
         },
-        "dashMultiplier": 0
+        "dashMultiplier": 10
       },
       "attack_4": {
         "damage": 35,
@@ -830,35 +848,41 @@
       "textureName": "vfx_2",
       "frameNum": 6,
       "frameTime": 0.1,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 64.0,
+      "offsetX": 0.0,
+      "offsetY": 0.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": 0.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 15,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 32.0,
+      "offsetX": 10.0,
+      "offsetY": -20.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 10.0,
+      "hitboxOffsetY": -20.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
+      "hitboxW": 80.0,
+      "hitboxH": 64.0,
       "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "offsetY": -10.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": 10.0,
+      "hitboxOffsetY": 0.0
     }
   },
   "boss_shank": {
@@ -1036,35 +1060,41 @@
       "textureName": "vfx_2",
       "frameNum": 5,
       "frameTime": 0.1,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 64.0,
+      "offsetX": 20.0,
+      "offsetY": 0.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": -20.0
     },
     "special_ball": {
       "damage": 45,
       "textureName": "vfx_3",
       "frameNum": 4,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
+      "hitboxW": 64.0,
+      "hitboxH": 64.0,
       "offsetX": 50.0,
       "offsetY": -30.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": -30.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_1",
       "frameNum": 7,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
+      "hitboxW": 100.0,
+      "hitboxH": 64.0,
       "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "offsetY": 0.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": 0.0,
+      "hitboxOffsetY": 0.0
     }
   },
   "boss_narutoboss": {
@@ -1242,12 +1272,14 @@
       "textureName": "vfx_1",
       "frameNum": 4,
       "frameTime": 0.1,
-      "hitboxW": 48.0,
-      "hitboxH": 48.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "hitboxW": 64.0,
+      "hitboxH": 80.0,
+      "offsetX": 20.0,
+      "offsetY": -20.0,
       "speed": 500.0,
-      "lifetime": 4.0
+      "lifetime": 4.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": -10.0
     },
     "fireball": {
       "damage": 30,
@@ -1256,21 +1288,25 @@
       "frameTime": 0.1,
       "hitboxW": 32.0,
       "hitboxH": 32.0,
-      "offsetX": 50.0,
-      "offsetY": -30.0,
+      "offsetX": 0.0,
+      "offsetY": -20.0,
       "speed": 400.0,
-      "lifetime": 3.0
+      "lifetime": 3.0,
+      "hitboxOffsetX": 20.0,
+      "hitboxOffsetY": -20.0
     },
     "explosion": {
       "damage": 60,
       "textureName": "vfx_2",
       "frameNum": 6,
       "frameTime": 0.05,
-      "hitboxW": 150.0,
-      "hitboxH": 150.0,
-      "offsetX": 0.0,
-      "offsetY": -50.0,
-      "lifetime": 0.6
+      "hitboxW": 164.0,
+      "hitboxH": 64.0,
+      "offsetX": 130.0,
+      "offsetY": 0.0,
+      "lifetime": 0.6,
+      "hitboxOffsetX": -40.0,
+      "hitboxOffsetY": 0.0
     }
   },
   "mob_slime": {

@@ -307,6 +307,60 @@ offsetX = (screenW - 2560*factor) / 2             // canh giữa phần dư
 - **Hoạt ảnh người thắng:** tái dùng khuôn mẫu island của `CharacterSelectionState` — đọc `characters.json`, nạp `idle` + `attack_1` qua `AssetManager` (Flyweight, không tốn thêm VRAM), idle lặp vô hạn, cứ 3 giây có 50% cơ hội chen một lượt kỹ năng. Neo **giữa-đáy** tại `(0.50, 0.672)` của khung hình = mặt bục podium, cao `26%` chiều cao khung hình, rộng suy ra theo tỉ lệ ảnh nên không bóp méo. Vì ảnh nền được kéo giãn phủ kín màn hình, toạ độ theo tỉ lệ này đúng ở mọi khung hình.
 - **Điều kiện thắng PvP (mới):** trước đây PvP **không có điều kiện kết thúc nào** — `EndgameState` chỉ được tạo từ cổng `EndgameAsset` của luồng 1-Player, còn `processDeathCondition()` chỉ kiểm tra player1. Nay `BaseLevelState::processDeathCondition()` có nhánh PvP riêng: ai gục trước thì bên kia thắng, không hồi sinh; nếu rơi ra ngoài map mà máu còn thì `takeDamage(9999)` để animation chết chạy; đợi `pvpEndTimer_` = 1.5s rồi mới chuyển sang màn trao giải kèm tên người thắng. Hai bên cùng gục trong một frame → hoà, không hiện nhân vật nào.
 
+#### Custom Map — đợt sửa lỗi & tái cấu trúc
+
+**Quy trình dữ liệu (đọc kỹ trước khi sửa):**
+```
+file .ldtk gốc --(offline, 1 lần)--> EditorBlockRegistry + extracted_rules.json
+người chơi dựng map trong editor    --> CustomMapData (RAM)
+Save                                --> saves/custom_map_N.json
+Load                                --> CustomMapData --> TileMap::LoadCustomMap
+```
+Luồng **không** đi ngược ra file `.ldtk`. Hàm `CustomMapSerializer::exportToLDtk` (513 dòng, 76% file) đã bị **gỡ bỏ**: nó ghi ra `saves/custom_map_N.ldtk` mà không một dòng code nào trong dự án nạp lại, và bản thân nó sinh sai dữ liệu (map 20 tile xuất ra 887 tile, 74 ô nằm ngoài biên level, mỗi ô viền bị lặp trên 7 tileset khác nhau, thứ tự layer ngẫu nhiên theo `unordered_map`). Đừng thêm lại trừ khi thật sự có bên tiêu thụ.
+
+**File mới:**
+
+| File | Vai trò |
+|---|---|
+| `include/editor/CustomMapValidator.h` + `.cpp` | Luật hợp lệ của map, tách khỏi `MapEditorState`. Hợp lệ ⟺ (1 PlayerSpawn + đúng 1 `Boss_*`) hoặc (2 PlayerSpawn + 0 boss). Trả kèm `PlayMode` để suy ra số người chơi và cờ PvP từ chính dữ liệu map |
+| `include/editor/IconFit.h` | Đặt vùng ảnh vào ô đích giữ nguyên tỉ lệ. Gom **5 bản chép** của cùng một đoạn toán (2 nhánh ghost, `TileMap`, `BlockVariantPanel`, `EntityPalette`) |
+| `include/editor/EditorToolType.h`, `SaveLoadMode.h` | Tách enum khỏi header của class theo quy tắc 1 khai báo / 1 file |
+
+**Lỗi đã sửa (nhóm gây sập / mất dữ liệu):**
+
+| Chỗ | Lỗi |
+|---|---|
+| `TileMap::LoadCustomMap` | `reg.getCollision()` gọi không kiểm tra `has()` → `std::out_of_range` không ai bắt → tắt game khi nạp map có blockId đã đổi tên |
+| `TileMap::LoadLDtkMap` | `playerSpawns.clear()` chạy **trước** khi kiểm tra mở được file → nạp hỏng là xoá sạch dữ liệu map đang chạy |
+| `BaseLevelState::processDeathCondition` | Chết trong custom map: hoặc văng sang world khác (checkpoint là singleton, `clearCheckpoint()` chưa từng được gọi), hoặc hồi sinh ở toạ độ cứng `{180,208}` giữa hư không. Nay có nhánh riêng: hồi sinh tại spawn của chính map |
+| `EditorMapResizer` | Không có `MAX_SIZE` → một cú kéo ở zoom thấp phóng map lên hàng nghìn ô → treo. Nay kẹp `[MIN_SIZE, MAX_SIZE=500]` |
+| `AutoTiler::loadRules` | `try` chỉ bọc `file >> j`; `stoi`/`get<int>()`/`operator[]` const nằm ngoài → file rules hỏng là tắt game **lúc vào editor** |
+| `CustomMapSerializer::load` | `operator[]` const trên phần tử mảng: với nlohmann 3.11.3 + NDEBUG là deref `end()` (UB), không phải exception. Nay dùng `.value()` toàn bộ + kẹp `width/height/tileSize` + lọc key ngoài biên |
+| `CustomMapSerializer::save` | Không kiểm tra `ofstream`, luôn `return true`. Nay ghi file tạm rồi `rename` (atomic) |
+
+**Lỗi đã sửa (nhóm chức năng không dùng được):**
+
+| Chỗ | Lỗi |
+|---|---|
+| `EditorBottomPanel` | Bố cục dùng pixel tuyệt đối, phần cố định 1168px → ở cửa sổ 1280 vùng chọn block chỉ còn 112px (icon rộng 128px), ở ≤1168px thì **âm** và không chọn được gì. Nay đi qua `UIScaler`, và `render`/`handleInput` dùng chung một `computeLayout()` thay vì mỗi hàm tự tính lại |
+| `MapEditorState::handleLoad` | Không hề gán `mapData_` → map đã lưu **không bao giờ mở lại sửa được**. Nay LOAD nạp thật (kèm `undoRedo_.clear()`), và có nút **PLAY** riêng để chơi thử |
+| `TileMap::LoadCustomMap` | Toạ độ entity dùng góc trên-trái trong khi `BaseItem` cần góc dưới-trái → mọi item lệch lên đúng 1 ô so với vị trí đặt trong editor |
+| `PlaceEntityTool` | `fields` lưu dạng object nhưng `ItemFactory` chỉ đọc `is_array()` → mọi Buff đặt trong editor đều thành `RandomBuff` |
+| `BaseLevelState` ctor custom | Chép tay ~60 dòng từ ctor LDtk và đã trôi: không spawn quái, không khôi phục trạng thái item, không cutscene trigger, không `bindPlayerInputs()`, và **luôn ép PvP** khi có 2 người. Nay cả hai ctor dùng chung `initWorldFromLoadedMap()`, `isPvPMode` là tham số |
+| `MapEditorState` undo | Ghi mốc ngay khi *nhấn chuột*, chưa biết có đổi gì → lịch sử 50 bước bị lấp đầy bản chụp rỗng. Nay `IEditorTool` trả `bool`, chỉ ghi khi thật sự đổi. Resize cũng đã vào undo |
+| `EditorBottomPanel` | Bấm category âm thầm reset tool về Place (đang xoá thành ra vẽ). Nút Back nằm trong vùng map và không nuốt click → bấm Back vừa thoát vừa đặt một block |
+| `EntityPalette` | Icon `Spring_left`/`Spring_right` hoán đổi; `scrollOffsetX_` khai báo `int` nhưng gán biểu thức thực |
+
+**Refactor OOP / Design Pattern:**
+
+- **`IEditorTool` thêm `renderGhost()`** — chuỗi `if/else` 80 dòng rẽ theo enum tool trong `MapEditorState` (vi phạm đóng-mở: thêm tool là phải sửa state) đã chuyển về từng tool. `drawGhostPreview` từ 90 dòng còn 13.
+- **Strategy không còn bị vòng qua** — chuột phải trước đây gọi hàm **tĩnh** `EraseTool::erase()`, khiến member `eraseTool_` khai báo rồi không dùng bao giờ và dedupe ô mất tác dụng (giữ chuột phải đứng yên vẫn xoá lại mỗi frame → dựng lại canvas 60 lần/giây). Nay đi qua một `EraseTool` thật.
+- **`CustomMapData`** thêm `keyOf/gridXOf/gridYOf` (công thức `gy*width+gx` trước đây chép tay 14 chỗ), `setTile/getTile` **có kiểm tra biên** (trước đây `setTile(width,0)` âm thầm ghi đè ô `(0,1)`), và `countBosses()/countEnemies()`.
+- **`MapEditorState`** bỏ `EditorTextureCache::unloadAll()` khỏi destructor — singleton sống theo tiến trình, để instance huỷ nó làm instance editor còn nằm dưới stack mất sạch texture.
+- Gỡ `EditorMapResizer::process(data, wts)` — overload 2 tham số thân là placeholder `return false`, không ai gọi.
+
+**Enemy trong custom map:** `EntityPalette` nay có 9 mob + 6 boss (tên giữ tiền tố `Mob_`/`Boss_` vì `spawnEntitiesFromMap()` phân nhánh bằng đúng hai tiền tố này). Trước đây palette không có một enemy nào, và kể cả có thì luồng spawn custom cũng chỉ gọi `ItemFactory`.
+
 **Thay đổi kèm theo ở các class có sẵn:**
 - `Player::createSaveData()` / `restoreFromSaveData()` — Player tự đóng gói mình, `BaseLevelState` hết phải thò tay vào `getRuntimeStatsMutable()`.
 - `BaseLevelState::onCheckpointReached()` — gom logic lưu về một chỗ (trước đây trùng lặp ở 2 nơi với 2 đường dẫn khác nhau).

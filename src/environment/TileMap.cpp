@@ -101,13 +101,19 @@ void TileMap::LoadMap(const std::string& jsonFilePath, const std::string& tilese
 }
 
 bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& levelName) {
-    playerSpawns.clear();
-    entityData_.clear();
+    // Mở file TRƯỚC khi xoá dữ liệu cũ. Trước đây hai lệnh clear() nằm phía
+    // trên, nên một lần nạp thất bại là xoá sạch spawn + entity của map đang
+    // chạy rồi mới return false — bên gọi tưởng không có gì thay đổi, thực chất
+    // map hiện tại đã rỗng (đây là nguyên nhân người chơi hồi sinh vào hư không
+    // sau khi chết trong custom map).
     std::ifstream file(ldtkFilePath);
     if (!file.is_open()) {
         std::cerr << "[LDtk] Khong the mo file: " << ldtkFilePath << std::endl;
         return false;
     }
+
+    playerSpawns.clear();
+    entityData_.clear();
 
     json j;
     file >> j;
@@ -134,7 +140,12 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
                         else if (id == "Cloud") type = CollisionType::Cloud;
                         else if (id == "Poison") type = CollisionType::Poison;
                         else if (id == "Lava") type = CollisionType::Lava;
-                        else if (id == "Slop") type = CollisionType::Slop;
+                        // Mọi file .ldtk trong dự án (vd world05) ghi "Slope",
+                        // nhưng chỗ này chỉ so khớp "Slop" — nên toàn bộ dốc ở
+                        // World 05 rơi về CollisionType::None và đi xuyên qua
+                        // được, dù logic đi dốc đã có sẵn trong Entity.cpp.
+                        // Chấp nhận cả hai cách viết.
+                        else if (id == "Slop" || id == "Slope") type = CollisionType::Slop;
                         else if (id == "Vine") type = CollisionType::Vine;
                         intToCollisionType[value] = type;
                     }
@@ -157,6 +168,15 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         }
         std::string localPath = baseDir + filename;
         std::string fullPath = baseDir + relPath;
+
+        // Giải phóng handle cũ trước khi ghi đè. LoadLDtkMap được gọi lại mỗi
+        // lần chuyển màn, hồi sinh và khôi phục save — không unload thì mỗi lần
+        // như vậy rò một texture cho MỖI tileset.
+        auto existing = tilesetTextures.find(uid);
+        if (existing != tilesetTextures.end()) {
+            if (existing->second.id != 0) UnloadTexture(existing->second);
+            tilesetTextures.erase(existing);
+        }
 
         if (FileExists(localPath.c_str())) {
             tilesetTextures[uid] = LoadTexture(localPath.c_str());
@@ -597,12 +617,21 @@ bool TileMap::LoadCustomMap(const CustomMapData& data) {
     // --- 1. Build collision layer ---
     collisionLayer.assign(rows, std::vector<CollisionType>(columns, CollisionType::None));
     auto& reg = EditorBlockRegistry::getInstance();
+    int unknownBlocks = 0;
     for (const auto& [key, blockId] : data.tiles) {
-        int gx = key % data.width;
-        int gy = key / data.width;
-        if (gx >= 0 && gx < columns && gy >= 0 && gy < rows) {
-            collisionLayer[gy][gx] = reg.getCollision(blockId);
-        }
+        int gx = data.gridXOf(key);
+        int gy = data.gridYOf(key);
+        if (gx < 0 || gx >= columns || gy < 0 || gy >= rows) continue;
+        // BẮT BUỘC kiểm tra has() trước: EditorBlockRegistry::get() NÉM
+        // std::out_of_range với id lạ, và không ai bắt nó — nạp một map đã lưu
+        // có blockId bị đổi tên/gỡ bỏ là tắt game. Hai pass phía dưới đã có
+        // bảo vệ này, riêng pass dựng collision thì không.
+        if (!reg.has(blockId)) { ++unknownBlocks; continue; }
+        collisionLayer[gy][gx] = reg.getCollision(blockId);
+    }
+    if (unknownBlocks > 0) {
+        std::cerr << "[TileMap] Bo qua " << unknownBlocks
+                  << " o co blockId khong con ton tai trong registry.\n";
     }
 
     // --- 2. Build entity data & player spawns ---
@@ -617,10 +646,20 @@ bool TileMap::LoadCustomMap(const CustomMapData& data) {
             });
         } else {
             LDtkEntityData ldtk;
-            ldtk.identifier    = e.type;
-            ldtk.px            = { (float)(e.gridX * tileSize), (float)(e.gridY * tileSize) };
-            ldtk.iid           = "custom_" + std::to_string(e.gridX) + "_" + std::to_string(e.gridY);
-            ldtk.fieldInstances = e.fields.is_null() ? nlohmann::json::array() : e.fields;
+            ldtk.identifier = e.type;
+            // Quy ước toạ độ phải KHỚP với LoadLDtkMap: BaseItem mong đợi góc
+            // DƯỚI-trái của ô, còn gridY*tileSize là góc TRÊN-trái. Thiếu phép
+            // cộng tileSize này thì mọi item trong custom map bị đẩy lên cao
+            // đúng một ô so với vị trí đã đặt trong editor.
+            ldtk.px = { (float)(e.gridX * tileSize),
+                        (float)(e.gridY * tileSize + tileSize) };
+            ldtk.iid = "custom_" + std::to_string(e.gridX) + "_" + std::to_string(e.gridY);
+            // fieldInstances phải là MẢNG — ItemFactory/EnemyFactory bỏ qua nếu
+            // không phải array (đây là lý do mọi Buff đặt trong editor đều ra
+            // RandomBuff).
+            ldtk.fieldInstances = e.fields.is_array() ? e.fields : nlohmann::json::array();
+            ldtk.width  = (float)tileSize;
+            ldtk.height = (float)tileSize;
             entityData_.push_back(ldtk);
         }
     }

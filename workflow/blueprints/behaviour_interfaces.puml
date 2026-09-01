@@ -1,0 +1,156 @@
+@startuml behaviour_interfaces
+' Super Mario Plus - skills, power-ups and item usage
+' Verified against the source tree at commit b378acb.
+' Matches: include/entity/Skill/, include/entity/BuffEffects/, include/entity/Item/
+
+title Behaviour Interfaces — Strategy, and one deliberate non-Strategy
+
+skinparam classAttributeIconSize 0
+
+package "Strategy — player skills" {
+  class ISkill {
+    # float manaCost, duration
+    # string animationName
+    # string nextComboSkillName
+    # float hitboxStartTime, hitboxEndTime
+    # float recoveryDuration, hitStopDuration
+    # float anticipationDuration
+    # int attackPower, defensePower
+    # Rectangle hitboxConfig
+    # float dashMultiplier
+    + {abstract} execute(Player&)
+    + hasNextCombo() : bool
+    + setDurationAndHitbox(...)
+    + setPacingData(...)
+    + setCombatData(...)
+  }
+  class Attack1Skill
+  class Attack2Skill
+  class Attack3Skill
+  class Attack4Skill
+  class JumpAttackSkill
+  class LowAttackSkill
+  class LongAttackSkill
+  class SpecialSkillAttack
+  class DashSkill
+  class BlockSkill
+
+  ISkill <|-- Attack1Skill
+  ISkill <|-- Attack2Skill
+  ISkill <|-- Attack3Skill
+  ISkill <|-- Attack4Skill
+  ISkill <|-- JumpAttackSkill
+  ISkill <|-- LowAttackSkill
+  ISkill <|-- LongAttackSkill
+  ISkill <|-- SpecialSkillAttack
+  ISkill <|-- DashSkill
+  ISkill <|-- BlockSkill
+}
+note bottom of ISkill
+  nextComboSkillName is what makes the
+  four-hit chain data rather than control
+  flow: each attack names its own
+  successor, so the player does not know
+  the chain.
+
+  Honest note: most of what distinguishes
+  one skill from another is timing and
+  damage loaded from JSON, so this is a
+  data-heavy application of Strategy.
+end note
+
+package "NOT Strategy — additive power-ups" {
+  interface IBuffEffect {
+    + {abstract} getName() : string
+    + {abstract} getDuration() : float
+    + getSpeedMultiplier() : float
+    + getJumpMultiplier() : float
+    + getDamageMultiplier() : float
+    + isInvincible() : bool
+    + isInvisible() : bool
+    + canTimeStop() : bool
+    + hasGoldMagnet() : bool
+    + onApply(Player&)
+    + onRemove(Player&)
+    + render(Player&, float) const
+  }
+  class SpeedBuff
+  class JumpBuff
+  class StrengthBuff
+  class ShieldBuff
+  class InvisiBuff
+  class GoldMagnetBuff
+  class TimeStopBuff
+  class HealBuff
+  class RandomBuff
+
+  class BuffManager {
+    - vector<ActiveBuff> activeBuffs_
+    + addBuff(unique_ptr<IBuffEffect>, Player&)
+    + update(float, Player&)
+    + getTotalSpeedMultiplier() : float
+    + getTotalJumpMultiplier() : float
+    + getTotalDamageMultiplier() : float
+    + isInvincible() : bool
+    + isInvisible() : bool
+    + canTimeStop() : bool
+    + hasGoldMagnet() : bool
+  }
+
+  IBuffEffect <|.. SpeedBuff
+  IBuffEffect <|.. JumpBuff
+  IBuffEffect <|.. StrengthBuff
+  IBuffEffect <|.. ShieldBuff
+  IBuffEffect <|.. InvisiBuff
+  IBuffEffect <|.. GoldMagnetBuff
+  IBuffEffect <|.. TimeStopBuff
+  IBuffEffect <|.. HealBuff
+  IBuffEffect <|.. RandomBuff
+  BuffManager o-- IBuffEffect : holds several at once
+}
+note bottom of BuffManager
+  This is deliberately NOT Strategy.
+  Strategy selects ONE algorithm at a time;
+  here several effects are active together
+  and their contributions are SUMMED.
+  Accurate name: polymorphic modifier
+  collection.
+end note
+
+package "Strategy — item usage" {
+  interface IItemUseStrategy {
+    + {abstract} use(Player&)
+  }
+  class ConsumeBuffStrategy {
+    - string buffType_
+  }
+  class ThrowBombStrategy
+  class ThrowPoisonStrategy
+  class ItemUsageFactory <<static>> {
+    + {static} create(itemIdentifier) : unique_ptr<IItemUseStrategy>
+  }
+
+  IItemUseStrategy <|.. ConsumeBuffStrategy
+  IItemUseStrategy <|.. ThrowBombStrategy
+  IItemUseStrategy <|.. ThrowPoisonStrategy
+  ItemUsageFactory ..> IItemUseStrategy : creates
+}
+note bottom of IItemUseStrategy
+  The cleanest Strategy in the project:
+  a single-operation interface, chosen by
+  a factory, called by a context that
+  learns nothing about which one ran.
+end note
+
+class Player {
+  - map<string, unique_ptr<ISkill>> skillList
+  - BuffManager buffManager_
+  + useSkill(string)
+  + useStoredItem()
+}
+
+Player *-- ISkill
+Player *-- BuffManager
+Player ..> IItemUseStrategy : uses transiently
+
+@enduml

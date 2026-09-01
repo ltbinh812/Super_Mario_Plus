@@ -27,6 +27,102 @@
 #include <raymath.h>
 
 
+// =============================================================================
+// initWorldFromLoadedMap — phần khởi tạo DÙNG CHUNG cho mọi nguồn map.
+//
+// Gọi SAU khi `map` đã nạp xong (LDtk hoặc CustomMapData). Trước đây toàn bộ
+// đoạn này được chép tay hai lần trong hai constructor; bản chép ở constructor
+// custom map đã trôi khỏi bản gốc và thiếu hẳn: spawn quái, khôi phục trạng
+// thái item, cutscene trigger, bind phím dự phòng — đồng thời lại tự ý bật PvP.
+// Gom về một chỗ thì hai đường không thể lệch nhau nữa.
+// =============================================================================
+void BaseLevelState::initWorldFromLoadedMap(const std::string &p1Name,
+                                            const std::string &p2Name) {
+  auto spawns = map.GetPlayerSpawns();
+  Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 150.0f};
+
+  partyInventory = std::make_shared<PartyInventory>();
+  auto& sm = SettingsManager::GetInstance();
+
+  player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
+  if (player1) {
+    player1->setPosition(spawn1);
+    player1->setStartPosition(spawn1);
+    player1->setCommandQueue(&spawnQueue);
+    player1->setPartyInventory(partyInventory);
+
+    player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+    player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+    player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+    player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+    player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+    player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+    player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+
+    player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+    player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+  }
+
+  // Chỉ tạo player2 khi thực sự được yêu cầu. Bản chép cũ ở constructor custom
+  // map bỏ mất guard này nên luôn gọi PlayerFactory với tên rỗng.
+  if (!p2Name.empty()) {
+    player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
+    if (player2) {
+      Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 150.0f};
+      player2->setPosition(spawn2);
+      player2->setStartPosition(spawn2);
+      player2->setCommandQueue(&spawnQueue);
+      player2->setPartyInventory(partyInventory);
+
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
+      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
+      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
+
+      player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
+      player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
+    }
+  }
+
+  // PvP là quyết định của BÊN GỌI, không phải hệ quả của "có hai người chơi".
+  if (player1 && player2 && isPvPMode_) {
+    player1->setPvPMode(true);
+    player2->setPvPMode(true);
+  }
+
+  bindPlayerInputs();
+
+  ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
+  static const char* kMobAtlases[] = {
+    "mob_mushroom", "mob_rat", "mob_tree", "mob_skeleton", "mob_goblin",
+    "mob_guardian", "mob_bat", "mob_soldier", "mob_slime"
+  };
+  for (const char* name : kMobAtlases) {
+    ItemAtlasRegistry::getInstance().loadAtlas(
+        name, std::string("assets/mobs/") + name + ".json",
+              std::string("assets/mobs/") + name + ".png");
+  }
+  AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
+
+  spawnEntitiesFromMap();
+  spawnCutsceneTriggersFromMap();
+  TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.",
+           (int)activeItems.size(), (int)activeEntities.size());
+}
+
 BaseLevelState::BaseLevelState(const std::string &mapFilePath,
                                const std::string &initialLevel,
                                const std::string &p1Name,
@@ -37,86 +133,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   std::cout << "[BaseLevelState] Loading map: " << mapFilePath << " level: " << initialLevel << "\n";
   if (map.LoadLDtkMap(mapFilePath, initialLevel)) {
     std::cout << "[BaseLevelState] Map loaded successfully!\n";
-
-    auto spawns = map.GetPlayerSpawns();
-    Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 150.0f};
-
-    partyInventory = std::make_shared<PartyInventory>();
-
-    player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
-    if (player1) {
-      player1->setPosition(spawn1);
-      player1->setStartPosition(spawn1);
-      player1->setCommandQueue(&spawnQueue);
-      player1->setPartyInventory(partyInventory);
-      auto& sm = SettingsManager::GetInstance();
-      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
-      
-      player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
-    }
-
-    if (!p2Name.empty()) {
-      player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
-      if (player2) {
-        Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 150.0f};
-        player2->setPosition(spawn2);
-        player2->setStartPosition(spawn2);
-        player2->setCommandQueue(&spawnQueue);
-        player2->setPartyInventory(partyInventory);
-        
-        auto& sm = SettingsManager::GetInstance();
-        player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-        player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
-        player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
-        player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
-        player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
-        player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-        player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
-        
-        player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
-        player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
-      }
-    }
-    
-    if (player1 && player2 && isPvPMode_) {
-        player1->setPvPMode(true);
-        player2->setPvPMode(true);
-    }
-    
-    bindPlayerInputs();
-
-    ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_rat", "assets/mobs/mob_rat.json", "assets/mobs/mob_rat.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_tree", "assets/mobs/mob_tree.json", "assets/mobs/mob_tree.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_skeleton", "assets/mobs/mob_skeleton.json", "assets/mobs/mob_skeleton.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_goblin", "assets/mobs/mob_goblin.json", "assets/mobs/mob_goblin.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_guardian", "assets/mobs/mob_guardian.json", "assets/mobs/mob_guardian.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_bat", "assets/mobs/mob_bat.json", "assets/mobs/mob_bat.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_soldier", "assets/mobs/mob_soldier.json", "assets/mobs/mob_soldier.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_slime", "assets/mobs/mob_slime.json", "assets/mobs/mob_slime.png");
-    AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
-
-    spawnEntitiesFromMap();
-    spawnCutsceneTriggersFromMap();
-    TraceLog(LOG_INFO, "[BaseLevelState] Spawned %d items and %d entities.", activeItems.size(), activeEntities.size());
+    initWorldFromLoadedMap(p1Name, p2Name);
   } else {
     std::cerr << "[BaseLevelState] Error loading " << mapFilePath << "!\n";
   }
@@ -163,102 +180,23 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath, const GameSaveDat
 // =============================================================================
 BaseLevelState::BaseLevelState(const CustomMapData& customMap,
                                const std::string &p1Name,
-                               const std::string &p2Name)
-    : mapCamera(600.0f), currentLevel(customMap.name), mapFilePath("custom") {
+                               const std::string &p2Name,
+                               bool isPvPMode)
+    : mapCamera(600.0f), currentLevel(customMap.name), mapFilePath("custom"),
+      isPvPMode_(isPvPMode) {
 
-  bool loaded = map.LoadCustomMap(customMap);
-  if (loaded && map.GetHeight() > 0) {
+  // Checkpoint là singleton sống suốt tiến trình và chưa từng được xoá ở đâu.
+  // Nếu không dọn ở đây, chết trong map tự tạo sẽ khôi phục checkpoint của một
+  // world khác -> người chơi bị văng thẳng sang world đó.
+  SaveManager::getInstance().clearCheckpoint();
+
+  if (map.LoadCustomMap(customMap) && map.GetHeight() > 0) {
     std::cout << "[BaseLevelState] Loaded custom map ("
               << currentLevel << ") successfully!\n";
-
-    auto spawns = map.GetPlayerSpawns();
-    Vector2 spawn1 = spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 208.0f};
-
-    partyInventory = std::make_shared<PartyInventory>();
-
-    player1 = PlayerFactory::createPlayer(p1Name, {0, 0});
-    if (player1) {
-      player1->setPosition(spawn1);
-      player1->setStartPosition(spawn1);
-      player1->setCommandQueue(&spawnQueue);
-      player1->setPartyInventory(partyInventory);
-      
-      auto& sm = SettingsManager::GetInstance();
-      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player1Handler.bindKey(sm.GetP1Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(sm.GetP1Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-      player1Handler.bindKey(sm.GetP1Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
-      
-      player1Handler.bindKey(sm.GetP1Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
-      player1Handler.bindKey(sm.GetP1Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
-    }
-
-    player2 = PlayerFactory::createPlayer(p2Name, {0, 0});
-    if (player2) {
-      Vector2 spawn2 = spawns.size() > 1 ? spawns[1] : Vector2{220.0f, 208.0f};
-      player2->setPosition(spawn2);
-      player2->setStartPosition(spawn2);
-      player2->setCommandQueue(&spawnQueue);
-      player2->setPartyInventory(partyInventory);
-      
-      auto& sm = SettingsManager::GetInstance();
-      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<MoveLeftCommand>(), InputType::DOWN);
-      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<MoveRightCommand>(), InputType::DOWN);
-      player2Handler.bindKey(sm.GetP2Key("Climb"), std::make_unique<ClimbCommand>(), InputType::DOWN);
-      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<CrouchCommand>(), InputType::DOWN);
-      player2Handler.bindKey(sm.GetP2Key("Crouch"), std::make_unique<StopCrouchCommand>(), InputType::RELEASED);
-      player2Handler.bindKey(sm.GetP2Key("Move Left"), std::make_unique<StopLeftCommand>(), InputType::RELEASED);
-      player2Handler.bindKey(sm.GetP2Key("Move Right"), std::make_unique<StopRightCommand>(), InputType::RELEASED);
-      
-      player2Handler.bindKey(sm.GetP2Key("Attack"), std::make_unique<AttackCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("Jump"), std::make_unique<JumpCommand>(), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("Dash"), std::make_unique<UseSkillCommand>("Dash"), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("LongAttack"), std::make_unique<UseSkillCommand>("LongAttack"), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("SpecialAttack"), std::make_unique<UseSkillCommand>("SpecialAttack"), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("Block"), std::make_unique<UseSkillCommand>("Block"), InputType::PRESSED);
-      player2Handler.bindKey(sm.GetP2Key("Interact"), std::make_unique<InteractCommand>(), InputType::PRESSED);
-    }
-    
-    if (player1 && player2) {
-        player1->setPvPMode(true);
-        player2->setPvPMode(true);
-        isPvPMode_ = true;
-    }
-
-    ItemAtlasRegistry::getInstance().loadAll("assets/maps/item/");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_mushroom", "assets/mobs/mob_mushroom.json", "assets/mobs/mob_mushroom.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_rat", "assets/mobs/mob_rat.json", "assets/mobs/mob_rat.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_tree", "assets/mobs/mob_tree.json", "assets/mobs/mob_tree.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_skeleton", "assets/mobs/mob_skeleton.json", "assets/mobs/mob_skeleton.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_goblin", "assets/mobs/mob_goblin.json", "assets/mobs/mob_goblin.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_guardian", "assets/mobs/mob_guardian.json", "assets/mobs/mob_guardian.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_bat", "assets/mobs/mob_bat.json", "assets/mobs/mob_bat.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_soldier", "assets/mobs/mob_soldier.json", "assets/mobs/mob_soldier.png");
-    ItemAtlasRegistry::getInstance().loadAtlas("mob_slime", "assets/mobs/mob_slime.json", "assets/mobs/mob_slime.png");
-    AssetManager::getInstance().loadTexture("arrow_soldier", "assets/mobs/arrow_soldier.png");
-
-    activeItems.clear();
-    auto entityData = map.GetEntityData();
-    for (const auto &data : entityData) {
-      auto item =
-          ItemFactory::create(data.identifier, data.px, data.fieldInstances);
-      if (item) {
-        item->setIid(data.iid);
-        item->setCommandQueue(&spawnQueue);
-        activeItems.push_back(std::move(item));
-      }
-    }
-    std::cout << "[BaseLevelState] Spawned " << activeItems.size()
-              << " items.\n";
-
+    // Dùng CHUNG đường khởi tạo với map LDtk. Trước đây khối này được chép tay
+    // và đã trôi mất: không spawn quái, không khôi phục trạng thái item, không
+    // có cutscene trigger, không bind phím dự phòng, và luôn ép PvP.
+    initWorldFromLoadedMap(p1Name, p2Name);
   } else {
     std::cerr << "[BaseLevelState] Error loading custom map data!\n";
   }
@@ -838,8 +776,20 @@ void BaseLevelState::processDeathCondition(float dt) {
     respawnTimer -= dt;
     if (respawnTimer <= 0.0f) {
       respawnTimer = -1.0f;
-      
-      if (SaveManager::getInstance().hasCheckpoint()) {
+
+      if (isCustomMap()) {
+          // Map tự tạo KHÔNG nạp lại từ file: nó không có file .ldtk nào cả
+          // (mapFilePath == "custom"). Trước đây nhánh này gọi
+          // LoadLDtkMap("custom", ...) — thất bại, và ở phiên bản cũ còn xoá
+          // sạch spawn của map trước khi thất bại — rồi hồi sinh ở toạ độ cứng
+          // {180,208}, thường nằm trong tường hoặc giữa hư không.
+          // Map vẫn nguyên trong bộ nhớ nên chỉ cần đưa người chơi về spawn.
+          auto spawns = map.GetPlayerSpawns();
+          if (player1) {
+            player1->respawn(spawns.size() > 0 ? spawns[0]
+                                               : player1->getWorldStats().startPosition);
+          }
+      } else if (SaveManager::getInstance().hasCheckpoint()) {
           restoreFromSaveData(SaveManager::getInstance().getCheckpoint());
           if (player1) player1->respawn(player1->getWorldStats().position);
       } else {

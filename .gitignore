@@ -10,3 +10,8 @@ build/
 .cache/
 .clangd
 compile_commands.json
+
+# Dữ liệu sinh ra lúc chạy: map tự tạo, save game, cấu hình người chơi.
+# Mỗi lần chơi thử đều làm bẩn working tree nếu theo dõi những file này.
+saves/
+

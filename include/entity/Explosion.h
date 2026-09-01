@@ -16,6 +16,8 @@ private:
     std::function<void(Entity*)> onHitEffect;
     int hitboxStartFrame;
     int hitboxEndFrame;
+    float hitboxOffsetX = 0.0f;
+    float hitboxOffsetY = 0.0f;
 
 public:
     Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig& config, Entity* spawner);
@@ -25,6 +27,7 @@ public:
 
     bool hasActiveHitbox() const override;
     Hitbox getActiveHitbox() override;
+    Rectangle getOffsetHitbox() const;
 
     void onHitWall(bool isRightWall, bool isCliff = false) override {}
     void onCollide(Entity& other) override {}

@@ -1,12 +1,11 @@
 #pragma once
+#include "SaveLoadMode.h"
 #include <functional>
 #include <string>
 #include <vector>
 #include "raylib.h"
 
-// Giao diện (Overlay) hiển thị 10 slot để Save/Load map
-enum class SaveLoadMode { Save, Load };
-
+// Giao diện (Overlay) hiển thị các slot để Save / Load / Test Play map.
 class EditorSaveLoadUI {
 public:
     EditorSaveLoadUI();

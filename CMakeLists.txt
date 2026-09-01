@@ -57,6 +57,7 @@ set(SOURCES
     src/editor/EditorBlockRegistry.cpp
     src/editor/AutoTiler.cpp
     src/editor/CustomMapSerializer.cpp
+    src/editor/CustomMapValidator.cpp
     src/editor/PlaceTileTool.cpp
     src/editor/PlaceEntityTool.cpp
     src/editor/EraseTool.cpp

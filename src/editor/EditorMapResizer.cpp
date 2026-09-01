@@ -152,17 +152,12 @@ void EditorMapResizer::render(const CustomMapData& data, float wts) const {
 // Process (drag logic)
 // =============================================================================
 
-bool EditorMapResizer::process(CustomMapData& data, float wts) {
-    // Snap threshold: kéo >= 1 tile → resize
-    const float threshold = wts;
-
-    Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), { {0,0},{0,0},0.0f,1.0f });
-    // Lưu ý: EditorCamera sẽ set worldMouse từ bên ngoài.
-    // Ở đây dùng GetScreenToWorld2D với identity vì handle tọa độ được render
-    // trong BeginMode2D. Process() cần nhận mouse world position từ MapEditorState.
-    // → Xem MapEditorState::Process() truyền mouseWorldPos_ vào.
-    // Tạm thời để placeholder, MapEditorState sẽ pass vào qua overload.
-    return false;  // Placeholder — full logic ở overload bên dưới
+bool EditorMapResizer::isHoveringHandle(const CustomMapData& data, float wts,
+                                        Vector2 mouseWorld) const {
+    for (auto h : { Handle::North, Handle::South, Handle::East, Handle::West }) {
+        if (CheckCollisionPointRec(mouseWorld, getHandleRect(h, data, wts))) return true;
+    }
+    return false;
 }
 
 bool EditorMapResizer::process(CustomMapData& data, float wts, Vector2 mouseWorld) {
@@ -186,9 +181,17 @@ bool EditorMapResizer::process(CustomMapData& data, float wts, Vector2 mouseWorl
         if (dragging_ == Handle::South) delta = mouseWorld.y - dragStart_.y;
         if (dragging_ == Handle::North) delta = dragStart_.y - mouseWorld.y;
 
+        const bool horizontal = (dragging_ == Handle::East || dragging_ == Handle::West);
+
+        // Kẹp kích thước đích vào [MIN_SIZE, MAX_SIZE] TRƯỚC vòng lặp. Nếu chỉ
+        // dựa vào kiểm tra MIN_SIZE bên trong từng hàm shrink*, vòng while vẫn
+        // quay đủ số lần mà không làm gì; còn phía nới rộng thì trước đây không
+        // có trần nào cả — một cú kéo là treo máy.
         int newSize = dragStartDim_ + (int)(delta / wts);
-        int curSize = (dragging_ == Handle::East || dragging_ == Handle::West)
-                      ? data.width : data.height;
+        if (newSize < MIN_SIZE) newSize = MIN_SIZE;
+        if (newSize > MAX_SIZE) newSize = MAX_SIZE;
+
+        int curSize = horizontal ? data.width : data.height;
         int diff = newSize - curSize;
 
         while (diff > 0) {

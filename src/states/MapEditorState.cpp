@@ -4,6 +4,7 @@
 #include "EditorBlockRegistry.h"
 #include "EditorTextureCache.h"
 #include "CustomMapSerializer.h"
+#include "CustomMapValidator.h"
 #include "command/StateCommands.h"
 #include "BaseLevelState.h"
 #include <raylib.h>
@@ -57,21 +58,31 @@ MapEditorState::MapEditorState() {
     saveLoadUI_.init();
 
     // 7. Init tool manager
-    toolManager_.setTool(EditorToolType::Place,
-                         &bottomPanel_.getSelectedBlockId(),
-                         &bottomPanel_.getSelectedEntityType());
+    {
+        const EntityPalette& palette = bottomPanel_.getEntityPalette();
+        toolManager_.setTool(EditorToolType::Place,
+                             &bottomPanel_.getSelectedBlockId(),
+                             &bottomPanel_.getSelectedEntityType(),
+                             [&palette](const std::string& id) { return palette.getEntityDef(id); });
+    }
 
     mapDirty_ = true;
-    
+
     // 8. Back button
     backBtnTex_ = LoadTexture("assets/UI_screens/menu_btn_back.png");
     backBtnPressTex_ = LoadTexture("assets/UI_screens/menu_btn_back_press.png");
 }
 
 MapEditorState::~MapEditorState() {
-    EditorTextureCache::getInstance().unloadAll();
-    UnloadTexture(backBtnTex_);
-    UnloadTexture(backBtnPressTex_);
+    // KHÔNG gọi EditorTextureCache::unloadAll() ở đây.
+    //
+    // EditorTextureCache là singleton sống theo tiến trình. StateManager có thể
+    // giữ một MapEditorState cũ nằm dưới đáy stack (mở editor -> chơi thử ->
+    // quit về menu -> mở editor lần hai). Khi instance thứ hai bị huỷ, nó xoá
+    // sạch cache mà instance thứ nhất vẫn đang dùng -> mọi texture trở thành
+    // handle chết và editor vẽ ra toàn ô màu dự phòng.
+    if (backBtnTex_.id != 0)      UnloadTexture(backBtnTex_);
+    if (backBtnPressTex_.id != 0) UnloadTexture(backBtnPressTex_);
 }
 
 float MapEditorState::worldTileSize() const {
@@ -114,11 +125,15 @@ void MapEditorState::HandleInput() {
     pendingGridX_ = (int)std::floor(mouseWorldPos_.x / wts);
     pendingGridY_ = (int)std::floor(mouseWorldPos_.y / wts);
 
-    // Phân biệt chuột trên map hay panel
-    float screenH  = (float)GetScreenHeight();
-    float panelTop = screenH - EditorBottomPanel::PANEL_HEIGHT;
-    mouseOnPanel_  = (mouseScreen.y >= panelTop);
-    mouseOnMap_    = !mouseOnPanel_ && mapData_.inBounds(pendingGridX_, pendingGridY_);
+    // Phân biệt chuột trên map hay trên giao diện.
+    // Nút Back nằm ở góc (10,10) — TRONG vùng map. Nếu không tính nó là "trên
+    // giao diện" thì một cú bấm Back vừa thoát editor vừa đặt một block ngay
+    // dưới nút, kèm một mốc Undo thừa.
+    Rectangle panelRect = bottomPanel_.getPanelRect((float)GetScreenWidth(),
+                                                    (float)GetScreenHeight());
+    mouseOnPanel_ = CheckCollisionPointRec(mouseScreen, panelRect) ||
+                    CheckCollisionPointRec(mouseScreen, hitBox);
+    mouseOnMap_   = !mouseOnPanel_ && mapData_.inBounds(pendingGridX_, pendingGridY_);
 
     // Đọc mouse buttons
     leftPress_   = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
@@ -161,9 +176,11 @@ void MapEditorState::Process() {
     // Sync tool type từ panel sang toolManager (Strategy pattern)
     EditorToolType panelTool = bottomPanel_.getActiveTool();
     if (panelTool != toolManager_.getActiveTool()) {
+        const EntityPalette& palette = bottomPanel_.getEntityPalette();
         toolManager_.setTool(panelTool,
                              &bottomPanel_.getSelectedBlockId(),
-                             &bottomPanel_.getSelectedEntityType());
+                             &bottomPanel_.getSelectedEntityType(),
+                             [&palette](const std::string& id) { return palette.getEntityDef(id); });
     }
 
     // --- Save button ---
@@ -172,11 +189,16 @@ void MapEditorState::Process() {
         showSaveLoadUI_   = true;
         saveLoadMode_ = SaveLoadMode::Save;
     }
-    // --- Load button ---
+    // --- Load button (mở map đã lưu ĐỂ SỬA) ---
     if (bottomPanel_.requestLoad() && !showSaveLoadUI_) {
         saveLoadUI_.init();
         showSaveLoadUI_   = true;
         saveLoadMode_ = SaveLoadMode::Load;
+    }
+    // --- Play button (chơi thử map ĐANG SỬA — không cần chọn slot) ---
+    if (bottomPanel_.requestPlay()) {
+        handleTestPlay(-1);
+        return;
     }
     // --- Exit button → quay về menu ---
     if (bottomPanel_.requestExit()) {
@@ -220,24 +242,40 @@ void MapEditorState::Process() {
     }
 
     // --- Map resize handles ---
-    bool resized = resizer_.process(mapData_, wts, mouseWorldPos_);
-    if (resized) mapDirty_ = true;
+    // Ghi mốc Undo NGAY TRƯỚC khi bắt đầu kéo. Trước đây resize hoàn toàn nằm
+    // ngoài lịch sử: một cú Ctrl+Z hoàn tác cả phép resize LẪN thao tác vẽ
+    // trước đó, và nếu shrink là thao tác cuối thì phần dữ liệu bị cắt mất
+    // vĩnh viễn không cứu được.
+    if (!mouseOnPanel_ && leftPress_ && resizer_.isHoveringHandle(mapData_, wts, mouseWorldPos_)) {
+        undoRedo_.pushUndo(mapData_);
+    }
+    if (resizer_.process(mapData_, wts, mouseWorldPos_)) {
+        mapDirty_ = true;
+    }
 
     // --- Tool dispatch (chỉ khi chuột trên map) ---
     if (mouseOnMap_) {
-        bool willChange = (leftPress_ || rightPress_);
-        if (willChange) undoRedo_.pushUndo(mapData_);
+        // Chụp TRƯỚC, chỉ GIỮ LẠI nếu tool báo có thay đổi thật.
+        // Trước đây mốc được đẩy vào ngay khi nhấn chuột, nên click vào ô đã có
+        // sẵn block, ô đã có entity, hay click khi chưa chọn block đều nhét một
+        // bản chụp rỗng — trần lịch sử 50 bước bị lấp đầy bằng thao tác vô nghĩa
+        // và Ctrl+Z trông như bị liệt.
+        CustomMapData before = mapData_;
 
         bool changed = toolManager_.dispatch(
             pendingGridX_, pendingGridY_,
-            leftPress_  && !mouseOnPanel_,
-            leftDown_   && !mouseOnPanel_,
-            leftRelease_,
-            rightPress_ && !mouseOnPanel_,
-            rightDown_  && !mouseOnPanel_,
+            leftPress_, leftDown_, leftRelease_,
+            rightPress_, rightDown_,
             mapData_);
 
-        if (changed) mapDirty_ = true;
+        if (changed) {
+            undoRedo_.pushUndo(before);
+            mapDirty_ = true;
+        }
+    } else if (leftRelease_) {
+        // Nhả chuột ngoài vùng map vẫn phải kết thúc thao tác kéo của tool.
+        toolManager_.dispatch(pendingGridX_, pendingGridY_,
+                              false, false, true, false, false, mapData_);
     }
 }
 
@@ -379,92 +417,15 @@ void MapEditorState::drawEntityIcons() const {
 void MapEditorState::drawGhostPreview() const {
     if (!mouseOnMap_) return;
 
-    float wts  = worldTileSize();
-    Rectangle destRect = {
-        pendingGridX_ * wts,
-        pendingGridY_ * wts,
-        wts, wts
-    };
+    const float wts = worldTileSize();
+    const Rectangle cellRect = { pendingGridX_ * wts, pendingGridY_ * wts, wts, wts };
 
-    EditorToolType tool = toolManager_.getActiveTool();
-
-    if (tool == EditorToolType::Erase) {
-        // Erase ghost: red tinted
-        DrawRectangleRec(destRect, Color{255, 60, 60, 50});
-        DrawRectangleLinesEx(destRect, 2.0f, Color{255, 80, 80, 180});
-        return;
-    }
-
-    if (tool == EditorToolType::PlaceEntity) {
-        const std::string& entityId = bottomPanel_.getSelectedEntityType();
-        const EntityDef* def = bottomPanel_.getEntityPalette().getEntityDef(entityId);
-        bool drawn = false;
-
-        if (def && !def->texturePath.empty()) {
-            const Texture2D& tex = EditorTextureCache::getInstance().getOrDefault(def->texturePath);
-            if (tex.id != 0) {
-                float scaleX = wts / std::abs(def->uv.width);
-                float scaleY = wts / std::abs(def->uv.height);
-                float minScale = std::min(scaleX, scaleY);
-                
-                float newW = std::abs(def->uv.width) * minScale;
-                float newH = std::abs(def->uv.height) * minScale;
-                float offX = (wts - newW) / 2.0f;
-                float offY = (wts - newH) / 2.0f;
-                
-                Rectangle trueDest = {
-                    destRect.x + offX,
-                    destRect.y + offY,
-                    newW, newH
-                };
-                DrawTexturePro(tex, def->uv, trueDest, {0, 0}, 0.0f, Color{255, 255, 255, 130});
-                drawn = true;
-            }
-        }
-        if (!drawn && def) {
-            Color gc = {def->fallbackColor.r, def->fallbackColor.g, def->fallbackColor.b, 100};
-            DrawRectangleRec(destRect, gc);
-        }
-        DrawRectangleLinesEx(destRect, 2.0f, Color{255, 255, 255, 130});
-        return;
-    }
-
-    // Place block ghost
-    const std::string& blockId = bottomPanel_.getSelectedBlockId();
-    if (blockId.empty()) return;
-
-    auto& reg = EditorBlockRegistry::getInstance();
-    if (!reg.has(blockId)) return;
-
-    const auto& def = reg.get(blockId);
-    bool drawn = false;
-
-    if (!def.tilesetPath.empty()) {
-        const Texture2D& tex = EditorTextureCache::getInstance().getOrDefault(def.tilesetPath);
-        if (tex.id != 0) {
-            float scaleX = wts / std::abs(def.uv.width);
-            float scaleY = wts / std::abs(def.uv.height);
-            float minScale = std::min(scaleX, scaleY);
-            
-            float newW = std::abs(def.uv.width) * minScale;
-            float newH = std::abs(def.uv.height) * minScale;
-            float offX = (wts - newW) / 2.0f;
-            float offY = (wts - newH) / 2.0f;
-            
-            Rectangle trueDest = {
-                (float)(pendingGridX_ * wts) + offX,
-                (float)(pendingGridY_ * wts) + offY,
-                newW, newH
-            };
-            DrawTexturePro(tex, def.uv, trueDest, {0, 0}, 0.0f, Color{255, 255, 255, 130});
-            drawn = true;
-        }
-    }
-    if (!drawn) {
-        Color gc = {def.fallbackColor.r, def.fallbackColor.g, def.fallbackColor.b, 100};
-        DrawRectangleRec(destRect, gc);
-    }
-    DrawRectangleLinesEx(destRect, 2.0f, Color{255, 255, 255, 130});
+    // Uỷ quyền hoàn toàn cho tool đang chọn.
+    //
+    // Trước đây chỗ này là một chuỗi if/else 80 dòng rẽ theo EditorToolType,
+    // nghĩa là mỗi khi thêm một tool mới lại phải sửa MapEditorState — đúng thứ
+    // mà nguyên tắc đóng-mở cấm. Nay IEditorTool::renderGhost() lo phần này.
+    toolManager_.renderGhost(pendingGridX_, pendingGridY_, cellRect, mapData_);
 }
 
 // =============================================================================
@@ -472,42 +433,82 @@ void MapEditorState::drawGhostPreview() const {
 // =============================================================================
 
 void MapEditorState::handleSaveLoadSlotAction(int slot) {
-    if (saveLoadMode_ == SaveLoadMode::Save) {
+    switch (saveLoadMode_) {
+    case SaveLoadMode::Save:
         if (validateMapBeforeAction("Save")) {
             handleSave(slot);
             showSaveLoadUI_ = false;
         }
-    } else if (saveLoadMode_ == SaveLoadMode::Load) {
+        break;
+    case SaveLoadMode::Load:
         handleLoad(slot);
         showSaveLoadUI_ = false;
+        break;
+    case SaveLoadMode::TestPlay:
+        handleTestPlay(slot);
+        showSaveLoadUI_ = false;
+        break;
     }
 }
 
 void MapEditorState::handleSave(int slot) {
-    bool ok = CustomMapSerializer::save(mapData_, slot);
-    if (!ok) {
-        bottomPanel_.setErrorMessage("Save failed! Check console.");
-    } else {
-        std::cout << "[MapEditorState] Saved to slot " << slot << "\n";
-        // Export to LDtk for BaseLevelState to read
-        CustomMapSerializer::exportToLDtk(mapData_, slot);
-    }
-}
-
-void MapEditorState::handleLoad(int slot) {
-    if (!CustomMapSerializer::slotExists(slot)) {
-        bottomPanel_.setErrorMessage("Slot " + std::to_string(slot) + " is empty.");
+    if (!CustomMapSerializer::save(mapData_, slot)) {
+        bottomPanel_.setErrorMessage("Luu that bai! Xem console.");
         return;
     }
-    CustomMapData data = CustomMapSerializer::load(slot);
-    int spawns = data.countPlayerSpawns();
-    int players = (spawns >= 2) ? 2 : 1;
-    
-    LevelFactory factory = [data](std::string p1, std::string p2) {
-        return std::make_unique<BaseLevelState>(data, p1, p2);
+    std::cout << "[MapEditorState] Da luu vao slot " << slot << "\n";
+}
+
+// -----------------------------------------------------------------------------
+// LOAD = mở map đã lưu ĐỂ SỬA TIẾP.
+//
+// Trước đây hàm này không hề gán vào mapData_ — nó dựng luôn CharacterSelection
+// rồi vào game, nên map đã lưu không bao giờ mở lại chỉnh sửa được. Việc chơi
+// thử nay là hành động riêng (handleTestPlay).
+// -----------------------------------------------------------------------------
+void MapEditorState::handleLoad(int slot) {
+    bool ok = false;
+    CustomMapData data = CustomMapSerializer::load(slot, &ok);
+    if (!ok) {
+        bottomPanel_.setErrorMessage("Khong nap duoc slot " + std::to_string(slot) + ".");
+        return;
+    }
+
+    mapData_ = std::move(data);
+
+    // Lịch sử undo của map CŨ không còn ý nghĩa với map vừa nạp — giữ lại thì
+    // một cú Ctrl+Z sẽ biến map mới thành map cũ.
+    undoRedo_.clear();
+    resizer_.reset();
+    mapDirty_ = true;
+
+    std::cout << "[MapEditorState] Da mo slot " << slot << " de chinh sua.\n";
+}
+
+// -----------------------------------------------------------------------------
+// TEST PLAY = chơi thử map ĐANG SỬA (không phải bản trên đĩa).
+//
+// Chế độ chơi suy ra từ chính dữ liệu map qua CustomMapValidator, thay vì ép
+// cứng "spawns >= 2 ? 2 : 1" rồi để BaseLevelState tự bật PvP.
+// -----------------------------------------------------------------------------
+void MapEditorState::handleTestPlay(int /*slot*/) {
+    auto result = CustomMapValidator::validate(mapData_);
+    if (!result.valid) {
+        std::cerr << "[MapEditorState] Khong the choi thu: " << result.message << "\n";
+        bottomPanel_.setErrorMessage(result.message);
+        return;
+    }
+
+    std::cout << "[MapEditorState] Choi thu — " << result.message << "\n";
+
+    CustomMapData data = mapData_;
+    bool pvp = result.isPvP();
+
+    LevelFactory factory = [data, pvp](std::string p1, std::string p2) {
+        return std::make_unique<BaseLevelState>(data, p1, p2, pvp);
     };
-    
-    auto selectionState = std::make_unique<CharacterSelectionState>(players, factory);
+
+    auto selectionState = std::make_unique<CharacterSelectionState>(result.playerCount(), factory);
     this->PushStateCommand(std::make_unique<::PushStateCommand>(std::move(selectionState)));
 }
 
@@ -515,12 +516,15 @@ void MapEditorState::handleLoad(int slot) {
 // Validation
 // =============================================================================
 
+// Uỷ quyền cho CustomMapValidator — một nguồn chân lý duy nhất cho luật hợp lệ,
+// dùng chung giữa Save và Test Play. Trước đây hàm này chỉ kiểm `spawns >= 1`,
+// mâu thuẫn với tài liệu và cho phép lưu những map không chơi được.
 bool MapEditorState::validateMapBeforeAction(const std::string& action) {
-    int spawns = mapData_.countPlayerSpawns();
-    if (spawns < 1) {
-        bottomPanel_.setErrorMessage(
-            action + " failed: need at least 1 PlayerSpawn (found " +
-            std::to_string(spawns) + ")");
+    auto result = CustomMapValidator::validate(mapData_);
+    if (!result.valid) {
+        std::cerr << "[MapEditorState] " << action << " bi tu choi: "
+                  << result.message << "\n";
+        bottomPanel_.setErrorMessage(result.message);
         return false;
     }
     return true;

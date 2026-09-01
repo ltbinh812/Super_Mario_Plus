@@ -37,8 +37,11 @@ public:
 private:
     std::vector<EntityDef> entities_;
     std::string selectedId_;
-    int scrollOffsetX_ = 0;
+    // float: giá trị cuộn được tính bằng số thực (wheel * 40.0f). Khai báo int
+    // như trước làm mất phần thập phân mỗi nấc lăn chuột.
+    float scrollOffsetX_ = 0.0f;
 
     void initEntityList();
+    void appendEnemies();   // thêm Mob_* và Boss_* vào cuối danh sách
     void drawEntityIcon(const EntityDef& def, Rectangle dest, bool selected) const;
 };

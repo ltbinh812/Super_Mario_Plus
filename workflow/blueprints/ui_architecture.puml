@@ -1,0 +1,165 @@
+@startuml ui_architecture
+' Super Mario Plus - interface layer
+' Verified against the source tree at commit b378acb.
+' Matches: include/ui/, src/ui/
+
+title User Interface — panels, widgets and resolution scaling
+
+skinparam classAttributeIconSize 0
+
+interface IMenuPanel {
+  + {abstract} Update(float dt)
+  + {abstract} Render() const
+  + {abstract} HandleInput(Vector2 mouse, bool pressed, bool released)
+  + TriggerEntry()
+  + TriggerExit()
+  + SetOnCloseCallback(function<void()>)
+}
+
+class ButtonGroup {
+  - vector<MenuButtonState> buttons_
+  - vector<MenuButtonState> tabs_
+  - vector<KeybindRow> keybinds_
+  - vector<SliderRow> sliders_
+  - Font customFont_
+  - float scrollY_, maxScrollY_
+  + AddButton(normalPath, pressPath, action, onClick, delay, label)
+  + AddTab(...)
+  + AddKeybind(label, action, currentKey, defaultKey, isP1)
+  + AddSlider(label, getter, setter)
+  + UpdateLayout(startY, gap)
+}
+note right of ButtonGroup
+  Carries the settings screen: the
+  key-rebinding rows and the four volume
+  sliders. Sliders hold getter/setter
+  callbacks bound to SettingsManager, so
+  the widget never knows what it is editing.
+end note
+
+class WorldActionPanel {
+  - int worldIndex_
+  - PanelButton newGameBtn_
+  - PanelButton loadGameBtn_
+  - PanelButton backBtn_
+  + Open(worldIndex, worldName)
+  + SetOnNewGame(function<void()>)
+  + SetOnLoadGame(function<void()>)
+}
+
+class SaveVersionPanel {
+  - vector<SaveSlotInfo> slots_
+  - int selectedIndex_
+  - PanelButton deleteBtn_, loadBtn_, backBtn_
+  + Open(worldIndex, worldName, vector<SaveSlotInfo>)
+  + Refresh(vector<SaveSlotInfo>)
+  + SetOnLoad(function<void(SaveSlotInfo)>)
+  + SetOnDelete(function<void(SaveSlotInfo)>)
+}
+
+class CharacterInfoPanel {
+  - vector<string> characters
+  - unique_ptr<UIAtlasAnimator> appearAnim_
+  - unique_ptr<UIAtlasAnimator> disappearAnim_
+}
+
+IMenuPanel <|.. ButtonGroup
+IMenuPanel <|.. WorldActionPanel
+IMenuPanel <|.. SaveVersionPanel
+IMenuPanel <|.. CharacterInfoPanel
+
+class PanelButton {
+  - Rectangle bounds_
+  - Texture2D texNormal_, texPressed_
+  - float hoverScale_
+  - bool clicked_
+  + HandleInput(Vector2, bool, bool)
+  + Update(float dt)
+  + Render() const
+  + ConsumeClick() : bool
+}
+note bottom of PanelButton
+  ConsumeClick returns the click ONCE and
+  clears it. HandleInput only records that
+  a click happened; acting on it belongs to
+  a later phase. This keeps the widget
+  inside the four-phase rule.
+end note
+
+class Button {
+  - Rectangle bound_
+  - function<void()> onClick_
+  + setPosition(Vector2) : Button&
+  + setSize(Vector2) : Button&
+  + setLabel(string) : Button&
+  + setOnClick(function<void()>) : Button&
+}
+
+class PlayerHUD <<static>> {
+  + {static} render(Player* p1, Player* p2, PartyInventory* inv)
+}
+
+class ShopUIPanel {
+  - bool isOpen_
+  - Player* buyer_
+  - vector<ShopItemDef> items_
+  - float scrollOffset_
+  + open(Player* buyer)
+  + update(float, Vector2, bool)
+  + render(float alpha) const
+}
+
+class IngameSettingsPanel {
+  - shared_ptr<ButtonGroup> settingsGroup_
+  - Rectangle cogwheelBounds_
+  - bool isOpen_
+  + init(w, h, function<void()> onQuitToMenu)
+  + toggle()
+}
+
+class UIScaler {
+  - float factor_
+  - float offsetX_, offsetY_
+  + {static} kDesignWidth = 2560
+  + {static} kDesignHeight = 1440
+  + Refresh()
+  + S(float length) : float
+  + X(float x) : float
+  + Y(float y) : float
+  + Pos(float, float) : Vector2
+  + Rect(float, float, float, float) : Rectangle
+}
+note right of UIScaler
+  Virtual canvas. Everything is laid out
+  against a fixed 2560x1440 frame and
+  scaled by min(w/2560, h/1440), so
+  artwork is never distorted and the
+  layout keeps its proportions.
+
+  S() converts a LENGTH.
+  X()/Y() convert a POSITION (adds the
+  centring offset). Mixing them up puts
+  elements out by exactly one margin.
+end note
+
+interface ITransition {
+  + {abstract} Start(bool out)
+  + {abstract} Update(float dt)
+  + {abstract} Render() const
+  + {abstract} IsFinished() const : bool
+}
+class IrisTransition {
+  - float maxRadius, currentRadius
+  - float speedOut, speedIn, featherSize
+  - Color overlayColor
+}
+ITransition <|.. IrisTransition
+
+WorldActionPanel *-- PanelButton
+SaveVersionPanel *-- PanelButton
+ButtonGroup *-- Button
+IngameSettingsPanel *-- ButtonGroup
+ButtonGroup ..> UIScaler
+ShopUIPanel ..> Player : buyer (raw, non-owning)
+
+@enduml

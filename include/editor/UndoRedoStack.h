@@ -24,6 +24,11 @@ public:
     // Clear redo stack (gọi sau mỗi lần edit mới)
     void clearRedo();
 
+    // Xoá SẠCH cả hai ngăn xếp. Bắt buộc gọi khi nạp một map khác vào editor:
+    // lịch sử của map cũ áp lên map mới là vô nghĩa, một cú Ctrl+Z sẽ biến map
+    // vừa mở thành map trước đó.
+    void clear();
+
     bool canUndo() const { return !undoStack_.empty(); }
     bool canRedo() const { return !redoStack_.empty(); }
 

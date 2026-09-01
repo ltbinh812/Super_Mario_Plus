@@ -1,0 +1,159 @@
+@startuml map_editor
+' Super Mario Plus - in-game map editor
+' Verified against the source tree at commit b378acb.
+' Matches: include/editor/, src/editor/, src/states/MapEditorState.cpp
+
+title Map Editor — tools, history and the bridge into gameplay
+
+skinparam classAttributeIconSize 0
+
+class MapEditorState {
+  - CustomMapData mapData_
+  - TileMap tileMap_
+  - EditorCamera editorCamera_
+  - EditorMapResizer resizer_
+  - EditorBottomPanel bottomPanel_
+  - EditorToolManager toolManager_
+  - UndoRedoStack undoRedo_
+  - EditorSaveLoadUI saveLoadUI_
+  - bool mapDirty_
+  + handleSave(int slot)
+  + handleLoad(int slot)
+  + handleTestPlay(int slot)
+}
+
+class CustomMapData {
+  + int width, height, tileSize
+  + string name
+  + map<int, string> tiles
+  + vector<CustomEntityData> entities
+  + keyOf(gx, gy) : int
+  + gridXOf(key) : int
+  + gridYOf(key) : int
+  + getTile(gx, gy) : string
+  + setTile(gx, gy, blockId)
+  + countPlayerSpawns() : int
+  + countBosses() : int
+}
+note right of CustomMapData
+  Sparse storage: only non-empty cells
+  are held. This is what makes whole-map
+  snapshot undo affordable.
+  Cell index depends on width, so every
+  resize re-indexes the stored cells.
+end note
+
+package "Strategy — editing tools" {
+  interface IEditorTool {
+    + {abstract} onPress(gx, gy, CustomMapData&) : bool
+    + {abstract} onDrag(gx, gy, CustomMapData&) : bool
+    + {abstract} onRelease()
+    + {abstract} renderGhost(gx, gy, Rectangle, CustomMapData&) const
+  }
+  class PlaceTileTool {
+    - const string* pSelected_
+    - int lastGx_, lastGy_
+  }
+  class PlaceEntityTool {
+    - const string* pSelected_
+    - function<const EntityDef*(string)> defLookup_
+  }
+  class EraseTool {
+    - int lastGx_, lastGy_
+  }
+  IEditorTool <|.. PlaceTileTool
+  IEditorTool <|.. PlaceEntityTool
+  IEditorTool <|.. EraseTool
+}
+
+note bottom of IEditorTool
+  onPress and onDrag return whether the
+  map actually changed. That return value
+  decides both whether an undo snapshot is
+  kept and whether the map canvas is
+  rebuilt — clicking a cell that already
+  holds the selected block does neither.
+end note
+
+class EditorToolManager {
+  - EditorToolType activeType_
+  - unique_ptr<IEditorTool> current_
+  - EraseTool rightEraseTool_
+  + setTool(type, blockId*, entityType*, defLookup)
+  + dispatch(gx, gy, mouse flags, CustomMapData&) : bool
+  + renderGhost(gx, gy, Rectangle, CustomMapData&) const
+}
+
+package "Memento — reversible editing" {
+  class UndoRedoStack {
+    - deque<CustomMapData> undoStack_
+    - deque<CustomMapData> redoStack_
+    + {static} MAX_HISTORY : int
+    + pushUndo(CustomMapData)
+    + undo(CustomMapData&) : bool
+    + redo(CustomMapData&) : bool
+    + clear()
+  }
+}
+note right of UndoRedoStack
+  Whole-state snapshots rather than
+  per-operation inverses. An operation
+  cannot implement its inverse wrongly
+  because no operation implements one.
+end note
+
+class EditorBottomPanel {
+  - CategoryPanel categoryPanel_
+  - BlockVariantPanel blockVariantPanel_
+  - EntityPalette entityPalette_
+  - UIScaler ui_
+  + getSelectedBlockId() : string&
+  + getSelectedEntityType() : string&
+  + getActiveTool() : EditorToolType
+}
+
+class EditorBlockRegistry <<singleton>> {
+  - map<string, EditorBlockDef> defs_
+  + get(id) : EditorBlockDef&
+  + has(id) : bool
+  + getCollision(id) : CollisionType
+}
+
+class AutoTiler <<singleton>> {
+  - vector<AutoTileRuleGroup> groups_
+  + loadRules(path)
+  + buildLayer(mapData, cells) : vector<AutoTileOutput>
+}
+note left of AutoTiler
+  Parses real LDtk auto-tiling rule
+  groups so a wall drawn in this editor
+  picks its own corners and edges the
+  same way an authored level does.
+end note
+
+class CustomMapSerializer <<static>> {
+  + {static} MAX_SLOTS : int
+  + {static} save(CustomMapData, slot) : bool
+  + {static} load(slot, bool* ok) : CustomMapData
+  + {static} listOccupiedSlots() : vector<int>
+}
+
+class CustomMapValidator <<static>> {
+  + {static} validate(CustomMapData) : Result
+}
+
+class BaseLevelState
+
+MapEditorState *-- CustomMapData
+MapEditorState *-- EditorToolManager
+MapEditorState *-- EditorBottomPanel
+MapEditorState *-- UndoRedoStack
+EditorToolManager *-- IEditorTool
+UndoRedoStack o-- CustomMapData : snapshots
+EditorBottomPanel ..> EditorBlockRegistry
+CustomMapData ..> AutoTiler : tiled by
+MapEditorState ..> CustomMapSerializer
+MapEditorState ..> CustomMapValidator
+MapEditorState ..> BaseLevelState : test play\n(hands over CustomMapData directly)
+
+@enduml
