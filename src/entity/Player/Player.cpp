@@ -203,6 +203,15 @@ void Player::useSkill(const std::string &skillname) {
   }
 }
 
+void Player::stopSkill(const std::string &skillname) {
+  if (currentState == &skillState) {
+    const ISkill *current = skillState.getCurrentSkill();
+    if (current && current == findSkill(skillname)) {
+        skillState.forceStop();
+    }
+  }
+}
+
 void Player::addSkill(const std::string &name, std::unique_ptr<ISkill> skill) {
   skillList[name] = std::move(skill);
 }

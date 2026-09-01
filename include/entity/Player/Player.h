@@ -46,10 +46,13 @@ public:
   void restoreFromSaveData(const PlayerSaveData &data);
 
   // Skill system
-  void useSkill(const std::string &skillname);
+  void useSkill(const std::string& skillName);
+  void stopSkill(const std::string& skillName);
   void addSkill(const std::string &name, std::unique_ptr<ISkill> skill);
   ISkill* findSkill(const std::string& skillName);
   bool hasEnoughMana(float cost) const;
+
+  bool isPvPEnabled() const override { return isPvPMode_; }
 
   // --- Input action dispatchers (called by Command Pattern) ---
   void onMoveRight();

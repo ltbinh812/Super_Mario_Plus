@@ -18,11 +18,19 @@ bool UndoRedoStack::undo(CustomMapData& current) {
 bool UndoRedoStack::redo(CustomMapData& current) {
     if (redoStack_.empty()) return false;
     undoStack_.push_back(current);        // lưu current vào undo
+    // Giữ trần lịch sử ở MỌI nơi đẩy vào undoStack_, không riêng pushUndo().
+    if ((int)undoStack_.size() > MAX_HISTORY)
+        undoStack_.pop_front();
     current = std::move(redoStack_.back());
     redoStack_.pop_back();
     return true;
 }
 
 void UndoRedoStack::clearRedo() {
+    redoStack_.clear();
+}
+
+void UndoRedoStack::clear() {
+    undoStack_.clear();
     redoStack_.clear();
 }

@@ -90,3 +90,14 @@ public:
     player.interactWithOverlapping();
   }
 };
+
+class StopSkillCommand : public IPlayerCommand {
+private:
+  std::string skillName_;
+
+public:
+  StopSkillCommand(const std::string &skillName) : skillName_(skillName) {}
+  void Execute(Player &player) override {
+    player.stopSkill(skillName_);
+  }
+};

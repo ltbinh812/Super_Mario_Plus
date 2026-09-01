@@ -13,6 +13,10 @@ class EditorMapResizer {
 public:
     static constexpr int   HANDLE_SIZE = 16;   // px trong world space
     static constexpr int   MIN_SIZE    = 10;   // tile tối thiểu mỗi chiều
+    // Trần kích thước. Trước đây CHỈ có MIN_SIZE, nên một cú kéo ở mức zoom
+    // thấp (một pixel màn hình = nhiều ô) có thể phóng map lên hàng nghìn ô ->
+    // LoadRenderTexture khổng lồ + AutoTiler quét vài giây mỗi frame -> treo.
+    static constexpr int   MAX_SIZE    = 500;
 
     // Vẽ 4 handle trên 4 cạnh biên. Gọi trong BeginMode2D.
     // worldTileSize = kích thước 1 tile sau scale (thường 32px)
@@ -21,8 +25,14 @@ public:
     // Xử lý drag input. Gọi trong Process(). Modifies data nếu resize.
     // mouseWorld: tọa độ chuột trong world space (từ EditorCamera::screenToWorld).
     // Trả về true nếu có thay đổi kích thước map.
-    bool process(CustomMapData& data, float worldTileSize);
     bool process(CustomMapData& data, float worldTileSize, Vector2 mouseWorld);
+
+    // Con trỏ có đang nằm trên một handle không? Bên gọi dùng để ghi mốc Undo
+    // TRƯỚC khi phép resize bắt đầu làm thay đổi dữ liệu.
+    bool isHoveringHandle(const CustomMapData& data, float worldTileSize, Vector2 mouseWorld) const;
+
+    // Đang trong một thao tác kéo resize?
+    bool isDragging() const { return dragging_ != Handle::None; }
 
     // Reset trạng thái drag (gọi khi rời editor)
     void reset();

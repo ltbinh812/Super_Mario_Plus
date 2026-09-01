@@ -114,4 +114,6 @@ public:
   
   EntityFaction getFaction() const { return faction; }
   void setFaction(EntityFaction f) { faction = f; }
+
+  virtual bool isPvPEnabled() const { return false; }
 };

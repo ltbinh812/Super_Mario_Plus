@@ -64,6 +64,14 @@ protected:
     void spawnEntitiesFromMap();
     void bindPlayerInputs();
 
+    // Khởi tạo người chơi + entity + asset SAU khi `map` đã nạp xong.
+    // Dùng chung cho cả map LDtk lẫn custom map — xem giải thích trong .cpp.
+    void initWorldFromLoadedMap(const std::string& p1Name, const std::string& p2Name);
+
+    // Map tự tạo không có file trên đĩa; constructor đánh dấu bằng đúng chuỗi
+    // này. Nhiều nhánh (hồi sinh, checkpoint, chuyển màn) phải rẽ khác đi.
+    bool isCustomMap() const { return mapFilePath == "custom"; }
+
     void processDeathCondition(float dt);
     void processItemInteractions();
     void processSpawnQueue();
@@ -97,8 +105,12 @@ public:
     // Original LDtk constructor
     BaseLevelState(const std::string& mapFilePath, const std::string& initialLevel = "", const std::string& p1Name = "Goku", const std::string& p2Name = "", bool isPvPMode = false);
     
-    // [NEW] Constructor cho chế độ Test Play từ MapEditorState
-    BaseLevelState(const CustomMapData& customMap, const std::string& p1Name = "Goku", const std::string& p2Name = "Goku");
+    // [NEW] Constructor cho chế độ Test Play từ MapEditorState.
+    // p2Name mặc định RỖNG (không phải "Goku"): bỏ trống nghĩa là chơi một
+    // mình. isPvPMode do bên gọi quyết định dựa trên dữ liệu map, thay vì tự
+    // bật lên chỉ vì map có hai điểm xuất phát.
+    BaseLevelState(const CustomMapData& customMap, const std::string& p1Name = "Goku",
+                   const std::string& p2Name = "", bool isPvPMode = false);
 
     // [NEW] Constructor khôi phục từ bản lưu (luồng LOAD GAME).
     // Uỷ quyền cho constructor LDtk ở trên với nhân vật + level lấy từ save,

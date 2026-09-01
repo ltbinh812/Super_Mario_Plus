@@ -1,51 +1,140 @@
 @startuml world_and_collision
+' Super Mario Plus - level loading, terrain and camera
+' Verified against the source tree at commit b378acb.
+' Matches: include/environment/, src/environment/, include/combatsystem/
 
-skinparam packageStyle rectangle
+title World — level loading, terrain and camera
 
-title World System & Spatial Grid Collision
+skinparam classAttributeIconSize 0
 
-package "Level Loading System" {
-    class LevelLoader {
-        + static LoadLevel(jsonPath: string, world: WorldState&): void
-    }
-    
-    note right of LevelLoader
-      Dùng nlohmann/json để đọc file .json
-      Sinh ra TileMap và nhồi Entities vào World.
-    end note
+enum CollisionType {
+  None
+  Solid
+  OneWay
+  Hazard
+  Ladder
+  Water
+  Die
+  Lotus
+  Cloud
+  Poison
+  Lava
+  Slop
+  Vine
 }
 
-package "World Domain" {
-    class WorldState {
-        - tileMap: unique_ptr<TileMap>
-        - entities: vector<unique_ptr<Entity>>
-        - cameraManager: CameraManager
-        + Update(dt: float): void
-    }
-
-    class TileMap {
-        - grid: vector<vector<int>>
-        - tileSize: int
-        + GetTilesInRect(bounds: Rectangle): vector<Rectangle>
-        + IsSolid(gridX: int, gridY: int): bool
-    }
-
-    class CameraManager {
-        - camera: Camera2D
-        + Update(target: Vector2, dt: float): void
-    }
+class TileMap {
+  - map<int, Texture2D> tilesetTextures
+  - RenderTexture2D mapCanvas
+  - vector<vector<int>> backgroundLayer
+  - vector<vector<int>> displayLayer
+  - vector<vector<CollisionType>> collisionLayer
+  - map<string, vector<NeighbourInfo>> currentNeighbours
+  - vector<Vector2> playerSpawns
+  - vector<LDtkEntityData> entityData_
+  - int tileSize, columns, rows
+  --
+  + LoadLDtkMap(path, levelName) : bool
+  + LoadCustomMap(CustomMapData&) : bool
+  + Draw() const
+  + GetCollidingTiles(Rectangle) : vector<CollisionTile>
+  + GetNeighbour(dir, gx, gy) : string
+  + GetPlayerSpawns() : vector<Vector2>
+  + GetEntityData() : vector<LDtkEntityData>
 }
-
-WorldState *-- TileMap
-WorldState *-- CameraManager
-LevelLoader ..> WorldState : populates >
-
 note right of TileMap
-  THAY THẾ VÒNG LẶP O(N * M)
-  Thay vì duyệt mảng Platform,
-  chỉ cần tính toán gridX, gridY từ toạ độ
-  và lấy ra 4-8 block xung quanh nhân vật.
-  Tốc độ va chạm là O(1) bất chấp map to cỡ nào.
+  Two entry points, one internal model.
+  LoadLDtkMap serves the authored campaign,
+  LoadCustomMap serves the in-game editor,
+  and everything downstream is identical.
+
+  The static background is composited once
+  into mapCanvas instead of being redrawn
+  tile by tile every frame.
 end note
+
+class LDtkEntityData {
+  + string identifier
+  + Vector2 px
+  + string iid
+  + json fieldInstances
+  + float width, height
+}
+note bottom of LDtkEntityData
+  iid is the stable identifier that makes
+  world state saveable — see save_architecture.puml
+end note
+
+package "Strategy + queue — camera behaviour" {
+  interface ICameraMode {
+    + {abstract} update(MapCamera&, float dt)
+    + {abstract} isFinished() const : bool
+    + {abstract} getName() const : string
+  }
+  class CameraFollowMode {
+    - Vector2 targetPos1, targetVel
+    - int mapWidth, mapHeight
+  }
+  class CameraPanMode {
+    - Vector2 startPos, targetPos
+    - float duration, elapsed
+    - EaseType easeType
+  }
+  class CameraZoomMode {
+    - float startZoom, targetZoom
+    - float duration, elapsed
+  }
+  ICameraMode <|.. CameraFollowMode
+  ICameraMode <|.. CameraPanMode
+  ICameraMode <|.. CameraZoomMode
+}
+
+class MapCamera {
+  - Camera2D camera
+  - unique_ptr<ICameraMode> currentMode
+  - queue<unique_ptr<ICameraMode>> modeQueue
+  - bool isInCinematicMode
+  + Update(target, vel, mapW, mapH, dt, target2)
+  + pushMode(unique_ptr<ICameraMode>)
+  + updateMode(float dt)
+  + clearModes()
+  + BeginMode()
+  + EndMode()
+}
+note right of MapCamera
+  Following is one behaviour among the
+  three, not a special default. Returning
+  to normal is simply the next entry in
+  the queue, which is why an interrupted
+  cutscene cannot leave the camera stuck.
+end note
+
+package "Combat" {
+  interface ICollisionDetector {
+    + {abstract} detect(hitboxes, entities) : vector<CollisionPair>
+  }
+  class BruteForceDetector
+  class CombatSystem {
+    - unique_ptr<ICollisionDetector> detector
+    + update(vector<Entity*>, float dt)
+    + renderDebug(vector<Entity*>) const
+  }
+  class Hitbox {
+    + Rectangle rect
+    + int damage, defense
+    + Entity* owner
+    + Entity* ignoreEntity
+    + uint32_t targetFactionMask
+    + canHit(EntityFaction) const : bool
+  }
+  ICollisionDetector <|.. BruteForceDetector
+  CombatSystem *-- ICollisionDetector
+  CombatSystem ..> Hitbox : resolves
+}
+
+TileMap ..> CollisionType : grid of
+TileMap *-- LDtkEntityData
+MapCamera *-- ICameraMode : current
+MapCamera o-- ICameraMode : queued
 
 @enduml

@@ -5,14 +5,16 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 using json = nlohmann::json;
 
 EndgameState::EndgameState(bool isPvPMode, const std::string& winnerName)
     : isPvPMode_(isPvPMode), winnerName_(winnerName),
-      bgTex_({0}), btnNormalTex_({0}), btnPressTex_({0}),
+      bgTex_({0}), customFont_({0}),
       backBtnRect_({0, 0, 0, 0}), backBtnHitBox_({0, 0, 0, 0}),
       isBtnHovered_(false), isBtnPressed_(false), isReturningToMenu_(false),
+      isTransitioningIn_(false), isTransitioningOut_(false), btnAnimTimer_(0.0f),
       screenW_(0), screenH_(0),
       isPlayingSkill_(false), skillTimer_(0.0f)
 {
@@ -41,12 +43,18 @@ void EndgameState::Init() {
         std::cerr << "[EndgameState] Khong nap duoc anh nen ket thuc man.\n";
     }
 
-    btnNormalTex_ = LoadTexture("assets/UI_screens/undo_button_2.png");
-    btnPressTex_  = LoadTexture("assets/UI_screens/undo_button_2.png"); // chưa có ảnh press riêng
-
     if (isPvPMode_ && !winnerName_.empty()) {
         LoadWinnerAnimations();
     }
+
+    transitionIn_ = std::make_unique<IrisTransition>();
+    transitionOut_ = std::make_unique<IrisTransition>();
+    isTransitioningIn_ = true;
+    isTransitioningOut_ = false;
+    transitionIn_->Start(false); // Mở vòng tròn từ tối ra sáng
+
+    btnAnimTimer_ = 0.0f; // Reset đếm giờ cho hiệu ứng nảy nút
+    customFont_ = LoadFont("assets/config/kenney-pixel-hu.otf"); // Dùng font giống LoadingState
 
     RecalculateLayout();
 }
@@ -116,20 +124,32 @@ void EndgameState::LoadWinnerAnimations() {
 // đang dùng cho nút back của nó.
 // -----------------------------------------------------------------------------
 void EndgameState::RecalculateLayout() {
-    float baseSize  = screenH_ * 0.10f;
-    float hoverSize = baseSize * 1.1f;
+    float baseWidth  = screenW_ * 0.15f;
+    float baseHeight = screenH_ * 0.08f;
+    float hoverWidth = baseWidth * 1.05f;
+    float hoverHeight = baseHeight * 1.05f;
 
-    float marginX = screenW_ * 0.05f;
-    float marginY = screenH_ * 0.05f;
+    float marginX = screenW_ * 0.03f;
+    float marginY = screenH_ * 0.10f;
 
-    backBtnHitBox_ = { screenW_ - marginX - hoverSize,
-                       screenH_ - marginY - hoverSize,
-                       hoverSize, hoverSize };
+    float targetYHitbox = screenH_ - marginY - hoverHeight;
+    float startYHitbox = screenH_ + hoverHeight; // Bắt đầu ở bên dưới mép màn hình
+    
+    // Phương trình lò xo tắt dần (damped sine wave) cho Y offset
+    float scale = 1.0f - expf(-6.0f * btnAnimTimer_) * cosf(15.0f * btnAnimTimer_);
+    if (btnAnimTimer_ > 1.0f) scale = 1.0f; // Chốt cứng sau 1 giây để tránh lỗi tính toán
+    
+    float currentYHitbox = startYHitbox + (targetYHitbox - startYHitbox) * scale;
 
-    float btnSize = isBtnHovered_ ? hoverSize : baseSize;
-    backBtnRect_ = { backBtnHitBox_.x + (hoverSize - btnSize) / 2.0f,
-                     backBtnHitBox_.y + (hoverSize - btnSize) / 2.0f,
-                     btnSize, btnSize };
+    backBtnHitBox_ = { screenW_ - marginX - hoverWidth,
+                       currentYHitbox,
+                       hoverWidth, hoverHeight };
+
+    float btnW = isBtnHovered_ ? hoverWidth : baseWidth;
+    float btnH = isBtnHovered_ ? hoverHeight : baseHeight;
+    backBtnRect_ = { backBtnHitBox_.x + (hoverWidth - btnW) / 2.0f,
+                     backBtnHitBox_.y + (hoverHeight - btnH) / 2.0f,
+                     btnW, btnH };
 }
 
 void EndgameState::HandleInput() {
@@ -144,10 +164,9 @@ void EndgameState::HandleInput() {
     }
 
     if (mouseReleased) {
-        // Chỉ GHI NHẬN ý định; việc chuyển state để Process() làm, đúng phân
-        // tách 4 giai đoạn của dự án.
-        if (isBtnHovered_ && isBtnPressed_) {
-            isReturningToMenu_ = true;
+        if (isBtnHovered_ && isBtnPressed_ && !isTransitioningIn_ && !isTransitioningOut_) {
+            isTransitioningOut_ = true;
+            transitionOut_->Start(true);
         }
         isBtnPressed_ = false;
     }
@@ -162,6 +181,21 @@ void EndgameState::Process() {
 }
 
 void EndgameState::Update(float dt) {
+    if (isTransitioningIn_) {
+        transitionIn_->Update(dt);
+        if (transitionIn_->IsFinished()) isTransitioningIn_ = false;
+    } else {
+        // Nút bấm chỉ bắt đầu xuất hiện và nảy sau khi mở màn hình xong
+        btnAnimTimer_ += dt; 
+    }
+
+    if (isTransitioningOut_) {
+        transitionOut_->Update(dt);
+        if (transitionOut_->IsFinished()) {
+            isReturningToMenu_ = true; // Kích hoạt đổi state ở vòng Process
+        }
+    }
+
     // Màn hình có thể bị đổi kích thước -> tính lại bố cục nút.
     screenW_ = (float)GetScreenWidth();
     screenH_ = (float)GetScreenHeight();
@@ -200,10 +234,6 @@ void EndgameState::Render(float alpha) const {
         DrawTexturePro(bgTex_, source, dest, {0, 0}, 0.0f, WHITE);
     } else {
         ClearBackground(RAYWHITE);
-        const char* msg = isPvPMode_ ? "WINNER!" : "LEVEL COMPLETED!";
-        int fs = 40;
-        int tw = MeasureText(msg, fs);
-        DrawText(msg, (int)(screenW_ / 2.0f - tw / 2.0f), (int)(screenH_ / 2.0f), fs, BLACK);
     }
 
     // --- Nhân vật thắng đứng trên bục podium (chỉ chế độ 2-Player) ---
@@ -226,14 +256,66 @@ void EndgameState::Render(float alpha) const {
                 DrawTexturePro(current->getTexture(), src, dest, origin, 0.0f, WHITE);
             }
         }
+    } else {
+        // --- Hiệu ứng chữ LEVEL COMPLETED cho chế độ 1-Player ---
+        float scale = 1.0f - expf(-6.0f * btnAnimTimer_) * cosf(15.0f * btnAnimTimer_);
+        if (btnAnimTimer_ > 1.0f) scale = 1.0f;
+        
+        float fontSize = screenH_ * 0.15f; // Chữ rất lớn
+        const char* msg = "LEVEL COMPLETED!";
+        
+        Vector2 textSize = {0,0};
+        if (customFont_.texture.id != 0) {
+            textSize = MeasureTextEx(customFont_, msg, fontSize, 1.0f);
+        } else {
+            textSize.x = (float)MeasureText(msg, (int)fontSize);
+            textSize.y = fontSize;
+        }
+
+        // Vị trí đích ở chính giữa màn hình
+        float targetY = screenH_ / 2.0f - textSize.y / 2.0f;
+        float startY = -textSize.y; // Rơi từ trên cùng màn hình xuống
+        float currentY = startY + (targetY - startY) * scale;
+        float textX = screenW_ / 2.0f - textSize.x / 2.0f;
+
+        // Vẽ bóng đen
+        if (customFont_.texture.id != 0) {
+            DrawTextEx(customFont_, msg, {textX + 6.0f, currentY + 6.0f}, fontSize, 1.0f, Color{0, 0, 0, 150});
+            DrawTextEx(customFont_, msg, {textX, currentY}, fontSize, 1.0f, GREEN); // Xanh lá
+        } else {
+            DrawText(msg, (int)textX + 6, (int)currentY + 6, (int)fontSize, Color{0, 0, 0, 150});
+            DrawText(msg, (int)textX, (int)currentY, (int)fontSize, GREEN);
+        }
     }
 
     // --- Nút quay về Menu ---
-    Texture2D texToDraw = (isBtnPressed_ && isBtnHovered_) ? btnPressTex_ : btnNormalTex_;
-    if (texToDraw.id != 0) {
-        Rectangle src = {0.0f, 0.0f, (float)texToDraw.width, (float)texToDraw.height};
-        DrawTexturePro(texToDraw, src, backBtnRect_, {0, 0}, 0.0f, WHITE);
-    }
+    Color btnColor = isBtnHovered_ ? (isBtnPressed_ ? Color{46, 125, 50, 255} : Color{76, 175, 80, 255}) : Color{56, 142, 60, 255};
+    Color borderColor = isBtnHovered_ ? (isBtnPressed_ ? Color{27, 94, 32, 255} : Color{56, 142, 60, 255}) : Color{38, 110, 42, 255};
+    
+    // Đổ bóng (Shadow) dày và đậm hơn một chút
+    Rectangle shadowRect = backBtnRect_;
+    shadowRect.x += 6.0f;
+    shadowRect.y += 6.0f;
+    DrawRectangleRounded(shadowRect, 0.4f, 16, Color{0, 0, 0, 120});
+
+    // Nút chính
+    DrawRectangleRounded(backBtnRect_, 0.4f, 16, btnColor);
+
+    // Viền nút
+    DrawRectangleRoundedLines(backBtnRect_, 0.4f, 16, 4.0f, borderColor);
+
+    // Chữ "Return"
+    const char* btnText = "Return";
+    int fontSize = (int)(backBtnRect_.height * 0.5f);
+    int textW = MeasureText(btnText, fontSize);
+    DrawText(btnText, 
+             (int)(backBtnRect_.x + backBtnRect_.width / 2.0f - textW / 2.0f), 
+             (int)(backBtnRect_.y + backBtnRect_.height / 2.0f - fontSize / 2.0f), 
+             fontSize, WHITE);
+
+    // --- Vẽ hiệu ứng Transition nằm đè lên trên cùng ---
+    if (isTransitioningIn_) transitionIn_->Render();
+    if (isTransitioningOut_) transitionOut_->Render();
 }
 
 void EndgameState::Cleanup() {
@@ -241,13 +323,9 @@ void EndgameState::Cleanup() {
         UnloadTexture(bgTex_);
         bgTex_ = {0};
     }
-    if (btnNormalTex_.id != 0) {
-        UnloadTexture(btnNormalTex_);
-        btnNormalTex_ = {0};
-    }
-    if (btnPressTex_.id != 0) {
-        UnloadTexture(btnPressTex_);
-        btnPressTex_ = {0};
+    if (customFont_.texture.id != 0) {
+        UnloadFont(customFont_);
+        customFont_.texture.id = 0;
     }
     // winnerIdleAnim_/winnerSkillAnim_ chỉ TRỎ tới texture do AssetManager sở
     // hữu, nên chỉ cần thả con trỏ, tuyệt đối không UnloadTexture ở đây.

@@ -5642,20 +5642,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Boss_franky",
-							"__grid": [235,20],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#F77622",
-							"iid": "f69e1010-96d0-11f1-9220-6f9fa26c3959",
-							"width": 32,
-							"height": 32,
-							"defUid": 265,
-							"px": [3768,336],
-							"fieldInstances": [{ "__identifier": "cutSceneId", "__type": "String", "__value": null, "__tile": null, "defUid": 266, "realEditorValues": [] }]
-						},
-						{
 							"__identifier": "Buff",
 							"__grid": [55,6],
 							"__pivot": [0,0],
@@ -5711,20 +5697,6 @@
 							"height": 16,
 							"defUid": 270,
 							"px": [248,384],
-							"fieldInstances": []
-						},
-						{
-							"__identifier": "Endgame",
-							"__grid": [27,20],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "68492b10-96d0-11f1-9f54-4dc544e90a5c",
-							"width": 16,
-							"height": 16,
-							"defUid": 271,
-							"px": [440,336],
 							"fieldInstances": []
 						},
 						{

@@ -31,7 +31,8 @@ Explosion::Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig
     : Entity(getExplosionBaseStats(config), getExplosionRuntimeStats(config), getExplosionWorldStats(startPos, isFacingRight)),
       lifetime(config.lifetime), attackPower(config.damage), 
       hitboxW(config.hitboxW), hitboxH(config.hitboxH), spawner(spawner), onHitEffect(config.onHitEffect),
-      hitboxStartFrame(config.hitboxStartFrame), hitboxEndFrame(config.hitboxEndFrame) {
+      hitboxStartFrame(config.hitboxStartFrame), hitboxEndFrame(config.hitboxEndFrame),
+      hitboxOffsetX(config.hitboxOffsetX), hitboxOffsetY(config.hitboxOffsetY) {
     
     faction = spawner ? spawner->getFaction() : EntityFaction::Neutral;
     
@@ -41,6 +42,19 @@ Explosion::Explosion(Vector2 startPos, bool isFacingRight, const ExplosionConfig
         if (tex.id != 0) {
             animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime, config.scale);
         }
+    }
+    
+    if (hitboxW <= 0.0f || hitboxH <= 0.0f) {
+        if (animation) {
+            Rectangle frame = animation->getCurrentFrame();
+            hitboxW = std::abs(frame.width) * config.scale;
+            hitboxH = std::abs(frame.height) * config.scale;
+        } else {
+            hitboxW = 100.0f;
+            hitboxH = 100.0f;
+        }
+        baseStats.physicsBox = {hitboxW, hitboxH};
+        runtimeStats.physicsBox = {hitboxW, hitboxH};
     }
 }
 
@@ -95,11 +109,22 @@ bool Explosion::hasActiveHitbox() const {
     return true;
 }
 
-Hitbox Explosion::getActiveHitbox() {
+Rectangle Explosion::getOffsetHitbox() const {
     Rectangle rect = { worldStats.position.x - hitboxW / 2.0f, worldStats.position.y - hitboxH, hitboxW, hitboxH };
+    float offX = worldStats.isFacingRight ? hitboxOffsetX : -hitboxOffsetX;
+    rect.x += offX;
+    rect.y += hitboxOffsetY;
+    return rect;
+}
+
+Hitbox Explosion::getActiveHitbox() {
+    Rectangle rect = getOffsetHitbox();
     Hitbox hb = { rect, attackPower, 0, this, spawner, onHitEffect };
     if (faction == EntityFaction::Player) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+        if (spawner && spawner->isPvPEnabled()) {
+            hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+        }
     } else if (faction == EntityFaction::Enemy) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
     }

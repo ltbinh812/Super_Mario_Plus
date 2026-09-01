@@ -58,12 +58,60 @@ void EntityPalette::initEntityList() {
         { "Boom",         "Bomb",          ITEM_A,                                  {128, 0, 64, 64},  {80,  80,  80,  255} },
         // Buff — buff.png, first frame at (16,16,176,160) nhưng quá lớn → dùng fallback
         { "Buff",         "Buff",          "assets/maps/item/buff.png",             {416, 16, 176, 176}, {255, 100, 200, 255} },
-        // Spring variants — item/a.png
+        // Spring variants — item/a.png.
+        // Lưu ý: trong ảnh nguồn, spring_out_left nằm ở x=960 còn spring_out_right
+        // ở x=1024. Bảng cũ gán ngược hai giá trị này nên icon Left/Right bị hoán đổi.
         { "Spring_up",    "Spring Up",     ITEM_A,                                  {1088, 0, 64, 64},  {50,  200, 80,  255} },
         { "Spring_down",  "Spring Down",   ITEM_A,                                  {896, 0, 64, 64},  {50,  200, 80,  255} },
-        { "Spring_left",  "Spring Left",   ITEM_A,                                  {1024,0, 64, 64},  {50,  200, 80,  255} },
-        { "Spring_right", "Spring Right",  ITEM_A,                                  {960, 0, 64, 64},  {50,  200, 80,  255} },
+        { "Spring_left",  "Spring Left",   ITEM_A,                                  {960, 0, 64, 64},  {50,  200, 80,  255} },
+        { "Spring_right", "Spring Right",  ITEM_A,                                  {1024,0, 64, 64},  {50,  200, 80,  255} },
     };
+
+    appendEnemies();
+}
+
+// -----------------------------------------------------------------------------
+// Quái và boss.
+//
+// TÊN PHẢI GIỮ TIỀN TỐ "Mob_" / "Boss_": BaseLevelState::spawnEntitiesFromMap()
+// dùng đúng hai tiền tố này (rfind(prefix, 0) == 0) để quyết định gọi
+// EnemyFactory thay vì ItemFactory. Đổi tên là quái biến mất khỏi map.
+//
+// EnemyFactory hạ chữ thường rồi tra assets/config/enemies.json, nên
+// "Mob_slime" -> khoá "mob_slime". Danh sách dưới đây khớp đúng 15 khoá có
+// trong file cấu hình đó.
+//
+// Icon lấy khung ĐẦU TIÊN của hoạt ảnh idle (một ô vuông cạnh bằng chiều cao
+// dải sprite) — xem chú thích UV từng dòng.
+// -----------------------------------------------------------------------------
+void EntityPalette::appendEnemies() {
+    const Color kMobTint  = {200,  90,  90, 255};
+    const Color kBossTint = {230,  60, 140, 255};
+
+    struct EnemySeed { const char* id; const char* label; const char* tex; Rectangle uv; bool boss; };
+    static const EnemySeed kEnemies[] = {
+        // --- Mob: atlas assets/mobs/<ten>.png, idle là dải ngang ---
+        { "Mob_mushroom", "Mushroom", "assets/mobs/mob_mushroom.png", {0, 128,  64,  64}, false },
+        { "Mob_slime",    "Slime",    "assets/mobs/mob_slime.png",    {0,   0,  64,  64}, false },
+        { "Mob_soldier",  "Soldier",  "assets/mobs/mob_soldier.png",  {0,   0,  64,  64}, false },
+        { "Mob_bat",      "Bat",      "assets/mobs/mob_bat.png",      {0,   0, 112, 112}, false },
+        { "Mob_guardian", "Guardian", "assets/mobs/mob_guardian.png", {0,   0,  96,  96}, false },
+        { "Mob_goblin",   "Goblin",   "assets/mobs/mob_goblin.png",   {0, 128,  64,  64}, false },
+        { "Mob_skeleton", "Skeleton", "assets/mobs/mob_skeleton.png", {0, 128,  64,  64}, false },
+        { "Mob_tree",     "Tree",     "assets/mobs/mob_tree.png",     {0, 128,  64,  64}, false },
+        { "Mob_rat",      "Rat",      "assets/mobs/mob_rat.png",      {0,  64,  32,  32}, false },
+        // --- Boss: mỗi hoạt ảnh một file riêng trong assets/boss/<ten>/ ---
+        { "Boss_itachi",     "Boss Itachi", "assets/boss/itachi/idle.png",     {0, 0, 64, 64}, true },
+        { "Boss_doflam",     "Boss Doflam", "assets/boss/doflam/idle.png",     {0, 0, 80, 80}, true },
+        { "Boss_franky",     "Boss Franky", "assets/boss/franky/idle.png",     {0, 0, 96, 96}, true },
+        { "Boss_narutoboss", "Boss Naruto", "assets/boss/narutoboss/idle.png", {0, 0, 64, 64}, true },
+        { "Boss_sasukeboss", "Boss Sasuke", "assets/boss/sasukeboss/idle.png", {0, 0, 80, 80}, true },
+        { "Boss_shank",      "Boss Shank",  "assets/boss/shank/idle.png",      {0, 0, 80, 80}, true },
+    };
+
+    for (const auto& s : kEnemies) {
+        entities_.push_back({ s.id, s.label, s.tex, s.uv, s.boss ? kBossTint : kMobTint });
+    }
 }
 
 std::vector<std::string> EntityPalette::getAllTexturePaths() const {
@@ -172,14 +220,17 @@ void EntityPalette::handleInput(Rectangle panelRect) {
     Vector2 mp = GetMousePosition();
     if (CheckCollisionPointRec(mp, panelRect)) {
         float wheel = GetMouseWheelMove();
-        if (wheel != 0.0f) {
-            scrollOffsetX_ -= wheel * 40.0f;
-            float totalWidth = ICON_PAD + entities_.size() * (ICON_SIZE + ICON_PAD);
-            float visibleWidth = panelRect.width;
-            float maxScroll = totalWidth > visibleWidth ? (totalWidth - visibleWidth) : 0.0f;
-            if (scrollOffsetX_ < 0.0f) scrollOffsetX_ = 0.0f;
-            if (scrollOffsetX_ > maxScroll) scrollOffsetX_ = maxScroll;
-        }
+        if (wheel != 0.0f) scrollOffsetX_ -= wheel * 40.0f;
+    }
+
+    // Kẹp NGOÀI nhánh lăn chuột: sau khi cửa sổ đổi kích thước (hoặc danh sách
+    // entity dài ra) thì maxScroll đổi theo, nếu chỉ kẹp bên trong nhánh thì
+    // danh sách có thể kẹt ở vị trí cuộn quá đà cho tới nấc lăn kế tiếp.
+    {
+        float totalWidth   = ICON_PAD + entities_.size() * (ICON_SIZE + ICON_PAD);
+        float maxScroll    = totalWidth > panelRect.width ? (totalWidth - panelRect.width) : 0.0f;
+        if (scrollOffsetX_ < 0.0f)       scrollOffsetX_ = 0.0f;
+        if (scrollOffsetX_ > maxScroll)  scrollOffsetX_ = maxScroll;
     }
 
     if (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) return;

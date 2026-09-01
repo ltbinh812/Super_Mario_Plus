@@ -74,7 +74,8 @@ private:
     // --- Helpers ---
     void handleSaveLoadSlotAction(int slot);
     void handleSave(int slot);
-    void handleLoad(int slot);
+    void handleLoad(int slot);      // nạp slot vào editor ĐỂ SỬA
+    void handleTestPlay(int slot);  // chơi thử map đang sửa
     bool validateMapBeforeAction(const std::string& action);
 
     // --- Render helpers (const — không thay đổi state) ---

@@ -13,9 +13,15 @@ EditorBottomPanel::EditorBottomPanel()
           if (cat != "Entities") {
               blockVariantPanel_.onCategoryChanged(cat);
           }
-          // Khi chuyển sang Entities tab → switch tool về PlaceEntity
-          // Khi chuyển sang tab khác → switch tool về Place
-          activeTool_ = (cat == "Entities") ? EditorToolType::PlaceEntity : EditorToolType::Place;
+          // Chỉ đổi tool khi thực sự chuyển GIỮA đặt-block và đặt-entity.
+          //
+          // Trước đây dòng này gán vô điều kiện, nên đang chọn Erase mà mở một
+          // category khác để tìm block là bị âm thầm đưa về Place — cú click kế
+          // tiếp vẽ thay vì xoá. Người dùng đang xoá thì phải vẫn đang xoá.
+          if (activeTool_ != EditorToolType::Erase) {
+              activeTool_ = (cat == "Entities") ? EditorToolType::PlaceEntity
+                                                : EditorToolType::Place;
+          }
       }),
       blockVariantPanel_([](const std::string&) {
           // Block selected — MapEditorState đọc getSelectedBlockId()
@@ -38,7 +44,7 @@ const std::string& EditorBottomPanel::getSelectedBlockId() const {
 }
 
 void EditorBottomPanel::clearRequests() {
-    reqSave_ = reqLoad_ = reqExit_ = reqUndo_ = reqRedo_ = false;
+    reqSave_ = reqLoad_ = reqPlay_ = reqExit_ = reqUndo_ = reqRedo_ = false;
 }
 
 void EditorBottomPanel::updateErrorTimer(float dt) {
@@ -46,7 +52,55 @@ void EditorBottomPanel::updateErrorTimer(float dt) {
 }
 
 Rectangle EditorBottomPanel::getPanelRect(float screenW, float screenH) const {
-    return { 0.0f, screenH - PANEL_HEIGHT, screenW, PANEL_HEIGHT };
+    ui_.Refresh();
+    float h = ui_.S(PANEL_HEIGHT);
+    return { 0.0f, screenH - h, screenW, h };
+}
+
+// =============================================================================
+// computeLayout — nguồn chân lý DUY NHẤT cho bố cục panel.
+//
+// Trước đây render() và handleInput() mỗi hàm tự tính lại 6 dòng y hệt nhau;
+// chỉ cần sửa một hằng số ở một bên là vùng vẽ lệch khỏi vùng bấm.
+//
+// Mọi hằng số đều đi qua ui_.S() — xem ghi chú ở đầu EditorBottomPanel.h.
+// =============================================================================
+EditorBottomPanel::Layout EditorBottomPanel::computeLayout(float screenW, float screenH) const {
+    ui_.Refresh();
+    Layout L;
+
+    const float panelH   = ui_.S(PANEL_HEIGHT);
+    const float catW     = ui_.S(CAT_WIDTH);
+    const float btnW     = ui_.S(BTN_WIDTH);
+    const float btnH     = ui_.S(BTN_HEIGHT);
+    const float pad      = ui_.S(BTN_PAD);
+    const float actBtnW  = ui_.S(ACTION_BTN_W);
+    const float gap      = ui_.S(4.0f);
+
+    L.panel    = { 0.0f, screenH - panelH, screenW, panelH };
+    L.category = { L.panel.x, L.panel.y, catW, L.panel.height };
+
+    const float rightX      = L.panel.x + catW + gap;
+    const float actionAreaW = (actBtnW + pad) * kActionCount + pad;
+    const float toolAreaW   = btnW + pad * 2.0f;
+
+    float variantW = screenW - rightX - toolAreaW - actionAreaW - gap;
+    if (variantW < 0.0f) variantW = 0.0f;   // an toàn tuyệt đối cho BeginScissorMode
+
+    L.variant  = { rightX, L.panel.y + ui_.S(2.0f), variantW, L.panel.height - ui_.S(4.0f) };
+    L.iconSize = ui_.S(BlockVariantPanel::ICON_SIZE);
+
+    const float btnX = rightX + variantW + pad;
+    const float btnY = L.panel.y + (L.panel.height - btnH * 2.0f - ui_.S(6.0f)) / 2.0f;
+    L.toolPlace = { btnX, btnY, btnW, btnH };
+    L.toolErase = { btnX, btnY + btnH + ui_.S(6.0f), btnW, btnH };
+
+    const float abX = btnX + btnW + pad;
+    const float abY = L.panel.y + (L.panel.height - btnH) / 2.0f;
+    for (int i = 0; i < kActionCount; ++i) {
+        L.action[i] = { abX + (actBtnW + pad) * i, abY, actBtnW, btnH };
+    }
+    return L;
 }
 
 // =============================================================================
@@ -58,8 +112,11 @@ static void drawBtn(const char* label, Rectangle r, bool active) {
     Color border = active ? Color{100, 160, 255, 255} : Color{80, 80, 110, 255};
     DrawRectangleRec(r, bg);
     DrawRectangleLinesEx(r, 1.5f, border);
-    int tw = MeasureText(label, 22);
-    DrawText(label, (int)(r.x + (r.width - tw) / 2), (int)(r.y + (r.height - 22) / 2), 22, WHITE);
+    // Cỡ chữ bám theo chiều cao nút để không tràn khi bố cục co lại ở màn nhỏ.
+    int fs = (int)(r.height * 0.36f);
+    if (fs < 8) fs = 8;
+    int tw = MeasureText(label, fs);
+    DrawText(label, (int)(r.x + (r.width - tw) / 2), (int)(r.y + (r.height - fs) / 2), fs, WHITE);
 }
 
 // =============================================================================
@@ -67,51 +124,41 @@ static void drawBtn(const char* label, Rectangle r, bool active) {
 // =============================================================================
 
 void EditorBottomPanel::render(float screenW, float screenH) const {
-    Rectangle panel = getPanelRect(screenW, screenH);
+    const Layout L = computeLayout(screenW, screenH);
 
     // Panel background
-    DrawRectangleRec(panel, Color{12, 12, 22, 248});
-    DrawRectangleLinesEx(panel, 1.5f, Color{60, 60, 90, 255});
+    DrawRectangleRec(L.panel, Color{12, 12, 22, 248});
+    DrawRectangleLinesEx(L.panel, 1.5f, Color{60, 60, 90, 255});
 
-    // --- Left: CategoryPanel ---
-    Rectangle catRect = { panel.x, panel.y, CAT_WIDTH, panel.height };
-    categoryPanel_.render(catRect);
-
-    // --- Center: Block/Entity variant area ---
-    float rightX      = panel.x + CAT_WIDTH + 4.0f;
-    float actionAreaW = (ACTION_BTN_W + BTN_PAD) * 5 + BTN_PAD;
-    float toolAreaW   = BTN_WIDTH + BTN_PAD * 2;
-    float variantW    = screenW - rightX - toolAreaW - actionAreaW - 4.0f;
-    Rectangle variantRect = { rightX, panel.y + 2.0f, variantW, panel.height - 4.0f };
+    categoryPanel_.render(L.category);
 
     if (isEntityTab()) {
-        entityPalette_.render(variantRect);
+        entityPalette_.render(L.variant);
     } else {
-        blockVariantPanel_.render(variantRect);
+        blockVariantPanel_.render(L.variant);
     }
 
     // --- Tool buttons ---
-    float btnX = rightX + variantW + BTN_PAD;
-    float btnY = panel.y + (panel.height - BTN_HEIGHT * 2 - 6.0f) / 2.0f;
     bool placing = (activeTool_ == EditorToolType::Place || activeTool_ == EditorToolType::PlaceEntity);
     bool erasing = (activeTool_ == EditorToolType::Erase);
-    drawBtn("Place", { btnX, btnY,               BTN_WIDTH, BTN_HEIGHT }, placing);
-    drawBtn("Erase", { btnX, btnY + BTN_HEIGHT + 6, BTN_WIDTH, BTN_HEIGHT }, erasing);
+    drawBtn("Place", L.toolPlace, placing);
+    drawBtn("Erase", L.toolErase, erasing);
 
-    // --- Action buttons ---
-    float abX = btnX + BTN_WIDTH + BTN_PAD;
-    float abY = panel.y + (panel.height - BTN_HEIGHT) / 2.0f;
-    drawBtn("Save", { abX,                              abY, ACTION_BTN_W, BTN_HEIGHT }, false);
-    drawBtn("Load", { abX + (ACTION_BTN_W + BTN_PAD),  abY, ACTION_BTN_W, BTN_HEIGHT }, false);
-    drawBtn("Exit", { abX + (ACTION_BTN_W + BTN_PAD)*2,abY, ACTION_BTN_W, BTN_HEIGHT }, false);
-    drawBtn("Undo", { abX + (ACTION_BTN_W + BTN_PAD)*3,abY, ACTION_BTN_W, BTN_HEIGHT }, false);
-    drawBtn("Redo", { abX + (ACTION_BTN_W + BTN_PAD)*4,abY, ACTION_BTN_W, BTN_HEIGHT }, false);
+    // --- Action buttons (thứ tự phải khớp handleInput) ---
+    static const char* kActionLabels[kActionCount] = {
+        "Save", "Load", "Play", "Exit", "Undo", "Redo"
+    };
+    for (int i = 0; i < kActionCount; ++i) {
+        drawBtn(kActionLabels[i], L.action[i], false);
+    }
 
     // --- Error message ---
     if (errorTimer_ > 0.0f && !errorMsg_.empty()) {
         unsigned char alpha = (unsigned char)(std::min(255.0f, errorTimer_ * 100.0f));
         Color ec = { 255, 80, 80, alpha };
-        DrawText(errorMsg_.c_str(), (int)(panel.x + 8), (int)(panel.y - 30), 24, ec);
+        int fs = (int)ui_.S(24.0f);
+        DrawText(errorMsg_.c_str(), (int)(L.panel.x + ui_.S(8.0f)),
+                 (int)(L.panel.y - ui_.S(30.0f)), fs, ec);
     }
 }
 
@@ -120,48 +167,35 @@ void EditorBottomPanel::render(float screenW, float screenH) const {
 // =============================================================================
 
 void EditorBottomPanel::handleInput(float screenW, float screenH) {
-    Rectangle panel = getPanelRect(screenW, screenH);
+    const Layout L = computeLayout(screenW, screenH);
 
-    // --- Category Panel ---
-    categoryPanel_.handleInput({ panel.x, panel.y, CAT_WIDTH, panel.height });
-
-    // --- Variant area ---
-    float rightX      = panel.x + CAT_WIDTH + 4.0f;
-    float actionAreaW = (ACTION_BTN_W + BTN_PAD) * 5 + BTN_PAD;
-    float toolAreaW   = BTN_WIDTH + BTN_PAD * 2;
-    float variantW    = screenW - rightX - toolAreaW - actionAreaW - 4.0f;
-    Rectangle variantRect = { rightX, panel.y + 2.0f, variantW, panel.height - 4.0f };
+    categoryPanel_.handleInput(L.category);
 
     if (isEntityTab()) {
-        entityPalette_.handleInput(variantRect);
+        entityPalette_.handleInput(L.variant);
     } else {
-        blockVariantPanel_.handleInput(variantRect);
+        blockVariantPanel_.handleInput(L.variant);
     }
 
     // --- Button clicks (left press only) ---
     if (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) return;
     Vector2 mp = GetMousePosition();
 
-    float btnX = rightX + variantW + BTN_PAD;
-    float btnY = panel.y + (panel.height - BTN_HEIGHT * 2 - 6.0f) / 2.0f;
-
     // Tool buttons
-    if (CheckCollisionPointRec(mp, { btnX, btnY, BTN_WIDTH, BTN_HEIGHT })) {
+    if (CheckCollisionPointRec(mp, L.toolPlace)) {
         activeTool_ = isEntityTab() ? EditorToolType::PlaceEntity : EditorToolType::Place;
         return;
     }
-    if (CheckCollisionPointRec(mp, { btnX, btnY + BTN_HEIGHT + 6, BTN_WIDTH, BTN_HEIGHT })) {
+    if (CheckCollisionPointRec(mp, L.toolErase)) {
         activeTool_ = EditorToolType::Erase;
         return;
     }
 
-    // Action buttons
-    float abX = btnX + BTN_WIDTH + BTN_PAD;
-    float abY = panel.y + (panel.height - BTN_HEIGHT) / 2.0f;
-
-    if (CheckCollisionPointRec(mp, { abX,                               abY, ACTION_BTN_W, BTN_HEIGHT })) { reqSave_ = true; return; }
-    if (CheckCollisionPointRec(mp, { abX + (ACTION_BTN_W + BTN_PAD),   abY, ACTION_BTN_W, BTN_HEIGHT })) { reqLoad_ = true; return; }
-    if (CheckCollisionPointRec(mp, { abX + (ACTION_BTN_W + BTN_PAD)*2, abY, ACTION_BTN_W, BTN_HEIGHT })) { reqExit_ = true; return; }
-    if (CheckCollisionPointRec(mp, { abX + (ACTION_BTN_W + BTN_PAD)*3, abY, ACTION_BTN_W, BTN_HEIGHT })) { reqUndo_ = true; return; }
-    if (CheckCollisionPointRec(mp, { abX + (ACTION_BTN_W + BTN_PAD)*4, abY, ACTION_BTN_W, BTN_HEIGHT })) { reqRedo_ = true; return; }
+    // Action buttons — thứ tự phải khớp kActionLabels trong render()
+    bool* const reqs[kActionCount] = {
+        &reqSave_, &reqLoad_, &reqPlay_, &reqExit_, &reqUndo_, &reqRedo_
+    };
+    for (int i = 0; i < kActionCount; ++i) {
+        if (CheckCollisionPointRec(mp, L.action[i])) { *reqs[i] = true; return; }
+    }
 }

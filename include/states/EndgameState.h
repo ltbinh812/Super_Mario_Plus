@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <memory>
 #include <string>
+#include "../ui/transitions/IrisTransition.h"
 
 // =============================================================================
 // EndgameState — Màn hình kết thúc, dùng chung cho cả hai chế độ chơi.
@@ -32,14 +33,20 @@ private:
     std::string winnerName_;   // tên nhân vật thắng; rỗng = hoà hoặc chế độ 1P
 
     Texture2D bgTex_;
-    Texture2D btnNormalTex_;
-    Texture2D btnPressTex_;
 
     Rectangle backBtnRect_;    // vùng VẼ nút (co lại khi không rê chuột)
     Rectangle backBtnHitBox_;  // vùng BẤM, luôn bằng kích thước lúc hover
     bool isBtnHovered_;
     bool isBtnPressed_;
     bool isReturningToMenu_;   // cờ do HandleInput đặt, Process xử lý
+
+    std::unique_ptr<IrisTransition> transitionIn_;
+    std::unique_ptr<IrisTransition> transitionOut_;
+    bool isTransitioningIn_;
+    bool isTransitioningOut_;
+    float btnAnimTimer_;
+
+    Font customFont_; // Font cho text "LEVEL COMPLETED!"
 
     float screenW_;
     float screenH_;

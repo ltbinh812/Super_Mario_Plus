@@ -34,7 +34,9 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
       curveAmplitude(config.curveAmplitude),
       curveFrequency(config.curveFrequency),
       originY(startPos.y),
-      spawner(spawner)
+      spawner(spawner),
+      hitboxOffsetX(config.hitboxOffsetX),
+      hitboxOffsetY(config.hitboxOffsetY)
 {
     faction = spawner ? spawner->getFaction() : EntityFaction::Neutral;
     
@@ -45,6 +47,21 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
         if (tex.id != 0) {
             animation = std::make_unique<Animation>(tex, config.frameNum, config.frameTime, config.scale);
         }
+    }
+
+    float autoW = config.hitboxW;
+    float autoH = config.hitboxH;
+    if (autoW <= 0.0f || autoH <= 0.0f) {
+        if (animation) {
+            Rectangle frame = animation->getCurrentFrame();
+            autoW = std::abs(frame.width) * config.scale;
+            autoH = std::abs(frame.height) * config.scale;
+        } else {
+            autoW = 16.0f;
+            autoH = 16.0f;
+        }
+        baseStats.physicsBox = {autoW, autoH};
+        runtimeStats.physicsBox = {autoW, autoH};
     }
 
     std::cout << "[Fireball] Created at (" << startPos.x << ", " << startPos.y << ") facing " << (isFacingRight ? "right" : "left")
@@ -105,7 +122,7 @@ void Fireball::render(float alpha) {
     }
 
     // Debug: draw hitbox outline
-    DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+    DrawRectangleLinesEx(getOffsetHitbox(), 1.0f, RED);
 }
 
 void Fireball::onHitWall(bool isRightWall, bool isCliff) {
@@ -121,11 +138,22 @@ bool Fireball::hasActiveHitbox() const {
     return isActive;
 }
 
+Rectangle Fireball::getOffsetHitbox() const {
+    Rectangle baseHitbox = getHitbox();
+    float offX = worldStats.isFacingRight ? hitboxOffsetX : -hitboxOffsetX;
+    baseHitbox.x += offX;
+    baseHitbox.y += hitboxOffsetY;
+    return baseHitbox;
+}
+
 Hitbox Fireball::getActiveHitbox() {
-    Rectangle rect = getHitbox();
+    Rectangle rect = getOffsetHitbox();
     Hitbox hb = { rect, attackPower, 0, this, spawner };
     if (faction == EntityFaction::Player) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Enemy)) | (1 << static_cast<int>(EntityFaction::Environment));
+        if (spawner && spawner->isPvPEnabled()) {
+            hb.targetFactionMask |= (1 << static_cast<int>(EntityFaction::Player));
+        }
     } else if (faction == EntityFaction::Enemy) {
         hb.targetFactionMask = (1 << static_cast<int>(EntityFaction::Player)) | (1 << static_cast<int>(EntityFaction::Environment));
     }

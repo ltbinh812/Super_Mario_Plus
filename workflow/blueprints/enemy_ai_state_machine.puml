@@ -1,0 +1,60 @@
+@startuml enemy_ai_state_machine
+' Super Mario Plus - enemy and boss AI transitions
+' Verified against the source tree at commit b378acb.
+' Matches: include/entity/IMobState.h, src/entity/EnemyStates/, src/entity/BossStates/
+
+title Enemy and Boss AI — seven enemy states, nine boss states
+
+state "Boss only" as BossOnly {
+  [*] --> Intro
+  Intro --> BossIdle : cutscene finished
+  state "DebugInput" as Debug
+  BossIdle --> Debug : debug build only
+  Debug --> BossIdle
+}
+
+[*] --> Patrol : enemies start here
+
+Patrol --> Idle : patrol distance reached
+Idle --> Patrol : patrol timer elapsed
+
+Patrol --> Run : player entered detection range
+Idle   --> Run : player entered detection range
+Run    --> Patrol : player left detection range
+
+Run    --> Attack : player within attack range
+Attack --> Run    : attack finished, still pursuing
+Run    --> Skill  : a special move is off cooldown
+Skill  --> Run    : skill finished
+
+Attack --> Hurt : took damage
+Run    --> Hurt : took damage
+Patrol --> Hurt : took damage
+Hurt   --> Run  : recovery elapsed
+
+Hurt   --> Die : health reached zero
+Die    --> [*] : removed; identifier recorded as defeated
+
+BossIdle --> Run : player entered detection range
+
+note right of Patrol
+  Enemies flagged avoidCliffsAndWater
+  turn back at ledges and at the edge
+  of water, lava and poison. The check
+  lives in the physics hook onHitWall,
+  not in the AI.
+end note
+
+note bottom
+  Base interface: IMobState
+    enter(Mob&) / decideAction(Mob&) / process(Mob&) / exit(Mob&)
+    onHitWall(Mob&, bool rightWall, bool isCliff)
+
+  Enemy states (7): Idle, Patrol, Run, Attack, Skill, Hurt, Die
+  Boss states  (9): the above plus Intro and DebugInput
+
+  Unlike PlayerState, IMobState stores no back-reference;
+  the Mob is passed as a parameter on every call.
+end note
+
+@enduml
