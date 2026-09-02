@@ -2872,9 +2872,9 @@
 			"__smartColor": "#9A9CAB",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\where.mp3", "__tile": null, "defUid": 182, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/where.mp3", "__tile": null, "defUid": 182, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\where.mp3"]
+				"params": ["assets/audio/where.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -4791,6 +4791,23 @@
 									"id": "V_Bool",
 									"params": [ true ]
 								}] }
+							]
+						},
+						{
+							"__identifier": "Luckyblock",
+							"__grid": [40,11],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 4, "x": 64, "y": 0, "w": 64, "h": 64 },
+							"__smartColor": "#D77643",
+							"iid": "533e24b0-96d0-11f1-9230-a17020a043be",
+							"width": 16,
+							"height": 16,
+							"defUid": 122,
+							"px": [324,92],
+							"fieldInstances": [
+								{ "__identifier": "isActive", "__type": "Bool", "__value": false, "__tile": null, "defUid": 136, "realEditorValues": [] },
+								{ "__identifier": "ItemType", "__type": "Array<LocalEnum.ItemType>", "__value": [], "__tile": null, "defUid": 137, "realEditorValues": [] }
 							]
 						}
 					]

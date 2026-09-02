@@ -9636,9 +9636,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [17.444444444444443,17.444444444444443], "cropRect": [0,72.11464968152866,288,35.77070063694268] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -19625,9 +19625,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [15.222222222222221,15.222222222222221], "cropRect": [0,74.75912408759125,288,30.48175182481752] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -27408,9 +27408,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [1.2916666666666667,1.2916666666666667], "cropRect": [0,298.45161290322585,1920,483.09677419354836] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -32214,9 +32214,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.6018518518518519,0.6018518518518519], "cropRect": [0,0,1728,584.8615384615384] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -33813,9 +33813,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [1.375,1.375], "cropRect": [0,0,1280,267.6363636363636] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -37147,9 +37147,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [1.4,1.4], "cropRect": [438.7857142857142,0,1051.4285714285716,400] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
@@ -40483,9 +40483,9 @@
 			"__smartColor": "#ADADB5",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.23703703703703705,0.23703703703703705], "cropRect": [0,0,1485,1080] },
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets\\audio\\goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
+			"fieldInstances": [{ "__identifier": "bg_sound", "__type": "String", "__value": "assets/audio/goosebump.mp3", "__tile": null, "defUid": 394, "realEditorValues": [{
 				"id": "V_String",
-				"params": ["assets\\\\audio\\\\goosebump.mp3"]
+				"params": ["assets/audio/goosebump.mp3"]
 			}] }],
 			"layerInstances": [
 				{
