@@ -200,6 +200,11 @@ void MapSelectionState::HandleInput() {
         return;
     }
 
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        isBackClicked = true;
+        return;
+    }
+
     // Back button logic
     float baseSize = 48.0f;
     float hoverSize = 56.0f;
@@ -387,6 +392,23 @@ void MapSelectionState::Render(float alpha) const {
             Rectangle dest = { node.position.x, node.position.y, src.width * node.currentScale, src.height * node.currentScale };
             Vector2 origin = { dest.width / 2.0f, dest.height / 2.0f }; 
             DrawTexturePro(node.tex, src, dest, origin, 0.0f, WHITE);
+
+            // Tên world ngay dưới chân mỗi cụm đảo.
+            //
+            // Lấy từ WorldCatalog chứ không viết chuỗi tại đây: đó là nơi DUY
+            // NHẤT biết world nào tên gì (cùng chỗ giữ file .ldtk và thư mục
+            // lưu), nên thêm world mới chỉ phải sửa một chỗ.
+            const std::string name = WorldCatalog::getInstance().displayName(node.worldIndex);
+            if (!name.empty()) {
+                // Cỡ chữ theo BỀ RỘNG cụm đảo đang vẽ, nên tên tự to ra khi rê
+                // chuột và luôn cân đối với hình, không phụ thuộc độ phân giải.
+                float fs = dest.width * 0.16f;
+                Vector2 sz = MeasureTextEx(customFont, name.c_str(), fs, 1.0f);
+                Vector2 pos = { node.position.x - sz.x / 2.0f,
+                                node.position.y + dest.height / 2.0f - sz.y * 0.35f };
+                DrawTextEx(customFont, name.c_str(), {pos.x + 3.0f, pos.y + 3.0f}, fs, 1.0f, Color{0,0,0,190});
+                DrawTextEx(customFont, name.c_str(), pos, fs, 1.0f, node.isHovered ? GOLD : RAYWHITE);
+            }
         }
     }
     

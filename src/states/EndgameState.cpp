@@ -170,6 +170,11 @@ void EndgameState::HandleInput() {
         }
         isBtnPressed_ = false;
     }
+
+    if (IsKeyPressed(KEY_ESCAPE) && !isTransitioningIn_ && !isTransitioningOut_) {
+        isTransitioningOut_ = true;
+        transitionOut_->Start(true);
+    }
 }
 
 void EndgameState::Process() {

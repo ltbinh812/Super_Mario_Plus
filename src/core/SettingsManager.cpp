@@ -33,6 +33,7 @@ void SettingsManager::LoadDefaults() {
     playerSfxVolume_ = 1.0f;
     enemySfxVolume_ = 1.0f;
     isCreativeMode_ = false;
+    screenShakeEnabled_ = true;
 }
 
 void SettingsManager::ResetToDefault() {
@@ -200,6 +201,7 @@ void SettingsManager::SaveToFile(const std::string& filepathIn) {
     j["playerSfxVolume"] = playerSfxVolume_;
     j["enemySfxVolume"] = enemySfxVolume_;
     j["creativeMode"] = isCreativeMode_;
+    j["screenShake"] = screenShakeEnabled_;
 
     std::error_code ec;
     std::filesystem::path path(filepath);
@@ -251,6 +253,7 @@ void SettingsManager::LoadFromFile(const std::string& filepathIn) {
             if (j.contains("playerSfxVolume")) playerSfxVolume_ = j["playerSfxVolume"];
             if (j.contains("enemySfxVolume")) enemySfxVolume_ = j["enemySfxVolume"];
             if (j.contains("creativeMode")) isCreativeMode_ = j["creativeMode"];
+            if (j.contains("screenShake")) screenShakeEnabled_ = j["screenShake"];
         } catch (const std::exception& e) {
             std::cerr << "Failed to parse settings file: " << e.what() << std::endl;
         }

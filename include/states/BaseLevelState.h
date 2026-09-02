@@ -90,6 +90,9 @@ protected:
     // Tự bỏ qua ở PvP / custom map / menu — xem chi tiết trong .cpp.
     void onCheckpointReached();
 
+    // Đăng ký callback "Return to Save" cho IngameSettingsPanel sau khi init xong.
+    void initReturnToSaveCallback();
+
     // Tổng thời gian đã chơi (giây), cộng dồn trong Update(). Được lưu vào
     // save để panel LOAD GAME hiển thị "đã chơi bao lâu".
     float playTimeSeconds_ = 0.0f;

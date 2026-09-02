@@ -192,6 +192,7 @@ MainMenuState::MainMenuState()
     // Add Tabs
     settingsGroup->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Controls");
     settingsGroup->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Sounds");
+    settingsGroup->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Display");
     
     // Populate P1 Keybinds
     settingsGroup->AddKeybind("Move Left", "Move Left", SettingsManager::GetInstance().GetP1Key("Move Left"), SettingsManager::GetInstance().GetP1DefaultKey("Move Left"), true);
@@ -241,6 +242,13 @@ MainMenuState::MainMenuState()
         [](float v) { SettingsManager::GetInstance().SetEnemySFXVolume(v); }
     );
     
+    // Cùng công tắc rung màn hình như bảng settings lúc chơi — chung một giá trị
+    // trong SettingsManager nên hai nơi không thể lệch nhau.
+    settingsGroup->AddToggle("Screen Shake",
+        []() { return SettingsManager::GetInstance().IsScreenShakeEnabled(); },
+        [](bool v) { SettingsManager::GetInstance().SetScreenShakeEnabled(v); }
+    );
+
     settingsGroup->UpdateLayout(settingsPos.y + 50.0f * panelScale, gap);
     
     // Decorate Settings Group
@@ -316,6 +324,11 @@ float MainMenuState::EaseOutBack(float t) const {
 }
 
 void MainMenuState::HandleInput() {
+    if (IsKeyPressed(KEY_ESCAPE) && activeGroup != "Main") {
+        activeGroup = "Main";
+        return;
+    }
+
     // Only handle UI clicks. Do NOT call BaseLevelState::HandleInput() so manual player control is disabled.
     Vector2 mousePos = GetMousePosition();
     bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);

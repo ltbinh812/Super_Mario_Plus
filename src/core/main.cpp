@@ -19,6 +19,7 @@ int main() {
     
     // Mở cửa sổ
     InitWindow(1280, 720, "Super Mario Plus");
+    SetExitKey(0); // Tắt tính năng tự động thoát game khi nhấn ESC của raylib
     MaximizeWindow(); // Phóng to cửa sổ tối đa (vừa toàn màn hình nhưng không ngập lấp Taskbar)
     SetTargetFPS(60);
 

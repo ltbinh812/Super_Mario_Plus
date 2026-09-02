@@ -58,6 +58,9 @@ private:
     float enemySfxVolume_ = 1.0f;
     
     bool isCreativeMode_ = false;
+
+    // Rung màn hình khi đòn đánh chạm mục tiêu. Mặc định bật.
+    bool screenShakeEnabled_ = true;
     
     void LoadDefaults();
 public:
@@ -98,5 +101,9 @@ public:
     void SetEnemySFXVolume(float v) { enemySfxVolume_ = (v < 0.0f) ? 0.0f : ((v > 1.0f) ? 1.0f : v); SaveToFile(); }
     
     bool IsCreativeMode() const { return isCreativeMode_; }
+
+    // Rung màn hình — áp dụng cho MỌI nguồn rung, không riêng lúc đánh quái.
+    bool IsScreenShakeEnabled() const { return screenShakeEnabled_; }
+    void SetScreenShakeEnabled(bool on) { screenShakeEnabled_ = on; SaveToFile(); }
     void SetCreativeMode(bool creative) { isCreativeMode_ = creative; SaveToFile(); }
 };
