@@ -2985,8 +2985,13 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-51-54/world04.ldtk
 			"width": 16,
 			"height": 16,
+========
+			"width": 32,
+			"height": 32,
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-19-33/world04.ldtk
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -3055,8 +3060,13 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-51-54/world04.ldtk
 			"width": 16,
 			"height": 16,
+========
+			"width": 32,
+			"height": 32,
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-19-33/world04.ldtk
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -3090,8 +3100,13 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-51-54/world04.ldtk
 			"width": 16,
 			"height": 16,
+========
+			"width": 32,
+			"height": 32,
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-19-33/world04.ldtk
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -3195,8 +3210,13 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-51-54/world04.ldtk
 			"width": 16,
 			"height": 16,
+========
+			"width": 32,
+			"height": 32,
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-19-33/world04.ldtk
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -3230,8 +3250,13 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-51-54/world04.ldtk
 			"width": 16,
 			"height": 16,
+========
+			"width": 32,
+			"height": 32,
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-19-33/world04.ldtk
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,

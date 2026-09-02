@@ -41,7 +41,10 @@ public:
 
     // For state persistence across level transitions
     ItemState getItemState() const { return itemState_; }
-    void setItemState(ItemState s) { itemState_ = s; }
+    void setItemState(ItemState s) { 
+        itemState_ = s; 
+        setAnimation(s);
+    }
 
     const std::string& getIid() const { return iid_; }
     void setIid(const std::string& iid) { iid_ = iid; }

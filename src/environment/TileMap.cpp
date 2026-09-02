@@ -256,12 +256,35 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
         std::string localPath = baseDir + filename;
         std::string fullPath = baseDir + bgRel;
 
-        if (FileExists(localPath.c_str())) {
-            backgroundTexture = LoadTexture(localPath.c_str());
-            hasBackgroundTexture = true;
-        } else if (FileExists(fullPath.c_str())) {
-            backgroundTexture = LoadTexture(fullPath.c_str());
-            hasBackgroundTexture = true;
+        std::string chosen;
+        if (FileExists(localPath.c_str()))     chosen = localPath;
+        else if (FileExists(fullPath.c_str())) chosen = fullPath;
+
+        if (chosen.empty()) {
+            TraceLog(LOG_WARNING, "[TileMap] Khong tim thay anh nen '%s' cua level '%s'",
+                     bgRel.c_str(), actualLevelName.c_str());
+        } else {
+            backgroundTexture = LoadTexture(chosen.c_str());
+
+            // PHAI kiem tra id != 0. LoadTexture van tra ve mot Texture2D hop le
+            // ve mat kieu du lieu khi giai ma that bai, chi khac la id = 0 — ve
+            // no ra thi khong co gi hien len.
+            //
+            // Truoc day cho hasBackgroundTexture = true vo dieu kien, nen mot anh
+            // nen hong chi lam man hinh den thui, khong mot dong log nao. Da mat
+            // cong truy nguoc vi rodrigo-lopez-1.png thuc chat la file JPEG bi doi
+            // duoi: raylib chon nhanh giai ma theo duoi file, stb_image ngui ra
+            // JPEG, ma ban raylib nay build voi STBI_NO_JPEG nen khong co bo giai
+            // ma JPEG -> tra ve rong.
+            if (backgroundTexture.id == 0) {
+                TraceLog(LOG_WARNING,
+                         "[TileMap] Nap anh nen that bai: '%s' (level '%s'). Kiem tra xem "
+                         "noi dung file co dung dinh dang voi duoi file khong. Raylib ban "
+                         "nay chi giai ma duoc PNG/BMP/TGA, khong co JPEG.",
+                         chosen.c_str(), actualLevelName.c_str());
+            } else {
+                hasBackgroundTexture = true;
+            }
         }
     }
 

@@ -4,6 +4,7 @@
 #include "EndgameState.h"
 #include "EndgameAsset.h"
 #include "core/SettingsManager.h"
+#include "core/DebugDraw.h"
 #include "Effects.h"
 #include "EntityFactory.h"
 #include "EnemyFactory.h"
@@ -21,6 +22,7 @@
 #include "ShopAsset.h"
 #include "PlayerHUD.h"
 #include "Coin.h"
+#include "Key.h"
 #include "CustomMapData.h"
 #include "DialogueRegistry.h"
 #include <algorithm>
@@ -133,6 +135,7 @@ BaseLevelState::BaseLevelState(const std::string &mapFilePath,
   ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
       this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
   });
+  initReturnToSaveCallback();
 
   // Initialize Shop UI
   shopUI_ = std::make_unique<ShopUIPanel>();
@@ -196,6 +199,7 @@ BaseLevelState::BaseLevelState(const CustomMapData& customMap,
   ingameSettings_->init((float)GetScreenWidth(), (float)GetScreenHeight(), [this]() {
       this->PushStateCommand(std::make_unique<ChangeStateCommand>(std::make_unique<MainMenuState>()));
   });
+  initReturnToSaveCallback();
 
   // Initialize Shop UI
   shopUI_ = std::make_unique<ShopUIPanel>();
@@ -484,7 +488,7 @@ void BaseLevelState::Update(float dt) {
   bool anyHitLanded = false;
   if (player1 && player1->consumeHitLanded()) anyHitLanded = true;
   if (player2 && player2->consumeHitLanded()) anyHitLanded = true;
-  if (anyHitLanded) {
+  if (anyHitLanded && SettingsManager::GetInstance().IsScreenShakeEnabled()) {
       mapCamera.shake(3.0f, 0.12f);
   }
   mapCamera.updateShake(dt);
@@ -506,16 +510,18 @@ void BaseLevelState::Render(float alpha) const {
   if (player2)
     player2->render(alpha);
     
-  std::vector<Entity*> allEntities;
-  if (player1) allEntities.push_back(player1.get());
-  if (player2) allEntities.push_back(player2.get());
-  for (const auto& e : activeEntities) {
-      if (e && e->getIsActive()) allEntities.push_back(e.get());
-  }
-  combatSystem.renderDebug(allEntities);
+  if constexpr (DebugDraw::kShowHitboxes) {
+    std::vector<Entity*> allEntities;
+    if (player1) allEntities.push_back(player1.get());
+    if (player2) allEntities.push_back(player2.get());
+    for (const auto& e : activeEntities) {
+        if (e && e->getIsActive()) allEntities.push_back(e.get());
+    }
+    combatSystem.renderDebug(allEntities);
 
-  for (const auto& trigger : cutsceneTriggers) {
-      trigger.renderDebug();
+    for (const auto& trigger : cutsceneTriggers) {
+        trigger.renderDebug();
+    }
   }
   
   mapCamera.EndMode();
@@ -695,6 +701,32 @@ void BaseLevelState::onCheckpointReached() {
   }
 }
 
+void BaseLevelState::initReturnToSaveCallback() {
+  if (!ingameSettings_) return;
+  ingameSettings_->setReturnToSaveCallback([this]() {
+    if (SaveManager::getInstance().hasCheckpoint()) {
+      // Quay lại checkpoint gần nhất
+      restoreFromSaveData(SaveManager::getInstance().getCheckpoint());
+      if (player1) player1->respawn(player1->getWorldStats().position);
+    } else if (isCustomMap()) {
+      // Custom map: reset về spawn point
+      auto spawns = map.GetPlayerSpawns();
+      if (player1) player1->respawn(spawns.size() > 0 ? spawns[0] : player1->getWorldStats().startPosition);
+      if (player2) player2->respawn(spawns.size() > 1 ? spawns[1] : player2->getWorldStats().startPosition);
+    } else {
+      // LDtk map: load lại map về trạng thái ban đầu
+      map.LoadLDtkMap(mapFilePath, currentLevel);
+      persistedItemStates.clear();
+      persistedDeadEntities.clear();
+      spawnEntitiesFromMap();
+      spawnCutsceneTriggersFromMap();
+      auto spawns = map.GetPlayerSpawns();
+      if (player1) player1->respawn(spawns.size() > 0 ? spawns[0] : Vector2{180.0f, 208.0f});
+      if (player2) player2->respawn(spawns.size() > 1 ? spawns[1] : Vector2{280.0f, 208.0f});
+    }
+  }, []() { return SaveManager::getInstance().hasCheckpoint(); });
+}
+
 void BaseLevelState::spawnEntitiesFromMap() {
     activeItems.clear();
     auto entityData = map.GetEntityData();
@@ -731,6 +763,19 @@ void BaseLevelState::spawnEntitiesFromMap() {
                     }
                 }
                 activeItems.push_back(std::move(item));
+            }
+        }
+    }
+
+    // [NEW] Hồi sinh Key bay trên đầu người chơi khi load map mới hoặc load save
+    if (player1 && partyInventory && partyInventory->keys > 0) {
+        for (int i = 0; i < partyInventory->keys; ++i) {
+            auto keyItem = ItemFactory::create("Key", player1->getWorldStats().position, nlohmann::json());
+            if (keyItem) {
+                if (auto* asKey = dynamic_cast<Key*>(keyItem.get())) {
+                    asKey->setFollowing(player1.get(), i + 1);
+                }
+                activeItems.push_back(std::move(keyItem));
             }
         }
     }

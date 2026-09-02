@@ -1,4 +1,5 @@
 #include "Explosion.h"
+#include "core/DebugDraw.h"
 #include "AssetManager.h"
 #include <raylib.h>
 
@@ -97,7 +98,9 @@ void Explosion::render(float alpha) {
             hitboxW / 2.0f, RED
         );
     }
-    DrawRectangleLinesEx(getActiveHitbox().rect, 1.0f, ORANGE);
+    if constexpr (DebugDraw::kShowHitboxes) {
+        DrawRectangleLinesEx(getActiveHitbox().rect, 1.0f, ORANGE);
+    }
 }
 
 bool Explosion::hasActiveHitbox() const {

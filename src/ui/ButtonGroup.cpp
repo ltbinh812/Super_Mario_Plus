@@ -230,6 +230,21 @@ void ButtonGroup::AddSlider(const std::string& label, std::function<float()> get
     sliders_.push_back(row);
 }
 
+void ButtonGroup::AddToggle(const std::string& label, std::function<bool()> getter, std::function<void(bool)> setter) {
+    LoadSettingsTextures();
+    ToggleRow row;
+    row.label  = label;
+    row.getter = getter;
+    row.setter = setter;
+    row.barTex = barTex_;
+    toggles_.push_back(row);
+}
+
+void ButtonGroup::SetReturnToSaveLabel(bool hasCheckpoint) {
+    returnToSaveHasCheckpoint_ = hasCheckpoint;
+    returnConfirmBtn_.labelText = hasCheckpoint ? "RETURN TO CHECKPOINT" : "RESET MAP";
+}
+
 void ButtonGroup::SetOnQuitToMenu(std::function<void()> callback) {
     LoadSettingsTextures();
     hasQuitToMenu_ = true;
@@ -246,6 +261,25 @@ void ButtonGroup::SetOnQuitToMenu(std::function<void()> callback) {
     quitConfirmBtn_.btn.setSize({w, h});
     quitConfirmBtn_.btn.setOnClick(callback);
     quitConfirmBtn_.isVisible = true;
+}
+
+void ButtonGroup::SetOnReturnToSave(std::function<void()> callback, bool hasCheckpoint) {
+    LoadSettingsTextures();
+    hasReturnToSave_ = true;
+    onReturnToSave_ = callback;
+    returnToSaveHasCheckpoint_ = hasCheckpoint;
+
+    returnConfirmBtn_.texNormal = barTex_;
+    returnConfirmBtn_.texPress = barPressTex_;
+    returnConfirmBtn_.action = "ReturnConfirm";
+    returnConfirmBtn_.labelText = hasCheckpoint ? "RETURN TO CHECKPOINT" : "RESET MAP";
+
+    float w = 150.0f * btnScale_;
+    float h = returnConfirmBtn_.texNormal.height * btnScale_ * 1.2f;
+    returnConfirmBtn_.btn = Button();
+    returnConfirmBtn_.btn.setSize({w, h});
+    returnConfirmBtn_.btn.setOnClick(callback);
+    returnConfirmBtn_.isVisible = true;
 }
 
 
@@ -316,8 +350,20 @@ void ButtonGroup::UpdateLayout(float startY, float gap) {
         
         sliderY += rowHeight + rowGap;
     }
+
+    // Layout Toggles (tab Display) — cùng nhịp hàng với slider để hai tab nhìn
+    // đồng bộ, chỉ khác là nút hẹp hơn vì chỉ hiện ON/OFF.
+    float toggleY = startY;
+    for (auto& row : toggles_) {
+        float rowHeight = row.barTex.height * btnScale_;
+        float bw = row.barTex.width * btnScale_ * 0.8f;
+        float bh = rowHeight * 0.8f;
+        row.btnRect = { panelPos_.x + 180.0f * panelScale_,
+                        toggleY + (rowHeight - bh) / 2.0f, bw, bh };
+        toggleY += rowHeight + rowGap;
+    }
     
-    float maxY = std::max(rowY, sliderY);
+    float maxY = std::max(std::max(rowY, sliderY), toggleY);
     maxScrollY_ = std::max(0.0f, (maxY - startY) - scissorArea_.height + 20.0f * panelScale_);
 
     if (hasQuitToMenu_) {
@@ -325,6 +371,13 @@ void ButtonGroup::UpdateLayout(float startY, float gap) {
         float qX = panelPos_.x + (panelW_ - btnW) / 2.0f + 25.0f * panelScale_;
         float qY = startY + 70.0f * panelScale_;
         quitConfirmBtn_.btn.setPosition({qX, qY});
+    }
+
+    if (hasReturnToSave_) {
+        float btnW = returnConfirmBtn_.btn.getSize().x;
+        float rX = panelPos_.x + (panelW_ - btnW) / 2.0f + 25.0f * panelScale_;
+        float rY = startY + 70.0f * panelScale_;
+        returnConfirmBtn_.btn.setPosition({rX, rY});
     }
 
     if (hasHeaderBtn_) {
@@ -444,6 +497,11 @@ void ButtonGroup::Update(float dt) {
     if (hasQuitToMenu_ && (activeTab_ == "Quit to Menu" || activeTab_ == "Quit")) {
         quitConfirmBtn_.btn.update();
     }
+
+    // Check click on Return to Save confirm button
+    if (hasReturnToSave_ && activeTab_ == "Return to Save") {
+        returnConfirmBtn_.btn.update();
+    }
     
     if (!anyHovered) {
         hoveredIndex_ = -1;
@@ -514,6 +572,16 @@ void ButtonGroup::HandleInput(Vector2 mousePos, bool mousePressed, bool mouseRel
                     row.resetBtn.btn.handleInput(scrolledMouse, mousePressed, mouseReleased);
             }
         }
+    } else if (activeTab_ == "Display") {
+        if (mousePressed && CheckCollisionPointRec(mousePos, scissorArea_)) {
+            for (auto& row : toggles_) {
+                Rectangle hit = row.btnRect;
+                hit.y -= scrollY_;
+                if (CheckCollisionPointRec(mousePos, hit) && row.getter && row.setter) {
+                    row.setter(!row.getter());   // đảo trạng thái, ghi thẳng vào SettingsManager
+                }
+            }
+        }
     } else if (activeTab_ == "Sounds") {
         for (auto& row : sliders_) {
             if (CheckCollisionPointRec(mousePos, scissorArea_)) {
@@ -545,6 +613,11 @@ void ButtonGroup::HandleInput(Vector2 mousePos, bool mousePressed, bool mouseRel
         if (hasQuitToMenu_) {
             Vector2 scrolledMouse = { mousePos.x, mousePos.y + scrollY_ };
             quitConfirmBtn_.btn.handleInput(scrolledMouse, mousePressed, mouseReleased);
+        }
+    } else if (activeTab_ == "Return to Save") {
+        if (hasReturnToSave_) {
+            Vector2 scrolledMouse = { mousePos.x, mousePos.y + scrollY_ };
+            returnConfirmBtn_.btn.handleInput(scrolledMouse, mousePressed, mouseReleased);
         }
     }
 
@@ -704,6 +777,25 @@ void ButtonGroup::Render() const {
             int rTextW = MeasureText(btnText.c_str(), fontSize * 0.8f);
             DrawText(btnText.c_str(), rPos.x + (rw - rTextW)/2, rPos.y - scrollY_ + yOffset + (rh - fontSize*0.8f)/2, fontSize * 0.8f, BLACK);
         }
+    } else if (activeTab_ == "Display") {
+        for (const auto& row : toggles_) {
+            float bY = row.btnRect.y - scrollY_ + yOffset;
+            int fontSize = 12 * panelScale_;
+
+            DrawText(row.label.c_str(), panelPos_.x + 55.0f * panelScale_,
+                     bY + row.btnRect.height / 2.0f - fontSize / 2.0f, fontSize, BLACK);
+
+            const bool on = row.getter ? row.getter() : false;
+            Rectangle dest = { row.btnRect.x, bY, row.btnRect.width, row.btnRect.height };
+            Rectangle src  = { 0.0f, 0.0f, (float)row.barTex.width, (float)row.barTex.height };
+            DrawTexturePro(row.barTex, src, dest, {0,0}, 0.0f, on ? Color{120,220,130,255}
+                                                                 : Color{190,190,190,255});
+
+            const char* txt = on ? "ON" : "OFF";
+            int tw = MeasureText(txt, fontSize);
+            DrawText(txt, dest.x + (dest.width - tw) / 2.0f,
+                     dest.y + (dest.height - fontSize) / 2.0f, fontSize, BLACK);
+        }
     } else if (activeTab_ == "Sounds") {
         for (const auto& row : sliders_) {
             float sY = row.barRect.y - scrollY_ + yOffset;
@@ -771,6 +863,39 @@ void ButtonGroup::Render() const {
             int btnFSize = 12 * panelScale_;
             int bTextW = MeasureText(quitConfirmBtn_.labelText.c_str(), btnFSize);
             DrawText(quitConfirmBtn_.labelText.c_str(), (int)(qPos.x + (btnW - bTextW)/2), (int)(qPos.y - scrollY_ + yOffset + (btnH - btnFSize)/2), btnFSize, MAROON);
+        }
+    } else if (activeTab_ == "Return to Save") {
+        if (hasReturnToSave_) {
+            int fontSize = 13 * panelScale_;
+            const char* msg = returnToSaveHasCheckpoint_
+                ? "Return to your last checkpoint?"
+                : "No checkpoint found. Reset map to the beginning?";
+            int msgW = MeasureText(msg, fontSize);
+            float msgX = panelPos_.x + (panelW_ - msgW) / 2.0f + 25.0f * panelScale_;
+            float msgY = panelPos_.y + 65.0f * panelScale_ + yOffset;
+            DrawText(msg, (int)msgX, (int)msgY, fontSize, BLACK);
+
+            const char* subMsg = returnToSaveHasCheckpoint_
+                ? "Your current position will be lost."
+                : "Your current progress in this level will be lost.";
+            int subFontSize = 10 * panelScale_;
+            int subW = MeasureText(subMsg, subFontSize);
+            float subX = panelPos_.x + (panelW_ - subW) / 2.0f + 25.0f * panelScale_;
+            float subY = msgY + 22.0f * panelScale_;
+            DrawText(subMsg, (int)subX, (int)subY, subFontSize, DARKGRAY);
+
+            Vector2 rPos = returnConfirmBtn_.btn.getPosition();
+            Texture2D rTex = returnConfirmBtn_.btn.isPressed() ? returnConfirmBtn_.texPress : returnConfirmBtn_.texNormal;
+            float btnW = returnConfirmBtn_.btn.getSize().x;
+            float btnH = returnConfirmBtn_.btn.getSize().y;
+
+            NPatchInfo nPatch = { {0, 0, (float)rTex.width, (float)rTex.height}, 6, 6, 6, 6, NPATCH_NINE_PATCH };
+            DrawTextureNPatch(rTex, nPatch, {rPos.x, rPos.y - scrollY_ + yOffset, btnW, btnH}, {0,0}, 0.0f, WHITE);
+
+            int btnFSize = 12 * panelScale_;
+            int bTextW = MeasureText(returnConfirmBtn_.labelText.c_str(), btnFSize);
+            Color btnColor = returnToSaveHasCheckpoint_ ? DARKBLUE : MAROON;
+            DrawText(returnConfirmBtn_.labelText.c_str(), (int)(rPos.x + (btnW - bTextW)/2), (int)(rPos.y - scrollY_ + yOffset + (btnH - btnFSize)/2), btnFSize, btnColor);
         }
     }
 

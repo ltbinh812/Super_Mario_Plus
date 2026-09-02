@@ -32,12 +32,17 @@ private:
     
     bool isOpen_ = false;
     std::function<void()> onQuitToMenuCallback_;
+    std::function<void()> onReturnToSaveCallback_;
+    std::function<bool()> hasCheckpointFn_;
 
 public:
     IngameSettingsPanel();
     ~IngameSettingsPanel();
 
     void init(float screenWidth, float screenHeight, std::function<void()> onQuitToMenu);
+    // hasCheckpointFn được hỏi lại MỖI LẦN mở bảng, nên nhãn nút không bao
+    // giờ lệch với trạng thái thật. Xem IngameSettingsPanel::open().
+    void setReturnToSaveCallback(std::function<void()> cb, std::function<bool()> hasCheckpointFn);
 
     bool handleInput(Vector2 mousePos, bool mousePressed, bool mouseReleased);
     void process();

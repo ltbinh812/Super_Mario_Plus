@@ -3,11 +3,16 @@
 #include "SettingsManager.h"
 #include "infrastructure/AudioManager.h"
 #include "infrastructure/AppPaths.h"
+#include "core/DebugLog.h"
 #include "raylib.h"
 #include <ctime>
 #include <cstdlib>
 
 int main() {
+    // Tat log ra console. Dat truoc moi thu khac de khong dong nao lot ra.
+    // Bat lai bang cach doi DebugLog::kVerbose thanh true.
+    DebugLog::Apply();
+
     srand(time(nullptr));
 
     // Dời dữ liệu lưu cũ (nếu có) về thư mục saves/ nằm cạnh .exe.
@@ -19,6 +24,7 @@ int main() {
     
     // Mở cửa sổ
     InitWindow(1280, 720, "Super Mario Plus");
+    SetExitKey(0); // Tắt tính năng tự động thoát game khi nhấn ESC của raylib
     MaximizeWindow(); // Phóng to cửa sổ tối đa (vừa toàn màn hình nhưng không ngập lấp Taskbar)
     SetTargetFPS(60);
 

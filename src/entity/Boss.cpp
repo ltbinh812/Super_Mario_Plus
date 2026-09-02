@@ -135,6 +135,19 @@ void Boss::updateTeleport(float dt) {
         hasFirstTeleport_ = true;
         armNextStall();
         tryRepositionNear(*target);
+
+        // MÀN RA MẮT. Dịch chuyển TRƯỚC rồi mới diễn, không phải ngược lại:
+        // diễn tại chỗ cũ thì người chơi đứng cách 5 block, ngoài khung nhìn,
+        // xong mới thấy boss nhảy tới — mất hẳn phần ra mắt.
+        //
+        // Truyền false vì đây KHÔNG phải đường cutscene: không có CutsceneTrigger
+        // nào sẽ gọi onCutsceneEnd() để hạ cờ, nên BossIntroState phải tự kết
+        // thúc theo animation. Xem đầu BossIntroState.h.
+        //
+        // Cờ hasFirstTeleport_ ở trên đảm bảo mỗi boss chỉ diễn đúng một lần.
+        // Bản thân updateTeleport() cũng return sớm khi đang ở BossIntroState,
+        // nên cơ chế dịch chuyển đứng yên chờ diễn xong, không đá nhau.
+        changeState(std::make_unique<BossIntroState>(false));
         return;
     }
 

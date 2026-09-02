@@ -1,4 +1,5 @@
 #include "Mob.h"
+#include "core/DebugDraw.h"
 #include "IMobState.h"
 #include "EnemyStates/EnemyHurtState.h"
 #include "EnemyStates/EnemyDieState.h"
@@ -217,9 +218,9 @@ void Mob::render(float alpha) {
         DrawRectangle((int)barX, (int)barY, (int)(barWidth * hpPercent), (int)barHeight, GREEN);
     }
 
-    // Render Physics Box
-    Rectangle hitbox = getHitbox();
-    DrawRectangleLinesEx(hitbox, 1.0f, RED);
+    if constexpr (DebugDraw::kShowHitboxes) {
+        DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+    }
 }
 
 void Mob::decideAction() {

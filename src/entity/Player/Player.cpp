@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "core/DebugDraw.h"
 #include "AssetManager.h"
 #include "SettingsManager.h"
 #include "ISkill.h"
@@ -141,8 +142,9 @@ void Player::render(float alpha) {
   DrawTexturePro(worldStats.animation->getTexture(), source, dest, {0, 0},
                  0.0f, tint);
 
-  // Debug hitbox
-  DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+  if constexpr (DebugDraw::kShowHitboxes) {
+    DrawRectangleLinesEx(getHitbox(), 1.0f, RED);
+  }
   for (auto& eff : activeEffects) {
       eff->render(*this, alpha);
   }

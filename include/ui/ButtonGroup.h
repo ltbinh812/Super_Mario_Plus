@@ -32,6 +32,18 @@ struct KeybindRow {
     bool isListening;
 };
 
+// Một hàng bật/tắt trong bảng Settings. Cùng khuôn với SliderRow nhưng giá trị
+// chỉ có hai trạng thái, nên vẽ bằng một nút ON/OFF thay vì thanh trượt.
+// getter/setter trỏ thẳng vào SettingsManager, nên hàng này không giữ trạng
+// thái riêng — không thể lệch với giá trị thật.
+struct ToggleRow {
+    std::string label;
+    std::function<bool()> getter;
+    std::function<void(bool)> setter;
+    Texture2D barTex;
+    Rectangle btnRect;
+};
+
 struct SliderRow {
     std::string label;
     std::function<float()> getter;
@@ -102,6 +114,7 @@ private:
     
     // Sliders
     std::vector<SliderRow> sliders_;
+    std::vector<ToggleRow> toggles_;
     
     // Scrolling
     float scrollY_ = 0.0f;
@@ -120,6 +133,12 @@ private:
     bool hasQuitToMenu_ = false;
     std::function<void()> onQuitToMenu_;
     MenuButtonState quitConfirmBtn_;
+
+    // Return to Save Support
+    bool hasReturnToSave_ = false;
+    std::function<void()> onReturnToSave_;
+    MenuButtonState returnConfirmBtn_;
+    bool returnToSaveHasCheckpoint_ = false; // true nếu có checkpoint, false thì sẽ reset map
     
     // Helper to load cached textures for keybind rows
     void LoadSettingsTextures();
@@ -149,11 +168,22 @@ public:
     void AddKeybind(const std::string& label, const std::string& actionName, int currentKey, int defaultKey, bool isP1);
     void AddSlider(const std::string& label, std::function<float()> getter, std::function<void(float)> setter);
 
+    // Hàng bật/tắt, hiển thị dưới tab "Display".
+    void AddToggle(const std::string& label, std::function<bool()> getter, std::function<void(bool)> setter);
+
     
     void SetCustomFont(Font font) { customFont_ = font; hasCustomFont_ = true; }
     void UpdateLayout(float startY, float gap);
     
     void SetOnQuitToMenu(std::function<void()> callback);
+    void SetOnReturnToSave(std::function<void()> callback, bool hasCheckpoint);
+
+    // Cập nhật lại NHÃN của nút "Return to Save" mà không dựng lại nút.
+    //
+    // Cần vì nhãn phụ thuộc việc đã có checkpoint hay chưa, mà điều đó thay đổi
+    // TRONG LÚC CHƠI (chạm cờ, hoặc nạp một bản lưu). Nếu chỉ đặt một lần lúc
+    // khởi tạo thì nhãn sẽ đứng nguyên và nói sai — xem BaseLevelState.
+    void SetReturnToSaveLabel(bool hasCheckpoint);
     void ResetActiveTab() { activeTab_ = "Controls"; scrollY_ = 0.0f; }
     const std::string& GetActiveTab() const { return activeTab_; }
     

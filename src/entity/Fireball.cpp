@@ -1,4 +1,5 @@
 #include "Fireball.h"
+#include "core/DebugDraw.h"
 #include "AssetManager.h"
 #include <iostream>
 #include <cmath>
@@ -247,8 +248,9 @@ void Fireball::render(float alpha) {
         );
     }
 
-    // Debug: draw hitbox outline
-    DrawRectangleLinesEx(getOffsetHitbox(), 1.0f, RED);
+    if constexpr (DebugDraw::kShowHitboxes) {
+        DrawRectangleLinesEx(getOffsetHitbox(), 1.0f, RED);
+    }
 }
 
 // =============================================================================

@@ -2,6 +2,7 @@
 #include "MainMenuState.h"
 #include "StateCommands.h"
 #include "AssetManager.h"
+#include "infrastructure/AudioManager.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
@@ -30,6 +31,13 @@ EndgameState::~EndgameState() {
 
 void EndgameState::Init() {
     Cleanup();   // cho phép gọi lại nhiều lần mà không rò texture
+
+    // Phát nhạc tương ứng khi kết thúc Level (bạn thay đổi tên file trong folder sfx nhé)
+    if (isPvPMode_) {
+        AudioManager::getInstance().PlayMusic("assets/sfx/pvp_complete.wav");
+    } else {
+        AudioManager::getInstance().PlayMusic("assets/sfx/level_complete.wav");
+    }
 
     screenW_ = (float)GetScreenWidth();
     screenH_ = (float)GetScreenHeight();
@@ -169,6 +177,11 @@ void EndgameState::HandleInput() {
             transitionOut_->Start(true);
         }
         isBtnPressed_ = false;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE) && !isTransitioningIn_ && !isTransitioningOut_) {
+        isTransitioningOut_ = true;
+        transitionOut_->Start(true);
     }
 }
 

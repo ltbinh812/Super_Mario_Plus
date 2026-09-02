@@ -21682,6 +21682,7 @@
 							"fieldInstances": [],
 							"__worldX": 296,
 							"__worldY": -656
+<<<<<<<< HEAD:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_14-35-45/world04.ldtk
 						},
 						{
 							"__identifier": "Chest_normal",
@@ -21858,6 +21859,8 @@
 							"fieldInstances": [],
 							"__worldX": 680,
 							"__worldY": -656
+========
+>>>>>>>> origin/minh1:assets/maps/map04/world04/backups/a3619740-7820-11ed-b6fd-4b64aa0352a1_2026-09-02_13-32-49/world04.ldtk
 						}
 					]
 				},

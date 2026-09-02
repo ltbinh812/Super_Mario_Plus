@@ -52,9 +52,11 @@ void IngameSettingsPanel::init(float screenWidth, float screenHeight, std::funct
         close();
     });
 
-    // Add 3 Tabs
+    // Add 4 Tabs
     settingsGroup_->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Controls");
     settingsGroup_->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Sounds");
+    settingsGroup_->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Display");
+    settingsGroup_->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Return to Save");
     settingsGroup_->AddTab("assets/UI_screens/bar.png", "assets/UI_screens/bar_press.png", "Quit to Menu");
 
     // Populate P1 Keybinds
@@ -106,6 +108,12 @@ void IngameSettingsPanel::init(float screenWidth, float screenHeight, std::funct
         [](float v) { SettingsManager::GetInstance().SetEnemySFXVolume(v); }
     );
 
+    // Display: bật/tắt rung màn hình
+    settingsGroup_->AddToggle("Screen Shake",
+        []() { return SettingsManager::GetInstance().IsScreenShakeEnabled(); },
+        [](bool v) { SettingsManager::GetInstance().SetScreenShakeEnabled(v); }
+    );
+
     // Setup Quit to Menu callback
     settingsGroup_->SetOnQuitToMenu([this]() {
         if (onQuitToMenuCallback_) {
@@ -120,6 +128,28 @@ void IngameSettingsPanel::init(float screenWidth, float screenHeight, std::funct
     float sLine1X = settingsPos.x + (settingsPanelW - line1Tex_.width * sLineScaleX) / 2.0f;
     float sLine1Y = settingsPos.y + 28.0f * panelScale;
     settingsGroup_->AddDecoLine(line1Tex_, {sLine1X, sLine1Y}, {sLineScaleX, panelScale});
+}
+
+void IngameSettingsPanel::setReturnToSaveCallback(std::function<void()> cb,
+                                                 std::function<bool()> hasCheckpointFn) {
+    onReturnToSaveCallback_ = cb;
+    hasCheckpointFn_ = hasCheckpointFn;
+    const bool hasCheckpoint = hasCheckpointFn_ ? hasCheckpointFn_() : false;
+    settingsGroup_->SetOnReturnToSave([this]() {
+        if (onReturnToSaveCallback_) onReturnToSaveCallback_();
+        close();
+    }, hasCheckpoint);
+
+    // Bắt buộc gọi lại UpdateLayout vì nút mới được thêm vào cần được tính toán toạ độ
+    float panelScale = 2.0f;
+    float gap = 20.0f * panelScale;
+    float sWidth = GetScreenWidth() > 0 ? GetScreenWidth() : 1280.0f;
+    float sHeight = GetScreenHeight() > 0 ? GetScreenHeight() : 720.0f;
+    float settingsPanelW = panelTex2_.width * panelScale * 1.4f;
+    float settingsPanelH = panelTex2_.height * panelScale;
+    Vector2 settingsPos = { (sWidth - settingsPanelW) / 2.0f, (sHeight - settingsPanelH) / 2.0f };
+    
+    settingsGroup_->UpdateLayout(settingsPos.y + 50.0f * panelScale, gap);
 }
 
 bool IngameSettingsPanel::handleInput(Vector2 mousePos, bool mousePressed, bool mouseReleased) {
@@ -195,6 +225,20 @@ void IngameSettingsPanel::render(float alpha) const {
 }
 
 void IngameSettingsPanel::open() {
+    // LỖI ĐÃ SỬA — nhãn nút ghi "RESET MAP" dù đã có checkpoint.
+    //
+    // Nhãn phụ thuộc "đã có checkpoint chưa", mà điều đó thay đổi TRONG LÚC
+    // CHƠI: chạm cờ, hoặc nạp một bản lưu. Trước đây nó chỉ được đặt một lần
+    // lúc dựng màn nên đứng nguyên và nói sai.
+    //
+    // Nặng nhất là luồng LOAD GAME: constructor uỷ quyền chạy constructor gốc
+    // TRƯỚC (lúc đó chưa có checkpoint -> nhãn "RESET MAP"), rồi thân hàm mới
+    // gọi setCheckpoint(save) sau — quá muộn, nhãn đã chốt.
+    //
+    // Hỏi lại đúng lúc mở bảng thì không thể lệch nữa.
+    if (hasCheckpointFn_ && settingsGroup_) {
+        settingsGroup_->SetReturnToSaveLabel(hasCheckpointFn_());
+    }
     isOpen_ = true;
     settingsGroup_->ResetActiveTab();
     settingsGroup_->TriggerEntry();
