@@ -28,9 +28,9 @@
         "hitboxStartFrame": 3,
         "hitboxEndFrame": 7,
         "box": {
-          "offsetX": 20.0,
+          "offsetX": -10.0,
           "offsetY": -30.0,
-          "w": 40.0,
+          "w": 50.0,
           "h": 30.0
         },
         "dashMultiplier": 0
@@ -1380,9 +1380,9 @@
         "hitboxStartFrame": 3,
         "hitboxEndFrame": 6,
         "box": {
-          "offsetX": 10.0,
+          "offsetX": -10.0,
           "offsetY": -30.0,
-          "w": 35.0,
+          "w": 50.0,
           "h": 35.0
         },
         "dashMultiplier": 0
@@ -1420,9 +1420,9 @@
         "hitboxStartFrame": 3,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 10.0,
+          "offsetX": -10.0,
           "offsetY": -30.0,
-          "w": 30.0,
+          "w": 50.0,
           "h": 45.0
         },
         "dashMultiplier": 0
@@ -1483,9 +1483,9 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
-          "offsetX": 10.0,
+          "offsetX": -10.0,
           "offsetY": -50.0,
-          "w": 60.0,
+          "w": 70.0,
           "h": 40.0
         },
         "dashMultiplier": 0
@@ -1522,8 +1522,8 @@
         "hitboxStartFrame": 6,
         "hitboxEndFrame": 9,
         "box": {
-          "offsetX": 25.0,
-          "offsetY": -60.0,
+          "offsetX": -10.0,
+          "offsetY": -100.0,
           "w": 80.0,
           "h": 80.0
         },
@@ -1561,9 +1561,9 @@
         "hitboxStartFrame": 6,
         "hitboxEndFrame": 8,
         "box": {
-          "offsetX": -30.0,
+          "offsetX": -40.0,
           "offsetY": -50.0,
-          "w": 80.0,
+          "w": 90.0,
           "h": 60.0
         },
         "dashMultiplier": 0
@@ -1600,9 +1600,9 @@
         "hitboxStartFrame": 6,
         "hitboxEndFrame": 8,
         "box": {
-          "offsetX": 15.0,
+          "offsetX": -10.0,
           "offsetY": -50.0,
-          "w": 70.0,
+          "w": 95.0,
           "h": 50.0
         },
         "dashMultiplier": 0
@@ -1639,9 +1639,9 @@
         "hitboxStartFrame": 6,
         "hitboxEndFrame": 8,
         "box": {
-          "offsetX": 20.0,
+          "offsetX": -10.0,
           "offsetY": -60.0,
-          "w": 40.0,
+          "w": 70.0,
           "h": 60.0
         },
         "dashMultiplier": 0
@@ -1678,9 +1678,9 @@
         "hitboxStartFrame": 2,
         "hitboxEndFrame": 4,
         "box": {
-          "offsetX": 10.0,
+          "offsetX": -10.0,
           "offsetY": -30.0,
-          "w": 32.0,
+          "w": 60.0,
           "h": 32.0
         },
         "dashMultiplier": 0
