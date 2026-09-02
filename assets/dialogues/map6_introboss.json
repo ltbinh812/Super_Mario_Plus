@@ -1,0 +1,35 @@
+{
+    "id": "map6_introboss",
+    "lines": [
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_smirk",
+            "text": "Fuffuffuffu! Another little insect crawls straight into my web!",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Doflamingo! Your reign over this palace ends right now.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_serious",
+            "text": "Justice? Evil? Those terms mean nothing! The only truth in this world is power!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle",
+            "text": "Then feel the weight of everyone you crushed underneath your heel!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_combat",
+            "text": "Fuffuffuffu! Dance upon my strings until you break, you pathetic worm!",
+            "textSpeed": 25
+        }
+    ]
+}

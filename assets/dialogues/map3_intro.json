@@ -1,0 +1,41 @@
+{
+    "id": "map3_intro",
+    "lines": [
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_thoughtful",
+            "text": "Tread carefully, traveler. Once you cross this gate, the road turns treacherous.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_curious",
+            "text": "Treacherous? What lies ahead after this castle?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_warning",
+            "text": "The Rotten Mire—a stagnant swamp thick with venomous mist and sinking ground.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_serious",
+            "text": "Worse than the mud, a fearsome warrior guards the deep marsh. He tests the resolve of anyone seeking passage.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "A swamp and a powerful guardian won't stop me. I'm moving forward.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_nod",
+            "text": "Keep your footing solid and your blade ready. May fortune guide your steps.",
+            "textSpeed": 30
+        }
+    ]
+}

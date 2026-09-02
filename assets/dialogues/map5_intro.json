@@ -1,0 +1,41 @@
+{
+    "id": "map5_intro",
+    "lines": [
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_thoughtful",
+            "text": "You made it past the mire, but do not drop your guard just yet.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_curious",
+            "text": "What kind of place is this dense forest ahead?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_warning",
+            "text": "The Whispering Woods. The canopy is so thick that daylight never touches the forest floor.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_serious",
+            "text": "A lone avenger lurks in those shadows. His blade is as swift and merciless as lightning.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Shadows or lightning, nothing stands between me and my goal.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_nod",
+            "text": "Trust your instincts, not your eyes. Step into the shadows with caution.",
+            "textSpeed": 30
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "id": "map6_end",
+    "lines": [
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_kneeling_bruised",
+            "text": "Huff... dammit... all my threads... completely shattered?!",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_catch_breath",
+            "text": "It's over, Doflamingo. Your marionette show has played its final act.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_grin_thumb_up",
+            "text": "Fuffuffu... unbelievable. To think a mere stray could shatter my cage.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_serious",
+            "text": "Don't get cocky. The tides of this era will soon swallow you whole!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Let the tides come. I will pave my own way forward.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Doflamingo",
+            "portrait": "doflamingo_confident",
+            "text": "Fuffuffuffu! Then go forth and drown in the storm you just unleashed!",
+            "textSpeed": 25
+        }
+    ]
+}

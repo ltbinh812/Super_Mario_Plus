@@ -1,0 +1,41 @@
+{
+    "id": "map2_end",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "player_exhausted_gasp",
+            "text": "Huff... huff... The nightmare is fading... Did I actually break through your genjutsu?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Itachi",
+            "portrait": "itachi_fading_crows",
+            "text": "Impressive. Very few possess the will to shatter my illusions and stand upright.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Look behind you. The seal on that massive ancient gate just shattered.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Itachi",
+            "portrait": "itachi_faint_smile",
+            "text": "Then your path is clear. You have proven that your truth is stronger than the darkness within this maze.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_confident",
+            "text": "Thanks for the trial, Itachi. I'm taking the leap to the next realm.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Itachi",
+            "portrait": "itachi_dissolving_shadow",
+            "text": "Go forth, and remember: never lose sight of who you are, no matter how deep the abyss gets.",
+            "textSpeed": 22
+        }
+    ]
+}

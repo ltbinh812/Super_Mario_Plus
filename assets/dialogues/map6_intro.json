@@ -1,0 +1,41 @@
+{
+    "id": "map6_intro",
+    "lines": [
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_thoughtful",
+            "text": "You stand before the grand citadel at last. Beyond these gates lies absolute malice.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_curious",
+            "text": "Who rules over this palace of shadows?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_warning",
+            "text": "A charismatic tyrant who pulls the invisible strings of this entire domain.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_serious",
+            "text": "His razor threads spare no one. If you hesitate for a split second, you become his puppet.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "No puppet strings can hold me down. I'll tear this whole court apart.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "oldman_nod",
+            "text": "Sever the marionette strings and reclaim the throne. All our hopes rest on you.",
+            "textSpeed": 30
+        }
+    ]
+}

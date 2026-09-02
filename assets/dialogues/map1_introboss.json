@@ -1,0 +1,35 @@
+{
+    "id": "map1_introboss",
+    "lines": [
+        {
+            "speaker": "Franky",
+            "portrait": "franky_smirk",
+            "text": "So, you're the one who made it all the way here?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Out of my way! I have a mission to finish.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Franky",
+            "portrait": "franky_serious",
+            "text": "I can't let you pass that easily. A real man never backs down from a promise!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle",
+            "text": "Then prove your words with your fists!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Franky",
+            "portrait": "franky_combat",
+            "text": "Show me what you've got! SUUUUPER!",
+            "textSpeed": 25
+        }
+    ]
+}

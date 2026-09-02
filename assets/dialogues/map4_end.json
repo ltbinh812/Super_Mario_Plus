@@ -1,0 +1,41 @@
+{
+    "id": "map4_end",
+    "lines": [
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_kneeling_bruised",
+            "text": "Huff... huff... Damn, you broke right through my strongest guard.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_catch_breath",
+            "text": "That was an intense duel, Naruto. But this castle is finally within reach.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_grin_thumb_up",
+            "text": "Heh, fair enough. You truly proved yourself in combat.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_serious",
+            "text": "The inner sanctum lies just beyond these doors. Keep your guard up.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Thanks. I'll see this mission through to the very end.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_confident",
+            "text": "Don't you dare give up now! Charge ahead and claim your victory! Believe it!",
+            "textSpeed": 25
+        }
+    ]
+}

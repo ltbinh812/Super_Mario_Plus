@@ -1,0 +1,41 @@
+{
+    "id": "map5_end",
+    "lines": [
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_kneeling_bruised",
+            "text": "Tch... huff... to think your strikes could pierce through my guard...",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_catch_breath",
+            "text": "You're formidable, Sasuke. But my journey doesn't end here.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_grin_thumb_up",
+            "text": "Hmph. Fine. You've proven you have the strength to back up your words.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_serious",
+            "text": "The path beyond leads straight to the final convergence. Don't let your guard down.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "I'm ready for whatever awaits at the end of the line.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_confident",
+            "text": "Keep moving forward. Make sure you don't fall before reaching your destiny.",
+            "textSpeed": 25
+        }
+    ]
+}

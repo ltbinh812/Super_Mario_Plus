@@ -1,0 +1,35 @@
+{
+    "id": "map5_introboss",
+    "lines": [
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_smirk",
+            "text": "Hmph. So you're the nuisance wandering through these woods.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Sasuke! Sheathe your sword and let me pass.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_serious",
+            "text": "You don't command me. You lack the resolve to walk the path ahead.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle",
+            "text": "I'll make you step aside by force if I have to!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Sasuke",
+            "portrait": "sasuke_combat",
+            "text": "Show me your strength, then... or perish in the dark!",
+            "textSpeed": 25
+        }
+    ]
+}

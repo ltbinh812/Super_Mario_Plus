@@ -1,0 +1,35 @@
+{
+    "id": "map2_introshop",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "player_exhausted",
+            "text": "Huff... I've been walking in circles for hours. My legs are barely holding up.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_tired_looking_up",
+            "text": "Just how much deeper does this cursed labyrinth go?",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_surprised",
+            "text": "Wait... is that a light glowing ahead? A shop stall... down here?!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_curious",
+            "text": "Talk about bizarre timing, but I won't complain.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_relieved",
+            "text": "I desperately need some potions and food before I collapse. Let's see what's in stock.",
+            "textSpeed": 35
+        }
+    ]
+}

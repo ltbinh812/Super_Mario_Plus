@@ -1,0 +1,35 @@
+{
+    "id": "map4_intro",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "player_looking_up_awe",
+            "text": "Whoa... Are we finally out of the underground? Look at those massive spires.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "old_man_serious",
+            "text": "Behold the Citadel of Eclipse. Once a throne of legends, now a stronghold shrouded in blood and thunder.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_alert",
+            "text": "The atmosphere here is suffocating. It feels like lightning could strike from the ceiling at any second.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "old_man_warning",
+            "text": "The master of this castle wields a ruthless power. Traps, heavy armor, and lethal blades guard every corridor.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined_grin",
+            "text": "I didn't come this far just to turn back now. Let's breach the main hall!",
+            "textSpeed": 40
+        }
+    ]
+}

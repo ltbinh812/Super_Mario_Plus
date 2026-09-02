@@ -1,0 +1,35 @@
+{
+    "id": "map3_introboss",
+    "lines": [
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_smirk",
+            "text": "Impressive. Not many could trudge through this swamp and make it this far.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Shanks! I don't have time to waste in the muck. Step aside!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_serious",
+            "text": "Putting your life on the line takes real guts. Show me your resolve has what it takes to survive the seas ahead.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle",
+            "text": "I'll bet my life on this blade then!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_combat",
+            "text": "Draw your sword! Let's see how much weight your ambitions carry!",
+            "textSpeed": 25
+        }
+    ]
+}

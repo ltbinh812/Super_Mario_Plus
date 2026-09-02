@@ -1,0 +1,35 @@
+{
+    "id": "map4_introboss",
+    "lines": [
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_smirk",
+            "text": "So, you actually fought your way through the castle gates...",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "Naruto! Step aside, I need to reach the throne room.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_serious",
+            "text": "I can't let you do that. A real shinobi never backs down from guarding this fortress!",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle",
+            "text": "If that's the case, I'll carve my way through!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Naruto",
+            "portrait": "naruto_combat",
+            "text": "Let's see if you can break my defense! Believe it!",
+            "textSpeed": 25
+        }
+    ]
+}

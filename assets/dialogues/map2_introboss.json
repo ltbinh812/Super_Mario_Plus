@@ -1,0 +1,41 @@
+{
+    "id": "map2_introboss",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "player_weary_look",
+            "text": "The ground stopped descending... Is this the bottom of the labyrinth?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "???",
+            "portrait": "itachi_shadow",
+            "text": "You wander aimlessly in the dark, believing you have found an end.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_battle_stance",
+            "text": "Crows?! Who's there? Step out from the shadows!",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Itachi",
+            "portrait": "itachi_calm_red_eyes",
+            "text": "I am Itachi Uchiha. You have fought well to reach these depths, but your reality ends here.",
+            "textSpeed": 28
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "I defeated Naruto, and I survived this maze. I won't let your mind games stop me now!",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Itachi",
+            "portrait": "itachi_sharingan_glow",
+            "text": "Bravery without vision is merely foolishness. Step into Tsukuyomi... and face yourself.",
+            "textSpeed": 22
+        }
+    ]
+}

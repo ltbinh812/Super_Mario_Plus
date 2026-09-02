@@ -429,6 +429,7 @@ void Mob::setAnimation(const std::string& animName) {
     }
     
     currentBaseAnimName = baseAnimName;
+    TraceLog(LOG_INFO, "[Mob::setAnimation] mobType=%s, animName=%s, baseAnimName=%s, foundStandard=%d", mobType.c_str(), animName.c_str(), baseAnimName.c_str(), currentStandardAnim != nullptr);
 
     // Play sound based on the requested animation name
     bool loop = true;
@@ -497,6 +498,11 @@ void Mob::playSound(const std::string& soundKey, bool loop) {
                 volumeModifier = 1.0f - (dist / maxHearingDistance);
                 if (volumeModifier < 0.0f) volumeModifier = 0.0f;
             }
+        }
+        
+        // Intro sound is cinematic, always hear it at full volume
+        if (currentSoundKey.find("intro") != std::string::npos) {
+            volumeModifier = 1.0f;
         }
         
         float finalVolume = SettingsManager::GetInstance().GetEnemySFXVolume() * volumeModifier;

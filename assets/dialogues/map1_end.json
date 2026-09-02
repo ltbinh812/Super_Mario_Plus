@@ -1,0 +1,41 @@
+{
+    "id": "map1_end",
+    "lines": [
+        {
+            "speaker": "Franky",
+            "portrait": "franky_kneeling_bruised",
+            "text": "Huff... huff... Damn, you hit way harder than you look.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_catch_breath",
+            "text": "That was tough, Franky. Now step aside—the gate is opening.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Franky",
+            "portrait": "franky_grin_thumb_up",
+            "text": "Heh, fair enough. You earned every bit of this path forward.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Franky",
+            "portrait": "franky_serious",
+            "text": "Listen to me: the trials waiting on the other side are on a whole different level.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "I'm ready for whatever comes next.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Franky",
+            "portrait": "franky_confident",
+            "text": "That's the spirit! Go out there, kick some ass, and do it with a SUUUUPER blast!",
+            "textSpeed": 25
+        }
+    ]
+}

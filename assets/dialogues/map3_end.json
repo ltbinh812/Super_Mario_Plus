@@ -1,0 +1,41 @@
+{
+    "id": "map3_end",
+    "lines": [
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_kneeling_bruised",
+            "text": "Huff... huff... Ha! That was one hell of a strike.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_catch_breath",
+            "text": "You almost had me there, Shanks. The fog in this swamp is finally clearing.",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_grin_thumb_up",
+            "text": "Heh, you've earned your pass. Your blade didn't hesitate for even a second.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_serious",
+            "text": "Beyond this marsh lies uncharted, ruthless territory. Only true kings survive what's waiting.",
+            "textSpeed": 30
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "No matter what comes, I won't turn back now.",
+            "textSpeed": 40
+        },
+        {
+            "speaker": "Shanks",
+            "portrait": "shanks_confident",
+            "text": "That's what I wanted to hear! Go out there, carve your legend, and don't look back!",
+            "textSpeed": 25
+        }
+    ]
+}

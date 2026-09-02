@@ -1,0 +1,41 @@
+{
+    "id": "map2_intro",
+    "lines": [
+        {
+            "speaker": "Player",
+            "portrait": "player_looking_down",
+            "text": "The air down here is freezing... Where on earth are we?",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "old_man_lantern",
+            "text": "Welcome to the Sunken Labyrinth, young traveler. Few who step into these depths ever see daylight again.",
+            "textSpeed": 28
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_surprised",
+            "text": "These corridors look endless. It feels like the walls themselves are shifting...",
+            "textSpeed": 35
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "old_man_serious",
+            "text": "Your senses do not deceive you. The stone remembers every lost soul trapped in its corridors.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Old Man",
+            "portrait": "old_man_warning",
+            "text": "Keep your blade drawn, mark your path, and beware the shadows lurking around every corner.",
+            "textSpeed": 25
+        },
+        {
+            "speaker": "Player",
+            "portrait": "player_determined",
+            "text": "No turning back now. Let's find the way through.",
+            "textSpeed": 40
+        }
+    ]
+}
