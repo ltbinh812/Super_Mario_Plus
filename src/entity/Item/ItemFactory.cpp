@@ -14,6 +14,7 @@
 #include "EndgameAsset.h"
 #include "nlohmann/json.hpp"
 #include <iostream>
+#include <unordered_map>
 
 using json = nlohmann::json;
 
@@ -84,15 +85,54 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
 {
     std::unique_ptr<BaseItem> item = nullptr;
 
-    if (identifier == "Coin")         item = std::make_unique<Coin>(worldPos);
-    else if (identifier == "Key")     item = std::make_unique<Key>(worldPos);
-    else if (identifier == "Boom")    item = std::make_unique<Bomb>(worldPos);
-    else if (identifier == "Buff")    item = std::make_unique<Buff>(worldPos, 2.0f, "");
-    else if (identifier == "ThrownBoom") {
+    // ---- Item vật lý ném/ném đặc biệt (có initial velocity) -----------------
+    if (identifier == "ThrownBoom") {
         item = std::make_unique<Bomb>(worldPos, initialVelocity);
     }
     else if (identifier == "ThrownPoison") {
         item = std::make_unique<PoisonFlask>(worldPos, initialVelocity);
+    }
+    // ---- Item rơi ra (từ rương, quái chết) ------------------------------------
+    // Các identifier khớp CHÍNH XÁC với allUsableItems() và các identifier
+    // dùng bởi Mob::dropLootOnce / EnemyDieState.
+    else if (identifier == "Coin") {
+        item = std::make_unique<Coin>(worldPos);
+    }
+    else if (identifier == "Key") {
+        item = std::make_unique<Key>(worldPos);
+    }
+    else if (identifier == "Boom") {
+        item = std::make_unique<Bomb>(worldPos);
+    }
+    else if (identifier == "Poison") {
+        // Drop dạng vật phẩm nhặt, không phải ném — tạo PoisonFlask không velocity
+        item = std::make_unique<PoisonFlask>(worldPos);
+    }
+    else if (identifier == "Buff") {
+        // Buff chung, không xác định loại
+        item = std::make_unique<Buff>(worldPos, 2.0f, "");
+    }
+    // ---- Tất cả buff cụ thể từ allUsableItems() ------------------------------
+    // "Speed", "Strength", "Shield", "Jump", "Invisibility",
+    // "GoldMagnet", "TimeStop", "Heal"
+    // Buff constructor nhận specificType dạng "Item_speed", "Item_strength"...
+    // Dùng bảng map để tránh if-else dài và để thêm buff mới chỉ cần thêm 1 dòng.
+    else {
+        // Map từ identifier ngắn (dùng bởi allUsableItems) → Item_xxx (dùng bởi Buff ctor)
+        static const std::unordered_map<std::string, std::string> kBuffTypeMap = {
+            {"Speed",        "Item_speed"},
+            {"Strength",     "Item_strength"},
+            {"Shield",       "Item_shield"},
+            {"Jump",         "Item_jump"},
+            {"Invisibility", "Item_invisibility"},
+            {"GoldMagnet",   "Item_gold_magnet"},
+            {"TimeStop",     "Item_time_stop"},
+            {"Heal",         "Item_heal"},
+        };
+        auto it = kBuffTypeMap.find(identifier);
+        if (it != kBuffTypeMap.end()) {
+            item = std::make_unique<Buff>(worldPos, 2.0f, it->second);
+        }
     }
 
     if (item) {
@@ -107,3 +147,4 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
     std::cout << "[ItemFactory] Unknown dynamic identifier: " << identifier << "\n";
     return nullptr;
 }
+

@@ -11,9 +11,10 @@ static const float BLOCK_SIZE = 32.0f;
 Coin::Coin(Vector2 worldPos, float scale)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
 {
+    // gravityScale = 160 để Coin đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ quái chết hoặc chậu kho, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    // Pop up if spawned dynamically
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
 
     // Set up default animation
     animations_[ItemState::Idle] = AtlasAnimation("coin_anim", 6, 0.1f);

@@ -877,6 +877,13 @@ void BaseLevelState::processItemInteractions() {
     
     item->process({player1.get()});
 
+    // Khoá nhặt trong thời gian drop arc (bật lên từ rương/quái).
+    // Điều này được set bởi launchAsDrop() và giảm dần trong BaseItem::update().
+    // Guard tầng ngoài này là điểm bảo vệ duy nhất — không cần mỗi subclass
+    // tự check riêng, nhưng vẫn giữ check cũ trong subclass như lớp fallback.
+    if (item->getPickupDelay() > 0.0f)
+      continue;
+
     Rectangle itemBox = item->getHitbox();
     auto handleInteract = [&](Player* p) {
         if (p && CheckCollisionRecs(itemBox, p->getHitbox())) {
@@ -892,6 +899,7 @@ void BaseLevelState::processItemInteractions() {
     handleInteract(player1.get());
   }
 }
+
 
 void BaseLevelState::processSpawnQueue() {
   auto entityCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Entity);

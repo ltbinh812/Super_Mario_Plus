@@ -103,6 +103,23 @@ void BaseItem::onLand(float floorY) {
     runtimeStats.velocity.x = 0.0f;
 }
 
+// Chạm tường ngang — dừng trôi ngang.
+// Item drop không được đi ngang (launchAsDrop đã zero-out velocity.x), nhưng
+// item Coin/Buff/Key tạo từ map cũ vẫn có thể có velocity.x != 0 nếu constructor
+// chưa được làm sạch. Guard thêm ở đây để chắc chắn.
+void BaseItem::onHitWall(bool isRightWall, bool isCliff) {
+    runtimeStats.velocity.x = 0.0f;
+}
+
+// Chạm trần solid trong khi đang bật lên (drop arc) — dừng ngay, bắt đầu rơi.
+// Không xử lý: item sẽ tiếp tục đi lên, chui vào tile trần, rồi bị physics
+// push ra theo hướng không kiểm soát → nhìn như item "biến mất".
+void BaseItem::onHitCeiling(float ceilY) {
+    runtimeStats.velocity.y = 0.0f;
+    // Không reset dropOriginY_: khi velocity.y = 0 thì gravity sẽ kéo xuống,
+    // bộ chặn độ cao trong update() không can thiệp nữa (velocity.y > 0).
+}
+
 float BaseItem::getRenderOffsetY() const {
     if (runtimeStats.velocity.y == 0.0f && itemState_ != ItemState::Used) {
         return sinf(animTimer_ * 5.0f) * 4.0f;

@@ -16,6 +16,11 @@ private:
     // Boss::onDamagedBy.
     float noDamageTimer_ = 0.0f;
 
+    // Đếm thời gian boss liên tục đứng trong Poison hoặc Lava.
+    // Khi vượt kLiquidDangerLimit, boss tự dịch chuyển về gần player.
+    // Reset về 0 khi ra khỏi liquid nguy hiểm.
+    float liquidDangerTimer_ = 0.0f;
+
     // Ngưỡng chờ cho lần dịch chuyển kế tiếp, bốc ngẫu nhiên trong
     // [kStallMin, kStallMax] sau mỗi lần nhảy.
     float nextStallDelay_ = kStallMin;
@@ -47,6 +52,11 @@ public:
     // người chơi. Bốc ngẫu nhiên trong khoảng để không thành nhịp máy đếm.
     static constexpr float kStallMin = 5.0f;
     static constexpr float kStallMax = 10.0f;
+
+    // Ngưỡng giây trong Poison/Lava liên tục trước khi boss tự teleport thoát.
+    // Áp dụng ngay cả trước lần đầu tiên (để boss không chết âm thầm trong lava
+    // trước khi trận bắt đầu).
+    static constexpr float kLiquidDangerLimit = 5.0f;
 
     // Bật/tắt chế độ điều khiển boss bằng tay để chỉnh timing hitbox.
     // Trước đây gắn cứng vào phím P bên trong update() — xem Boss::update().

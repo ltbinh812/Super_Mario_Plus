@@ -21,8 +21,10 @@ static const float BLOCK_SIZE = 32.0f;
 Buff::Buff(Vector2 worldPos, float scale, const std::string& specificType)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
 {
+    // gravityScale = 160 để item đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ chest/quái, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
     if (specificType == "Item_strength") effect_ = std::make_unique<StrengthBuff>();
     else if (specificType == "Item_shield") effect_ = std::make_unique<ShieldBuff>();
     else if (specificType == "Item_time_stop") effect_ = std::make_unique<TimeStopBuff>();

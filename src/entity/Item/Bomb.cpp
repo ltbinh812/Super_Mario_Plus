@@ -16,13 +16,15 @@ static const float BLOCK_SIZE = 32.0f;
 Bomb::Bomb(Vector2 worldPos, float scale)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
 {
+    // gravityScale = 160 để item đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ rương/drop, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    // Pop up when spawned from a chest/luckyblock
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
 
     animations_[ItemState::Idle] = AtlasAnimation("bomb_anim", 10, 0.1f);
     setAnimation(ItemState::Idle);
 }
+
 
 // Pre-activated thrown bomb: starts counting down immediately
 Bomb::Bomb(Vector2 worldPos, Vector2 initVelocity)

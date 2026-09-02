@@ -22,8 +22,8 @@ public:
     virtual void process(const std::vector<class Player*>& players) {}
     virtual void render(float alpha) override = 0;
 
-    virtual void onHitWall(bool isRightWall, bool isCliff = false) override {}
-    virtual void onHitCeiling(float ceilY) override {}
+    virtual void onHitWall(bool isRightWall, bool isCliff = false) override;
+    virtual void onHitCeiling(float ceilY) override;
     virtual void onLand(float floorY) override;
 
     // Allows items to have dynamic rendering offsets (e.g. hovering)

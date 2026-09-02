@@ -98,6 +98,28 @@ void Boss::updateTeleport(float dt) {
     Player* target = getClosestPlayer();
     if (!target || target->isDead()) return;
 
+    // ---- Thoát khỏi môi trường nguy hiểm: Poison / Lava ------------------
+    //
+    // Không gắn với hasFirstTeleport_: boss cần thoát lava kể cả trước khi
+    // trận bắt đầu (tránh boss chết âm thầm trong dung nham khi player chưa
+    // tiếp cận). Đây là cơ chế survival độc lập với hệ thống teleport chiến đấu.
+    {
+        auto liq = getRuntimeStats().currentLiquid;
+        bool inDanger = (liq == CollisionType::Poison || liq == CollisionType::Lava);
+        if (inDanger) {
+            liquidDangerTimer_ += dt;
+            if (liquidDangerTimer_ >= kLiquidDangerLimit) {
+                liquidDangerTimer_ = 0.0f;
+                // Reset bộ đếm stall luôn để tránh teleport kép ngay sau đó.
+                armNextStall();
+                tryRepositionNear(*target);
+                return; // Đã xử lý teleport lần này, bỏ qua logic stall bên dưới.
+            }
+        } else {
+            liquidDangerTimer_ = 0.0f; // Ra khỏi liquid: reset bộ đếm
+        }
+    }
+
     // ---- Lần đầu: chờ người chơi vào tầm 5 block ----------------------------
     if (!hasFirstTeleport_) {
         const TileMap* map = getMap();
@@ -123,6 +145,7 @@ void Boss::updateTeleport(float dt) {
     armNextStall();          // đặt lại NGAY, kể cả khi không tìm được chỗ trống
     tryRepositionNear(*target);
 }
+
 
 void Boss::armNextStall() {
     noDamageTimer_ = 0.0f;

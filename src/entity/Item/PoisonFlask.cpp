@@ -15,8 +15,10 @@ static const float BLOCK_SIZE = 32.0f;
 PoisonFlask::PoisonFlask(Vector2 worldPos, float scale)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
 {
+    // gravityScale = 160 để item đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ rương/drop, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
     
     // Using item_poison_drop first frame as sprite
     animations_[ItemState::Idle] = AtlasAnimation("item_poison_drop", 30, 0.05f, true);
