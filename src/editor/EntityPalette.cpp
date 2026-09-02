@@ -8,7 +8,7 @@
 //
 // Tileset chính: assets/maps/item/a.png (64x64px mỗi entity trong file)
 //   Coin      : x=256, y=0
-//   Boom      : x=128, y=0
+//   Bomb      : x=128, y=0
 //   Door      : x=320, y=0
 //   Flag      : x=576, y=0
 //   Key       : x=704, y=0
@@ -54,7 +54,7 @@ void EntityPalette::initEntityList() {
         { "Door",         "Door",          ITEM_A,                                  {320, 0, 64, 64},  {100, 50,  20,  255} },
         // Key — item/a.png x=704 y=0
         { "Key",          "Key",           ITEM_A,                                  {640, 0, 64, 64},  {200, 200, 50,  255} },
-        // Boom — item/a.png x=128 y=0
+        // Bomb — item/a.png x=128 y=0
         { "Boom",         "Bomb",          ITEM_A,                                  {128, 0, 64, 64},  {80,  80,  80,  255} },
         // Buff — buff.png, first frame at (16,16,176,160) nhưng quá lớn → dùng fallback
         { "Buff",         "Buff",          "assets/maps/item/buff.png",             {416, 16, 176, 176}, {255, 100, 200, 255} },

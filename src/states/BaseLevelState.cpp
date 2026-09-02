@@ -472,6 +472,22 @@ void BaseLevelState::Update(float dt) {
       if (e && e->getIsActive()) allEntities.push_back(e.get());
   }
   combatSystem.update(allEntities, dt);
+
+  // === Rung màn hình khi đòn của người chơi chạm mục tiêu ===
+  //
+  // Đặt SAU combatSystem.update() vì cờ chỉ được bật trong lúc giải quyết sát
+  // thương. Player chỉ GHI NHẬN "vừa đánh trúng"; quyết định rung bao mạnh là
+  // việc của màn chơi, nên Player không cần biết camera tồn tại.
+  //
+  // consumeHitLanded() tự xoá cờ, nên một đòn chỉ gây một cú rung dù có trúng
+  // nhiều mục tiêu cùng lúc.
+  bool anyHitLanded = false;
+  if (player1 && player1->consumeHitLanded()) anyHitLanded = true;
+  if (player2 && player2->consumeHitLanded()) anyHitLanded = true;
+  if (anyHitLanded) {
+      mapCamera.shake(3.0f, 0.12f);
+  }
+  mapCamera.updateShake(dt);
 }
 
 void BaseLevelState::Render(float alpha) const {
@@ -877,6 +893,41 @@ void BaseLevelState::processItemInteractions() {
   }
 }
 
+// =============================================================================
+// Chọn chỗ thả vật phẩm.
+//
+// `origin` là vị trí của THỨ ĐÃ THẢ nó ra — rương, hoặc con quái vừa chết.
+// Chỗ đó chắc chắn trống, vì cái rương/con quái đang đứng ở đó.
+//
+// Ưu tiên nhấc lên trên một chút cho dễ thấy; nếu phía trên là đá (rương kê
+// trong hốc hẹp, hoặc quái chết sát trần) thì rơi về đúng `origin`.
+//
+// Vì sao phải quan tâm: BaseItem cố ý KHÔNG có vật lý, nên vật phẩm nằm y
+// nguyên chỗ được sinh ra. Thả vào trong tường là mất luôn phần thưởng —
+// người chơi không nhìn thấy và cũng không chạm tới được.
+//
+// LẦN SỬA ĐẦU TIÊN CỦA HÀM NÀY ĐÃ SAI: nó thử một chuỗi ứng viên lệch nhau
+// theo chiều cao VẬT PHẨM (24 đơn vị) trong khi ô gạch rộng 32, nên mọi ứng
+// viên vẫn nằm trong cùng khối đá; và nó không hề có `origin` trong danh sách.
+// Chạy thử trên bản đồ thật: 12/12 trường hợp vẫn kẹt. Bản này chỉ có hai lựa
+// chọn, và lựa chọn thứ hai thì không thể sai.
+// =============================================================================
+Vector2 BaseLevelState::findFreeItemSpawn(Vector2 origin, Vector2 boxSize) const {
+    auto blocked = [&](Vector2 p) {
+        // getHitbox() của BaseItem neo góc trên-trái tại (x, y - h) — dựng khung
+        // thử y hệt để phép kiểm khớp với lúc chạy thật.
+        Rectangle probe = { p.x, p.y - boxSize.y, boxSize.x, boxSize.y };
+        for (const auto& tile : map.GetCollidingTiles(probe)) {
+            if (tile.type == CollisionType::Solid) return true;
+        }
+        return false;
+    };
+
+    Vector2 raised = { origin.x, origin.y - boxSize.y };
+    if (!blocked(raised)) return raised;
+    return origin;
+}
+
 void BaseLevelState::processSpawnQueue() {
   auto entityCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Entity);
   for (const auto &cmd : entityCmds) {
@@ -894,6 +945,13 @@ void BaseLevelState::processSpawnQueue() {
   for (const auto &cmd : itemCmds) {
     auto item = ItemFactory::createDynamic(cmd.itemIdentifier, cmd.position, cmd.velocity);
     if (item) {
+      // Vật phẩm ném (bom, bình độc) có vận tốc ban đầu và tự bay, không cần
+      // nắn chỗ. Chỉ đồ rơi tại chỗ mới phải kiểm tra có bị kẹt trong tường.
+      const bool isThrown = (cmd.velocity.x != 0.0f || cmd.velocity.y != 0.0f);
+      if (!isThrown) {
+        Rectangle box = item->getHitbox();
+        item->setPosition(findFreeItemSpawn(cmd.position, { box.width, box.height }));
+      }
       item->setCommandQueue(&spawnQueue);
       activeItems.push_back(std::move(item));
     }

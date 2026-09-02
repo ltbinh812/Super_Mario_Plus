@@ -80,6 +80,17 @@ protected:
     void processDeathCondition(float dt);
     void processItemInteractions();
     void processSpawnQueue();
+
+    // Tìm một chỗ KHÔNG bị đặc để thả vật phẩm ra.
+    //
+    // Vật phẩm không có vật lý (BaseItem cố ý là tĩnh), nên nó nằm y nguyên chỗ
+    // được sinh ra. Rương thả đồ ở ngay phía trên nắp; nếu trên nắp là trần đá
+    // — rương kê trong hốc hẹp — thì món đồ nằm lọt trong tường, người chơi
+    // không thấy và cũng không chạm tới được. Nhìn ra ngoài y như rương hỏng.
+    //
+    // Chỉ tầng level mới có TileMap để trả lời "chỗ này có đặc không", nên phép
+    // sửa nằm ở đây chứ không nằm trong từng loại rương.
+    Vector2 findFreeItemSpawn(Vector2 desired, Vector2 boxSize) const;
     void processCutsceneTriggers();
     void spawnCutsceneTriggersFromMap();
 

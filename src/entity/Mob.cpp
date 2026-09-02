@@ -3,6 +3,7 @@
 #include "EnemyStates/EnemyHurtState.h"
 #include "EnemyStates/EnemyDieState.h"
 #include "Player.h"
+#include "CommandQueue.h"
 #include "TileMap.h"
 #include "SettingsManager.h"
 #include "infrastructure/AssetManager.h"
@@ -57,6 +58,27 @@ void Mob::update(float dt) {
         hurtTimer -= dt;
     }
 
+    // === Khi nào quái được phép xuống nước ===
+    //
+    // avoidCliffsAndWater giữ quái khỏi đi lộn cổ xuống vực — nhưng nó coi mép
+    // nước cũng là vực, nên quái đứng trên bờ quay đầu và người chơi cứ lặn
+    // xuống là an toàn tuyệt đối.
+    //
+    // Nới ra đúng hai trường hợp:
+    //   - Quái đã ở trong nước: né nữa thì vô nghĩa, chỉ khiến nó giãy giụa.
+    //   - Mục tiêu đang ở trong nước: cho phép quái lội xuống mà đuổi.
+    // Ngoài hai trường hợp đó, cảm biến vực vẫn bật như cũ.
+    bool allowWater = isInLiquid();
+    if (!allowWater) {
+        if (Player* t = getClosestPlayer()) {
+            auto liq = t->getRuntimeStats().currentLiquid;
+            allowWater = (liq == CollisionType::Water ||
+                          liq == CollisionType::Poison ||
+                          liq == CollisionType::Lava);
+        }
+    }
+    baseStats.avoidCliffsAndWater = !allowWater;
+
     if (currentStandardAnim) {
         currentStandardAnim->update(dt);
     } else if (currentAnim) {
@@ -72,6 +94,57 @@ void Mob::update(float dt) {
         // TraceLog(LOG_INFO, "[Mob] %s is at (%f, %f) Active: %d", mobType.c_str(), worldStats.position.x, worldStats.position.y, getIsActive());
         logT = 0.0f;
     }
+}
+
+// =============================================================================
+// Bơi về phía mục tiêu.
+//
+// Trên cạn quái chỉ điều khiển trục X, còn trục Y do trọng lực lo. Dưới nước
+// thì cả hai trục đều phải chủ động, nếu không con quái chỉ trôi ngang ở đúng
+// một độ sâu và không bao giờ với tới người chơi đang lặn sâu hơn hay nổi cao hơn.
+//
+// Tốc độ bơi lấy 70% tốc độ chạy — dưới nước thì chậm hơn, giống hệt cách người
+// chơi bị giảm tốc khi bơi.
+// =============================================================================
+bool Mob::swimToward(Vector2 target) {
+    if (!isInLiquid()) return false;
+
+    const float swimSpeed = baseStats.moveVelocity * 0.7f;
+    Vector2 pos = getPosition();
+    float dx = target.x - pos.x;
+    float dy = target.y - pos.y;
+
+    // Ngưỡng chết để quái không rung lắc quanh mục tiêu.
+    const float dead = 4.0f;
+
+    float vx = 0.0f, vy = 0.0f;
+    if (dx >  dead) { vx =  swimSpeed; isFacingRight = true;  }
+    else if (dx < -dead) { vx = -swimSpeed; isFacingRight = false; }
+
+    if (dy >  dead) vy =  swimSpeed;
+    else if (dy < -dead) vy = -swimSpeed;
+    else vy = 0.0f;   // ngang tầm rồi thì giữ độ sâu, khỏi chìm
+
+    runtimeStats.velocity.x = vx;
+    runtimeStats.velocity.y = vy;
+    return true;
+}
+
+bool Mob::dropLootOnce(const std::string& itemIdentifier) {
+    if (lootDropped_) return false;
+    CommandQueue* q = getCommandQueue();
+    if (!q) return false;
+
+    lootDropped_ = true;
+
+    SpawnCommand cmd;
+    cmd.category       = SpawnCategory::Item;
+    cmd.itemIdentifier = itemIdentifier;
+    // Gửi vị trí chân con quái. Việc nhấc lên cho dễ nhìn (và lùi lại khi vướng
+    // đá) do BaseLevelState::findFreeItemSpawn() lo.
+    cmd.position       = getPosition();
+    q->push(cmd);
+    return true;
 }
 
 void Mob::render(float alpha) {

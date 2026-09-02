@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include "CommandQueue.h"
+#include "ItemUsageFactory.h"
 
 static const float HITBOX_W = 32.0f;
 static const float HITBOX_H = 32.0f;
@@ -54,13 +55,26 @@ void ChestNormal::onInteract(Entity& other) {
         SpawnCommand cmd;
         cmd.category = SpawnCategory::Item;
         
-        int randVal = rand() % 3;
-        if (randVal == 0) cmd.itemIdentifier = "Coin";
-        else if (randVal == 1) cmd.itemIdentifier = "Boom";
-        else cmd.itemIdentifier = "Buff";
+        // Bốc đều trong TOÀN BỘ danh sách vật phẩm dùng được: 8 buff (Speed,
+        // Strength, Shield, Jump, Invisibility, GoldMagnet, TimeStop, Heal)
+        // cộng Poison và Boom.
+        //
+        // Trước đây rương chỉ có ba khả năng — Coin, Boom, hoặc "Buff" chung
+        // chung — mà nhánh "Buff" lại đẩy sang bảng quay của Random buff, và
+        // bảng đó bỏ sót Strength, Invisibility, TimeStop. Kết quả: ba buff ấy
+        // KHÔNG BAO GIỜ ra khỏi rương. Nay lấy thẳng danh sách gốc nên không
+        // thể sót.
+        //
+        // Coin bị bỏ khỏi bể này vì tiền giờ đã rơi từ quái (xem EnemyDieState);
+        // rương để dành cho vật phẩm.
+        const auto& pool = ItemUsageFactory::allUsableItems();
+        cmd.itemIdentifier = pool[rand() % pool.size()];
 
-        // Spawn it slightly above the chest
-        cmd.position = { worldStats.position.x, worldStats.position.y - hitH_ };
+        // Gửi vị trí CỦA CHÍNH RƯƠNG, không phải chỗ đã nhấc lên sẵn.
+        // BaseLevelState::findFreeItemSpawn() sẽ tự nhấc lên nếu phía trên
+        // trống, còn vướng đá thì thả ngay tại đây — chỗ này chắc chắn đi tới
+        // được, vì người chơi vừa đứng đó mở rương.
+        cmd.position = worldStats.position;
         commandQueue->push(cmd);
     }
 

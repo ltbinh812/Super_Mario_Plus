@@ -20,6 +20,6 @@ public:
         cmd.velocity       = {player.getWorldStats().isFacingRight ? THROW_VX : -THROW_VX, THROW_VY};
         queue->push(cmd);
         
-        std::cout << "[ThrowBombStrategy] Threw Boom!\n";
+        std::cout << "[ThrowBombStrategy] Threw Bomb!\n";
     }
 };

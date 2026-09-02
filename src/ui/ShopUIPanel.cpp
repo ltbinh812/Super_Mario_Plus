@@ -17,15 +17,15 @@ static std::string toLowerString(const std::string& str) {
 
 ShopUIPanel::ShopUIPanel() {
     items_.push_back({"Boom",           "Boom",        10, {0,0,0,0}, false});
-    items_.push_back({"Speed Potion",   "Speed",       20, {0,0,0,0}, false});
-    items_.push_back({"Strength Buff",  "Strength",    20, {0,0,0,0}, false});
-    items_.push_back({"Shield Buff",    "Shield",      30, {0,0,0,0}, false});
-    items_.push_back({"Health Potion",  "Heal",        15, {0,0,0,0}, false});
-    items_.push_back({"Poison Flask",   "Poison",      25, {0,0,0,0}, false});
-    items_.push_back({"Gold Magnet",    "Gold_Magnet", 40, {0,0,0,0}, false});
-    items_.push_back({"Invisibility",   "Invisibility",50, {0,0,0,0}, false});
-    items_.push_back({"Super Jump",     "Jump",        20, {0,0,0,0}, false});
-    items_.push_back({"Time Stop",      "Time_Stop",   60, {0,0,0,0}, false});
+    items_.push_back({"Speed Potion",   "Speed",       14, {0,0,0,0}, false});
+    items_.push_back({"Strength Buff",  "Strength",    14, {0,0,0,0}, false});
+    items_.push_back({"Shield Buff",    "Shield",      16, {0,0,0,0}, false});
+    items_.push_back({"Health Potion",  "Heal",        12, {0,0,0,0}, false});
+    items_.push_back({"Poison Flask",   "Poison",      15, {0,0,0,0}, false});
+    items_.push_back({"Gold Magnet",    "Gold_Magnet", 17, {0,0,0,0}, false});
+    items_.push_back({"Invisibility",   "Invisibility",18, {0,0,0,0}, false});
+    items_.push_back({"Super Jump",     "Jump",        14, {0,0,0,0}, false});
+    items_.push_back({"Time Stop",      "Time_Stop",   20, {0,0,0,0}, false});
     items_.push_back({"Mystery Box",    "Random",      35, {0,0,0,0}, false});
 }
 
@@ -298,7 +298,7 @@ void ShopUIPanel::render(float alpha) const {
             Rectangle    srcRect = {0, 0, 0, 0};
 
             if (item.type == "Boom") {
-                // Boom dùng texture riêng (không có trong atlas buff)
+                // Bomb dùng texture riêng (không có trong atlas buff)
                 iconTex = boomTex_;
                 srcRect = {0.0f, 0.0f, (float)boomTex_.width, (float)boomTex_.height};
             } else {

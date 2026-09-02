@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include "ItemUsageFactory.h"
 
 static const float BLOCK_SIZE = 32.0f;
 
@@ -58,14 +59,11 @@ void Buff::onInteract(Entity& other) {
         if (p->getRuntimeStats().storedItemSlot.empty()) {
             std::string buffName = effect_->getName();
             if (buffName == "Random") {
-                int r = rand() % 6;
-                if (r == 0) buffName = "Speed";
-                else if (r == 1) buffName = "Jump";
-                else if (r == 2) buffName = "GoldMagnet";
-                else if (r == 3) buffName = "Shield";
-                else if (r == 4) buffName = "Heal";
-                else if (r == 5) buffName = "Poison";
-                else buffName = "Boom"; 
+                // Quay trong TOÀN BỘ danh sách, không phải 6 mục chép tay.
+                // Bảng cũ bỏ sót Strength, Invisibility, TimeStop, và nhánh
+                // "Boom" của nó là code chết vì rand()%6 chỉ cho ra 0..5.
+                const auto& pool = ItemUsageFactory::allUsableItems();
+                buffName = pool[rand() % pool.size()];
             }
             p->getRuntimeStatsMutable().storedItemSlot = buffName;
             itemState_ = ItemState::Used;
@@ -81,14 +79,8 @@ void Buff::forceInteract(Entity& other) {
     if (p) {
         std::string buffName = effect_->getName();
         if (buffName == "Random") {
-            int r = rand() % 6;
-            if (r == 0) buffName = "Speed";
-            else if (r == 1) buffName = "Jump";
-            else if (r == 2) buffName = "GoldMagnet";
-            else if (r == 3) buffName = "Shield";
-            else if (r == 4) buffName = "Heal";
-            else if (r == 5) buffName = "Poison";
-            else buffName = "Boom"; 
+            const auto& pool = ItemUsageFactory::allUsableItems();
+            buffName = pool[rand() % pool.size()];
         }
         p->getRuntimeStatsMutable().storedItemSlot = buffName;
         itemState_ = ItemState::Used;

@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseItem.h"
 
-// Drops: random Buff or Boom. Uses 4 random chest types with 5-frame animations.
+// Drops: random Buff or Bomb. Uses 4 random chest types with 5-frame animations.
 class ChestNormal : public BaseItem {
 public:
     ChestNormal(Vector2 worldPos, float scale = 2.0f);

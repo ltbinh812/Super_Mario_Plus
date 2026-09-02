@@ -2,12 +2,18 @@
 #include "AssetManager.h"
 #include "SettingsManager.h"
 #include "infrastructure/AudioManager.h"
+#include "infrastructure/AppPaths.h"
 #include "raylib.h"
 #include <ctime>
 #include <cstdlib>
 
 int main() {
     srand(time(nullptr));
+
+    // Dời dữ liệu lưu cũ (nếu có) về thư mục saves/ nằm cạnh .exe.
+    // Phải chạy TRƯỚC mọi thứ khác: SettingsManager đọc file cài đặt ngay lần
+    // đầu có ai gọi GetInstance(), nên dời sau đó là đã muộn.
+    AppPaths::MigrateLegacySaves();
     // Khởi tạo các cờ cửa sổ (có thể điều chỉnh kích thước, VSync)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     

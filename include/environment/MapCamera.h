@@ -57,12 +57,30 @@ public:
     // Kiểm tra camera đang ở cinematic mode (có mode nào đang chạy) hay không
     bool isCinematic() const { return isInCinematicMode; }
 
+    // === Rung màn hình (screen shake) ===
+    //
+    // CỐ Ý KHÔNG làm thành một ICameraMode trong hàng đợi, dù comment ở
+    // ICameraMode.h có gợi ý "CameraShakeMode". Lý do: mode trong hàng đợi
+    // THAY THẾ hành vi đang chạy, nên camera sẽ ngừng bám người chơi trong lúc
+    // rung — sai hoàn toàn. Rung màn hình phải CHỒNG LÊN bất kể camera đang
+    // làm gì (bám người chơi, lia cinematic, zoom).
+    //
+    // Nên nó là một độ lệch cộng thêm, chỉ áp vào lúc vẽ.
+    void shake(float intensity, float duration);
+    void updateShake(float dt);
+
     // Direct setters — chỉ dành cho ICameraMode subclasses gọi (thay đổi camera internals)
     void setCameraTarget(Vector2 t) { camera.target = t; }
     void setCameraZoom(float z) { zoom = z; camera.zoom = z; }
     void setCameraOffset(Vector2 o) { camera.offset = o; }
 
 private:
+    // Rung màn hình: cường độ giảm dần về 0 trong suốt thời lượng.
+    float shakeTimer_ = 0.0f;
+    float shakeDuration_ = 0.0f;
+    float shakeIntensity_ = 0.0f;
+    Vector2 shakeOffset_ = {0.0f, 0.0f};
+
     std::unique_ptr<ICameraMode> currentMode;
     std::queue<std::unique_ptr<ICameraMode>> modeQueue;
     bool isInCinematicMode = false;

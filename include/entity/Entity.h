@@ -63,6 +63,12 @@ public:
   virtual Hitbox getActiveHitbox() { return { {0,0,0,0}, 0, 0, nullptr }; }
   virtual void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) {}
 
+  // Đòn của thực thể này vừa CHẠM được mục tiêu. CombatSystem gọi ngược về chủ
+  // hitbox ngay sau khi đã trừ máu — trước đây không có đường phản hồi nào nên
+  // kẻ tấn công không hề biết mình đánh trúng hay đánh hụt.
+  // Player dùng nó để kích hoạt hit-stop (xem Player::onDealtDamage).
+  virtual void onDealtDamage(Entity* target, int amount) {}
+
   // Polymorphic Hook Methods (Extension Points for subclasses)
   virtual void onHitWall(bool isRightWall, bool isCliff = false) {}
   virtual void onLand(float floorY) {}

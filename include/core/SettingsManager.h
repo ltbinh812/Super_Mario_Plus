@@ -61,8 +61,22 @@ private:
     
     void LoadDefaults();
 public:
-    void SaveToFile(const std::string& filepath = "saves/settings.json");
-    void LoadFromFile(const std::string& filepath = "saves/settings.json");
+    // Đường dẫn file cài đặt, NEO VÀO THƯ MỤC CHỨA FILE .EXE.
+    //
+    // Trước đây mặc định là chuỗi tương đối "saves/settings.json", tức là phụ
+    // thuộc thư mục làm việc lúc bấm chạy: mở từ VS Code thì ghi vào
+    // <goc-du-an>/saves/, bấm thẳng build/SuperMarioPlus.exe thì ghi vào
+    // build/saves/. Hai lần chạy khác cách là hai file khác nhau, nên đổi phím
+    // xong mở lại kiểu khác là như chưa từng đổi.
+    //
+    // Neo vào thư mục .exe thì đường dẫn cố định, chạy kiểu gì cũng ra đúng
+    // một file — và assets cũng đã được CMake chép sang cạnh .exe nên mọi thứ
+    // nằm chung một chỗ.
+    static std::string GetSettingsPath();
+
+    // filepath rỗng = dùng GetSettingsPath(). Truyền tay chỉ dùng cho test.
+    void SaveToFile(const std::string& filepath = "");
+    void LoadFromFile(const std::string& filepath = "");
 
     float GetMasterVolume() const { return masterVolume_; }
     void SetMasterVolume(float v) { 

@@ -23,13 +23,71 @@ Player::Player(CharacterBaseStats &bS, CharacterRuntimeStats &rS,
   faction = EntityFaction::Player;
 }
 
+// =============================================================================
+// HIT-STOP — khựng khung hình đúng khoảnh khắc đòn chạm.
+//
+// Khi một đòn ăn vào mục tiêu, animation và đồng hồ chiêu của NGƯỜI ĐÁNH đứng
+// yên trong vài phần trăm giây. Cú đánh nhờ vậy có "sức nặng": trúng và hụt
+// trông khác hẳn nhau dù dùng chung một animation.
+//
+// Thời lượng nằm sẵn trong từng chiêu (hitStopDuration, nạp từ characters.json)
+// nên chỉnh cảm giác đánh là sửa JSON chứ không phải sửa code.
+//
+// LƯU Ý: trường hitStopDuration đã có từ lâu và vẫn được nạp đầy đủ từ JSON,
+// nhưng KHÔNG một chỗ nào gọi getHitStopDuration() — nó là dữ liệu chết. Cơ chế
+// dưới đây mới là chỗ biến nó thành hiệu ứng thật.
+// =============================================================================
+void Player::onDealtDamage(Entity* target, int amount) {
+  (void)target;
+  (void)amount;
+  hitLandedThisStep_ = true;
+  if (currentState != &skillState) return;
+
+  // CHỈ MỘT LẦN cho mỗi lần ra chiêu.
+  //
+  // LỖI ĐÃ SỬA — đòn đánh bị kéo dài ra trông thấy khi trúng quái.
+  // Trước đây mỗi lần đòn chạm là gán lại hitStopTimer_. Nghe thì vô hại,
+  // nhưng nó cộng dồn theo một vòng khép kín:
+  //
+  //   đóng băng -> currentState->update() bị bỏ qua -> đồng hồ chiêu đứng yên
+  //   -> getElapsedTime() không đổi -> isHitboxActive() vẫn true ở đúng khung đó
+  //   -> hitbox còn sống, con quái tiếp theo bước vào là lại trúng
+  //   -> nạp thêm 0.05s nữa...
+  //
+  // Đánh một con thì chỉ dài thêm 0.05s, khó thấy. Nhưng đánh giữa đám đông thì
+  // cộng lại thành vài phần mười giây và animation lê ra rất rõ.
+  //
+  // Hit-stop đúng nghĩa là MỘT nhịp khựng cho MỘT cú đánh, không phải một nhịp
+  // cho mỗi mục tiêu. Khoá lại sau lần đầu thì độ dài chiêu bị đội thêm nhiều
+  // nhất đúng một hitStopDuration, bất kể trúng bao nhiêu con.
+  if (hitStopUsedThisSkill_) return;
+
+  if (const ISkill* skill = skillState.getCurrentSkill()) {
+    hitStopTimer_ = skill->getHitStopDuration();
+    hitStopUsedThisSkill_ = true;
+  }
+}
+
 void Player::update(float dt) {
   if (runtimeStats.iframeTimer > 0.0f) {
     runtimeStats.iframeTimer -= dt;
   }
-  
+
   updateEffects(dt);
   overlappingItem_ = nullptr; // Reset each frame; collision loop in GameState will set it if still overlapping
+
+  // Đang khựng vì vừa đánh trúng: bỏ qua state và animation lượt này.
+  //
+  // Chỉ đóng băng HÌNH ẢNH và đồng hồ chiêu. Vật lý nằm ở updatePhysicsWithMap
+  // do level gọi riêng nên vẫn chạy — nhân vật đang bay không bị treo lơ lửng.
+  // Buff và chữ nổi cũng chạy tiếp, vì đóng băng cả chúng thì đồng hồ buff sẽ
+  // trôi chậm dần mỗi lần người chơi đánh trúng.
+  if (hitStopTimer_ > 0.0f) {
+    hitStopTimer_ -= dt;
+    buffManager_.update(dt, *this);
+    updateFloatingTexts(dt);
+    return;
+  }
 
   // Hồi mana ở MỌI trạng thái (chạy, nhảy, bơi, leo, đang ra chiêu...).
   // Trước đây lời gọi này nằm trong PlayerIdleState::update nên chỉ đứng yên

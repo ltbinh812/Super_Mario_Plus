@@ -38,9 +38,15 @@ private:
     static int parseVersionIndex(const std::string& fileName);
 
 public:
-    // rootDir mặc định "saves" — tham số hoá để test có thể trỏ vào thư mục tạm.
+    // rootDir KHÔNG có giá trị mặc định — cố ý.
+    //
+    // Trước đây mặc định là chuỗi tương đối "saves", nên ai lỡ dựng repository
+    // mà quên truyền đường dẫn là lại ghi theo thư mục làm việc — đúng con bug
+    // vừa phải đi sửa. Bắt buộc truyền tay thì không thể quên:
+    //     - gameplay  -> AppPaths::SavesDir()  (thư mục cạnh .exe)
+    //     - test      -> một thư mục tạm
     explicit FileSaveRepository(std::unique_ptr<ISaveSerializer> serializer,
-                                const std::string& rootDir = "saves");
+                                const std::string& rootDir);
     ~FileSaveRepository() override = default;
 
     std::vector<SaveSlotInfo> listVersions(int worldIndex) const override;

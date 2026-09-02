@@ -10,7 +10,7 @@
 //  - PlayerSpawn không có tile → dùng fallbackColor
 //
 // Path tuyệt đối (relative to game exe):
-//   assets/maps/item/a.png  — chứa: LuckyBlock, Boom, Coin, Door, Flag, Key, Springs
+//   assets/maps/item/a.png  — chứa: LuckyBlock, Bomb, Coin, Door, Flag, Key, Springs
 //   assets/maps/item/buff.png
 //   assets/maps/item/chest_boss.png
 //   assets/maps/item/chest_normal.png

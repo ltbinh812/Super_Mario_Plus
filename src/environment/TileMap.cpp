@@ -384,7 +384,36 @@ bool TileMap::LoadLDtkMap(const std::string& ldtkFilePath, const std::string& le
             if (layer.contains("entityInstances") && !layer["entityInstances"].is_null()) {
                 for (const auto& ent : layer["entityInstances"]) {
                     if (ent.contains("__identifier") && ent["__identifier"] == "Starting_position") {
-                        playerSpawns.push_back({ (float)ent["px"][0], (float)ent["px"][1] });
+                        // Quy về ĐIỂM CHÂN (giữa-đáy) ngay tại đây, vì đó là
+                        // điểm neo mà Player dùng.
+                        //
+                        // LỖI ĐÃ SỬA: trước đây GetPlayerSpawns() cộng cứng
+                        // (+8, +16), tức mặc định mọi Starting_position đều là
+                        // ô 16x16 có pivot ở GÓC TRÊN-TRÁI. Nhưng pivot được
+                        // đặt khác nhau giữa các world:
+                        //     world02/04/05/06 -> pivot (0,0)   : px là góc trên-trái
+                        //     world01/03       -> pivot (0.5,1) : px ĐÃ LÀ điểm chân
+                        // Với hai world sau, phép cộng cứng đẩy người chơi lệch
+                        // 8px sang phải và 16px xuống dưới — đúng một ô gạch,
+                        // nên nhân vật xuất hiện lọt vào nền thay vì đứng trên
+                        // chỗ người thiết kế đã đặt.
+                        //
+                        // Công thức chung, đọc pivot và kích thước THẬT của
+                        // từng instance:
+                        //     chân.x = px.x + (0.5 - pivotX) * width
+                        //     chân.y = px.y + (1.0 - pivotY) * height
+                        float ex = (float)ent["px"][0];
+                        float ey = (float)ent["px"][1];
+                        float ew = ent.value("width", 16);
+                        float eh = ent.value("height", 16);
+                        float pvx = 0.0f, pvy = 0.0f;
+                        if (ent.contains("__pivot") && ent["__pivot"].is_array() &&
+                            ent["__pivot"].size() == 2) {
+                            pvx = (float)ent["__pivot"][0];
+                            pvy = (float)ent["__pivot"][1];
+                        }
+                        playerSpawns.push_back({ ex + (0.5f - pvx) * ew,
+                                                 ey + (1.0f - pvy) * eh });
                     }
 
                     // Collect all non-internal entities for ItemFactory
@@ -576,11 +605,14 @@ std::string TileMap::GetNeighbour(const std::string& dir, float globalX, float g
 }
 
 std::vector<Vector2> TileMap::GetPlayerSpawns() const {
+    // playerSpawns đã được quy về điểm chân (giữa-đáy) ngay lúc nạp map — cả
+    // nhánh LDtk lẫn nhánh custom map — nên ở đây chỉ còn việc đổi sang đơn vị
+    // thế giới. Không cộng bù gì thêm.
     std::vector<Vector2> scaledSpawns;
-    float scale = GetWorldScale();
+    const float scale = GetWorldScale();
+    scaledSpawns.reserve(playerSpawns.size());
     for (const auto& p : playerSpawns) {
-        // Return bottom-center of the 16x16 Starting_position entity
-        scaledSpawns.push_back({ (p.x + 8.0f) * scale, (p.y + 16.0f) * scale });
+        scaledSpawns.push_back({ p.x * scale, p.y * scale });
     }
     return scaledSpawns;
 }
@@ -653,10 +685,13 @@ bool TileMap::LoadCustomMap(const CustomMapData& data) {
     playerSpawns.clear();
     for (const auto& e : data.entities) {
         if (e.type == "PlayerSpawn") {
-            // PlayerSpawn → pixel position (top-left của ô grid)
+            // Cùng quy ước với nhánh LDtk: lưu sẵn ĐIỂM CHÂN (giữa-đáy) của ô.
+            // Trước đây chỗ này lưu góc trên-trái rồi để GetPlayerSpawns() cộng
+            // cứng (+8, +16) — chỉ đúng khi tileSize đúng bằng 16, còn map vẽ ở
+            // tile 32 thì người chơi lệch nửa ô.
             playerSpawns.push_back({
-                (float)(e.gridX * tileSize),
-                (float)(e.gridY * tileSize)
+                (float)(e.gridX * tileSize) + tileSize * 0.5f,
+                (float)(e.gridY * tileSize) + (float)tileSize
             });
         } else {
             LDtkEntityData ldtk;

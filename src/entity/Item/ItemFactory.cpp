@@ -8,7 +8,7 @@
 #include "ChestNormal.h"
 #include "ChestBoss.h"
 #include "Buff.h"
-#include "Boom.h"
+#include "Bomb.h"
 #include "PoisonFlask.h"
 #include "ShopAsset.h"
 #include "EndgameAsset.h"
@@ -56,14 +56,14 @@ std::unique_ptr<BaseItem> ItemFactory::create(
             }
         }
         if (itemType == "Boom") {
-            return std::make_unique<Boom>(worldPos);
+            return std::make_unique<Bomb>(worldPos);
         }
         if (itemType == "Item_poison") {
             return std::make_unique<PoisonFlask>(worldPos);
         }
         return std::make_unique<Buff>(worldPos, 2.0f, itemType);
     }
-    if (identifier == "Boom")         return std::make_unique<Boom>(worldPos);
+    if (identifier == "Boom")         return std::make_unique<Bomb>(worldPos);
     if (identifier == "Poison")       return std::make_unique<PoisonFlask>(worldPos);
 
     std::cout << "[ItemFactory] Unknown identifier: " << identifier << "\n";
@@ -86,10 +86,10 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
 
     if (identifier == "Coin")         item = std::make_unique<Coin>(worldPos);
     else if (identifier == "Key")     item = std::make_unique<Key>(worldPos);
-    else if (identifier == "Boom")    item = std::make_unique<Boom>(worldPos);
+    else if (identifier == "Boom")    item = std::make_unique<Bomb>(worldPos);
     else if (identifier == "Buff")    item = std::make_unique<Buff>(worldPos, 2.0f, "");
     else if (identifier == "ThrownBoom") {
-        item = std::make_unique<Boom>(worldPos, initialVelocity);
+        item = std::make_unique<Bomb>(worldPos, initialVelocity);
     }
     else if (identifier == "ThrownPoison") {
         item = std::make_unique<PoisonFlask>(worldPos, initialVelocity);

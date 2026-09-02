@@ -1,5 +1,6 @@
 #include "SettingsManager.h"
 #include "infrastructure/AudioManager.h"
+#include "infrastructure/AppPaths.h"
 #include <unordered_map>
 #include <filesystem>
 #include <fstream>
@@ -11,6 +12,16 @@ using json = nlohmann::json;
 SettingsManager::SettingsManager() {
     LoadDefaults();
     LoadFromFile();
+
+    // Chưa có file thì tạo ngay bằng giá trị hiện tại (mặc định, hoặc bản vừa
+    // di cư được từ vị trí cũ). Hai cái lợi:
+    //   - Người chơi luôn nhìn thấy saves/settings.json để biết cấu hình nằm đâu.
+    //   - Nếu ổ đĩa/quyền ghi có vấn đề thì biết NGAY lúc khởi động, chứ không
+    //     phải đến lúc đổi phím xong thoát game mới phát hiện mất.
+    std::error_code ec;
+    if (!std::filesystem::exists(GetSettingsPath(), ec)) {
+        SaveToFile();
+    }
 }
 
 void SettingsManager::LoadDefaults() {
@@ -145,23 +156,41 @@ std::string SettingsManager::GetKeyName(int key) const {
 }
 
 // =============================================================================
+// Đường dẫn file cài đặt — neo vào thư mục chứa .exe.
+//
+// GetApplicationDirectory() của raylib trả về thư mục thật sự chứa file chạy,
+// bất kể người dùng bấm chạy từ đâu, nên kết quả luôn là cùng một file. Xem
+// chú thích dài hơn ở SettingsManager.h.
+// =============================================================================
+std::string SettingsManager::GetSettingsPath() {
+    return AppPaths::SettingsFile();
+}
+
+// =============================================================================
 // Ghi cấu hình xuống đĩa.
 //
 // LỖI ĐÃ SỬA — phím đổi trong Settings không được nhớ qua các lần mở game.
+// Có HAI nguyên nhân chồng lên nhau, phải chữa cả hai:
 //
-// Đường dẫn mặc định là "saves/settings.json", tương đối so với thư mục làm
-// việc. Game chạy từ build/, mà build/saves/ chưa từng được tạo: ofstream mở
-// một file trong thư mục không tồn tại thì THẤT BẠI, is_open() trả false, và
-// hàm này lặng lẽ không làm gì. Không có lấy một dòng báo lỗi, nên nhìn bên
-// ngoài thì cứ như cài đặt được lưu bình thường cho tới lần mở game sau.
+//  1. ĐƯỜNG DẪN TƯƠNG ĐỐI. Mặc định cũ là chuỗi "saves/settings.json", tính
+//     theo thư mục làm việc lúc bấm chạy. Mở từ VS Code thì ra
+//     <goc-du-an>/saves/, bấm thẳng build/SuperMarioPlus.exe thì ra
+//     build/saves/ — hai lần chạy khác cách đọc/ghi hai file khác nhau.
+//     Chữa bằng GetSettingsPath() -> AppPaths::SettingsFile(), neo vào thư
+//     mục chứa .exe. Xem AppPaths.h.
 //
-// (Hệ save màn chơi không dính lỗi này vì FileSaveRepository tự gọi
-// create_directories trước khi ghi.)
+//  2. THƯ MỤC CHA CHƯA TỒN TẠI. ofstream mở file trong thư mục không có thì
+//     THẤT BẠI, is_open() trả false, và hàm cũ lặng lẽ return — không một dòng
+//     báo lỗi, nên nhìn bên ngoài cứ như đã lưu xong.
+//     Chữa bằng create_directories trước khi mở, và BÁO RA nếu vẫn hỏng:
+//     im lặng nuốt lỗi ghi file chính là thứ đã giấu con bug này suốt.
 //
-// Nay: tạo thư mục cha trước khi mở, và nếu vẫn không mở được thì BÁO RA —
-// im lặng nuốt lỗi ghi file chính là thứ đã giấu con bug này.
+// (Bản lưu màn chơi và map tự tạo từng dính đúng lỗi 1; nay cả ba hệ thống
+// cùng đi qua AppPaths nên chỉ còn một thư mục saves/ duy nhất.)
 // =============================================================================
-void SettingsManager::SaveToFile(const std::string& filepath) {
+void SettingsManager::SaveToFile(const std::string& filepathIn) {
+    const std::string filepath = filepathIn.empty() ? GetSettingsPath() : filepathIn;
+
     json j;
     j["p1Keys"] = p1Keys_;
     j["p2Keys"] = p2Keys_;
@@ -188,7 +217,12 @@ void SettingsManager::SaveToFile(const std::string& filepath) {
     file.close();
 }
 
-void SettingsManager::LoadFromFile(const std::string& filepath) {
+void SettingsManager::LoadFromFile(const std::string& filepathIn) {
+    std::string filepath = filepathIn.empty() ? GetSettingsPath() : filepathIn;
+
+    // Không cần tự lo việc di cư ở đây: AppPaths::MigrateLegacySaves() đã chạy
+    // từ đầu main() và dời cả thư mục saves cũ (kể cả settings.json) về gốc mới.
+
     std::ifstream file(filepath);
     if (file.is_open()) {
         try {
