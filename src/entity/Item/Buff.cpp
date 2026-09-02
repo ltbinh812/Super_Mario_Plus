@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include "ItemUsageFactory.h"
 #include "infrastructure/AssetManager.h"
 
 static const float BLOCK_SIZE = 32.0f;
@@ -20,8 +21,10 @@ static const float BLOCK_SIZE = 32.0f;
 Buff::Buff(Vector2 worldPos, float scale, const std::string& specificType)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE)
 {
+    // gravityScale = 160 để item đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ chest/quái, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
     if (specificType == "Item_strength") effect_ = std::make_unique<StrengthBuff>();
     else if (specificType == "Item_shield") effect_ = std::make_unique<ShieldBuff>();
     else if (specificType == "Item_time_stop") effect_ = std::make_unique<TimeStopBuff>();
@@ -59,19 +62,16 @@ void Buff::onInteract(Entity& other) {
         if (p->getRuntimeStats().storedItemSlot.empty()) {
             std::string buffName = effect_->getName();
             if (buffName == "Random") {
-                int r = rand() % 6;
-                if (r == 0) buffName = "Speed";
-                else if (r == 1) buffName = "Jump";
-                else if (r == 2) buffName = "GoldMagnet";
-                else if (r == 3) buffName = "Shield";
-                else if (r == 4) buffName = "Heal";
-                else if (r == 5) buffName = "Poison";
-                else buffName = "Boom"; 
+                // Quay trong TOÀN BỘ danh sách, không phải 6 mục chép tay.
+                // Bảng cũ bỏ sót Strength, Invisibility, TimeStop, và nhánh
+                // "Boom" của nó là code chết vì rand()%6 chỉ cho ra 0..5.
+                const auto& pool = ItemUsageFactory::allUsableItems();
+                buffName = pool[rand() % pool.size()];
             }
             p->getRuntimeStatsMutable().storedItemSlot = buffName;
             itemState_ = ItemState::Used;
-            std::cout << "[Buff] Collected: " << buffName << " from " << effect_->getName() << "\n";
             PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
+            std::cout << "[Buff] Collected: " << buffName << " from " << effect_->getName() << "\n";
         } else {
             p->setOverlappingItem(this);
         }
@@ -83,18 +83,12 @@ void Buff::forceInteract(Entity& other) {
     if (p) {
         std::string buffName = effect_->getName();
         if (buffName == "Random") {
-            int r = rand() % 6;
-            if (r == 0) buffName = "Speed";
-            else if (r == 1) buffName = "Jump";
-            else if (r == 2) buffName = "GoldMagnet";
-            else if (r == 3) buffName = "Shield";
-            else if (r == 4) buffName = "Heal";
-            else if (r == 5) buffName = "Poison";
-            else buffName = "Boom"; 
+            const auto& pool = ItemUsageFactory::allUsableItems();
+            buffName = pool[rand() % pool.size()];
         }
         p->getRuntimeStatsMutable().storedItemSlot = buffName;
         itemState_ = ItemState::Used;
-        std::cout << "[Buff] Swapped to: " << buffName << "\n";
         PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
+        std::cout << "[Buff] Swapped to: " << buffName << "\n";
     }
 }

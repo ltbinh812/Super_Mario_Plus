@@ -34,7 +34,7 @@ private:
     Texture2D shelfTex_ = {0}; // shop2.png
     Texture2D backBtnNormalTex_ = {0};
     Texture2D backBtnPressTex_  = {0};
-    Texture2D boomTex_ = {0}; // Texture riêng cho item Boom (không dùng atlas)
+    Texture2D boomTex_ = {0}; // Texture riêng cho item Bomb (không dùng atlas)
 
     std::vector<ShopItemDef> items_;
 

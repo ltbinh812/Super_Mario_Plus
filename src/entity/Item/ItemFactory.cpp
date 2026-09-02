@@ -8,12 +8,13 @@
 #include "ChestNormal.h"
 #include "ChestBoss.h"
 #include "Buff.h"
-#include "Boom.h"
+#include "Bomb.h"
 #include "PoisonFlask.h"
 #include "ShopAsset.h"
 #include "EndgameAsset.h"
 #include "nlohmann/json.hpp"
 #include <iostream>
+#include <unordered_map>
 
 using json = nlohmann::json;
 
@@ -56,14 +57,14 @@ std::unique_ptr<BaseItem> ItemFactory::create(
             }
         }
         if (itemType == "Boom") {
-            return std::make_unique<Boom>(worldPos);
+            return std::make_unique<Bomb>(worldPos);
         }
         if (itemType == "Item_poison") {
             return std::make_unique<PoisonFlask>(worldPos);
         }
         return std::make_unique<Buff>(worldPos, 2.0f, itemType);
     }
-    if (identifier == "Boom")         return std::make_unique<Boom>(worldPos);
+    if (identifier == "Boom")         return std::make_unique<Bomb>(worldPos);
     if (identifier == "Poison")       return std::make_unique<PoisonFlask>(worldPos);
 
     std::cout << "[ItemFactory] Unknown identifier: " << identifier << "\n";
@@ -84,20 +85,61 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
 {
     std::unique_ptr<BaseItem> item = nullptr;
 
-    if (identifier == "Coin")         item = std::make_unique<Coin>(worldPos);
-    else if (identifier == "Key")     item = std::make_unique<Key>(worldPos);
-    else if (identifier == "Boom")    item = std::make_unique<Boom>(worldPos);
-    else if (identifier == "Buff")    item = std::make_unique<Buff>(worldPos, 2.0f, "");
-    else if (identifier == "ThrownBoom") {
-        item = std::make_unique<Boom>(worldPos, initialVelocity);
+    // ---- Item vật lý ném/ném đặc biệt (có initial velocity) -----------------
+    if (identifier == "ThrownBoom") {
+        item = std::make_unique<Bomb>(worldPos, initialVelocity);
     }
     else if (identifier == "ThrownPoison") {
         item = std::make_unique<PoisonFlask>(worldPos, initialVelocity);
     }
+    // ---- Item rơi ra (từ rương, quái chết) ------------------------------------
+    // Các identifier khớp CHÍNH XÁC với allUsableItems() và các identifier
+    // dùng bởi Mob::dropLootOnce / EnemyDieState.
+    else if (identifier == "Coin") {
+        item = std::make_unique<Coin>(worldPos);
+    }
+    else if (identifier == "Key") {
+        item = std::make_unique<Key>(worldPos);
+    }
+    else if (identifier == "Boom") {
+        item = std::make_unique<Bomb>(worldPos);
+    }
+    else if (identifier == "Poison") {
+        // Drop dạng vật phẩm nhặt, không phải ném — tạo PoisonFlask không velocity
+        item = std::make_unique<PoisonFlask>(worldPos);
+    }
+    else if (identifier == "Buff") {
+        // Buff chung, không xác định loại
+        item = std::make_unique<Buff>(worldPos, 2.0f, "");
+    }
+    // ---- Tất cả buff cụ thể từ allUsableItems() ------------------------------
+    // "Speed", "Strength", "Shield", "Jump", "Invisibility",
+    // "GoldMagnet", "TimeStop", "Heal"
+    // Buff constructor nhận specificType dạng "Item_speed", "Item_strength"...
+    // Dùng bảng map để tránh if-else dài và để thêm buff mới chỉ cần thêm 1 dòng.
+    else {
+        // Map từ identifier ngắn (dùng bởi allUsableItems) → Item_xxx (dùng bởi Buff ctor)
+        static const std::unordered_map<std::string, std::string> kBuffTypeMap = {
+            {"Speed",        "Item_speed"},
+            {"Strength",     "Item_strength"},
+            {"Shield",       "Item_shield"},
+            {"Jump",         "Item_jump"},
+            {"Invisibility", "Item_invisibility"},
+            {"GoldMagnet",   "Item_gold_magnet"},
+            {"TimeStop",     "Item_time_stop"},
+            {"Heal",         "Item_heal"},
+        };
+        auto it = kBuffTypeMap.find(identifier);
+        if (it != kBuffTypeMap.end()) {
+            item = std::make_unique<Buff>(worldPos, 2.0f, it->second);
+        }
+    }
 
     if (item) {
         if (identifier != "ThrownBoom" && identifier != "ThrownPoison") {
-            item->setPickupDelay(0.5f); // normal spawned items need delay
+            // Đồ rơi ra: bật lên tối đa một block rồi rơi xuống, và khoá
+            // nhặt 0.5 giây. launchAsDrop() đặt luôn cả pickupDelay.
+            item->launchAsDrop();
         }
         return item;
     }
@@ -105,3 +147,4 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
     std::cout << "[ItemFactory] Unknown dynamic identifier: " << identifier << "\n";
     return nullptr;
 }
+

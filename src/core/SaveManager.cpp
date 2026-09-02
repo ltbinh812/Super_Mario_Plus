@@ -1,10 +1,12 @@
 #include "SaveManager.h"
 #include "FileSaveRepository.h"
+#include "infrastructure/AppPaths.h"
 #include "JsonSaveSerializer.h"
 #include <iostream>
 
 // -----------------------------------------------------------------------------
-// Khởi tạo lười repository mặc định: FileSaveRepository ghi JSON vào "saves/".
+// Khởi tạo lười repository mặc định: FileSaveRepository ghi JSON vào
+// AppPaths::SavesDir() — thư mục saves/ nằm cạnh file .exe, xem AppPaths.h.
 //
 // Vì sao lười mà không dựng ngay trong constructor? SaveManager là Singleton
 // Meyers, được tạo lần đầu tiên có ai gọi getInstance() — có thể là rất sớm,
@@ -14,7 +16,7 @@
 ISaveRepository& SaveManager::repo() const {
     if (!repository_) {
         repository_ = std::make_unique<FileSaveRepository>(
-            std::make_unique<JsonSaveSerializer>(), "saves");
+            std::make_unique<JsonSaveSerializer>(), AppPaths::SavesDir());
     }
     return *repository_;
 }

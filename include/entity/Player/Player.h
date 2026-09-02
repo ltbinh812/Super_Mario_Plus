@@ -97,6 +97,21 @@ public:
   bool hasActiveHitbox() const override;
   Hitbox getActiveHitbox() override;   // Non-const: avoids const_cast
   void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
+  void onDealtDamage(Entity* target, int amount) override;
+
+  // PlayerSkillState gọi mỗi lần một chiêu được kích hoạt (kể cả khi nối combo),
+  // để mở lại quyền dùng hit-stop cho đòn mới.
+  void beginSkillActivation() {
+    hitStopUsedThisSkill_ = false;
+    hitStopTimer_ = 0.0f;
+  }
+
+  // Trả về true đúng MỘT lần cho mỗi đòn chạm, rồi tự xoá cờ.
+  bool consumeHitLanded() {
+    bool v = hitLandedThisStep_;
+    hitLandedThisStep_ = false;
+    return v;
+  }
   void setPvPMode(bool pvp) { isPvPMode_ = pvp; }
   bool getPvPMode() const { return isPvPMode_; }
 
@@ -139,6 +154,18 @@ private:
   void processBreath(float dt);
 
   PlayerState *currentState;
+
+  // Hit-stop: còn > 0 thì animation và đồng hồ chiêu của người tấn công đứng
+  // yên. Xem Player::onDealtDamage và Player::update.
+  float hitStopTimer_ = 0.0f;
+
+  // Lần ra chiêu này đã dùng hit-stop chưa. Xem Player::onDealtDamage.
+  bool hitStopUsedThisSkill_ = false;
+
+  // Đòn vừa chạm mục tiêu ở bước mô phỏng này. onDealtDamage chỉ GHI NHẬN;
+  // BaseLevelState đọc và xoá ở pha sau rồi mới rung màn hình — đúng quy tắc
+  // 4 pha: hàm được combat gọi thì không tự đi làm việc khác.
+  bool hitLandedThisStep_ = false;
   std::unordered_map<std::string, Animation> animationList;
   std::unordered_map<std::string, std::unique_ptr<ISkill>> skillList;
   class BaseItem* overlappingItem_ = nullptr;

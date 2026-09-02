@@ -61,52 +61,106 @@ void Boss::update(float dt) {
         }
     }
 
-    updateFirstSightTeleport();
+    updateTeleport(dt);
 }
 
 // =============================================================================
-// Dịch chuyển vào trận — CHỈ BOSS, và CHỈ MỘT LẦN.
+// Dịch chuyển của boss — HAI giai đoạn, hai điều kiện khác nhau.
 //
-// Boss đứng yên chờ ở phòng của nó. Khoảnh khắc người chơi bước vào bán kính 5
-// block quanh boss, boss nhấp nháy tới đứng ngay cạnh người chơi — một màn ra
-// mắt, đồng thời khoá luôn khoảng cách để trận đánh bắt đầu ngay thay vì boss
-// phải lệt bệt chạy tới (và có thể mắc kẹt ở vách đá giữa đường).
+//   LẦN ĐẦU  : người chơi lọt vào bán kính 5 BLOCK -> nhảy ngay. Đây là cú ra
+//              mắt: boss không lệt bệt chạy tới (và mắc kẹt ở vách đá giữa
+//              đường), nó xuất hiện ngay cạnh và trận đánh bắt đầu.
 //
-// "lần đầu" là đúng nghĩa đen: hasTeleportedOnSight_ không bao giờ được bật
-// lại, nên boss không thể đuổi theo người chơi bằng cách nhảy liên tục.
+//   LẦN SAU  : phải trôi qua 5~10 giây mà boss KHÔNG ăn đòn nào của người chơi.
+//              Đây là cơ chế chống bỏ chạy: áp sát đánh liên tục thì boss đứng
+//              yên đánh trả; bỏ chạy, nấp sau địa hình hay bắn hụt suốt thì
+//              boss tự tìm tới.
+//
+// Vì sao mốc là "bị đánh" chứ không phải khoảng cách: đứng gần vẫn có thể
+// không trúng phát nào, nên khoảng cách không phân biệt được "đang đánh nhau"
+// với "đang né". Sát thương thì phân biệt được.
+//
+// Sát thương môi trường KHÔNG tính (xem onDamagedBy) — đứng trong dung nham
+// không phải là đang đánh boss.
+//
+// Ngưỡng bốc ngẫu nhiên trong [5,10] giây để boss không nhảy theo nhịp đều
+// như máy đếm, và người chơi không học thuộc được thời điểm.
 //
 // Bán kính tính theo BLOCK chứ không phải pixel, để map vẽ ở tile 16px và map
-// vẽ ở tile 32px đều cho ra cùng một khoảng cách cảm nhận được.
+// vẽ ở tile 32px cho cùng một khoảng cách cảm nhận được.
 // =============================================================================
-void Boss::updateFirstSightTeleport() {
-    if (hasTeleportedOnSight_) return;
+void Boss::updateTeleport(float dt) {
     if (isDead || isWaitingForCutscene) return;
 
-    // Đang trong cutscene ra mắt thì để cảnh quay chạy xong đã.
+    // Đang diễn cảnh ra mắt thì để cảnh quay chạy xong đã.
     if (dynamic_cast<BossIntroState*>(currentState.get())) return;
 
-    const TileMap* map = getMap();
-    if (!map) return;
-
     Player* target = getClosestPlayer();
-    if (!target) return;
+    if (!target || target->isDead()) return;
 
-    // GetTileSize() là kích thước tile trong file nguồn; GetWorldScale() quy
-    // đổi sang đơn vị thế giới mà physics đang dùng.
-    const float blockPx = map->GetTileSize() * map->GetWorldScale();
-    if (blockPx <= 0.0f) return;
-
-    const float sightRadius = kFirstSightBlocks * blockPx;
-    if (Vector2Distance(getPosition(), target->getPosition()) > sightRadius) return;
-
-    // Thấy rồi thì coi như đã dùng lượt này, kể cả khi không tìm được ô trống —
-    // nếu không, boss sẽ thử lại mỗi frame suốt cả trận.
-    hasTeleportedOnSight_ = true;
-
-    if (tryRepositionNear(*target)) {
-        isWaitingForCutscene = false;
-        changeState(std::make_unique<BossIdleState>());
+    // ---- Thoát khỏi môi trường nguy hiểm: Poison / Lava ------------------
+    //
+    // Không gắn với hasFirstTeleport_: boss cần thoát lava kể cả trước khi
+    // trận bắt đầu (tránh boss chết âm thầm trong dung nham khi player chưa
+    // tiếp cận). Đây là cơ chế survival độc lập với hệ thống teleport chiến đấu.
+    {
+        auto liq = getRuntimeStats().currentLiquid;
+        bool inDanger = (liq == CollisionType::Poison || liq == CollisionType::Lava);
+        if (inDanger) {
+            liquidDangerTimer_ += dt;
+            if (liquidDangerTimer_ >= kLiquidDangerLimit) {
+                liquidDangerTimer_ = 0.0f;
+                // Reset bộ đếm stall luôn để tránh teleport kép ngay sau đó.
+                armNextStall();
+                tryRepositionNear(*target);
+                return; // Đã xử lý teleport lần này, bỏ qua logic stall bên dưới.
+            }
+        } else {
+            liquidDangerTimer_ = 0.0f; // Ra khỏi liquid: reset bộ đếm
+        }
     }
+
+    // ---- Lần đầu: chờ người chơi vào tầm 5 block ----------------------------
+    if (!hasFirstTeleport_) {
+        const TileMap* map = getMap();
+        if (!map) return;                       // không có map thì không dám nhảy
+        const float blockPx = map->GetTileSize() * map->GetWorldScale();
+        if (blockPx <= 0.0f) return;
+
+        const float sightRadius = kFirstSightBlocks * blockPx;
+        if (Vector2Distance(getPosition(), target->getPosition()) > sightRadius) return;
+
+        // Đánh dấu đã dùng lượt ra mắt kể cả khi không tìm được ô trống, để
+        // boss không thử lại mỗi khung hình.
+        hasFirstTeleport_ = true;
+        armNextStall();
+        tryRepositionNear(*target);
+        return;
+    }
+
+    // ---- Những lần sau: 5~10 giây không ăn đòn của người chơi ---------------
+    noDamageTimer_ += dt;
+    if (noDamageTimer_ < nextStallDelay_) return;
+
+    armNextStall();          // đặt lại NGAY, kể cả khi không tìm được chỗ trống
+    tryRepositionNear(*target);
+}
+
+
+void Boss::armNextStall() {
+    noDamageTimer_ = 0.0f;
+    const float span = kStallMax - kStallMin;
+    nextStallDelay_ = kStallMin + (float)GetRandomValue(0, 1000) / 1000.0f * span;
+}
+
+// Chỉ CombatSystem gọi hàm này, và chỉ khi có hitbox thật gây sát thương — nên
+// lava/độc (gọi thẳng takeDamage từ Effects.cpp) không bao giờ tới được đây.
+// Thêm một lớp lọc theo phe để đòn của quái khác cũng không tính.
+void Boss::onDamagedBy(Entity* attacker, int amount) {
+    (void)amount;
+    if (!attacker) return;
+    if (attacker->getFaction() != EntityFaction::Player) return;
+    noDamageTimer_ = 0.0f;
 }
 
 void Boss::enterDebugMode(bool enable) {
@@ -167,6 +221,13 @@ void Boss::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
         isWaitingForCutscene = false;
         changeState(std::make_unique<BossIdleState>());
     }
+
+    // CỐ Ý KHÔNG đặt lại noDamageTimer_ ở đây.
+    //
+    // takeDamage() không biết ai đánh, mà Effects.cpp gọi thẳng nó cho đầm độc
+    // và dung nham. Đặt lại ở đây thì boss đứng trong lava sẽ tưởng người chơi
+    // đang đánh mình và không bao giờ dịch chuyển nữa.
+    // Việc đó thuộc về onDamagedBy(), nơi biết rõ kẻ tấn công là ai.
 
     runtimeStats.health -= damage;
 

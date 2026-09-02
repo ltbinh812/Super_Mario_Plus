@@ -40,6 +40,11 @@ void BossRunState::process(Mob& mob) {
     Player* closestPlayer = mob.getClosestPlayer();
 
     if (closestPlayer && !closestPlayer->isDead()) {
+        // Dưới nước thì boss cũng bơi theo cả hai trục, giống quái thường.
+        if (mob.swimToward(closestPlayer->getPosition())) {
+            return;
+        }
+
         float speed = mob.getConfig().aiData.patrolSpeed * 1.5f; // Run speed is usually faster than patrol
         float dirX = closestPlayer->getPosition().x - mob.getPosition().x;
         if (std::abs(dirX) < 5.0f) {
@@ -58,6 +63,8 @@ void BossRunState::exit(Mob& mob) {
 }
 
 void BossRunState::onHitWall(Mob& mob, bool rightWall, bool isCliff) {
+    if (mob.isInLiquid()) return;   // đang bơi, không có vực để né
+
     if (isCliff) {
         mob.setAggroCooldown(2.0f);
         mob.changeState(std::make_unique<BossPatrolState>());

@@ -22,8 +22,8 @@ public:
     virtual void process(const std::vector<class Player*>& players) {}
     virtual void render(float alpha) override = 0;
 
-    virtual void onHitWall(bool isRightWall, bool isCliff = false) override {}
-    virtual void onHitCeiling(float ceilY) override {}
+    virtual void onHitWall(bool isRightWall, bool isCliff = false) override;
+    virtual void onHitCeiling(float ceilY) override;
     virtual void onLand(float floorY) override;
 
     // Allows items to have dynamic rendering offsets (e.g. hovering)
@@ -50,11 +50,31 @@ public:
     void setPickupDelay(float delay) { pickupDelay_ = delay; }
     float getPickupDelay() const { return pickupDelay_; }
 
+    // =========================================================================
+    // Bật vật phẩm lên rồi để nó rơi xuống — dùng cho đồ RƠI RA (rương mở, quái
+    // chết), không dùng cho đồ ném.
+    //
+    // LỖI ĐÃ SỬA — một số rương "không rơi ra gì cả".
+    // Coin/Key/Buff vốn tự bật lên với v0 = 450 và trôi ngang tới ±100/giây.
+    // Với gia tốc 160*9.8 thì đỉnh cao tới 65 đơn vị = ĐÚNG 2 BLOCK; còn dưới
+    // nước trọng lực chỉ còn 0.4 lần nên đỉnh vọt lên 161 đơn vị = 5 BLOCK.
+    // Rương kê trong hốc hẹp hay đặt dưới nước thì món đồ bắn thẳng vào trần
+    // hoặc trôi ngang ra khỏi tầm mắt — nhìn ra ngoài y như rương rỗng.
+    //
+    // Nay bật lên tối đa ĐÚNG MỘT BLOCK và không trôi ngang.
+    // =========================================================================
+    void launchAsDrop();
+
+    // Một block trong hệ toạ độ thế giới (tile 16px * hệ số 2).
+    static constexpr float kBlockSize = 32.0f;
+
     // Dynamic solid physics (returns {0,0,0,0} if not solid)
     virtual Rectangle getSolidRect() const { return {0, 0, 0, 0}; }
 
 protected:
     ItemState itemState_ = ItemState::Idle;
+    // Mốc độ cao lúc bắt đầu bật lên; -1 = không phải đồ rơi ra.
+    float dropOriginY_ = -1.0f;
     std::string iid_ = "";
     float scale_;   // 2.0f (LDtk 16px -> game 32px)
     float animTimer_ = 0.0f;

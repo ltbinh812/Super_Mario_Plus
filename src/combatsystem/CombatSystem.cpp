@@ -69,6 +69,16 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
             }
             target->takeDamage(finalDamage, dirX);
 
+            // Báo ngược cho kẻ tấn công biết đòn đã chạm — đây là tín hiệu duy
+            // nhất phân biệt "đánh trúng" với "đánh hụt", và là thứ hit-stop
+            // cần để chỉ khựng hình khi thật sự ăn đòn.
+            if (attackBox->owner) {
+                attackBox->owner->onDealtDamage(target, finalDamage);
+            }
+            // Báo cho BÊN NHẬN biết ai vừa đánh mình. Sát thương môi trường
+            // (lava, độc) không đi qua CombatSystem nên không bao giờ tới đây.
+            target->onDamagedBy(attackBox->owner, finalDamage);
+
             if (attackBox->onHitEffect) {
                 attackBox->onHitEffect(target);
             }

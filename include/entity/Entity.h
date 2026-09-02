@@ -63,6 +63,21 @@ public:
   virtual Hitbox getActiveHitbox() { return { {0,0,0,0}, 0, 0, nullptr }; }
   virtual void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) {}
 
+  // Đòn của thực thể này vừa CHẠM được mục tiêu. CombatSystem gọi ngược về chủ
+  // hitbox ngay sau khi đã trừ máu — trước đây không có đường phản hồi nào nên
+  // kẻ tấn công không hề biết mình đánh trúng hay đánh hụt.
+  // Player dùng nó để kích hoạt hit-stop (xem Player::onDealtDamage).
+  virtual void onDealtDamage(Entity* target, int amount) {}
+
+  // Thực thể này vừa ăn đòn CỦA AI. Chỉ CombatSystem gọi, nên chỉ sát thương
+  // từ hitbox thật (người chơi, quái, đạn) mới đi qua đây.
+  //
+  // Vì sao cần, trong khi đã có takeDamage(): takeDamage() không biết ai đánh.
+  // Đầm độc và dung nham gọi thẳng nó từ Effects.cpp, nên nhìn từ takeDamage()
+  // thì "bị lava đốt" và "bị người chơi chém" giống hệt nhau. Boss cần phân
+  // biệt hai thứ đó để đếm đúng "bao lâu rồi người chơi chưa đánh trúng mình".
+  virtual void onDamagedBy(Entity* attacker, int amount) {}
+
   // Polymorphic Hook Methods (Extension Points for subclasses)
   virtual void onHitWall(bool isRightWall, bool isCliff = false) {}
   virtual void onLand(float floorY) {}

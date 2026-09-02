@@ -61,6 +61,7 @@ protected:
     Hitbox currentHitbox;
 
     const class TileMap* map_ = nullptr;   // không sở hữu; do level gán khi spawn
+    bool lootDropped_ = false;             // đã thả đồ chưa (xem dropLootOnce)
 
     // --- Chuyển trạng thái an toàn (xem changeState ở phần public) ---
     std::unique_ptr<IMobState> pendingState_;
@@ -142,6 +143,29 @@ public:
         return !standardAnimations.empty();
     }
     
+    // === Bơi (xem Mob::update và EnemyRunState::process) ===
+
+    // Đang ngập trong nước/độc/dung nham?
+    bool isInLiquid() const {
+        return runtimeStats.currentLiquid == CollisionType::Water ||
+               runtimeStats.currentLiquid == CollisionType::Poison ||
+               runtimeStats.currentLiquid == CollisionType::Lava;
+    }
+
+    // Bơi thẳng về phía một điểm, cả hai trục. Trả về false nếu không ở trong
+    // nước — bên gọi cứ dùng cách di chuyển trên cạn như cũ.
+    bool swimToward(Vector2 target);
+
+    // === Rơi đồ khi chết ===
+    //
+    // Thả đúng MỘT vật phẩm cho cả đời con quái, dù trạng thái chết có được vào
+    // lại bao nhiêu lần. Cần cái chốt này vì BossDieState có HAI đường vào —
+    // Boss::takeDamage khi máu về 0, và BossHurtState::decideAction khi nó thấy
+    // checkIsDead() — nên chỉ dựa vào enter() là không đủ chắc.
+    //
+    // Trả về true nếu lần này thực sự thả đồ.
+    bool dropLootOnce(const std::string& itemIdentifier);
+
     // Utility
     const std::string& getMobType() const { return mobType; }
     const MobConfig& getConfig() const { return config; }

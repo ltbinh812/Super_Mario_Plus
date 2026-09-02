@@ -201,26 +201,30 @@ pixel-identical to what was originally hand-tuned.
 
 ---
 
-## F006 — Four-channel audio system
+## F006 — Five-channel audio system with keyframe-synchronised sound
 
 **Subsystem:** Infrastructure and settings
 
-**What it does.** The player controls four independent volumes — master, music, player sound effects
-and enemy sound effects — from either the main-menu settings screen or the in-game settings panel.
-The choices persist between sessions, so the game sounds the way it was left.
+**What it does.** The player controls five independent volumes — master, menu music, per-map
+background sound, player effects and enemy effects — from either the main-menu settings screen or the
+in-game settings panel, and the mix persists between sessions. Beyond mixing, the notable part is that
+sound is **tied to animation frames**: a running character's footsteps land on the frames where the
+feet actually plant, and enemy sounds fade with distance so a crowded room does not become noise.
 
-**How it works.** Sound ownership follows the same rule as every other asset: `AssetManager` holds an
-`unordered_map<std::string, Sound>` and `loadSound(name, path)` decodes a clip once, verifies that
-raylib actually produced a valid stream buffer before caching it, and logs a diagnostic instead of
-caching a broken handle on failure. `getSound(name)` returns a shared `const&`, so a sound effect
-triggered by fifty entities still occupies one buffer. The volume model lives in `SettingsManager`,
-which stores `masterVolume_`, `bgmVolume_`, `playerSfxVolume_` and `enemySfxVolume_` as clamped
-floats in `[0,1]`, writes to `session.json` on every change, and reloads them at startup. Separating
-player and enemy channels means a player who finds combat noise fatiguing can quiet the enemies
-without losing their own attack feedback. Clips are supplied by dropping files into the asset folder;
-a missing clip is reported and skipped rather than aborting startup.
+**How it works.** Music and effects are deliberately different resources. `AudioManager` owns the
+streaming `Music` tracks (one menu track, one map background track) and is serviced every frame;
+`AssetManager` caches fully decoded `Sound` effects by logical name, so a footstep has no streaming
+latency. Master volume goes through raylib's global `SetMasterVolume`; the other four are applied at
+the point the sound is triggered. **Keyframe synchronisation** is driven from `characters.json`: a
+`soundFrames` block maps an animation name to frame indices, so Goku's four-frame run declares
+`{"0": "step1", "2": "step2"}` and `updateSound()` fires each clip on the frame **transition**,
+guarded by `lastSoundFrameIndex` — without that guard one footstep would fire six times, because a
+0.1 s frame spans six fixed simulation steps. Enemy sound is scaled by
+`1 − distance / maxHearingDistance`, giving cheap spatial falloff with no panning. Clips are
+discovered automatically: if `assets/<folder>/sounds/<animation>.wav` exists it is bound to that
+animation, otherwise the animation is silent — adding sound needs no code.
 
-**Related files.** `src/infrastructure/AssetManager.cpp` · `include/infrastructure/AssetManager.h` · `src/core/SettingsManager.cpp` · `include/core/SettingsManager.h` · `src/ui/ButtonGroup.cpp` · `src/ui/IngameSettingsPanel.cpp`
+**Related files.** `src/infrastructure/AudioManager.cpp` · `src/infrastructure/AssetManager.cpp` · `src/core/SettingsManager.cpp` · `src/entity/Player/Player.cpp` · `src/entity/Mob.cpp` · `assets/config/characters.json`
 
 ---
 ---
@@ -1847,9 +1851,9 @@ read time rather than compiled in, a rebind takes effect on the very next frame.
 
 **Subsystem:** Settings
 
-**What it does.** Four sliders — master, music, player sound effects and enemy sound effects — are
-available both from the main menu and from the in-game settings panel, and the same values are shown in
-both places.
+**What it does.** Five sliders — master, menu music, map background sound, player effects and enemy
+effects — are available both from the main menu and from the in-game settings panel, and the same
+values are shown in both places.
 
 **How it works.** `ButtonGroup::AddSlider(label, getter, setter)` takes a pair of `std::function`
 callbacks rather than a value. The slider widget therefore never knows what it is editing: it renders a
@@ -1866,17 +1870,18 @@ source of truth with no duplicated state. Each setter clamps to `[0,1]` and pers
 
 **Subsystem:** Settings
 
-**What it does.** Every preference — both key maps, all four volumes and the menu options — is written
+**What it does.** Every preference — both key maps and all five volumes — is written
 to disk the moment it changes and restored on the next launch. Nothing is lost by closing the game, and
 nothing needs an explicit "apply".
 
 **How it works.** `SettingsManager` is a singleton whose setters each call `SaveToFile()`, writing
-`assets/config/session.json`. Saving on change rather than on exit means a crash cannot lose the player's
+`saves/settings.json`, at a fixed path derived from where the game is installed, so it is the same file however the game
+is launched. Saving on change rather than on exit means a crash cannot lose the player's
 configuration, which matters more than the tiny write cost. Loading happens once at construction, and a
 missing or malformed file falls back to defaults rather than failing to start — the game must be
 runnable on a machine that has never run it before, including the grader's.
 
-**Related files.** `src/core/SettingsManager.cpp` · `include/core/SettingsManager.h` · `assets/config/session.json`
+**Related files.** `src/core/SettingsManager.cpp` · `include/core/SettingsManager.h` · `src/infrastructure/AppPaths.cpp`
 
 ---
 ---

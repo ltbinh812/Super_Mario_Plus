@@ -28,14 +28,12 @@ University of Science – VNUHCM · Faculty of Information Technology · Septemb
 | **5** | **Design patterns and the reasoning behind them** — every pattern applied, and four rejected |
 | **6** | **Code organisation** — what every group of `.h` / `.cpp` files is responsible for |
 | **7** | **The four-phase game loop** — HandleInput, Process, Update, Render, each traced end to end |
-| **8** | **Key technical mechanisms** — LDtk↔JSON↔C++, collision, combat, skills, items, save, editor |
+| **8** | **Key technical mechanisms** — LDtk↔JSON↔C++, collision, combat, skills, items, audio, save, editor |
 | **9** | **Design decision matrix** |
 | **10** | **Build and reproduction** |
-| **11** | **Diagram index** |
-| **12** | **Conclusion** |
-| **13** | **Source evidence index** |
+| **11** | **Conclusion** |
 
-**43 diagrams** are embedded in this document as Mermaid source. They render directly on GitHub and in
+**53 diagrams** are embedded in this document as Mermaid source. They render directly on GitHub and in
 VS Code with no extension. The same architecture is also available as PlantUML in
 `workflow/blueprints/`.
 
@@ -1136,6 +1134,8 @@ stateDiagram-v2
     Idle --> Run : target within detectionRange
     Patrol --> Run : target within detectionRange
     Run --> Idle : target lost or invisible
+    Run --> Run : onHitWall, isCliff false — HOP QUA VAT CAN
+    Run --> Idle : onHitWall, isCliff true — lui lai, aggro cooldown 2s
     Run --> Attack : distance <= attackRange
     Attack --> Run : cooldown elapsed, still in range
     Attack --> Idle : target gone
@@ -1151,6 +1151,19 @@ stateDiagram-v2
 
 *Diagram 17 — The seven-state enemy AI.*
 
+Two transitions on `Run` deserve attention, because they are what stops a chase from ending at the
+first bump in the terrain. Both arrive through the **same** physics callback,
+`onHitWall(rightWall, isCliff)`, and the enemy reads the second argument to tell two very different
+obstacles apart:
+
+- **`isCliff == false`** — a wall or a raised ledge is in the way. The enemy **jumps over it**
+  (`setVelocity({vx, -jumpVelocity})`) and keeps chasing, so a one-tile step never blocks pursuit.
+- **`isCliff == true`** — the ground runs out ahead. Jumping would be suicide, so the enemy instead
+  gives up the chase and takes a two-second aggro cooldown.
+
+One callback, one boolean, two opposite reactions — and no separate obstacle-detection system, because
+the collision resolution already knows the difference (§8.2).
+
 ```mermaid
 stateDiagram-v2
     [*] --> Intro
@@ -1164,8 +1177,12 @@ stateDiagram-v2
     end note
     Idle --> Patrol : timer
     Patrol --> Idle : timer
+    Idle --> Teleport : LAN DAU thay player trong 5 block
+    Patrol --> Teleport : LAN DAU thay player trong 5 block
+    Teleport --> Idle : da nhay toi canh player, chi mot lan ca man
     Idle --> Run : player detected within 500px
     Patrol --> Run : player detected
+    Run --> Run : onHitWall, isCliff false — hop qua vat can
     Run --> Attack : within attackRange
     Attack --> Run : cooldown
     Run --> Skill : skill selected
@@ -1179,8 +1196,28 @@ stateDiagram-v2
     DebugInput --> Idle : release
 ```
 
-*Diagram 18 — The nine-state boss AI. `Intro` and `DebugInput` are what distinguish it from
+*Diagram 18 — The boss AI. `Intro`, `Teleport` and `DebugInput` are what distinguish it from
 Diagram 17.*
+
+### Teleport — the boss closes the distance itself
+
+A boss that has to walk to the player is a boss that can get stuck on the arena's own terrain, and the
+fight never starts. `Boss::updateFirstSightTeleport()` removes that failure mode: the **first** moment
+a player enters a radius of **five blocks**, the boss blinks to a free tile beside them and engages.
+
+Three details make it behave rather than feel arbitrary:
+
+- **Once per level, literally.** `hasTeleportedOnSight_` is never cleared, so the boss cannot chase by
+  repeatedly blinking. It is an entrance, not a movement ability.
+- **Measured in blocks, not pixels.** The radius is `5 × tileSize × worldScale`, so a map authored at
+  16 px per tile and one authored at 32 px give the same felt distance.
+- **It refuses to cheat the geometry.** `tryRepositionNear()` probes candidate positions beside the
+  player against the collision grid and rejects any that overlap `Solid`, `Die`, `Hazard` or `Lava`.
+  If nothing safe is found the boss simply stays put — better a slow approach than a boss embedded in
+  a wall.
+
+This is also why the boss owns a `const TileMap*`: it is the only entity that needs to ask the world
+"is this spot standable?" before moving itself there.
 
 `BossDebugInputState` is worth naming: it routes the keyboard into the boss so a developer can step
 through each attack and verify hitbox timing without fighting it legitimately. Adding a manual-control
@@ -1795,23 +1832,21 @@ rather than reached for.
 
 ## 6.1 The tree
 
-328 C++ files, 23,735 lines. Headers mirror sources: `include/<module>/X.h` pairs with
-`src/<module>/X.cpp`.
+Headers mirror sources: `include/<module>/X.h` pairs with `src/<module>/X.cpp`, one class per file.
 
-| Module | Headers | Sources | Lines | Responsibility |
-|---|---|---|---|---|
-| `entity/` (all sub-modules) | 88 | 60 | 8,114 | Everything that exists in the world and acts |
-| `states/` | 17 | 15 | 4,196 | Screens, and the level base class |
-| `ui/` | 14 | 12 | 3,676 | Panels, widgets, HUD, transitions, scaling |
-| `editor/` | 25 | 17 | 3,351 | The map editor |
-| `environment/` | 6 | 5 | 1,541 | Level loading, terrain, camera |
-| `save/` | 10 | 2 | 603 | Persistence |
-| `core/` | 6 | 6 | — | Loop, state stack, input, settings |
-| `command/` | 6 | — | — | The two command families and the spawn queue |
-| `combatsystem/` | 4 | 2 | — | Hitbox resolution |
-| `dialogue/` | 4 | 3 | — | Conversations |
-| `cutscene/` | 3 | 2 | — | Scripted sequences |
-| `infrastructure/` | 2 | 2 | — | Asset cache, GIF decoding |
+| Module | Responsibility |
+|---|---|
+| `entity/` (all sub-modules) | Everything that exists in the world and acts |
+| `states/` | Screens, and the level base class |
+| `ui/` | Panels, widgets, HUD, transitions, scaling |
+| `editor/` | The map editor |
+| `environment/` | Level loading, terrain, camera |
+| `save/` | Persistence |
+| `core/` | Loop, state stack, input, settings |
+| `command/` | The two command families and the spawn queue |
+| `combatsystem/` | Hitbox resolution |
+| `dialogue/` + `cutscene/` | Conversations and scripted sequences |
+| `infrastructure/` | Asset cache, audio, GIF decoding, data paths |
 
 ```mermaid
 flowchart TD
@@ -1825,7 +1860,7 @@ flowchart TD
     ED["editor/<br/>tools · palettes · AutoTiler · UndoRedoStack · serializer"]
     SAVE["save/<br/>DTOs · ISaveSerializer · ISaveRepository"]
     CUT["cutscene/ + dialogue/"]
-    INF["infrastructure/<br/>AssetManager · GifAnimation"]
+    INF["infrastructure/<br/>AssetManager · AudioManager · GifAnimation · AppPaths"]
 
     CORE --> STATES
     CORE --> CMD
@@ -1861,7 +1896,7 @@ into the screen.
 | `Game.h/.cpp` | Owns the `StateManager` and runs the frame loop: clamp `dt`, accumulate, drain in fixed steps, render once with an interpolation `alpha`. The whole timing policy is here and nowhere else |
 | `StateManager.h/.cpp` | Owns `stack<unique_ptr<GameState>>`; forwards the four phases; drains each state's command queue between frames |
 | `InputHandler.h/.cpp` | The **only** code that reads the keyboard for gameplay. Maps key codes to `IPlayerCommand` objects with an `InputType` (press / release / hold) and returns a list of commands to execute |
-| `SettingsManager.h/.cpp` | Singleton holding both players' key maps and the four volume channels; writes `session.json` on every change |
+| `SettingsManager.h/.cpp` | Singleton holding both players' key maps and the five volume channels; writes `saves/settings.json` on every change (§8.13) |
 | `SaveManager.h/.cpp` | Facade over the save stack; also holds the in-RAM respawn checkpoint |
 | `SaveData.h` | Backward-compatible aggregator header that pulls in the `save/` DTOs, so older includes still compile |
 
@@ -1892,7 +1927,7 @@ into the screen.
 
 ## 6.5 `entity/` — the world's inhabitants
 
-**Core (`include/entity/`, 15 headers).** `Entity` is the abstract base carrying the three stat
+**Core (`include/entity/`).** `Entity` is the abstract base carrying the three stat
 structs, the physics Template Method, the fifteen virtual event hooks, the faction, the `iid` and the
 spawn-queue pointer. `Player`, `Mob`, `Boss`, `BaseItem`, `Fireball` and `Explosion` derive from it.
 `Animation` decodes a sprite strip into timed frames. `IEffect`, with `PoisonEffect` and `LavaEffect`
@@ -1901,24 +1936,24 @@ collision, no faction and no physics. `EntityFaction.h` is the bitmask enum on w
 permission turns. `IEntityState.h` and `IMobState.h` are the two behaviour interfaces.
 `EnemyFactory` and `EntityFactory` build mobs and projectiles from data.
 
-**`entity/Player/` (16 headers).** `Player` itself; `CharacterStats.h`, the header holding the three stat
+**`entity/Player/`.** `Player` itself; `CharacterStats.h`, the header holding the three stat
 structs *and* `PartyInventory`; `PlayerFactory` which assembles a character from JSON; `BuffManager` which
 aggregates active buffs; and the ten state classes plus `PlayerState` and the `PlayerStates.h`
 convenience header.
 
-**`entity/Skill/` (15 headers).** `ISkill` and its ten player skills; `IEnemySkill` and its three
+**`entity/Skill/`.** `ISkill` and its ten player skills; `IEnemySkill` and its three
 enemy archetypes. A skill carries its mana cost, its animation name, its hit window, its pacing
 timings, its damage and defence values, its hitbox rectangle, its dash multiplier and — the detail
 that makes combos data — the name of the skill that may follow it.
 
-**`entity/Item/` (23 headers).** `BaseItem` and thirteen item types; `AtlasAnimation` and
+**`entity/Item/`.** `BaseItem` and thirteen item types; `AtlasAnimation` and
 `ItemAtlasRegistry` implementing Flyweight; `ItemState.h` recording what has changed for the save
 system; `ItemFactory` building items from LDtk records; `IItemUseStrategy` with its three
 implementations and `ItemUsageFactory`.
 
-**`entity/BuffEffects/` (10 headers).** `IBuffEffect` and nine buffs.
+**`entity/BuffEffects/`.** `IBuffEffect` and nine buffs.
 
-**`entity/EnemyStates/` (7) and `entity/BossStates/` (9).** The sixteen AI behaviours.
+**`entity/EnemyStates/` and `entity/BossStates/`.** The sixteen AI behaviours.
 
 ## 6.6 `environment/` — terrain and camera
 
@@ -1937,7 +1972,7 @@ implementations and `ItemUsageFactory`.
 | `BruteForceDetector.h/.cpp` | Every hitbox against every entity — adequate at this project's counts |
 | `CombatSystem.h/.cpp` | Collects the frame's hitboxes, resolves pairs, applies damage, defence, knockback direction and hit-stop, and can render the debug hitbox overlay |
 
-## 6.8 `editor/` — the map editor (25 headers, the second-largest module)
+## 6.8 `editor/` — the map editor
 
 | Group | Files | Responsibility |
 |---|---|---|
@@ -1950,7 +1985,7 @@ implementations and `ItemUsageFactory`.
 | **Persistence** | `CustomMapSerializer`, `EditorSaveLoadUI`, `SaveLoadMode.h`, `CustomMapValidator` | JSON save/load to slots, and the pre-flight check that refuses to launch a map with no spawn or no exit |
 | **Assets** | `EditorTextureCache` | Keeps the five tilesets loaded for the session |
 
-## 6.9 `save/` — persistence (10 headers, 603 lines)
+## 6.9 `save/` — persistence
 
 Four DTOs (`PlayerSaveData`, `InventorySaveData`, `LevelSaveData`, `SaveMetaData`) aggregated by
 `GameSaveData`; the summary struct `SaveSlotInfo`; the two interfaces `ISaveSerializer` and
@@ -1984,8 +2019,11 @@ from JSON via `DialogueLoader` and stores them as `DialogueSequence` objects, ea
 ## 6.12 `infrastructure/`
 
 `AssetManager` is the single owner of every texture, font and sound — three caches keyed by logical
-name, one `unloadAll()` at shutdown. `GifAnimation` wraps raylib's `LoadImageAnim`, decoding every
-frame once and advancing by `UpdateTexture` into a single reused texture.
+name, one `unloadAll()` at shutdown. `AudioManager` owns the one streaming music track and the one map
+background track, and is serviced each frame (§8.12). `GifAnimation` wraps raylib's `LoadImageAnim`,
+decoding every frame once and advancing by `UpdateTexture` into a single reused texture. `AppPaths`
+answers the single question "where does player data go" for every subsystem that writes to disk
+(§8.13).
 
 ## 6.13 Build
 
@@ -2279,12 +2317,66 @@ The project uses JSON for three genuinely different jobs, and confusing them wou
 |---|---|---|---|---|
 | **Level content** | `assets/maps/*/world0N.ldtk` (14 files) | The LDtk application | `TileMap::LoadLDtkMap` | Authored, read-only at runtime |
 | **Game configuration** | `characters.json`, `enemies.json`, dialogue, `extracted_rules.json` | Us, by hand | Factories, registries, `AutoTiler` | Authored, read-only at runtime |
-| **Player state** | `saves/world0X/versionY.json`, `session.json`, editor map slots | The game | The game | Generated, read **and** written |
+| **Player state** | `saves/settings.json`, `saves/world0X/versionY.json`, `saves/custom_map/…` | The game | The game | Generated, read **and** written |
 
 All three go through the same library — nlohmann/json, vendored header-only — but through different
 code paths, because the failure modes differ. A malformed configuration file is a development error
 and reports loudly; a malformed *save* file is something a grader's machine might genuinely produce,
 so the save path validates every field and falls back rather than crashing.
+
+### What a data-driven character actually looks like
+
+Claiming the game is "driven by data, not code" is easy; here is the shape of that data. This is one
+character's entry in `characters.json`, abridged to the parts that matter:
+
+```json
+"Goku": {
+  "name": "Goku",
+  "assetFolder": "goku",
+  "maxHealth": 300,  "maxMana": 100,
+  "moveVelocity": 300,  "jumpVelocity": -600,
+  "physicsBox": { "w": 28, "h": 46 },
+  "crouchBox":  { "w": 28, "h": 30 },
+
+  "animations": {
+    "idle": { "texture": "idle", "frameNum": 4,  "frameTime": 0.25 },
+    "run":  { "texture": "run",  "frameNum": 4,  "frameTime": 0.1  },
+    "special_attack": { "texture": "special_attack", "frameNum": 11, "frameTime": 0.1 }
+  },
+
+  "skills": {
+    "Attack1": {
+      "hitboxStartFrame": 2, "hitboxEndFrame": 5,
+      "attack": 10,
+      "box": { "w": 48, "h": 64, "offsetX": 0, "offsetY": 0 },
+      "manaCost": 20.0, "recoveryDuration": 0.1, "moveControl": 0.5
+    }
+  },
+
+  "special_ball": {
+    "speed": 500, "damage": 30, "lifetime": 2.0,
+    "textureName": "vfx_2", "frameNum": 14, "frameTime": 0.1, "scale": 0.4,
+    "beamFromOwner": true
+  },
+
+  "soundFrames": { "run": { "0": "step1", "2": "step2" } }
+}
+```
+
+Every number a designer would want to tune is here, and nothing here is duplicated in C++:
+
+- **Statistics** become `CharacterBaseStats`.
+- **`animations`** become `Animation` objects; the frame count and frame time also *define* the
+  duration of any skill that uses that animation, so a skill's timing can never drift out of sync
+  with its artwork.
+- **`skills`** declare hit windows **in frames**, which `PlayerFactory` converts to seconds using that
+  animation's own `frameTime`. A designer thinks "the sword connects on frame 2", not "at 0.2 s".
+- **`special_ball`** configures a projectile entity, including rendering options such as
+  `beamFromOwner` (§8.4).
+- **`soundFrames`** attaches audio to specific animation frames (§8.12).
+
+Adding a seventh playable character is this block plus a folder of sprites. No new class, no `switch`
+statement, no change to the state machine, the combat system, the HUD or the save format.
 
 ### `iid` — the field that makes persistence possible
 
@@ -2360,9 +2452,21 @@ flowchart TD
 entity type.*
 
 Resolving X **before** Y is what makes slopes and inside corners behave: horizontal position is
-settled first, so the vertical pass tests against the column the entity actually ended up in. The
-`isCliff` flag on `onHitWall` is how a cautious enemy learns to turn around at a ledge — the same
-callback, one extra bit, no separate ledge-detection system.
+settled first, so the vertical pass tests against the column the entity actually ended up in.
+
+**The `isCliff` bit is what makes enemy navigation possible.** The collision pass already knows
+whether the thing that stopped an entity was a wall or the edge of the floor, so it hands that one
+extra boolean to `onHitWall(rightWall, isCliff)` and lets each entity decide:
+
+| Who receives it | `isCliff == false` (a wall) | `isCliff == true` (a drop) |
+|---|---|---|
+| Chasing enemy / boss (`Run` state) | **Jumps over it** and keeps chasing | Abandons the chase, 2 s aggro cooldown |
+| Patrolling enemy | Turns around | Turns around |
+| Player | Nothing — the player decides for themselves | Nothing |
+
+Obstacle-hopping and cliff-avoidance are therefore **the same mechanism read two ways**, not two
+systems. Nothing in the project performs a separate raycast or look-ahead probe to find obstacles;
+the information falls out of the collision resolution that had to run anyway.
 
 **A real bug this structure exposed.** Every `.ldtk` file writes the slope tag as `"Slope"`, but the
 loader compared it against the enumerator spelling `"Slop"` only — so every slope in world 5 silently
@@ -2415,6 +2519,59 @@ The faction mask is what made PvP a one-line change. Damage permission is a **da
 "does this mask include that faction?" — not a **type** question — "is this a Player and that a Mob?"
 — so the combat system is completely independent of the entity hierarchy.
 
+### Hit-stop — the game-feel layer on top of the damage numbers
+
+Damage arithmetic alone makes combat *correct*; it does not make it *feel* like anything. A swing that
+connects and a swing that whiffs play the identical animation at the identical speed, and the player
+reads the difference only from a health bar moving somewhere else on screen.
+
+**Hit-stop** fixes that. At the instant an attack connects, the attacker's animation and skill timer
+**freeze for a few hundredths of a second**, then resume. The pause is short enough that nobody
+consciously notices it and long enough that a landed hit acquires weight.
+
+Making it work needed one thing the combat system did not previously have: **a way to tell the
+attacker that the blow landed**. Damage flowed strictly one way — `CombatSystem` called
+`target->takeDamage(...)` and the attacker was never informed. We added the return path as another
+`Entity` hook:
+
+```mermaid
+sequenceDiagram
+    participant CS as CombatSystem
+    participant A as attacker (Player)
+    participant SS as PlayerSkillState
+    participant T as target
+
+    CS->>T: takeDamage(finalDamage, dirX)
+    CS->>A: onDealtDamage(target, finalDamage)
+    Note over A: chi goi khi don THAT SU cham —<br/>danh hut khong kich hoat gi
+    A->>SS: getCurrentSkill()->getHitStopDuration()
+    SS-->>A: 0.05s (doc tu characters.json)
+    A->>A: hitStopTimer_ = 0.05
+    loop moi buoc Update trong khi hitStopTimer_ > 0
+        Note over A: BO QUA currentState->update(dt)<br/>BO QUA animation->update(dt)<br/>vat ly + buff van chay binh thuong
+    end
+```
+
+*Diagram 40 — Hit-stop. `onDealtDamage` is the only signal in the project that distinguishes a
+connecting hit from a miss.*
+
+**Screen shake rides on the same signal.** The level polls `consumeHitLanded()` after combat
+resolution and asks `MapCamera` for a short shake. It is deliberately **not** an `ICameraMode` in the
+queue — a queued mode *replaces* the running behaviour, so the camera would stop following the player
+while shaking. Instead the shake is a decaying random offset applied to a **copy** of the camera at
+draw time, leaving `camera.target` untouched; adding it to the real target would make the follow logic
+start each frame from an already-shaken position and drift away from the character.
+
+Two decisions keep hit-stop from causing damage of its own:
+
+- **Only the picture freezes.** Physics lives in `updatePhysicsWithMap`, which the level calls
+  separately, so a character struck mid-air keeps falling instead of hanging in the sky. Buff timers
+  and floating text also keep ticking — freezing those would make buffs run measurably longer for a
+  player who lands more hits.
+- **The duration is per skill, from JSON.** `hitStopDuration` sits beside the rest of a skill's pacing
+  data in `characters.json`, so a heavy fourth combo hit can hang longer than a jab, and tuning the
+  feel of combat never touches C++.
+
 ## 8.4 How a skill executes
 
 ```mermaid
@@ -2464,7 +2621,7 @@ sequenceDiagram
     end
 ```
 
-*Diagram 40 — Skill execution. Four separate design decisions meet here: state-dependent routing,
+*Diagram 41 — Skill execution. Four separate design decisions meet here: state-dependent routing,
 the mana check, the timed hit window, and data-driven combo chaining.*
 
 ## 8.5 How the player interacts with items
@@ -2498,7 +2655,7 @@ flowchart TD
     SP --> PERSIST
 ```
 
-*Diagram 41 — Item interaction. `Player::useStoredItem()` never tests what it is holding — it asks
+*Diagram 42 — Item interaction. `Player::useStoredItem()` never tests what it is holding — it asks
 the factory for a strategy and calls one method.*
 
 ## 8.6 How buffs aggregate
@@ -2533,7 +2690,7 @@ sequenceDiagram
     BM-->>C: true -> steer toward the player
 ```
 
-*Diagram 42 — Buff aggregation. Systems **poll** the manager rather than being notified, which is why
+*Diagram 43 — Buff aggregation. Systems **poll** the manager rather than being notified, which is why
 adding a buff required no change to enemy targeting or to `Coin`.*
 
 ## 8.7 The map editor and auto-tiling
@@ -2566,7 +2723,7 @@ sequenceDiagram
     Note over ES: each Render, the active tool<br/>draws renderGhost() under the cursor
 ```
 
-*Diagram 43 — An editor click. The `bool` return is what makes undo record one entry per action
+*Diagram 44 — An editor click. The `bool` return is what makes undo record one entry per action
 rather than one per frame of a drag.*
 
 Reusing LDtk's *real* rule format — exported once into `extracted_rules.json` — rather than inventing
@@ -2601,7 +2758,7 @@ sequenceDiagram
     R-->>SM: SaveSlotInfo{world, version, character,<br/>room, coins, health, playtime}
 ```
 
-*Diagram 44 — Writing a save. The player's copy and the disk copy are deliberately separate concerns.*
+*Diagram 45 — Writing a save. The player's copy and the disk copy are deliberately separate concerns.*
 
 ```mermaid
 flowchart TD
@@ -2622,7 +2779,7 @@ flowchart TD
     G -->|DELETE| P["deleteVersion -> list refreshed in place"]
 ```
 
-*Diagram 45 — Loading. Entities are built **filtered** rather than built fresh and then corrected.*
+*Diagram 46 — Loading. Entities are built **filtered** rather than built fresh and then corrected.*
 
 ## 8.9 Room transitions
 
@@ -2649,7 +2806,7 @@ sequenceDiagram
     L->>P: place at the matching edge
 ```
 
-*Diagram 46 — A room transition. No loading screen, and nothing already achieved is undone.*
+*Diagram 47 — A room transition. No loading screen, and nothing already achieved is undone.*
 
 ## 8.10 Resolution-independent interface
 
@@ -2664,7 +2821,7 @@ flowchart LR
     P --> W
 ```
 
-*Diagram 47 — The virtual canvas. Mixing `S()` and `X()` puts an element out by exactly one margin,
+*Diagram 48 — The virtual canvas. Mixing `S()` and `X()` puts an element out by exactly one margin,
 which is why the two families are named differently.*
 
 The design resolution was not guessed. We measured the real maximised framebuffer on the development
@@ -2706,11 +2863,209 @@ sequenceDiagram
     CM->>CM: record triggerId as played — one-shot
 ```
 
-*Diagram 48 — A cutscene. `CutsceneManager` is a Facade over three subsystems that know nothing about
+*Diagram 49 — A cutscene. `CutsceneManager` is a Facade over three subsystems that know nothing about
 each other.*
 
 ---
 ---
+
+## 8.12 The audio engine — five channels and keyframe-synchronised sound
+
+Audio is the part of the project where a small amount of structure buys a disproportionate amount of
+polish, so it is worth describing in full rather than as a settings screen with four sliders.
+
+### Two kinds of sound, two lifetimes
+
+Music and sound effects are not the same resource and are not handled by the same class.
+
+| | Music / background | Sound effects |
+|---|---|---|
+| raylib type | `Music` — decoded **streaming** | `Sound` — decoded **fully into memory** |
+| Owner | `AudioManager` (one active track at a time) | `AssetManager` (cached by logical name) |
+| Needs per-frame servicing | **Yes** — `AudioManager::Update()` refills the stream buffer | No — fire and forget |
+| Typical length | minutes | a fraction of a second |
+
+Streaming a four-minute track is right; streaming a footstep would add latency to something that must
+land on an exact animation frame. Loading a footstep into memory is right; loading four minutes of
+music into memory would waste tens of megabytes.
+
+### Five independent volume channels
+
+The settings screen exposes five, not four, and they are genuinely separate paths to the mixer:
+
+```mermaid
+flowchart TD
+    SM["SettingsManager<br/>5 gia tri, luu ngay khi doi"]
+    SM -->|"masterVolume"| RM["raylib SetMasterVolume<br/>he so nhan TOAN CUC"]
+    SM -->|"musicVolume"| AM1["AudioManager<br/>nhac Menu"]
+    SM -->|"backgroundSoundVolume"| AM2["AudioManager<br/>nhac nen tung map"]
+    SM -->|"playerSfxVolume"| PS["Player::updateSound"]
+    SM -->|"enemySfxVolume"| ES["Mob::updateSound"]
+
+    RM --> OUT(["Loa"])
+    AM1 --> OUT
+    AM2 --> OUT
+    PS --> OUT
+    ES -->|"x he so theo khoang cach"| OUT
+```
+
+*Diagram 50 — The five volume channels. Master multiplies everything through raylib itself; the other
+four are applied where the sound is triggered.*
+
+Separating **music** from **map background sound** matters more than it looks: menu music and the
+ambience of a cave are different jobs, and a player who wants a quiet cave should not have to silence
+the menu too. Separating **player** from **enemy** effects means a player who finds combat noise
+fatiguing can quiet the enemies without losing feedback on their own attacks.
+
+Every setter writes to disk immediately (§8.13), so the mix survives closing the game.
+
+### Distance attenuation for enemies
+
+Enemy sound is not played at full volume regardless of where the enemy is. `Mob::updateSound()`
+measures the distance to the nearest player and scales linearly to silence at `maxHearingDistance`
+(800 units):
+
+```
+finalVolume = enemySfxVolume × max(0, 1 − distance / 800)
+```
+
+A room with a dozen enemies therefore does not become a wall of noise: the ones near the player are
+the ones the player hears. This is a cheap approximation of spatial audio that needs no panning and no
+additional raylib features.
+
+### Keyframe-synchronised sound — footsteps that land on the foot
+
+This is the part worth showing a grader. A running character has feet that touch the ground on
+specific frames of the run animation. Playing a footstep on a fixed timer produces sound that drifts
+out of phase with the picture; playing it on a state change plays it once per state, not once per
+step.
+
+Instead, sound events are attached to **animation frame indices**, declared in `characters.json`
+beside the animation they belong to:
+
+```json
+"animations": {
+  "run": { "texture": "run", "frameNum": 4, "frameTime": 0.1 }
+},
+"soundFrames": {
+  "run": { "0": "step1", "2": "step2" }
+}
+```
+
+Read this as: *while the `run` animation is playing, the moment it enters frame 0 play `step1.wav`,
+and the moment it enters frame 2 play `step2.wav`.* Goku's run cycle is four frames with the feet
+planting on frames 0 and 2, so the two footsteps land exactly where they should — and using two
+different samples stops the loop sounding mechanical.
+
+```mermaid
+sequenceDiagram
+    participant A as Animation
+    participant P as Player::updateSound
+    participant AS as AssetManager
+    participant R as raylib
+
+    loop moi buoc Update
+        A->>P: getCurrentFrameIndex()
+        alt khung vua doi VA co trong soundFrames
+            P->>P: lastSoundFrameIndex = khung hien tai
+            P->>AS: getSound("Goku_step1_sound")
+            AS-->>P: Sound (da nap san trong bo nho)
+            P->>R: SetSoundVolume(playerSfxVolume) roi PlaySound
+        else khung chua doi
+            Note over P: khong lam gi — moi khung<br/>chi phat dung MOT lan
+        end
+    end
+```
+
+*Diagram 51 — Keyframe-synchronised sound. `lastSoundFrameIndex` is what makes the trigger fire on
+the frame **transition** rather than on every simulation step the frame is displayed.*
+
+The guard is the whole trick. `Update` runs at a fixed 1/60 s while an animation frame lasts 0.1 s, so
+each frame is displayed across roughly six simulation steps. Without remembering the last frame
+index, one footstep would fire six times.
+
+### Conventions that keep it data-driven
+
+Two naming rules mean adding sound to a character or an enemy requires **no code at all**:
+
+- **Automatic discovery.** When a factory builds a character or an enemy, it looks for
+  `assets/<assetFolder>/sounds/<animationName>.wav` for every declared animation. If the file exists
+  it is loaded and bound to that animation; if it does not, the animation is simply silent. Dropping
+  `dash.wav` into `assets/goku/sounds/` gives Goku a dash sound.
+- **A single key convention.** Everything is cached as `<owner>_<suffix>_sound`, so
+  `Goku_step1_sound` and `mob_bat_attack_sound` never collide, and the same footstep file used by two
+  characters is still stored once per owner name.
+
+Animations without an entry in `soundFrames` fall back to a simpler rule: looping animations keep
+their sound looping, one-shot animations fire once, and idle sounds are throttled by a long timer so
+an idle character does not chirp continuously.
+
+---
+---
+
+## 8.13 Where player data is stored, and why it is one folder
+
+Everything the game writes on the player's behalf lives under a single directory:
+
+```
+<goc-du-an>/saves/
+    settings.json               key bindings (both players) + the five volumes
+    world01/version1.json       campaign saves, one file per checkpoint
+    world01/version2.json
+    custom_map/custom_map_0.json    maps built in the editor
+```
+
+That sounds unremarkable until you see how it used to work. Three subsystems each built their own
+path, and all three were **relative strings**:
+
+| Subsystem | Old path | Resolved against |
+|---|---|---|
+| `SaveManager` → `FileSaveRepository` | `"saves"` | current working directory |
+| `SettingsManager` | `"saves/settings.json"` | current working directory |
+| `CustomMapSerializer` | `"saves/custom_map/…"` | current working directory |
+
+A relative path is resolved against the **working directory of the process**, which is decided by how
+the game is launched — not by where the game lives. Launching from an IDE at the project root gave
+`<project>/saves/`; double-clicking the executable gave `<project>/build/saves/`. Same machine, same
+build, two different folders. The visible symptom was that rebinding a key appeared to work and then
+silently reverted on the next launch, because the next launch read a different file.
+
+A second, independent fault hid the first: `std::ofstream` on a path whose parent directory does not
+exist simply **fails**, `is_open()` returns false, and the old code returned without a word. A save
+that never happened looked exactly like a save that worked.
+
+The fix is one class, `AppPaths`, that owns the answer to "where does player data go":
+
+```mermaid
+flowchart LR
+    EXE["GetApplicationDirectory()<br/>thu muc chua .exe, lui ra khoi build/<br/>— co dinh, khong phu thuoc cach bam chay"] --> AP["AppPaths::SavesDir()"]
+    AP --> S1["SettingsFile()<br/>settings.json"]
+    AP --> S2["FileSaveRepository rootDir<br/>world0X/versionY.json"]
+    AP --> S3["CustomMapDir()<br/>custom_map/"]
+    AP --> MIG["MigrateLegacySaves()<br/>chay mot lan luc khoi dong"]
+    MIG -.->|"chep sang, khong ghi de,<br/>khong xoa ban goc"| AP
+```
+
+*Diagram 52 — One class decides where player data lives; three subsystems ask it.*
+
+Three details are deliberate:
+
+- **Derived from the executable's location, not the working directory.** `GetApplicationDirectory()`
+  returns where the program actually is, so the answer is identical no matter how it was started.
+  One refinement: if the executable sits in a throw-away build folder (`build`, `Debug`, `Release`,
+  `bin`, `out`) the path steps up one level. Otherwise saves would live in `build/saves/` and a
+  routine `rm -rf build` — the very thing our own build instructions recommend when switching
+  compilers — would delete the player's entire progress.
+- **`FileSaveRepository`'s `rootDir` lost its default value.** It used to default to `"saves"`, which
+  meant forgetting to pass a path silently reintroduced the bug. Making the parameter mandatory turns
+  that mistake into a compile error.
+- **Old data is migrated, never destroyed.** `MigrateLegacySaves()` copies anything found in a
+  pre-existing working-directory `saves/` into the anchored folder, skipping files that already exist
+  and leaving the originals untouched, so running it repeatedly is safe.
+
+Writes now also **report failure**. Swallowing an I/O error is what let a broken save look healthy for
+so long, and it is the kind of bug that only surfaces on someone else's machine — a grader's, for
+instance.
 
 # 9. Design decision matrix
 
@@ -2731,6 +3086,10 @@ each other.*
 | Virtual design canvas | Per-resolution layouts | One layout, correct everywhere; no distortion | Two accessor families that must not be confused |
 | Singletons for caches only | Singletons for game state too | Contains global state to resources where a second copy is a bug | Initialisation order is implicit |
 | Explicit `set(SOURCES …)` | `file(GLOB …)` | A file that is not built shows up in the diff instead of silently vanishing | Every new file needs a CMake line |
+| Player data path derived from the install location | Relative `"saves/"` against the working directory | The same build launched two ways wrote two different folders, so settings and saves appeared to vanish | One extra class (`AppPaths`) and a one-time migration |
+| Sound events bound to animation frames | A timer, or one sound per state | Footsteps land on the frames where the feet actually plant, and stay in phase at any playback position | The trigger needs a "last frame" guard, since one frame spans several fixed steps |
+| Hit-stop driven by a hit-landed callback | Freeze whenever an attack is thrown | Only connecting hits freeze, so the player feels the difference between a hit and a whiff | Combat needed a return path (`onDealtDamage`) it did not have |
+| Enemy obstacle-jumping reuses `onHitWall` | A separate look-ahead raycast | Cliff-avoidance and obstacle-hopping fall out of collision data already computed | The two cases differ by one boolean, which must be read correctly |
 
 ---
 
@@ -2749,10 +3108,10 @@ flowchart LR
     P1 --> EXE["SuperMarioPlus.exe"]
     P2 --> EXE
     AS["assets/ — 412 PNG · 2 GIF ·<br/>31 JSON · 14 .ldtk"] -.->|"read at runtime"| EXE
-    EXE -.->|"written at runtime"| OUT["saves/world0X/versionY.json<br/>assets/config/session.json"]
+    EXE -.->|"written at runtime"| OUT["saves/settings.json<br/>saves/world0X/versionY.json<br/>saves/custom_map/"]
 ```
 
-*Diagram 49 — The build graph.*
+*Diagram 53 — The build graph.*
 
 **Visual Studio (MSVC)**
 
@@ -2775,125 +3134,22 @@ formatting in `FileSaveRepository` is guarded on `_WIN32` and uses `localtime_s`
 `localtime_r` is not declared by MinGW's headers — guarding on `_MSC_VER` instead broke the GCC build.
 
 ---
-
-# 11. Diagram index
-
-| # | Diagram | Type | § |
-|---|---|---|---|
-| 1 | Finishing a world | flowchart | 1.4 |
-| 2 | The single-player route | flowchart | 2.1 |
-| 3 | A world as a graph of rooms | flowchart | 2.8 |
-| 4 | Subsystem ownership between members | flowchart | 3.2 |
-| 5 | The extension points — all interfaces | class | 4.3 |
-| 6 | The `Entity` hierarchy | class | 4.4 |
-| 7 | The item hierarchy | class | 4.4 |
-| 8 | The screen hierarchy | class | 4.4 |
-| 9 | The behaviour-state hierarchies | class | 4.4 |
-| 10 | Skills, enemy skills, buffs, item strategies | class | 4.4 |
-| 11 | Panels, camera modes, tools, transitions, effects | class | 4.4 |
-| 12 | The two command families and save abstractions | class | 4.4 |
-| 13 | `Player` composition | class | 4.6 |
-| 14 | The ownership graph | flowchart | 4.7 |
-| 15 | The two State variants | class | 5.2 |
-| 16 | Player state machine | state | 5.2 |
-| 17 | Enemy AI state machine | state | 5.2 |
-| 18 | Boss AI state machine | state | 5.2 |
-| 19 | Six Strategy applications | class | 5.3 |
-| 20 | Buff aggregation — the non-Strategy | flowchart | 5.3 |
-| 21 | Screen transitions as commands | class | 5.4 |
-| 22 | The deferral sequence | sequence | 5.4 |
-| 23 | Input as commands | class | 5.4 |
-| 24 | The five factories | class | 5.5 |
-| 25 | Memento — undo stack | class | 5.7 |
-| 26 | An editor edit and its snapshot | sequence | 5.7 |
-| 27 | Flyweight — sprite atlases | class | 5.8 |
-| 28 | The four-layer save stack | class | 5.9 |
-| 29 | Module dependencies | flowchart | 6.1 |
-| 30 | The frame | flowchart | 7.1 |
-| 31 | Phase 1 — HandleInput | sequence | 7.2 |
-| 32 | Phase 2 — Process | sequence | 7.3 |
-| 33 | Phase 3 — Update | sequence | 7.4 |
-| 34 | Phase 4 — Render | flowchart | 7.5 |
-| 35 | One complete frame | sequence | 7.6 |
-| 36 | The LDtk pipeline | flowchart | 8.1 |
-| 37 | Two producers, one model | flowchart | 8.1 |
-| 38 | The physics Template Method | flowchart | 8.2 |
-| 39 | Combat resolution | sequence | 8.3 |
-| 40 | Skill execution | sequence | 8.4 |
-| 41 | Item interaction | flowchart | 8.5 |
-| 42 | Buff aggregation | sequence | 8.6 |
-| 43 | An editor click | sequence | 8.7 |
-| 44 | Writing a save | sequence | 8.8 |
-| 45 | Loading a save | flowchart | 8.8 |
-| 46 | A room transition | sequence | 8.9 |
-| 47 | The virtual design canvas | flowchart | 8.10 |
-| 48 | A cutscene | sequence | 8.11 |
-| 49 | The build graph | flowchart | 10 |
-
-**49 diagrams** — 13 class, 3 state, 14 sequence, 19 flowchart. The same architecture is available as
-PlantUML in `workflow/blueprints/`.
-
 ---
 
-# 12. Conclusion
+# 11. Conclusion
 
-Super Mario Plus is 23,735 lines of C++17 across 328 files, implementing 99 catalogued features: a
-six-world story campaign of 63 rooms, two-player co-op, a six-arena versus mode and a complete
-in-game level editor whose output is playable as a real level.
+What the project is, stated plainly — and what it is **not**.
 
-The design rests on four decisions that each removed a class of problem rather than an instance of
-one.
+It is a screen-stack state machine over self-rendering entities. It is **not MVC**: entities draw
+themselves, and there is no separate View layer, so calling it MVC would be a mislabel. It has **no
+object pool, no event bus and no ECS** — §5.11 records why each was considered and set aside rather
+than pretending they were never on the table.
 
-**Behaviour is objects, not flags.** Twenty-six state classes across players, enemies and bosses mean
-that a cancelled attack cannot keep dealing damage and a boss cannot attack during its own intro —
-not because a check catches it, but because the transition does not exist.
-
-**Rules are data, not types.** Characters, enemies, their statistics, animations and skills are JSON.
-Damage permission is a bitmask. That is why adding a character is a configuration edit and why an
-entire game mode — player-versus-player — cost one mask value.
-
-**Ordering is explicit.** The four-phase frame makes it structurally impossible to mutate a container
-while iterating it, or to destroy a screen while its own method is executing. The two command
-pipelines and the spawn queue exist to enforce that at the three places it would otherwise break.
-
-**One model, two producers.** `TileMap` accepts both the LDtk campaign format and the editor's own
-format and builds the same internal model, so no gameplay code knows where a level came from. That is
-the reason the level editor is a real feature rather than a toy.
-
-We also state plainly what the project is **not**. It is not MVC — entities render themselves, and
-there is no separate View layer; we describe it accurately as a screen-stack state machine over
-self-rendering entities. It has no object pool, no event bus and no ECS, and §5.11 explains why each
-was considered and set aside. A report whose value depends on its labels being accurate cannot afford
-to claim patterns it does not use.
-
----
-
-# 13. Source evidence index
-
-| Subsystem | Principal files |
-|---|---|
-| Frame loop and timing | `src/core/Game.cpp` · `include/core/Game.h` |
-| Screen stack and transitions | `src/core/StateManager.cpp` · `include/states/GameState.h` · `include/command/StateCommands.h` |
-| Input and rebinding | `src/core/InputHandler.cpp` · `include/command/PlayerCommands.h` · `src/core/SettingsManager.cpp` |
-| Entity base and physics | `include/entity/Entity.h` · `src/entity/Entity.cpp` · `include/entity/Player/CharacterStats.h` |
-| Player and its states | `src/entity/Player/Player.cpp` · `src/entity/Player/Player*State.cpp` (10) · `include/entity/IEntityState.h` |
-| Character construction | `src/entity/Player/PlayerFactory.cpp` · `assets/config/characters.json` |
-| Skills and combos | `include/entity/Skill/ISkill.h` · `src/entity/Skill/` (13) |
-| Combat resolution | `src/combatsystem/CombatSystem.cpp` · `include/combatsystem/Hitbox.h` · `include/entity/EntityFaction.h` |
-| Enemies, bosses and AI | `src/entity/Mob.cpp` · `src/entity/Boss.cpp` · `src/entity/EnemyStates/` (7) · `src/entity/BossStates/` (9) · `assets/config/enemies.json` |
-| Buffs | `src/entity/Player/BuffManager.cpp` · `include/entity/BuffEffects/` (10) |
-| Items | `include/entity/Item/BaseItem.h` · `src/entity/Item/` (18) · `include/entity/Item/IItemUseStrategy.h` |
-| Level loading and terrain | `src/environment/TileMap.cpp` · `include/environment/TileMap.h` · `assets/maps/*/world0N.ldtk` |
-| Camera and cutscenes | `src/environment/MapCamera.cpp` · `include/environment/ICameraMode.h` · `src/cutscene/CutsceneManager.cpp` |
-| Level screens | `src/states/BaseLevelState.cpp` · `src/states/World0*State.cpp` · `src/states/WorldCatalog.cpp` |
-| Save system | `include/save/` (10) · `src/save/FileSaveRepository.cpp` · `src/core/SaveManager.cpp` |
-| Map editor | `src/editor/` (17) · `include/editor/` (25) · `assets/maps/extracted_rules.json` |
-| Interface layer | `src/ui/` (12) · `include/ui/UIScaler.h` · `include/ui/IMenuPanel.h` |
-| Assets and GIF | `src/infrastructure/AssetManager.cpp` · `src/infrastructure/GifAnimation.cpp` |
-| Build | `CMakeLists.txt` · `CMakePresets.json` · `third_party/` |
+That distinction is the point. A design report is only worth as much as its labels are accurate, and
+naming a pattern the code does not use would cost more credibility than the pattern would have
+bought. Every pattern listed in §5 is one we can point at in a file; every one we rejected is listed
+with the reason.
 
 ---
 
 *Group 51 — Phạm Đức Minh (25125028) · Lê Tiến Bình (25125007) — September 2026*
-
-

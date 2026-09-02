@@ -148,7 +148,7 @@ set(SOURCES
     src/entity/Item/ChestNormal.cpp
     src/entity/Item/ChestBoss.cpp
     src/entity/Item/Buff.cpp
-    src/entity/Item/Boom.cpp
+    src/entity/Item/Bomb.cpp
     src/entity/Item/PoisonFlask.cpp
     src/entity/Item/ShopAsset.cpp
     src/entity/Item/EndgameAsset.cpp
@@ -158,6 +158,7 @@ set(SOURCES
     src/combatsystem/CombatSystem.cpp
     src/infrastructure/AssetManager.cpp
     src/infrastructure/AudioManager.cpp
+    src/infrastructure/AppPaths.cpp
     src/environment/TileMap.cpp
     src/environment/MapCamera.cpp
     src/states/BaseLevelState.cpp

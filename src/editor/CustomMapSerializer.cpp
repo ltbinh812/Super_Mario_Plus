@@ -3,6 +3,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include "infrastructure/AppPaths.h"
 
 namespace fs = std::filesystem;
 using json   = nlohmann::json;
@@ -16,7 +17,7 @@ bool CustomMapSerializer::isValidSlot(int slot) {
 }
 
 std::string CustomMapSerializer::slotPath(int slot) {
-    return "saves/custom_map/custom_map_" + std::to_string(slot) + ".json";
+    return AppPaths::CustomMapDir() + "/custom_map_" + std::to_string(slot) + ".json";
 }
 
 bool CustomMapSerializer::slotExists(int slot) {
@@ -67,7 +68,7 @@ bool CustomMapSerializer::save(const CustomMapData& data, int slot) {
     }
 
     try {
-        fs::create_directories("saves/custom_map");
+        fs::create_directories(AppPaths::CustomMapDir());
 
         json j;
         j["version"]  = data.version;

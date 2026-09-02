@@ -472,6 +472,22 @@ void BaseLevelState::Update(float dt) {
       if (e && e->getIsActive()) allEntities.push_back(e.get());
   }
   combatSystem.update(allEntities, dt);
+
+  // === Rung màn hình khi đòn của người chơi chạm mục tiêu ===
+  //
+  // Đặt SAU combatSystem.update() vì cờ chỉ được bật trong lúc giải quyết sát
+  // thương. Player chỉ GHI NHẬN "vừa đánh trúng"; quyết định rung bao mạnh là
+  // việc của màn chơi, nên Player không cần biết camera tồn tại.
+  //
+  // consumeHitLanded() tự xoá cờ, nên một đòn chỉ gây một cú rung dù có trúng
+  // nhiều mục tiêu cùng lúc.
+  bool anyHitLanded = false;
+  if (player1 && player1->consumeHitLanded()) anyHitLanded = true;
+  if (player2 && player2->consumeHitLanded()) anyHitLanded = true;
+  if (anyHitLanded) {
+      mapCamera.shake(3.0f, 0.12f);
+  }
+  mapCamera.updateShake(dt);
 }
 
 void BaseLevelState::Render(float alpha) const {
@@ -861,6 +877,13 @@ void BaseLevelState::processItemInteractions() {
     
     item->process({player1.get()});
 
+    // Khoá nhặt trong thời gian drop arc (bật lên từ rương/quái).
+    // Điều này được set bởi launchAsDrop() và giảm dần trong BaseItem::update().
+    // Guard tầng ngoài này là điểm bảo vệ duy nhất — không cần mỗi subclass
+    // tự check riêng, nhưng vẫn giữ check cũ trong subclass như lớp fallback.
+    if (item->getPickupDelay() > 0.0f)
+      continue;
+
     Rectangle itemBox = item->getHitbox();
     auto handleInteract = [&](Player* p) {
         if (p && CheckCollisionRecs(itemBox, p->getHitbox())) {
@@ -876,6 +899,7 @@ void BaseLevelState::processItemInteractions() {
     handleInteract(player1.get());
   }
 }
+
 
 void BaseLevelState::processSpawnQueue() {
   auto entityCmds = spawnQueue.peekAndConsumeByCategory(SpawnCategory::Entity);
@@ -894,6 +918,9 @@ void BaseLevelState::processSpawnQueue() {
   for (const auto &cmd : itemCmds) {
     auto item = ItemFactory::createDynamic(cmd.itemIdentifier, cmd.position, cmd.velocity);
     if (item) {
+      // Không nắn vị trí nữa: vật phẩm rơi ra tự bật lên tối đa một block rồi
+      // rơi xuống nền (BaseItem::launchAsDrop), nên nó tự tìm được chỗ đứng
+      // hợp lệ kể cả trong hốc hẹp. Nắn thêm ở đây chỉ chống lại cú bật đó.
       item->setCommandQueue(&spawnQueue);
       activeItems.push_back(std::move(item));
     }

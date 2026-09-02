@@ -141,16 +141,28 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
               << " speed=" << config.speed << " damage=" << config.damage << std::endl;
 }
 
+// =============================================================================
+// Vòng đời âm thanh của viên đạn (phần của minh1).
+//
+// Đạn bay có tiếng riêng, và tiếng đó phải TẮT khi đạn biến mất — nếu không nó
+// còn kêu sau khi quả đạn đã nổ. Đạn biến mất theo bốn đường khác nhau: hết
+// thời gian sống, chạm tường, trúng mục tiêu, và bị huỷ cùng màn chơi.
+//
+// Dồn hết vào deactivate() rồi cho cả bốn đường đi qua đó thì không sót đường
+// nào. Destructor gọi thêm một lần cho trường hợp đối tượng bị xoá khi vẫn còn
+// đang hoạt động (đổi phòng, thoát màn).
+// =============================================================================
 Fireball::~Fireball() {
     stopSound();
 }
 
 void Fireball::stopSound() {
-    if (!soundKey.empty() && AssetManager::getInstance().hasSound(soundKey)) {
-        Sound s = AssetManager::getInstance().getSound(soundKey);
-        if (IsSoundPlaying(s)) {
-            StopSound(s);
-        }
+    if (soundKey.empty()) return;
+    auto& mgr = AssetManager::getInstance();
+    if (!mgr.hasSound(soundKey)) return;
+    Sound s = mgr.getSound(soundKey);
+    if (IsSoundPlaying(s)) {
+        StopSound(s);
     }
 }
 

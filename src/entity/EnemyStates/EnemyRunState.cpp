@@ -46,6 +46,13 @@ void EnemyRunState::decideAction(Mob& mob) {
 void EnemyRunState::process(Mob& mob) {
     Player* target = mob.getClosestPlayer();
     if (target) {
+        // Dưới nước: bơi thẳng tới người chơi theo CẢ HAI trục.
+        // Nếu vẫn dùng cách đi bộ (chỉ điều khiển X) thì con quái chỉ trôi ngang
+        // ở một độ sâu cố định, không bao giờ với tới người chơi lặn sâu hơn.
+        if (mob.swimToward(target->getPosition())) {
+            return;
+        }
+
         float dirX = target->getPosition().x - mob.getPosition().x;
         if (std::abs(dirX) < 5.0f) {
             mob.setVelocity({0.0f, mob.getVelocity().y});
@@ -63,6 +70,10 @@ void EnemyRunState::exit(Mob& mob) {
 }
 
 void EnemyRunState::onHitWall(Mob& mob, bool rightWall, bool isCliff) {
+    // Đang bơi thì bỏ qua hết: dưới nước không có "vực" để né, và cú nhảy qua
+    // vật cản cũng vô nghĩa vì swimToward() đã tự điều khiển trục Y.
+    if (mob.isInLiquid()) return;
+
     if (isCliff) {
         mob.setAggroCooldown(2.0f);
         mob.changeState(std::make_unique<EnemyIdleState>());

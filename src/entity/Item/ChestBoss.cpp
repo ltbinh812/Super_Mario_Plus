@@ -55,7 +55,8 @@ void ChestBoss::onInteract(Entity& other) {
         SpawnCommand cmd;
         cmd.category = SpawnCategory::Item;
         cmd.itemIdentifier = "Key";
-        cmd.position = { worldStats.position.x, worldStats.position.y - hitH_ };
+        // Vị trí của chính cái rương. Việc nhấc lên do launchAsDrop() lo.
+        cmd.position = worldStats.position;
         commandQueue->push(cmd);
     }
     std::cout << "[ChestBoss] Opened! Dropping Key.\n";

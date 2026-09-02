@@ -42,6 +42,7 @@ struct CharacterRuntimeStats {
     float ignoreOneWayTimer = 0.0f;
     float ignoreLadderTimer = 0.0f;
     float iframeTimer = 0.0f;
+    float disableInputTimer = 0.0f;
 
     CollisionType currentLiquid = CollisionType::None;
     bool isPartiallyOutsideLiquid = true;

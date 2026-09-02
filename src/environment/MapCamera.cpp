@@ -126,8 +126,48 @@ void MapCamera::MoveManual(Vector2 delta) {
     camera.target.y += delta.y;
 }
 
+// =============================================================================
+// Rung màn hình.
+//
+// shake() lấy MẠNH HƠN giữa cú đang rung và cú mới, thay vì ghi đè. Nếu ghi đè
+// thì một đòn nhẹ ngay sau đòn nặng sẽ làm cú rung lớn tắt ngóm giữa chừng.
+// =============================================================================
+void MapCamera::shake(float intensity, float duration) {
+    if (intensity <= 0.0f || duration <= 0.0f) return;
+    if (intensity >= shakeIntensity_ || shakeTimer_ <= 0.0f) {
+        shakeIntensity_ = intensity;
+        shakeDuration_  = duration;
+        shakeTimer_     = duration;
+    }
+}
+
+void MapCamera::updateShake(float dt) {
+    if (shakeTimer_ <= 0.0f) {
+        shakeOffset_ = {0.0f, 0.0f};
+        return;
+    }
+    shakeTimer_ -= dt;
+    if (shakeTimer_ <= 0.0f) {
+        shakeTimer_ = 0.0f;
+        shakeIntensity_ = 0.0f;
+        shakeOffset_ = {0.0f, 0.0f};
+        return;
+    }
+    // Biên độ tắt dần tuyến tính -> cú rung "nảy mạnh rồi lặng", không cắt cụt.
+    const float falloff = shakeTimer_ / shakeDuration_;
+    const float amp = shakeIntensity_ * falloff;
+    shakeOffset_.x = ((float)GetRandomValue(-100, 100) / 100.0f) * amp;
+    shakeOffset_.y = ((float)GetRandomValue(-100, 100) / 100.0f) * amp;
+}
+
 void MapCamera::BeginMode() const {
-    BeginMode2D(camera);
+    // Áp độ lệch rung lên BẢN SAO, không đụng vào camera.target thật.
+    // Nếu cộng thẳng vào target thì logic bám người chơi sẽ lấy vị trí đã bị
+    // rung làm điểm xuất phát cho frame sau, và camera trôi dần khỏi nhân vật.
+    Camera2D shaken = camera;
+    shaken.target.x += shakeOffset_.x;
+    shaken.target.y += shakeOffset_.y;
+    BeginMode2D(shaken);
 }
 
 void MapCamera::EndMode() const {

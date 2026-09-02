@@ -27,6 +27,9 @@ void PlayerSkillState::onEnter() {
         timer = currentSkill->getDuration() + currentSkill->getRecoveryDuration();
         hasExecuted = false; // Reset the flag for the new skill
         hasLeftGround = !player.getRuntimeStats().isGrounded;
+        // Đòn mới -> được phép khựng một nhịp nữa. Gọi cả khi nối combo, vì
+        // onEnter() chạy lại cho từng mắt xích trong chuỗi.
+        player.beginSkillActivation();
         hasCutOnLanding = false;
     }
 }

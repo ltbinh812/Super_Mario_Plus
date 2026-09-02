@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cctype>
 #include "ItemAtlasRegistry.h"
+#include "ItemUsageFactory.h"
 
 // Helper để chuyển chữ thành thường
 static std::string toLowerString(const std::string& str) {
@@ -17,16 +18,16 @@ static std::string toLowerString(const std::string& str) {
 
 ShopUIPanel::ShopUIPanel() {
     items_.push_back({"Boom",           "Boom",        10, {0,0,0,0}, false});
-    items_.push_back({"Speed Potion",   "Speed",       20, {0,0,0,0}, false});
-    items_.push_back({"Strength Buff",  "Strength",    20, {0,0,0,0}, false});
-    items_.push_back({"Shield Buff",    "Shield",      30, {0,0,0,0}, false});
-    items_.push_back({"Health Potion",  "Heal",        15, {0,0,0,0}, false});
-    items_.push_back({"Poison Flask",   "Poison",      25, {0,0,0,0}, false});
-    items_.push_back({"Gold Magnet",    "Gold_Magnet", 40, {0,0,0,0}, false});
-    items_.push_back({"Invisibility",   "Invisibility",50, {0,0,0,0}, false});
-    items_.push_back({"Super Jump",     "Jump",        20, {0,0,0,0}, false});
-    items_.push_back({"Time Stop",      "Time_Stop",   60, {0,0,0,0}, false});
-    items_.push_back({"Mystery Box",    "Random",      35, {0,0,0,0}, false});
+    items_.push_back({"Speed Potion",   "Speed",       14, {0,0,0,0}, false});
+    items_.push_back({"Strength Buff",  "Strength",    14, {0,0,0,0}, false});
+    items_.push_back({"Shield Buff",    "Shield",      16, {0,0,0,0}, false});
+    items_.push_back({"Health Potion",  "Heal",        12, {0,0,0,0}, false});
+    items_.push_back({"Poison Flask",   "Poison",      15, {0,0,0,0}, false});
+    items_.push_back({"Gold Magnet",    "GoldMagnet",  17, {0,0,0,0}, false});
+    items_.push_back({"Invisibility",   "Invisibility",18, {0,0,0,0}, false});
+    items_.push_back({"Super Jump",     "Jump",        14, {0,0,0,0}, false});
+    items_.push_back({"Time Stop",      "TimeStop",    20, {0,0,0,0}, false});
+    items_.push_back({"Mystery Box",    "Random",      11, {0,0,0,0}, false});
 }
 
 ShopUIPanel::~ShopUIPanel() {
@@ -220,7 +221,15 @@ void ShopUIPanel::update(float dt, Vector2 mousePos, bool mousePressed) {
                 if (inventory && inventory->coins >= item.price) {
                     // Mua hàng
                     inventory->coins -= item.price;
-                    buyer_->getRuntimeStatsMutable().storedItemSlot = item.type;
+                    std::string itemType = item.type;
+                    
+                    if (itemType == "Random") {
+                        const auto& usableItems = ItemUsageFactory::allUsableItems();
+                        itemType = usableItems[rand() % usableItems.size()];
+                        std::cout << "[Shop] Mystery Box rolled: " << itemType << "!\n";
+                    }
+                    
+                    buyer_->getRuntimeStatsMutable().storedItemSlot = itemType;
                     std::cout << "[Shop] Bought " << item.name << " for " << item.price << " coins.\n";
                     
                     notificationMsg_ = "Bought successful: " + item.name + "!";
@@ -298,12 +307,18 @@ void ShopUIPanel::render(float alpha) const {
             Rectangle    srcRect = {0, 0, 0, 0};
 
             if (item.type == "Boom") {
-                // Boom dùng texture riêng (không có trong atlas buff)
+                // Bomb dùng texture riêng (không có trong atlas buff)
                 iconTex = boomTex_;
                 srcRect = {0.0f, 0.0f, (float)boomTex_.width, (float)boomTex_.height};
             } else {
+                std::string typeLower = toLowerString(item.type);
+                // Fix Bug: Ánh xạ lại tên file của 2 item này vì trong atlas 
+                // chúng dùng dấu gạch dưới (gold_magnet, time_stop)
+                if (item.type == "GoldMagnet") typeLower = "gold_magnet";
+                else if (item.type == "TimeStop") typeLower = "time_stop";
+
                 const std::string frameName =
-                    "item_" + toLowerString(item.type) + "_fix01 (Custom).png";
+                    "item_" + typeLower + "_fix01 (Custom).png";
                 const auto& registry = ItemAtlasRegistry::getInstance();
                 if (registry.isLoaded()) {
                     const Texture2D& atlasTex = registry.getTexture(frameName);

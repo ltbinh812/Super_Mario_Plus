@@ -4,9 +4,9 @@
 #include <iostream>
 #include "infrastructure/AssetManager.h"
 
-// Door: 5x4 blocks
+// Door: 5x7 blocks
 static constexpr float DOOR_W = 5 * 32.0f;
-static constexpr float DOOR_H = 4 * 32.0f;
+static constexpr float DOOR_H = 7 * 32.0f;
 
 Door::Door(Vector2 worldPos, float scale)
     : BaseItem(worldPos, DOOR_W, DOOR_H) {}

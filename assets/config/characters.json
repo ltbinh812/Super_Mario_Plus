@@ -857,8 +857,8 @@
         "landingCutDelay": 2.0
       },
       "LowAttack": {
-        "hitboxStartFrame": 12,
-        "hitboxEndFrame": 17,
+        "hitboxStartFrame": 0,
+        "hitboxEndFrame": 22,
         "attack": 10,
         "box": {
           "w": 100,
@@ -887,8 +887,8 @@
         "dashMultiplier": 0
       },
       "SpecialAttack": {
-        "hitboxStartFrame": 9,
-        "hitboxEndFrame": 27,
+        "hitboxStartFrame": 0,
+        "hitboxEndFrame": 34,
         "attack": 10,
         "box": {
           "w": 80,
@@ -1478,7 +1478,7 @@
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
         "moveControl": 0.5,
-        "dashMultiplier": 0 
+        "dashMultiplier": 0
       },
       "LowAttack": {
         "hitboxStartFrame": 0,

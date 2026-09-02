@@ -10,8 +10,10 @@ static const float BLOCK_SIZE = 32.0f;
 Key::Key(Vector2 worldPos, float scale)
     : BaseItem(worldPos, BLOCK_SIZE, BLOCK_SIZE) 
 {
+    // gravityScale = 160 để Key đặt trong map rơi xuống đất tự nhiên.
+    // Velocity KHÔNG tự set ở đây — khi spawn từ ChestBoss, createDynamic()
+    // sẽ gọi launchAsDrop() để set velocity bật lên đúng 1 block.
     baseStats.gravityScale = 160.0f;
-    runtimeStats.velocity = { ((rand() % 200) - 100) * 1.0f, -450.0f };
 
     animations_[ItemState::Idle] = AtlasAnimation("key_anim", 24, 0.1f);
     animations_[ItemState::Active] = AtlasAnimation("key_anim", 24, 0.1f);
