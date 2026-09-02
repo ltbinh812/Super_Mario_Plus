@@ -5715,16 +5715,16 @@
 						},
 						{
 							"__identifier": "Starting_position",
-							"__grid": [193,24],
+							"__grid": [28,20],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#FFFFFF",
-							"iid": "366f6ee0-96d0-11f1-86fe-3d3d6302600c",
+							"iid": "cbf22a80-96d0-11f1-a9e9-c9c03fb0e3c8",
 							"width": 16,
 							"height": 16,
 							"defUid": 241,
-							"px": [3096,400],
+							"px": [456,336],
 							"fieldInstances": []
 						}
 					]

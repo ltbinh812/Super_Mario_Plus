@@ -18,6 +18,7 @@ private:
     bool  beamFromOwner = false;         // xem FireballConfig
     bool  alignFramesByContent = false;
     std::string textureName;             // khoá cache canh khung theo nội dung
+    std::string soundKey;                // âm thanh đang phát
     // Tâm nội dung từng khung, tính SẴN lúc dựng đạn (xem Fireball.cpp).
     // nullptr khi không bật alignFramesByContent.
     const std::vector<Vector2>* frameCenters_ = nullptr;
@@ -26,9 +27,12 @@ private:
     float hitboxOffsetX = 0.0f;
     float hitboxOffsetY = 0.0f;
     
+    void stopSound();
+    
 public:
     // We pass initial position, facing direction, and per-character config
     Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& config, Entity* spawner);
+    ~Fireball() override;
 
     void update(float dt) override;
     void render(float alpha) override;
@@ -46,5 +50,5 @@ public:
     void takeDamage(int damage, float knockbackDirX = 0.0f, bool forceInterrupt = true) override;
 
     bool getIsActive() const override { return isActive; }
-    void deactivate() override { isActive = false; }
+    void deactivate() override;
 };

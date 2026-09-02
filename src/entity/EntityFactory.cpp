@@ -78,6 +78,7 @@ std::unique_ptr<Entity> EntityFactory::create(const SpawnCommand& cmd) {
                             }
                             SetSoundVolume(s, volume);
                             PlaySound(s);
+                            cfg.soundKey = soundKey;
                         }
                     } else {
                         cfg.textureName = texBase;
