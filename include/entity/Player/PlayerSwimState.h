@@ -2,6 +2,8 @@
 #include "PlayerState.h"
 
 class PlayerSwimState : public PlayerState {
+private:
+    float swimSoundTimer = 0.0f;
 public:
     PlayerSwimState(Player& player);
     

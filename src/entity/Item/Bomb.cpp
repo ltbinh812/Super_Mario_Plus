@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include "infrastructure/AssetManager.h"
 
 static const float BLOCK_SIZE = 32.0f;
 
@@ -91,6 +92,7 @@ void Bomb::update(float dt) {
         // Stop moving when it explodes
         runtimeStats.velocity = {0.0f, 0.0f};
         std::cout << "[Bomb] EXPLOSION!\n";
+        PlaySound(AssetManager::getInstance().getSound("boom_explosion_sound"));
     }
 }
 
@@ -131,6 +133,7 @@ void Bomb::onInteract(Entity& other) {
             p->getRuntimeStatsMutable().storedItemSlot = "Boom";
             itemState_ = ItemState::Used;
             std::cout << "[Bomb] Collected by player.\n";
+            PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
         } else {
             p->setOverlappingItem(this);
         }
@@ -143,6 +146,7 @@ void Bomb::forceInteract(Entity& other) {
         p->getRuntimeStatsMutable().storedItemSlot = "Boom";
         itemState_ = ItemState::Used;
         std::cout << "[Bomb] Swapped by player.\n";
+        PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
     }
 }
 

@@ -15,6 +15,7 @@ struct FireballConfig {
     float curveAmplitude = 0.0f;    // 0 = straight, >0 = sine wave
     float curveFrequency = 0.0f;
     std::string textureName = "";   // empty = draw circle fallback
+    std::string soundKey    = "";   // sound to stop when destroyed
     int   frameNum       = 1;
     float frameTime      = 0.1f;
     float scale          = 1.0f;

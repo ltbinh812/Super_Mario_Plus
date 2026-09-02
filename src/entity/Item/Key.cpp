@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "Player.h"
 #include <iostream>
+#include "infrastructure/AssetManager.h"
+#include "CommandQueue.h"
 
 static const float BLOCK_SIZE = 32.0f;
 

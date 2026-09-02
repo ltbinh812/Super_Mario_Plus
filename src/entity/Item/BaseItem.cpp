@@ -1,4 +1,5 @@
 #include "BaseItem.h"
+#include <cmath>
 
 static CharacterBaseStats makeBaseStats(float w, float h) {
     CharacterBaseStats bs;
@@ -32,11 +33,39 @@ Rectangle BaseItem::getHitbox() const {
     };
 }
 
+// Xem chú thích dài ở BaseItem.h.
+void BaseItem::launchAsDrop() {
+    baseStats.gravityScale = 160.0f;
+
+    // v0 vừa đủ để đỉnh cao đúng một block trên cạn:  v = sqrt(2 * a * h)
+    const float a  = baseStats.gravityScale * 9.8f;
+    const float v0 = std::sqrt(2.0f * a * kBlockSize);
+
+    // KHÔNG trôi ngang. Đây chính là thứ đẩy món đồ chui vào tường khi rương
+    // nằm trong hốc hẹp; và "rơi ra" thì chỉ cần lên rồi xuống.
+    runtimeStats.velocity = { 0.0f, -v0 };
+
+    dropOriginY_ = worldStats.position.y;
+    pickupDelay_ = 0.5f;
+}
+
 void BaseItem::update(float dt) {
     animTimer_ += dt;
     if (pickupDelay_ > 0.0f) {
         pickupDelay_ -= dt;
     }
+
+    // Chặn cứng độ cao: không bao giờ vượt quá một block so với chỗ bật lên.
+    //
+    // Chỉ tính v0 là chưa đủ, vì trong nước trọng lực chỉ còn 0.4 lần nên cùng
+    // một v0 sẽ đưa món đồ lên cao gấp hai lần rưỡi. Chặn theo VỊ TRÍ THẬT thì
+    // đúng trong mọi môi trường, không phụ thuộc gia tốc.
+    if (dropOriginY_ >= 0.0f && runtimeStats.velocity.y < 0.0f) {
+        if (dropOriginY_ - worldStats.position.y >= kBlockSize) {
+            runtimeStats.velocity.y = 0.0f;   // tới trần cho phép, bắt đầu rơi
+        }
+    }
+
     if (currentAnim_) {
         currentAnim_->update(dt);
     }

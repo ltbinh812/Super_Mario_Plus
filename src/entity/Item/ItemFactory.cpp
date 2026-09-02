@@ -97,7 +97,9 @@ std::unique_ptr<BaseItem> ItemFactory::createDynamic(
 
     if (item) {
         if (identifier != "ThrownBoom" && identifier != "ThrownPoison") {
-            item->setPickupDelay(0.5f); // normal spawned items need delay
+            // Đồ rơi ra: bật lên tối đa một block rồi rơi xuống, và khoá
+            // nhặt 0.5 giây. launchAsDrop() đặt luôn cả pickupDelay.
+            item->launchAsDrop();
         }
         return item;
     }

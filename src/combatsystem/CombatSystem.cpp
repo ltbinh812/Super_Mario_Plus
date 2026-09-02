@@ -75,6 +75,9 @@ void CombatSystem::update(const std::vector<Entity*>& entities, float dt) {
             if (attackBox->owner) {
                 attackBox->owner->onDealtDamage(target, finalDamage);
             }
+            // Báo cho BÊN NHẬN biết ai vừa đánh mình. Sát thương môi trường
+            // (lava, độc) không đi qua CombatSystem nên không bao giờ tới đây.
+            target->onDamagedBy(attackBox->owner, finalDamage);
 
             if (attackBox->onHitEffect) {
                 attackBox->onHitEffect(target);

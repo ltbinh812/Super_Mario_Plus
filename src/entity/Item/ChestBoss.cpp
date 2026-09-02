@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "CommandQueue.h"
+#include "infrastructure/AssetManager.h"
 
 static const float HITBOX_W = 32.0f;
 static const float HITBOX_H = 32.0f;
@@ -54,10 +55,12 @@ void ChestBoss::onInteract(Entity& other) {
         SpawnCommand cmd;
         cmd.category = SpawnCategory::Item;
         cmd.itemIdentifier = "Key";
-        cmd.position = { worldStats.position.x, worldStats.position.y - hitH_ };
+        // Vị trí của chính cái rương. Việc nhấc lên do launchAsDrop() lo.
+        cmd.position = worldStats.position;
         commandQueue->push(cmd);
     }
     std::cout << "[ChestBoss] Opened! Dropping Key.\n";
+    PlaySound(AssetManager::getInstance().getSound("chest_open_sound"));
 }
 
 float ChestBoss::getRenderOffsetY() const {

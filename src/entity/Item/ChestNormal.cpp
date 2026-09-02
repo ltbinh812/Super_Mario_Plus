@@ -5,6 +5,7 @@
 #include <cmath>
 #include "CommandQueue.h"
 #include "ItemUsageFactory.h"
+#include "infrastructure/AssetManager.h"
 
 static const float HITBOX_W = 32.0f;
 static const float HITBOX_H = 32.0f;
@@ -50,6 +51,8 @@ void ChestNormal::onInteract(Entity& other) {
     if (itemState_ == ItemState::Active) return;
     itemState_ = ItemState::Active;
     setAnimation(ItemState::Active);
+
+    PlaySound(AssetManager::getInstance().getSound("chest_open_sound"));
 
     if (commandQueue) {
         SpawnCommand cmd;

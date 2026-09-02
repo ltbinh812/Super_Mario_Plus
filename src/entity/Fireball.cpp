@@ -96,6 +96,7 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
       beamFromOwner(config.beamFromOwner),
       alignFramesByContent(config.alignFramesByContent),
       textureName(config.textureName),
+      soundKey(config.soundKey),
       spawner(spawner),
       hitboxOffsetX(config.hitboxOffsetX),
       hitboxOffsetY(config.hitboxOffsetY)
@@ -140,6 +141,36 @@ Fireball::Fireball(Vector2 startPos, bool isFacingRight, const FireballConfig& c
               << " speed=" << config.speed << " damage=" << config.damage << std::endl;
 }
 
+// =============================================================================
+// Vòng đời âm thanh của viên đạn (phần của minh1).
+//
+// Đạn bay có tiếng riêng, và tiếng đó phải TẮT khi đạn biến mất — nếu không nó
+// còn kêu sau khi quả đạn đã nổ. Đạn biến mất theo bốn đường khác nhau: hết
+// thời gian sống, chạm tường, trúng mục tiêu, và bị huỷ cùng màn chơi.
+//
+// Dồn hết vào deactivate() rồi cho cả bốn đường đi qua đó thì không sót đường
+// nào. Destructor gọi thêm một lần cho trường hợp đối tượng bị xoá khi vẫn còn
+// đang hoạt động (đổi phòng, thoát màn).
+// =============================================================================
+Fireball::~Fireball() {
+    stopSound();
+}
+
+void Fireball::stopSound() {
+    if (soundKey.empty()) return;
+    auto& mgr = AssetManager::getInstance();
+    if (!mgr.hasSound(soundKey)) return;
+    Sound s = mgr.getSound(soundKey);
+    if (IsSoundPlaying(s)) {
+        StopSound(s);
+    }
+}
+
+void Fireball::deactivate() {
+    isActive = false;
+    stopSound();
+}
+
 void Fireball::update(float dt) {
     if (!isActive) return;
     
@@ -147,7 +178,7 @@ void Fireball::update(float dt) {
     lifetime -= dt;
     if (lifetime <= 0) {
         std::cout << "[Fireball] Expired by lifetime" << std::endl;
-        isActive = false;
+        deactivate();
         return;
     }
 
@@ -274,11 +305,11 @@ void Fireball::renderOwnerBeam() const {
 
 void Fireball::onHitWall(bool isRightWall, bool isCliff) {
     std::cout << "[Fireball] Hit wall! Deactivating. pos=(" << worldStats.position.x << ", " << worldStats.position.y << ")" << std::endl;
-    isActive = false;
+    deactivate();
 }
 
 void Fireball::onCollide(Entity& other) {
-    isActive = false;
+    deactivate();
 }
 
 bool Fireball::hasActiveHitbox() const {
@@ -309,5 +340,5 @@ Hitbox Fireball::getActiveHitbox() {
 
 void Fireball::takeDamage(int damage, float knockbackDirX, bool forceInterrupt) {
     // Fireball is destroyed when it takes any damage (e.g. fireball-vs-fireball cancel)
-    isActive = false;
+    deactivate();
 }

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <raymath.h>
+#include "infrastructure/AssetManager.h"
 static const float BLOCK_SIZE = 32.0f;
 
 Coin::Coin(Vector2 worldPos, float scale)
@@ -68,5 +69,6 @@ void Coin::onInteract(Entity& other) {
         if (p->getPartyInventory()) p->getPartyInventory()->coins += 1;
         itemState_ = ItemState::Used;
         std::cout << "[Coin] Collected! Coins +1\n";
+        PlaySound(AssetManager::getInstance().getSound("coin_sound"));
     }
 }

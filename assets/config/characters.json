@@ -183,7 +183,7 @@
           "w": 48,
           "h": 64,
           "offsetX": 0,
-          "offsetY": 0
+          "offsetY": -10
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -402,35 +402,50 @@
       },
       "special_attack": {
         "texture": "special_attack",
-        "frameNum": 3,
+        "frameNum": 16,
         "frameTime": 0.1
       }
     },
     "fireball": {
       "speed": 400.0,
       "gravityScale": 0.0,
-      "lifetime": 1.2,
+      "lifetime": 1.6,
       "damage": 12,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
+      "hitboxW": 50.0,
+      "hitboxH": 50.0,
       "curveAmplitude": 0.0,
       "curveFrequency": 0.0,
       "offsetX": 100.0,
-      "offsetY": -10.0,
+      "offsetY": 0.0,
       "textureName": "vfx_1",
       "frameNum": 16,
       "frameTime": 0.1,
       "alignFramesByContent": true
     },
     "explosion": {
-      "lifetime": 0.5,
+      "lifetime": 0.9,
       "damage": 25,
-      "hitboxW": 100.0,
+      "hitboxW": 220.0,
       "hitboxH": 100.0,
-      "offsetX": 50.0,
+      "offsetX": 150.0,
       "offsetY": 0.0,
-      "textureName": "",
-      "frameNum": 1,
+      "textureName": "vfx_3",
+      "frameNum": 9,
+      "frameTime": 0.1
+    },
+    "special_ball": {
+      "speed": 500.0,
+      "gravityScale": 0.0,
+      "lifetime": 2.0,
+      "damage": 30,
+      "hitboxW": 90.0,
+      "hitboxH": 50.0,
+      "curveAmplitude": 0.0,
+      "curveFrequency": 0.0,
+      "offsetX": 100.0,
+      "offsetY": -10.0,
+      "textureName": "vfx_2",
+      "frameNum": 3,
       "frameTime": 0.1
     },
     "skills": {
@@ -468,7 +483,7 @@
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 32,
           "offsetX": 10,
           "offsetY": 10
         },
@@ -483,7 +498,7 @@
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 40,
           "offsetX": 10,
           "offsetY": 10
         },
@@ -498,7 +513,7 @@
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 40,
           "offsetX": 10,
           "offsetY": 10
         },
@@ -568,8 +583,8 @@
         "dashMultiplier": 0
       },
       "SpecialAttack": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 6,
+        "hitboxEndFrame": 12,
         "attack": 10,
         "box": {
           "w": 64,
@@ -582,21 +597,6 @@
         "moveControl": 0.5,
         "dashMultiplier": 0
       }
-    },
-    "special_ball": {
-      "speed": 500.0,
-      "gravityScale": 0.0,
-      "lifetime": 2.0,
-      "damage": 30,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "curveAmplitude": 0.0,
-      "curveFrequency": 0.0,
-      "offsetX": 100.0,
-      "offsetY": -10.0,
-      "textureName": "vfx_special",
-      "frameNum": 1,
-      "frameTime": 0.1
     },
     "soundFrames": {
       "run": {
@@ -714,8 +714,8 @@
       "gravityScale": 0.0,
       "lifetime": 1.0,
       "damage": 18,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
+      "hitboxW": 150.0,
+      "hitboxH": 80.0,
       "curveAmplitude": 0.0,
       "curveFrequency": 0.0,
       "offsetX": 100.0,
@@ -725,14 +725,29 @@
       "frameTime": 0.1
     },
     "explosion": {
-      "lifetime": 0.5,
+      "lifetime": 1.0,
       "damage": 25,
       "hitboxW": 100.0,
       "hitboxH": 100.0,
-      "offsetX": 50.0,
+      "offsetX": 100.0,
       "offsetY": 0.0,
-      "textureName": "",
-      "frameNum": 1,
+      "textureName": "vfx_3",
+      "frameNum": 10,
+      "frameTime": 0.1
+    },
+    "special_ball": {
+      "speed": 500.0,
+      "gravityScale": 0.0,
+      "lifetime": 2.0,
+      "damage": 30,
+      "hitboxW": 100.0,
+      "hitboxH": 100.0,
+      "curveAmplitude": 0.0,
+      "curveFrequency": 0.0,
+      "offsetX": 100.0,
+      "offsetY": -10.0,
+      "textureName": "vfx_2",
+      "frameNum": 14,
       "frameTime": 0.1
     },
     "skills": {
@@ -757,7 +772,7 @@
           "w": 64,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -765,12 +780,12 @@
         "dashMultiplier": 0
       },
       "Attack1": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 30,
           "offsetX": 10,
           "offsetY": 10
         },
@@ -780,12 +795,12 @@
         "dashMultiplier": 0
       },
       "Attack2": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
-          "w": 64,
-          "h": 64,
+          "w": 80,
+          "h": 30,
           "offsetX": 10,
           "offsetY": 10
         },
@@ -795,13 +810,13 @@
         "dashMultiplier": 0
       },
       "Attack3": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
-          "w": 64,
-          "h": 64,
-          "offsetX": 10,
+          "w": 120,
+          "h": 30,
+          "offsetX": -10,
           "offsetY": 10
         },
         "recoveryDuration": 0.1,
@@ -814,10 +829,10 @@
         "hitboxEndFrame": 10,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 80,
           "h": 64,
-          "offsetX": 10,
-          "offsetY": 10
+          "offsetX": 30,
+          "offsetY": -10
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -846,10 +861,10 @@
         "hitboxEndFrame": 22,
         "attack": 10,
         "box": {
-          "w": 64,
-          "h": 64,
+          "w": 100,
+          "h": 100,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -861,10 +876,10 @@
         "hitboxEndFrame": 28,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 80,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -876,31 +891,16 @@
         "hitboxEndFrame": 34,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 80,
           "h": 64,
-          "offsetX": 10,
-          "offsetY": 10
+          "offsetX": 30,
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
         "moveControl": 0.0,
         "dashMultiplier": 0.0
       }
-    },
-    "special_ball": {
-      "speed": 500.0,
-      "gravityScale": 0.0,
-      "lifetime": 2.0,
-      "damage": 30,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "curveAmplitude": 0.0,
-      "curveFrequency": 0.0,
-      "offsetX": 100.0,
-      "offsetY": -10.0,
-      "textureName": "vfx_special",
-      "frameNum": 1,
-      "frameTime": 0.1
     },
     "soundFrames": {
       "run": {
@@ -1018,7 +1018,7 @@
       "gravityScale": 0.0,
       "lifetime": 0.8,
       "damage": 14,
-      "hitboxW": 32.0,
+      "hitboxW": 50.0,
       "hitboxH": 32.0,
       "curveAmplitude": 0.0,
       "curveFrequency": 0.0,
@@ -1029,14 +1029,29 @@
       "frameTime": 0.1
     },
     "explosion": {
-      "lifetime": 0.5,
+      "lifetime": 0.8,
       "damage": 25,
       "hitboxW": 100.0,
       "hitboxH": 100.0,
-      "offsetX": 50.0,
+      "offsetX": 100.0,
       "offsetY": 0.0,
-      "textureName": "",
-      "frameNum": 1,
+      "textureName": "vfx_2",
+      "frameNum": 8,
+      "frameTime": 0.1
+    },
+    "special_ball": {
+      "speed": 500.0,
+      "gravityScale": 0.0,
+      "lifetime": 2.0,
+      "damage": 30,
+      "hitboxW": 80.0,
+      "hitboxH": 80.0,
+      "curveAmplitude": 0.0,
+      "curveFrequency": 0.0,
+      "offsetX": 100.0,
+      "offsetY": -10.0,
+      "textureName": "vfx_3",
+      "frameNum": 6,
       "frameTime": 0.1
     },
     "skills": {
@@ -1070,13 +1085,13 @@
       },
       "Attack1": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 4,
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 40,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1085,13 +1100,13 @@
       },
       "Attack2": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 4,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 40,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1100,13 +1115,13 @@
       },
       "Attack3": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 4,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 60,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1118,10 +1133,10 @@
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 80,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1134,9 +1149,9 @@
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 40,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1174,7 +1189,7 @@
         "dashMultiplier": 0
       },
       "SpecialAttack": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 4,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
@@ -1188,21 +1203,6 @@
         "moveControl": 0.5,
         "dashMultiplier": 0
       }
-    },
-    "special_ball": {
-      "speed": 500.0,
-      "gravityScale": 0.0,
-      "lifetime": 2.0,
-      "damage": 30,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "curveAmplitude": 0.0,
-      "curveFrequency": 0.0,
-      "offsetX": 100.0,
-      "offsetY": -10.0,
-      "textureName": "vfx_special",
-      "frameNum": 1,
-      "frameTime": 0.1
     },
     "soundFrames": {
       "run": {
@@ -1251,7 +1251,7 @@
       },
       "crouch": {
         "texture": "crouch",
-        "frameNum": 2,
+        "frameNum": 1,
         "frameTime": 0.25
       },
       "hurt": {
@@ -1271,12 +1271,12 @@
       },
       "attack_1": {
         "texture": "attack_1",
-        "frameNum": 7,
+        "frameNum": 6,
         "frameTime": 0.1
       },
       "attack_2": {
         "texture": "attack_2",
-        "frameNum": 6,
+        "frameNum": 7,
         "frameTime": 0.1
       },
       "attack_3": {
@@ -1301,7 +1301,7 @@
       },
       "block": {
         "texture": "block",
-        "frameNum": 2,
+        "frameNum": 1,
         "frameTime": 1
       },
       "long_attack": {
@@ -1347,18 +1347,33 @@
       "offsetX": 100.0,
       "offsetY": -10.0,
       "textureName": "vfx_1",
-      "frameNum": 15,
+      "frameNum": 5,
       "frameTime": 0.1
     },
     "explosion": {
-      "lifetime": 0.5,
+      "lifetime": 0.8,
       "damage": 25,
       "hitboxW": 100.0,
       "hitboxH": 100.0,
-      "offsetX": 50.0,
+      "offsetX": 100.0,
       "offsetY": 0.0,
-      "textureName": "",
-      "frameNum": 1,
+      "textureName": "vfx_2",
+      "frameNum": 7,
+      "frameTime": 0.1
+    },
+    "special_ball": {
+      "speed": 500.0,
+      "gravityScale": 0.0,
+      "lifetime": 2.0,
+      "damage": 30,
+      "hitboxW": 40.0,
+      "hitboxH": 60.0,
+      "curveAmplitude": 0.0,
+      "curveFrequency": 0.0,
+      "offsetX": 100.0,
+      "offsetY": -10.0,
+      "textureName": "vfx_3",
+      "frameNum": 8,
       "frameTime": 0.1
     },
     "skills": {
@@ -1391,14 +1406,14 @@
         "dashMultiplier": 0
       },
       "Attack1": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
+          "h": 40,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1406,14 +1421,14 @@
         "dashMultiplier": 0
       },
       "Attack2": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
           "w": 64,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -10
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1421,7 +1436,7 @@
         "dashMultiplier": 0
       },
       "Attack3": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 1,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
@@ -1442,8 +1457,8 @@
         "box": {
           "w": 64,
           "h": 64,
-          "offsetX": 10,
-          "offsetY": 10
+          "offsetX": 20,
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1451,7 +1466,7 @@
         "dashMultiplier": 0
       },
       "JumpAttack": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 3,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
@@ -1467,7 +1482,7 @@
       },
       "LowAttack": {
         "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxEndFrame": 1,
         "attack": 10,
         "box": {
           "w": 64,
@@ -1485,10 +1500,10 @@
         "hitboxEndFrame": 16,
         "attack": 10,
         "box": {
-          "w": 64,
+          "w": 80,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -10
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1496,35 +1511,20 @@
         "dashMultiplier": 0
       },
       "SpecialAttack": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 5,
+        "hitboxEndFrame": 7,
         "attack": 10,
         "box": {
           "w": 64,
-          "h": 64,
-          "offsetX": 10,
-          "offsetY": 10
+          "h": 80,
+          "offsetX": 20,
+          "offsetY": -20
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
         "moveControl": 0.5,
         "dashMultiplier": 0
       }
-    },
-    "special_ball": {
-      "speed": 500.0,
-      "gravityScale": 0.0,
-      "lifetime": 2.0,
-      "damage": 30,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "curveAmplitude": 0.0,
-      "curveFrequency": 0.0,
-      "offsetX": 100.0,
-      "offsetY": -10.0,
-      "textureName": "vfx_special",
-      "frameNum": 1,
-      "frameTime": 0.1
     },
     "soundFrames": {
       "run": {
@@ -1578,7 +1578,7 @@
       },
       "hurt": {
         "texture": "hurt",
-        "frameNum": 3,
+        "frameNum": 2,
         "frameTime": 0.15
       },
       "die": {
@@ -1593,22 +1593,22 @@
       },
       "attack_1": {
         "texture": "attack_1",
-        "frameNum": 12,
+        "frameNum": 8,
         "frameTime": 0.1
       },
       "attack_2": {
         "texture": "attack_2",
-        "frameNum": 7,
+        "frameNum": 12,
         "frameTime": 0.1
       },
       "attack_3": {
         "texture": "attack_3",
-        "frameNum": 6,
+        "frameNum": 7,
         "frameTime": 0.1
       },
       "attack_4": {
         "texture": "attack_4",
-        "frameNum": 8,
+        "frameNum": 6,
         "frameTime": 0.1
       },
       "jump_attack": {
@@ -1623,7 +1623,7 @@
       },
       "block": {
         "texture": "block",
-        "frameNum": 2,
+        "frameNum": 1,
         "frameTime": 1
       },
       "long_attack": {
@@ -1642,8 +1642,8 @@
       "gravityScale": 0.0,
       "lifetime": 1.0,
       "damage": 20,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
+      "hitboxW": 100.0,
+      "hitboxH": 60.0,
       "curveAmplitude": 0.0,
       "curveFrequency": 0.0,
       "offsetX": 100.0,
@@ -1653,12 +1653,27 @@
       "frameTime": 0.1
     },
     "explosion": {
-      "lifetime": 0.5,
+      "lifetime": 1.1,
       "damage": 25,
       "hitboxW": 100.0,
       "hitboxH": 100.0,
-      "offsetX": 50.0,
+      "offsetX": 100.0,
       "offsetY": 0.0,
+      "textureName": "vfx_3",
+      "frameNum": 10,
+      "frameTime": 0.1
+    },
+    "special_ball": {
+      "speed": 500.0,
+      "gravityScale": 0.0,
+      "lifetime": 2.0,
+      "damage": 30,
+      "hitboxW": 100.0,
+      "hitboxH": 100.0,
+      "curveAmplitude": 0.0,
+      "curveFrequency": 0.0,
+      "offsetX": 100.0,
+      "offsetY": -10.0,
       "textureName": "vfx_2",
       "frameNum": 13,
       "frameTime": 0.1
@@ -1693,14 +1708,14 @@
         "dashMultiplier": 0
       },
       "Attack1": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 3,
+        "hitboxEndFrame": 6,
         "attack": 10,
         "box": {
           "w": 64,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": -10
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1708,14 +1723,14 @@
         "dashMultiplier": 0
       },
       "Attack2": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 4,
+        "hitboxEndFrame": 8,
         "attack": 10,
         "box": {
           "w": 64,
           "h": 64,
-          "offsetX": 10,
-          "offsetY": 10
+          "offsetX": 0,
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1723,14 +1738,14 @@
         "dashMultiplier": 0
       },
       "Attack3": {
-        "hitboxStartFrame": 0,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
           "w": 64,
           "h": 64,
           "offsetX": 10,
-          "offsetY": 10
+          "offsetY": 0
         },
         "recoveryDuration": 0.1,
         "manaCost": 20.0,
@@ -1738,8 +1753,8 @@
         "dashMultiplier": 0
       },
       "Attack4": {
-        "hitboxStartFrame": 4,
-        "hitboxEndFrame": 8,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 5,
         "attack": 10,
         "box": {
           "w": 64,
@@ -1768,8 +1783,8 @@
         "dashMultiplier": 0
       },
       "LowAttack": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 2,
+        "hitboxEndFrame": 6,
         "attack": 10,
         "box": {
           "w": 64,
@@ -1783,8 +1798,8 @@
         "dashMultiplier": 0
       },
       "LongAttack": {
-        "hitboxStartFrame": 6,
-        "hitboxEndFrame": 11,
+        "hitboxStartFrame": 4,
+        "hitboxEndFrame": 8,
         "attack": 10,
         "box": {
           "w": 64,
@@ -1798,8 +1813,8 @@
         "dashMultiplier": 0
       },
       "SpecialAttack": {
-        "hitboxStartFrame": 0,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 11,
+        "hitboxEndFrame": 14,
         "attack": 10,
         "box": {
           "w": 64,
@@ -1812,21 +1827,6 @@
         "moveControl": 0.5,
         "dashMultiplier": 0
       }
-    },
-    "special_ball": {
-      "speed": 500.0,
-      "gravityScale": 0.0,
-      "lifetime": 2.0,
-      "damage": 30,
-      "hitboxW": 32.0,
-      "hitboxH": 32.0,
-      "curveAmplitude": 0.0,
-      "curveFrequency": 0.0,
-      "offsetX": 100.0,
-      "offsetY": -10.0,
-      "textureName": "vfx_special",
-      "frameNum": 1,
-      "frameTime": 0.1
     },
     "soundFrames": {
       "run": {
@@ -1852,7 +1852,7 @@
     },
     "Block": {
       "hitboxStartFrame": 0,
-      "hitboxEndFrame": 1,
+      "hitboxEndFrame": 2,
       "defense": 10,
       "box": {
         "w": 64,
@@ -1984,6 +1984,42 @@
       "manaCost": 20.0,
       "moveControl": 0.5,
       "dashMultiplier": 0
+    }
+  },
+  "Boom": {
+    "name": "Boom",
+    "assetFolder": "maps/item",
+    "explosion": {
+      "lifetime": 0.5,
+      "damage": 50,
+      "hitboxW": 128.0,
+      "hitboxH": 128.0,
+      "offsetX": 0.0,
+      "offsetY": 0.0,
+      "textureName": "explosion",
+      "frameNum": 15,
+      "frameTime": 0.07,
+      "scale": 1.0,
+      "hitboxStartFrame": 1,
+      "hitboxEndFrame": 6
+    }
+  },
+  "PoisonFlask": {
+    "name": "PoisonFlask",
+    "assetFolder": "maps/item",
+    "explosion": {
+      "lifetime": 0.5,
+      "damage": 20,
+      "hitboxW": 128.0,
+      "hitboxH": 128.0,
+      "offsetX": 0.0,
+      "offsetY": 0.0,
+      "textureName": "poison_explosion",
+      "frameNum": 7,
+      "frameTime": 0.07,
+      "scale": 1.0,
+      "hitboxStartFrame": 1,
+      "hitboxEndFrame": 6
     }
   }
 }

@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Player.h"
 #include <iostream>
+#include "infrastructure/AssetManager.h"
 
 // Door: 5x7 blocks
 static constexpr float DOOR_W = 5 * 32.0f;
@@ -47,6 +48,7 @@ void Door::onInteract(Entity& other) {
             inv->keys--;
             itemState_ = ItemState::Active;
             std::cout << "[Door] Unlocked!\n";
+            PlaySound(AssetManager::getInstance().getSound("door_open_sound"));
         } else {
             std::cout << "[Door] Locked! Needs a key.\n";
         }

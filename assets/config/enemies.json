@@ -26,12 +26,12 @@
       "mob_mushroom_attack": {
         "damage": 10,
         "hitboxStartFrame": 3,
-        "hitboxEndFrame": 6,
+        "hitboxEndFrame": 7,
         "box": {
           "offsetX": 20.0,
           "offsetY": -30.0,
-          "w": 64.0,
-          "h": 64.0
+          "w": 40.0,
+          "h": 30.0
         },
         "dashMultiplier": 0
       }
@@ -1366,7 +1366,7 @@
     },
     "aiData": {
       "detectionRange": 350.0,
-      "attackRange": 150.0,
+      "attackRange": 250.0,
       "patrolSpeed": 50.0,
       "patrolTime": 4.0
     },
@@ -1393,8 +1393,8 @@
       },
       "mob_soldier_projectile": {
         "damage": 15,
-        "hitboxStartFrame": 4,
-        "hitboxEndFrame": 5,
+        "hitboxStartFrame": 7,
+        "hitboxEndFrame": 9,
         "box": {
           "offsetX": 20.0,
           "offsetY": -30.0,
@@ -1426,7 +1426,7 @@
     "gravityScale": 50.0,
     "physicsBox": {
       "w": 30.0,
-      "h": 30.0
+      "h": 60.0
     },
     "aiData": {
       "detectionRange": 350.0,
@@ -1444,12 +1444,12 @@
     "enemySkills": {
       "mob_bat_attack": {
         "damage": 5,
-        "hitboxStartFrame": 3,
+        "hitboxStartFrame": 2,
         "hitboxEndFrame": 5,
         "box": {
           "offsetX": 10.0,
-          "offsetY": -30.0,
-          "w": 40.0,
+          "offsetY": -50.0,
+          "w": 60.0,
           "h": 40.0
         },
         "dashMultiplier": 0
@@ -1484,11 +1484,11 @@
       "mob_guardian_attack": {
         "damage": 25,
         "hitboxStartFrame": 6,
-        "hitboxEndFrame": 10,
+        "hitboxEndFrame": 9,
         "box": {
           "offsetX": 25.0,
-          "offsetY": -30.0,
-          "w": 60.0,
+          "offsetY": -60.0,
+          "w": 80.0,
           "h": 80.0
         },
         "dashMultiplier": 0
@@ -1522,13 +1522,13 @@
     "enemySkills": {
       "mob_goblin_attack": {
         "damage": 8,
-        "hitboxStartFrame": 3,
-        "hitboxEndFrame": 6,
+        "hitboxStartFrame": 6,
+        "hitboxEndFrame": 8,
         "box": {
-          "offsetX": 10.0,
-          "offsetY": -30.0,
-          "w": 30.0,
-          "h": 40.0
+          "offsetX": -30.0,
+          "offsetY": -50.0,
+          "w": 80.0,
+          "h": 60.0
         },
         "dashMultiplier": 0
       }
@@ -1543,7 +1543,7 @@
     "gravityScale": 160.0,
     "physicsBox": {
       "w": 32.0,
-      "h": 50.0
+      "h": 64.0
     },
     "aiData": {
       "detectionRange": 250.0,
@@ -1561,12 +1561,12 @@
     "enemySkills": {
       "mob_skeleton_attack": {
         "damage": 10,
-        "hitboxStartFrame": 3,
-        "hitboxEndFrame": 6,
+        "hitboxStartFrame": 6,
+        "hitboxEndFrame": 8,
         "box": {
           "offsetX": 15.0,
-          "offsetY": -30.0,
-          "w": 40.0,
+          "offsetY": -50.0,
+          "w": 70.0,
           "h": 50.0
         },
         "dashMultiplier": 0
@@ -1600,11 +1600,11 @@
     "enemySkills": {
       "mob_tree_attack": {
         "damage": 15,
-        "hitboxStartFrame": 3,
-        "hitboxEndFrame": 6,
+        "hitboxStartFrame": 6,
+        "hitboxEndFrame": 8,
         "box": {
           "offsetX": 20.0,
-          "offsetY": -30.0,
+          "offsetY": -60.0,
           "w": 40.0,
           "h": 60.0
         },
