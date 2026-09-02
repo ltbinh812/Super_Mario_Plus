@@ -72,6 +72,9 @@ void Player::update(float dt) {
   if (runtimeStats.iframeTimer > 0.0f) {
     runtimeStats.iframeTimer -= dt;
   }
+  if (runtimeStats.disableInputTimer > 0.0f) {
+    runtimeStats.disableInputTimer -= dt;
+  }
 
   updateEffects(dt);
   overlappingItem_ = nullptr; // Reset each frame; collision loop in GameState will set it if still overlapping
@@ -471,6 +474,7 @@ void Player::playAnimation(const std::string &name, bool loop) {
 }
 
 void Player::moveRight() {
+  if (runtimeStats.disableInputTimer > 0.0f) return;
   worldStats.isFacingRight = true;
   float mod = 1.0f;
   if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
@@ -479,6 +483,7 @@ void Player::moveRight() {
 }
 
 void Player::moveLeft() {
+  if (runtimeStats.disableInputTimer > 0.0f) return;
   worldStats.isFacingRight = false;
   float mod = 1.0f;
   if (runtimeStats.currentLiquid == CollisionType::Poison || runtimeStats.currentLiquid == CollisionType::Lava) mod = 0.5f;
@@ -487,11 +492,13 @@ void Player::moveLeft() {
 }
 
 void Player::stopLeftRun() {
+  if (runtimeStats.disableInputTimer > 0.0f) return;
   if (runtimeStats.velocity.x < 0.0f)
     runtimeStats.velocity.x = 0.0f;
 }
 
 void Player::stopRightRun() {
+  if (runtimeStats.disableInputTimer > 0.0f) return;
   if (runtimeStats.velocity.x > 0.0f)
     runtimeStats.velocity.x = 0.0f;
 }

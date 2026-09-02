@@ -503,7 +503,7 @@ void Mob::playSound(const std::string& soundKey, bool loop) {
         SetSoundVolume(s, finalVolume);
         
         if (currentSoundKey.find("idle") != std::string::npos) {
-            if (idleSoundTimer >= 300.0f) {
+            if (idleSoundTimer >= 3.0f) {
                 PlaySound(s);
                 idleSoundTimer = 0.0f;
             }
@@ -566,7 +566,7 @@ void Mob::updateSound() {
         Sound s = AssetManager::getInstance().getSound(currentSoundKey);
         
         if (currentSoundKey.find("idle") != std::string::npos) {
-            if (idleSoundTimer >= 300.0f) {
+            if (idleSoundTimer >= 3.0f) {
                 idleSoundTimer = 0.0f;
                 SetSoundVolume(s, finalVolume);
                 PlaySound(s);

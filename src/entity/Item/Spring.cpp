@@ -61,7 +61,12 @@ void Spring::onInteract(Entity& other) {
     triggered_ = true;
     animTimer_ = 0.0f;
 
-    auto& vel = other.getRuntimeStatsMutable().velocity;
+    auto& runtimeStats = other.getRuntimeStatsMutable();
+    auto& vel = runtimeStats.velocity;
+    
+    // Khoá input ngang của người chơi trong 0.3s để lực đẩy không bị phím di chuyển đè lên
+    runtimeStats.disableInputTimer = 0.3f;
+
     switch (dir_) {
         case SpringDir::Down:  vel.y = -LAUNCH_FORCE; break; // Base on ground, pushes UP
         case SpringDir::Up:    vel.y =  LAUNCH_FORCE; break; // Base on ceiling, pushes DOWN

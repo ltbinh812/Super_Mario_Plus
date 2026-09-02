@@ -13041,18 +13041,18 @@
 						},
 						{
 							"__identifier": "Flag",
-							"__grid": [48,10],
+							"__grid": [46,10],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 4, "x": 576, "y": 0, "w": 64, "h": 64 },
 							"__smartColor": "#63C74D",
-							"iid": "ef07ea40-96d0-11f1-8ca9-a3040ed81dbb",
+							"iid": "8ec7e310-96d0-11f1-9a79-ef1affc8e27a",
 							"width": 32,
 							"height": 32,
 							"defUid": 131,
-							"px": [768,160],
+							"px": [736,160],
 							"fieldInstances": [{ "__identifier": "isActive", "__type": "Bool", "__value": false, "__tile": null, "defUid": 143, "realEditorValues": [] }],
-							"__worldX": 2800,
+							"__worldX": 2768,
 							"__worldY": -192
 						}
 					]
