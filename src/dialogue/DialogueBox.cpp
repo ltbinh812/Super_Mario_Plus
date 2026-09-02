@@ -59,6 +59,7 @@ void DialogueBox::stop() {
     currentSequence = nullptr;
     active = false;
     finished = true;
+    StopSound(AssetManager::getInstance().getSound("typewriter_sound"));
 }
 
 // === handleInput(): Chỉ đọc phím, không thay đổi trạng thái ===
@@ -73,6 +74,7 @@ void DialogueBox::handleInput() {
             if (currentSequence) {
                 visibleChars = getTextLength(currentSequence->lines[currentLineIndex].text);
             }
+            StopSound(AssetManager::getInstance().getSound("typewriter_sound"));
         } else {
             // Text đã hiện hết → đánh dấu chờ chuyển dòng
             waitingForInput = true;
@@ -113,14 +115,21 @@ void DialogueBox::update(float dt) {
         float charInterval = (line.textSpeed > 0.0f) ? (1.0f / line.textSpeed) : 0.0f;
 
         // Tăng số ký tự hiển thị theo thời gian
+        bool characterRevealed = false;
         while (charTimer >= charInterval && visibleChars < totalChars) {
             charTimer -= charInterval;
             visibleChars++;
+            characterRevealed = true;
+        }
+
+        if (characterRevealed) {
+            PlaySound(AssetManager::getInstance().getSound("typewriter_sound"));
         }
 
         if (visibleChars >= totalChars) {
             lineComplete = true;
             visibleChars = totalChars;
+            StopSound(AssetManager::getInstance().getSound("typewriter_sound"));
         }
     }
 

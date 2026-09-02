@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include "infrastructure/AssetManager.h"
 
 static const float BLOCK_SIZE = 32.0f;
 
@@ -70,6 +71,7 @@ void Buff::onInteract(Entity& other) {
             p->getRuntimeStatsMutable().storedItemSlot = buffName;
             itemState_ = ItemState::Used;
             std::cout << "[Buff] Collected: " << buffName << " from " << effect_->getName() << "\n";
+            PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
         } else {
             p->setOverlappingItem(this);
         }
@@ -93,5 +95,6 @@ void Buff::forceInteract(Entity& other) {
         p->getRuntimeStatsMutable().storedItemSlot = buffName;
         itemState_ = ItemState::Used;
         std::cout << "[Buff] Swapped to: " << buffName << "\n";
+        PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
     }
 }

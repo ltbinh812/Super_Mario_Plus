@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include "CommandQueue.h"
+#include "infrastructure/AssetManager.h"
 
 static const float HITBOX_W = 32.0f;
 static const float HITBOX_H = 32.0f;
@@ -65,6 +66,7 @@ void ChestNormal::onInteract(Entity& other) {
     }
 
     std::cout << "[ChestNormal] Opened! Spawning random item.\n";
+    PlaySound(AssetManager::getInstance().getSound("chest_open_sound"));
 }
 
 float ChestNormal::getRenderOffsetY() const {

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include "infrastructure/AssetManager.h"
 
 static const float BLOCK_SIZE = 32.0f;
 
@@ -83,6 +84,7 @@ void PoisonFlask::update(float dt) {
         exploded_ = true;
         runtimeStats.velocity = {0.0f, 0.0f};
         std::cout << "[PoisonFlask] EXPLOSION!\n";
+        PlaySound(AssetManager::getInstance().getSound("poison_explosion_sound"));
     }
 }
 
@@ -135,6 +137,7 @@ void PoisonFlask::onInteract(Entity& other) {
             p->getRuntimeStatsMutable().storedItemSlot = "Poison";
             itemState_ = ItemState::Used;
             std::cout << "[PoisonFlask] Collected by player.\n";
+            PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
         } else {
             p->setOverlappingItem(this);
         }
@@ -147,5 +150,6 @@ void PoisonFlask::forceInteract(Entity& other) {
         p->getRuntimeStatsMutable().storedItemSlot = "Poison";
         itemState_ = ItemState::Used;
         std::cout << "[PoisonFlask] Swapped by player.\n";
+        PlaySound(AssetManager::getInstance().getSound("pickup_sound"));
     }
 }

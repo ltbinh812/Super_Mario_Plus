@@ -1,4 +1,5 @@
 #include "PanelButton.h"
+#include "infrastructure/AssetManager.h"
 
 void PanelButton::SetEnabled(bool enabled) {
     enabled_ = enabled;
@@ -23,6 +24,7 @@ void PanelButton::HandleInput(Vector2 mousePos, bool mousePressed, bool mouseRel
         // chuột ra ngoài rồi nhả là huỷ, giống hành vi nút chuẩn của hệ điều hành.
         if (hovered_ && pressed_) {
             clicked_ = true;
+            PlaySound(AssetManager::getInstance().getSound("click_sound"));
         }
         pressed_ = false;
     }

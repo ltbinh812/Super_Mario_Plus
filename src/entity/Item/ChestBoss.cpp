@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "CommandQueue.h"
+#include "infrastructure/AssetManager.h"
 
 static const float HITBOX_W = 32.0f;
 static const float HITBOX_H = 32.0f;
@@ -58,6 +59,7 @@ void ChestBoss::onInteract(Entity& other) {
         commandQueue->push(cmd);
     }
     std::cout << "[ChestBoss] Opened! Dropping Key.\n";
+    PlaySound(AssetManager::getInstance().getSound("chest_open_sound"));
 }
 
 float ChestBoss::getRenderOffsetY() const {

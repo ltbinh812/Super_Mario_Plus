@@ -1,4 +1,5 @@
 #include "Buttons.h"
+#include "infrastructure/AssetManager.h"
 
 Button::Button() {
 
@@ -49,6 +50,7 @@ void Button::handleInput(Vector2 mousePos, bool mousePressed, bool mouseReleased
     if (mouseReleased == true) {
         if (isHovered_ && isPressed_) {
             isClicked_ = true;
+            PlaySound(AssetManager::getInstance().getSound("click_sound"));
         }
 
         isPressed_ = false;

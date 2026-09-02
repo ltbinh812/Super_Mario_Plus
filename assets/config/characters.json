@@ -1985,5 +1985,41 @@
       "moveControl": 0.5,
       "dashMultiplier": 0
     }
+  },
+  "Boom": {
+    "name": "Boom",
+    "assetFolder": "maps/item",
+    "explosion": {
+      "lifetime": 0.5,
+      "damage": 50,
+      "hitboxW": 128.0,
+      "hitboxH": 128.0,
+      "offsetX": 0.0,
+      "offsetY": 0.0,
+      "textureName": "explosion",
+      "frameNum": 15,
+      "frameTime": 0.07,
+      "scale": 1.0,
+      "hitboxStartFrame": 1,
+      "hitboxEndFrame": 6
+    }
+  },
+  "PoisonFlask": {
+    "name": "PoisonFlask",
+    "assetFolder": "maps/item",
+    "explosion": {
+      "lifetime": 0.5,
+      "damage": 20,
+      "hitboxW": 128.0,
+      "hitboxH": 128.0,
+      "offsetX": 0.0,
+      "offsetY": 0.0,
+      "textureName": "poison_explosion",
+      "frameNum": 7,
+      "frameTime": 0.07,
+      "scale": 1.0,
+      "hitboxStartFrame": 1,
+      "hitboxEndFrame": 6
+    }
   }
 }

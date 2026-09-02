@@ -1,14 +1,18 @@
 #include "PlayerClimbState.h"
 #include "Player.h"
+#include "infrastructure/AssetManager.h"
 
 PlayerClimbState::PlayerClimbState(Player &player) : PlayerState(player) {}
 
 void PlayerClimbState::onEnter() {
   player.playAnimation("idle");        // Placeholder — replace with "climb" anim when available
   player.stopClimb(); // Freeze on ladder on entry
+  PlaySound(AssetManager::getInstance().getSound("hang_sound"));
 }
 
-void PlayerClimbState::onExit() {}
+void PlayerClimbState::onExit() {
+  StopSound(AssetManager::getInstance().getSound("hang_sound"));
+}
 
 void PlayerClimbState::update(float dt) {
   // Exit climb state if no longer on a ladder

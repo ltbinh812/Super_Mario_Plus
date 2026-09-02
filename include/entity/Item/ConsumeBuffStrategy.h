@@ -11,6 +11,7 @@
 #include "HealBuff.h"
 #include <string>
 #include <iostream>
+#include "infrastructure/AssetManager.h"
 
 class ConsumeBuffStrategy : public IItemUseStrategy {
 public:
@@ -30,6 +31,7 @@ public:
         if (buff) {
             player.getBuffManager().addBuff(std::move(buff), player);
             std::cout << "[ConsumeBuffStrategy] Consumed " << buffType_ << " buff!\n";
+            PlaySound(AssetManager::getInstance().getSound("buff_use_sound"));
         }
     }
 private:
